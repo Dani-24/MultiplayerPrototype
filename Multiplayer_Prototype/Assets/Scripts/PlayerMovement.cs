@@ -6,50 +6,54 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController controller;
 
     [SerializeField]
-    private Vector2 movementInput;
+    private GameObject playerBody;
 
     [SerializeField]
-    private float playerSpeed = 1.0f;
+    private Vector2 moveInput;
 
     [SerializeField]
-    private bool jumped = false;
-
-    private float speedY;
+    private float moveSpeed = 10.0f;
 
     [SerializeField]
-    private float jumpHeight = 1.0f;
+    private float rotationSpeed = 10.0f;
+
+    [HideInInspector]
+    public Camera cam;
 
     void Start()
     {
-        controller = GetComponentInChildren<CharacterController>();
+        controller = GetComponent<CharacterController>();
+        cam = GetComponentInChildren<Camera>();
     }
 
     void Update()
     {
-        // =============== Movement
+        // Camera Rotation & applying it to the player model
+        Vector3 forward = cam.transform.forward;
+        Vector3 right = cam.transform.right;
 
-        Vector3 move = new Vector3(movementInput.x, 0, movementInput.y);
-        controller.Move(move * Time.deltaTime * playerSpeed);
-    
+        forward.y = right.y = 0;
 
-        // =============== Jump
+        forward = forward.normalized;
+        right = right.normalized;
 
-        if(jumped)
+        Vector3 forwardRelativeVerticalInput = moveInput.y * forward;
+        Vector3 rigthRelativeHorizontalInput = moveInput.x * right;
+
+        Vector3 moveDir = forwardRelativeVerticalInput + rigthRelativeHorizontalInput;
+
+        if (moveDir != Vector3.zero)
         {
-            speedY += Mathf.Sqrt(jumpHeight * -3.0f * -9.81f);
+            Quaternion rotDes = Quaternion.LookRotation(moveDir, Vector3.up);
+
+            playerBody.transform.rotation = Quaternion.Slerp(playerBody.transform.rotation, rotDes, rotationSpeed * Time.deltaTime);
         }
 
-        speedY += -9.81f * Time.deltaTime;
-        controller.SimpleMove(new Vector3(0,speedY * Time.deltaTime,0));
+        controller.Move(moveDir * Time.deltaTime * moveSpeed);
     }
 
-    public void OnMove(InputAction.CallbackContext context)
+    void OnMove(InputValue value)
     {
-        movementInput = new Vector2(context.ReadValue<Vector2>().x, context.ReadValue<Vector2>().y);
-    }
-
-    public void OnJump(InputAction.CallbackContext context)
-    {
-        jumped = context.action.triggered;
+        moveInput = value.Get<Vector2>();
     }
 }
