@@ -14,10 +14,12 @@ public class Weapon : MonoBehaviour
 
     public float weaponRange = 4f;
 
-    public float rng = 5f;
+    public float rng = 0f;
 
-    [Header("Spawn Position")]
+    [Header("Position Corrections")]
     public Transform spawnBulletPosition;
+
+    public float verticalShootingOffset;
 
     [Header("Debug Info")]
     public bool isShooting = false;
@@ -26,7 +28,7 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     protected float shootCooldown = 0f;
 
-    //[HideInInspector]
+    [HideInInspector]
     public Vector3 aimDirection;
 
     [Header("Weapon meshes")]

@@ -21,25 +21,27 @@ public class Shooter : Weapon
             shootCooldown = 1 / cadence;
         }
 
-        aimDirection = GetComponentInParent<PlayerMovement>().cam.transform.forward;
-
         // =========== ROTACIÓN DEL ARMA ===========
 
-        Quaternion weaponRot = Quaternion.LookRotation(aimDirection, GetComponentInParent<PlayerMovement>().cam.transform.up);
-
-        //float maxVerticalRot = 75f;
-        //float maxHorizontalRot = 20f;
-
-        //Vector3 weaponRotEuler = weaponRot.eulerAngles;
-
-        //weaponRotEuler.x = Mathf.Clamp(weaponRotEuler.x, 360 - maxVerticalRot, maxVerticalRot);
-        //weaponRotEuler.y = Mathf.Clamp(weaponRotEuler.y, 360 - maxHorizontalRot, maxHorizontalRot);
-
-        weaponMesh.transform.rotation = weaponRot; //Quaternion.Euler(weaponRotEuler);
+        if (isShooting)
+        { 
+            aimDirection = GetComponentInParent<PlayerMovement>().cam.transform.forward;
+            weaponMesh.transform.rotation = Quaternion.LookRotation(aimDirection, GetComponentInParent<PlayerMovement>().cam.transform.up);
+        }
+        else
+        {
+            weaponMesh.transform.rotation = Quaternion.LookRotation(spawnBulletPosition.forward);
+        }
     }
 
     void Shoot()
     {
+        // Shooting direction
+        aimDirection.y += verticalShootingOffset;
+
+        // RNG
+        aimDirection.x += Random.Range(-rng,rng);
+
         GameObject bullet = Instantiate(bulletPrefab, spawnBulletPosition.position, Quaternion.LookRotation(aimDirection, Vector3.up));
 
         bullet.GetComponent<Bullet>().speed = bulletSpeed;

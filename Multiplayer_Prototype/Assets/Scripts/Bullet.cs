@@ -18,14 +18,10 @@ public class Bullet : MonoBehaviour
     }
 
     public void Start()
-    {
-        //rb.mass = (travelDistance * 9.81f) / ((speed * speed)); 
-        
+    {        
         rb.velocity = transform.forward * speed;
 
         float acc = (speed * speed) / (2 * travelDistance);
-
-        //rb.mass = (acc * rb.mass) / 9.81f;
 
         customGravity = acc / -9.81f;
     }
@@ -33,6 +29,11 @@ public class Bullet : MonoBehaviour
     private void FixedUpdate()
     {
         rb.velocity += new Vector3(0, customGravity, 0);
+
+        if(transform.position.y < -20)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
