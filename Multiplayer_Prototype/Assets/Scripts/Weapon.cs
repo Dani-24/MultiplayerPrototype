@@ -5,9 +5,6 @@ using UnityEngine.PlayerLoop;
 
 public class Weapon : MonoBehaviour
 {
-
-    [SerializeField] GunType type;
-
     [Header("Weapon Stats")]
     public float cadence = 1f;
 
@@ -32,6 +29,10 @@ public class Weapon : MonoBehaviour
     //[HideInInspector]
     public Vector3 aimDirection;
 
+    [Header("Weapon meshes")]
+    public GameObject weaponMesh;
+    public GameObject bulletPrefab;
+
     void Start()
     {
         
@@ -45,12 +46,5 @@ public class Weapon : MonoBehaviour
     void OnFire(InputValue value)
     {
         isShooting = value.isPressed;
-    }
-
-    public enum GunType
-    {
-        Shooter,
-        Blaster,
-        Charger
     }
 }

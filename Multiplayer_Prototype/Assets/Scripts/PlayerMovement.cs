@@ -20,10 +20,14 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector]
     public Camera cam;
 
+    private GameObject weapon;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
         cam = GetComponentInChildren<Camera>();
+
+        weapon = GetComponent<Weapon>().weaponMesh;
     }
 
     void Update()
@@ -55,5 +59,10 @@ public class PlayerMovement : MonoBehaviour
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
+    }
+
+    void OnResetCamera(InputValue value)
+    {
+        cam.GetComponent<OrbitCamera>().ResetCamera(value.isPressed);
     }
 }
