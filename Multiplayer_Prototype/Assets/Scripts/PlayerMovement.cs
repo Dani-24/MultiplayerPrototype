@@ -20,14 +20,20 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector]
     public Camera cam;
 
-    private GameObject weapon;
+    [SerializeField]
+    float fallingSpeed = 1.0f;
+
+    [Header("Weapon")]
+    public GameObject weapon;
+    public bool weaponShooting;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
         cam = GetComponentInChildren<Camera>();
 
-        weapon = GetComponent<Weapon>().weaponMesh;
+        GameObject weaponSpawnPoint = GameObject.FindGameObjectWithTag("WeaponSpawn");
+        Instantiate(weapon, weaponSpawnPoint.transform);
     }
 
     void Update()
@@ -48,12 +54,23 @@ public class PlayerMovement : MonoBehaviour
 
         if (moveDir != Vector3.zero)
         {
-            Quaternion rotDes = Quaternion.LookRotation(moveDir, Vector3.up);
+            Quaternion rotDes = Quaternion.identity;
+
+            if (!weaponShooting)
+            {
+                rotDes = Quaternion.LookRotation(moveDir, Vector3.up);
+            }
+            else
+            {
+                rotDes = Quaternion.LookRotation(forward, Vector3.up);
+            }
 
             playerBody.transform.rotation = Quaternion.Slerp(playerBody.transform.rotation, rotDes, rotationSpeed * Time.deltaTime);
         }
 
         controller.Move(moveDir * Time.deltaTime * moveSpeed);
+
+        controller.Move(new Vector3(0, -fallingSpeed * Time.deltaTime, 0));
     }
 
     void OnMove(InputValue value)
@@ -61,8 +78,14 @@ public class PlayerMovement : MonoBehaviour
         moveInput = value.Get<Vector2>();
     }
 
-    void OnResetCamera(InputValue value)
+    void OnFire(InputValue value)
     {
-        cam.GetComponent<OrbitCamera>().ResetCamera(value.isPressed);
+        if(weapon == null)
+        {
+            Debug.Log("There is no weapon to shoot");
+            return;
+        }
+
+        weaponShooting = value.isPressed;
     }
 }

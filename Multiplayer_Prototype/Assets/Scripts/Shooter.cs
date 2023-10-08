@@ -11,6 +11,8 @@ public class Shooter : Weapon
 
     void Update()
     {
+        isShooting = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().weaponShooting;
+
         if (shootCooldown >= 0.0f)
         {
             shootCooldown -= Time.deltaTime;

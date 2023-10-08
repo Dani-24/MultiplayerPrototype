@@ -5,6 +5,8 @@ using UnityEngine.PlayerLoop;
 
 public class Weapon : MonoBehaviour
 {
+    public string weaponName;
+
     [Header("Weapon Stats")]
     public float cadence = 1f;
 
@@ -43,10 +45,5 @@ public class Weapon : MonoBehaviour
     void Update()
     {
         
-    }
-
-    void OnFire(InputValue value)
-    {
-        isShooting = value.isPressed;
     }
 }

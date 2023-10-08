@@ -86,11 +86,11 @@ public class OrbitCamera : MonoBehaviour
             }
         }
     }
+    // Camera Reset View (WIP)
 
+    // La camara al resetearse tiene que alinearse con adonde mira el player en Y y ponerse en X = 0
     public void ResetCamera(bool reset)
     {
         cameraReseting = reset;
     }
-
-    // La camara al resetearse tiene que alinearse con adonde mira el player en Y y ponerse en X = 0
 }
