@@ -38,18 +38,6 @@
         },
         {
             "m_Id": "8e760635099b4147956bb9600d13cac2"
-        },
-        {
-            "m_Id": "01612b2f09a24a9c9879c83799445b96"
-        },
-        {
-            "m_Id": "55edcb19ba1d459dbb3c027e66abbc1e"
-        },
-        {
-            "m_Id": "f6677799b193415b8be7686b658a6e85"
-        },
-        {
-            "m_Id": "1bf9c5e6f5c34360a490da1c94e6a7c1"
         }
     ],
     "m_Keywords": [],
@@ -808,36 +796,6 @@
 
 {
     "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Internal.Texture2DShaderProperty",
-    "m_ObjectId": "01612b2f09a24a9c9879c83799445b96",
-    "m_Guid": {
-        "m_GuidSerialized": "abece64d-93bc-49f8-ba43-12c626ba05cd"
-    },
-    "m_Name": "GlitterTexture",
-    "m_DefaultRefNameVersion": 0,
-    "m_RefNameGeneratedByDisplayName": "",
-    "m_DefaultReferenceName": "Texture2D_01612b2f09a24a9c9879c83799445b96",
-    "m_OverrideReferenceName": "",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_DismissedVersion": 0,
-    "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
-    "m_Hidden": false,
-    "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"90fa52e833fedfb4b8b3dbe10e96a30e\",\"type\":3}}",
-        "m_Guid": ""
-    },
-    "isMainTexture": false,
-    "useTilingAndOffset": false,
-    "m_Modifiable": true,
-    "m_DefaultType": 0
-}
-
-{
-    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
     "m_ObjectId": "01b25b456e3a4150ba31de69195b9de4",
     "m_Id": 1,
@@ -1202,9 +1160,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -3682.999755859375,
-            "y": 346.0000915527344,
-            "width": 167.0,
+            "x": -4012.0,
+            "y": 342.0,
+            "width": 166.0,
             "height": 34.0
         }
     },
@@ -1246,36 +1204,6 @@
     },
     "m_Labels": [],
     "m_Channel": 0
-}
-
-{
-    "m_SGVersion": 3,
-    "m_Type": "UnityEditor.ShaderGraph.Internal.ColorShaderProperty",
-    "m_ObjectId": "1bf9c5e6f5c34360a490da1c94e6a7c1",
-    "m_Guid": {
-        "m_GuidSerialized": "7e2c1742-ae8a-48c5-92f6-5b546eeae54d"
-    },
-    "m_Name": "GlitterColor",
-    "m_DefaultRefNameVersion": 0,
-    "m_RefNameGeneratedByDisplayName": "",
-    "m_DefaultReferenceName": "Color_1bf9c5e6f5c34360a490da1c94e6a7c1",
-    "m_OverrideReferenceName": "",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_DismissedVersion": 0,
-    "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
-    "m_Hidden": false,
-    "m_Value": {
-        "r": 1.0,
-        "g": 1.0,
-        "b": 1.0,
-        "a": 0.0
-    },
-    "isMainColor": false,
-    "m_ColorMode": 1
 }
 
 {
@@ -1565,9 +1493,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -2086.0,
-            "y": -227.99998474121095,
-            "width": 112.99999237060547,
+            "x": -2088.0,
+            "y": -317.0,
+            "width": 111.9998779296875,
             "height": 34.0
         }
     },
@@ -2256,18 +2184,6 @@
         },
         {
             "m_Id": "8e760635099b4147956bb9600d13cac2"
-        },
-        {
-            "m_Id": "01612b2f09a24a9c9879c83799445b96"
-        },
-        {
-            "m_Id": "55edcb19ba1d459dbb3c027e66abbc1e"
-        },
-        {
-            "m_Id": "f6677799b193415b8be7686b658a6e85"
-        },
-        {
-            "m_Id": "1bf9c5e6f5c34360a490da1c94e6a7c1"
         }
     ]
 }
@@ -2330,34 +2246,6 @@
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
-}
-
-{
-    "m_SGVersion": 1,
-    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector2ShaderProperty",
-    "m_ObjectId": "55edcb19ba1d459dbb3c027e66abbc1e",
-    "m_Guid": {
-        "m_GuidSerialized": "57ce9ed0-af63-4a65-982c-38ed8f0bca37"
-    },
-    "m_Name": "GlitterTiling",
-    "m_DefaultRefNameVersion": 0,
-    "m_RefNameGeneratedByDisplayName": "",
-    "m_DefaultReferenceName": "Vector2_55edcb19ba1d459dbb3c027e66abbc1e",
-    "m_OverrideReferenceName": "",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_DismissedVersion": 0,
-    "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
-    "m_Hidden": false,
-    "m_Value": {
-        "x": 1.0,
-        "y": 1.0,
-        "z": 0.0,
-        "w": 0.0
-    }
 }
 
 {
@@ -3055,10 +2943,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1884.0,
-            "y": -266.0,
-            "width": 184.0,
-            "height": 253.0
+            "x": -1900.0001220703125,
+            "y": -319.0,
+            "width": 183.0,
+            "height": 250.99998474121095
         }
     },
     "m_Slots": [
@@ -4961,34 +4849,6 @@
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
-}
-
-{
-    "m_SGVersion": 1,
-    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
-    "m_ObjectId": "f6677799b193415b8be7686b658a6e85",
-    "m_Guid": {
-        "m_GuidSerialized": "8a7b5249-e5e7-4da6-83a4-8882da5a8aec"
-    },
-    "m_Name": "GlitterIntensity",
-    "m_DefaultRefNameVersion": 0,
-    "m_RefNameGeneratedByDisplayName": "",
-    "m_DefaultReferenceName": "Vector1_f6677799b193415b8be7686b658a6e85",
-    "m_OverrideReferenceName": "",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_DismissedVersion": 0,
-    "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
-    "m_Hidden": false,
-    "m_Value": 10.0,
-    "m_FloatType": 0,
-    "m_RangeValues": {
-        "x": 0.0,
-        "y": 1.0
-    }
 }
 
 {

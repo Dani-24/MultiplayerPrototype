@@ -185,12 +185,12 @@ Material:
     m_Ints: []
     m_Floats:
     - Vector1_0de750b9c41b4a5daef844a1599f5ac7: 0
-    - Vector1_2871f666316541908d110962eef07f02: 40
+    - Vector1_2871f666316541908d110962eef07f02: 110
     - Vector1_2c6f3ce4bba145b09c0a22fced0d7f85: 0
-    - Vector1_7bf270fe91494824b4209d2dc1faae23: 0
-    - Vector1_8e760635099b4147956bb9600d13cac2: 0.1
+    - Vector1_7bf270fe91494824b4209d2dc1faae23: 0.7
+    - Vector1_8e760635099b4147956bb9600d13cac2: 0.3
     - Vector1_b160a6374fb04a77b114bb611b8c55e4: 0
-    - Vector1_b5cc7f6f25194a778cb438f45fbbce66: 20
+    - Vector1_b5cc7f6f25194a778cb438f45fbbce66: 25
     - Vector1_f6677799b193415b8be7686b658a6e85: 10
     - _AORemapMax: 1
     - _AORemapMin: 0
