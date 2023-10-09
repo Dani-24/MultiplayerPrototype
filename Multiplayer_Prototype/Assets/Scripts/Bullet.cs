@@ -12,6 +12,8 @@ public class Bullet : MonoBehaviour
 
     public float customGravity = -9.81f;
 
+    private Renderer rend;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -24,6 +26,19 @@ public class Bullet : MonoBehaviour
         float acc = (speed * speed) / (2 * travelDistance);
 
         customGravity = acc / -9.81f;
+
+        rend = GetComponentInChildren<Renderer>();
+        if (rend != null)
+        {
+            if (tag == "Bullet")
+            {
+                rend.material.color = GameObject.FindGameObjectWithTag("SceneManager").GetComponent<SceneManager>().allyColor;
+            }
+            else
+            {
+                rend.material.color = GameObject.FindGameObjectWithTag("SceneManager").GetComponent<SceneManager>().enemyColor;
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -38,7 +53,7 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag != "Player" && other.tag != "Bullet")
+        if (other.tag != "Bullet" && other.tag != "EnemyBullet")
         {
             Destroy(gameObject);
         }

@@ -40,9 +40,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7267782849039474330}
-  - component: {fileID: 3184887705818406780}
+  - component: {fileID: 4230362310438633957}
   m_Layer: 0
-  m_Name: Weapon - Shooter
+  m_Name: Weapon - Shooter Dummy
   m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,7 +64,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3184887705818406780
+--- !u!114 &4230362310438633957
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73,10 +73,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3597637874272683826}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c684a59bd684054080ab1855969c842, type: 3}
+  m_Script: {fileID: 11500000, guid: 2c3afd05366b24243a898f1cc0fbb69e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponName: Shooter Default
+  weaponName: Shooter Dummy
   cadence: 5
   shootDMG: 35
   bulletSpeed: 30
@@ -84,7 +84,6 @@ MonoBehaviour:
   rng: 0.1
   spawnBulletPosition: {fileID: 3150462560917926386}
   verticalShootingOffset: 0.5
-  defaultDir: {fileID: 7267782849039474330}
   isShooting: 0
   shootCooldown: 0
   aimDirection: {x: 0, y: 0, z: 0}
