@@ -11,9 +11,11 @@ public class SceneManager : MonoBehaviour
     public Color allyColor;
     public Color enemyColor;
 
+    [SerializeField] bool useTheseDebugColors = false;
+
     void Start()
     {
-        if (colorPairs.Count > 0)
+        if (colorPairs.Count > 0 && !useTheseDebugColors)
         {
             int rand = Random.Range(0, colorPairs.Count);
 
@@ -21,7 +23,6 @@ public class SceneManager : MonoBehaviour
             enemyColor = colorPairs[rand].color2;
         }
     }
-
     void Update()
     {
         
