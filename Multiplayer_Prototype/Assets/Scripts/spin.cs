@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class spin : MonoBehaviour
 {
-    void Update()
+    void FixedUpdate()
     {
         transform.Rotate(0, 1, 0);
     }

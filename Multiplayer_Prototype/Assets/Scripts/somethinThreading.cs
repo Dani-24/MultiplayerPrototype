@@ -10,6 +10,8 @@ public class somethinThreading : MonoBehaviour
     [SerializeField]
     string fileName;
 
+    private WebClient webClient;
+
     public void PressButton()
     {
         Thread testThread = new Thread(DoSmtgWithThread);
@@ -18,7 +20,8 @@ public class somethinThreading : MonoBehaviour
 
     void DoSmtgWithThread()
     {
-        var webClient = new WebClient();
+        Debug.Log("Downloading " + url + " as " + fileName);
+        webClient = new WebClient();
         webClient.DownloadFile(url,fileName);
     }
 }
