@@ -11,7 +11,7 @@ public class ClientSockets : MonoBehaviour
 {
     [SerializeField] socketType typeOfSocket;
 
-    Socket newSocket;
+    Socket serverSocket;
 
     Thread threadClient;
 
@@ -33,7 +33,8 @@ public class ClientSockets : MonoBehaviour
     [SerializeField] TMP_Text textOnScreen;
     string messagesTexts;
 
-    int i = 1;
+    [SerializeField] TMP_InputField textInput;
+    [SerializeField] string pendingMessage = "";
 
     void Start()
     {
@@ -42,11 +43,11 @@ public class ClientSockets : MonoBehaviour
         switch (typeOfSocket)
         {
             case socketType.TCP:
-                newSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 break;
 
             case socketType.UDP:
-                newSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
                 break;
         }
 
@@ -63,7 +64,7 @@ public class ClientSockets : MonoBehaviour
 
         // ======= Binding =======
 
-        newSocket.Bind(ipep);
+        serverSocket.Bind(ipep);
 
         // ======= Thread =======
 
@@ -74,84 +75,119 @@ public class ClientSockets : MonoBehaviour
 
     void ThreadUpdate()
     {
-        Debug.Log(i); i++;
-
         switch (typeOfSocket)
         {
             case socketType.TCP:
-
-                if (!connected)
+                try
                 {
-                    try
-                    {
-                        Debug.Log("Connecting to server . . .");
-                        newSocket.Connect(ipep);
+                    Debug.Log("Connecting to server ...");
+                    serverSocket.Connect(ipep);
 
-                        connected = true;
-                    }
-                    catch (SocketException e)
-                    {
-                        Debug.Log("Failed to connect to server: " + e.ToString());
+                    connected = true;
+                }
+                catch (SocketException e)
+                {
+                    Debug.Log("Failed to connect to server: " + e.ToString());
 
-                        connected = false;
-                        return;
-                    }
+                    connected = false;
+                    return;
                 }
 
-                // ESTO TIENE QUE ESTAR EN BUCLE
-                recv = newSocket.Receive(data);
-                string message = Encoding.ASCII.GetString(data, 0, recv);
-                Debug.Log("Data received: " + message);
+                // == Send data ==      (Meter en el while)
+                string wlcm = "TCP Client Bombardeando Renfe";
+                data = Encoding.ASCII.GetBytes(wlcm);
+                serverSocket.Send(data);
 
-                messagesTexts += message + " " + DateTime.Now + "\n";
+                while (connected)
+                {
+                    lock (pendingMessage)
+                    {
+                        if (pendingMessage != "")
+                        {
+                            // == Send data ==
+                            data = Encoding.ASCII.GetBytes(pendingMessage);
+                            serverSocket.Send(data);
 
+                            Debug.Log("Sending: " + pendingMessage);
+
+                            pendingMessage = "";
+                        }
+                    }
+
+                    // == Receive data ==
+
+                    recv = serverSocket.Receive(data);
+                    string message = Encoding.ASCII.GetString(data, 0, recv);
+                    Debug.Log("Data received: " + message);
+
+                    messagesTexts += message + " " + DateTime.Now + "\n";
+                }
                 break;
             case socketType.UDP:
 
-                if (!connected)
+                IPEndPoint sender;
+                if (!localHostIP)
                 {
-                    IPEndPoint sender;
-                    if (!localHostIP)
-                    {
-                        sender = new IPEndPoint(IPAddress.Any, 0);
-                    }
-                    else
-                    {
-                        sender = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
-                    }
-
-                    Remote = (EndPoint)(sender);
-
-                    string welcome = "UDP Client Bombardeando Renfe";
-                    data = Encoding.ASCII.GetBytes(welcome);
-                    newSocket.SendTo(data, data.Length, SocketFlags.None, ipep);
-
+                    sender = new IPEndPoint(IPAddress.Any, 0);
+                }
+                else
+                {
+                    sender = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
                 }
 
-                data = new byte[1024];
-                recv = newSocket.ReceiveFrom(data, ref Remote);
+                Remote = (EndPoint)(sender);
 
-                Debug.Log("Message received from "+ Remote.ToString() + " : " +Encoding.ASCII.GetString(data, 0, recv));
+                connected = true;
 
-                messagesTexts += Remote.ToString() + " : " + Encoding.ASCII.GetString(data, 0, recv) + " " + DateTime.Now + "\n";
+                // == Send data ==      (Meter en el while)
+                string welcome = "UDP Client Bombardeando Renfe";
+                data = Encoding.ASCII.GetBytes(welcome);
+                serverSocket.SendTo(data, data.Length, SocketFlags.None, ipep);
 
+                while (connected)
+                {
+                    if (pendingMessage != "")
+                    {
+                        // == Send data ==
+                        data = Encoding.ASCII.GetBytes(pendingMessage);
+                        serverSocket.SendTo(data, data.Length, SocketFlags.None, ipep);
+
+                        Debug.Log("Sending: " + pendingMessage);
+
+                        pendingMessage = "";
+                    }
+
+                    data = new byte[1024];
+                    recv = serverSocket.ReceiveFrom(data, ref Remote);
+
+                    Debug.Log("Data received from " + Remote.ToString() + " : " + Encoding.ASCII.GetString(data, 0, recv));
+
+                    messagesTexts += Remote.ToString() + " : " + Encoding.ASCII.GetString(data, 0, recv) + " " + DateTime.Now + "\n";
+                }
                 break;
         }
+        //DisconnectSocket();
     }
 
     private void Update()
     {
-        threadClient.Join();
-
         if (img != null)
         {
             if (connected) { img.color = Color.green; }
             else { img.color = Color.red; }
         }
 
-        if(textOnScreen != null)
+        if (textOnScreen != null)
         {
             textOnScreen.text = messagesTexts;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Return)) {
+            lock (pendingMessage)
+            {
+                pendingMessage = textInput.text;
+            }
+            textInput.text = "";
         }
     }
 
@@ -164,20 +200,23 @@ public class ClientSockets : MonoBehaviour
     public void ResetConnection()
     {
         DisconnectSocket();
+
+        pendingMessage = textInput.text = "";
+
         Start();
     }
 
     void DisconnectSocket()
     {
-        if (newSocket.Connected)
+        threadClient.Abort();
+
+        if (serverSocket.Connected)
         {
-            newSocket.Shutdown(SocketShutdown.Both);
+            serverSocket.Shutdown(SocketShutdown.Both);
 
             connected = false;
         }
 
-        newSocket.Close();
-
-        threadClient.Abort();
+        serverSocket.Close();
     }
 }
