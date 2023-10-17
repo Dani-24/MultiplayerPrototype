@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class ServerSockets : MonoBehaviour
@@ -30,11 +29,11 @@ public class ServerSockets : MonoBehaviour
         switch (typeOfSocket)
         {
             case socketType.TCP:
-                newSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                newSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 break;
 
             case socketType.UDP:
-                newSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                newSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
                 break;
         }
 
