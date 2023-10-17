@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SceneManager : MonoBehaviour
 {
+    public string sceneName;
+
     [Header("Color combinations")]
     [SerializeField] public List<ColorPair> colorPairs = new List<ColorPair>();
 
