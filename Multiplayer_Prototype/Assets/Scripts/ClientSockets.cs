@@ -108,13 +108,14 @@ public class ClientSockets : MonoBehaviour
                 }
 
                 // == Send data ==
-                string wlcm = "TCP Connection Stablished (" + nickname + ")";
+                string wlcm = "TCP Client Connection Stablished (" + nickname + ")";
                 data = Encoding.ASCII.GetBytes(wlcm);
                 serverSocket.Send(data);
 
                 while (connected)
                 {
                     // == Receive data ==
+                    data = new byte[1024];
                     recv = serverSocket.Receive(data);
 
                     if (recv == 0)
@@ -146,7 +147,7 @@ public class ClientSockets : MonoBehaviour
                 connected = true;
 
                 // == Send data ==
-                string welcome = "UDP Connection Stablished (" + nickname + ")";
+                string welcome = "UDP Client Connection Stablished (" + nickname + ")";
                 data = Encoding.ASCII.GetBytes(welcome);
                 serverSocket.SendTo(data, data.Length, SocketFlags.None, ipep);
 

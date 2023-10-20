@@ -107,6 +107,10 @@ public class ServerSockets : MonoBehaviour
 
                     DebugMessage(Encoding.ASCII.GetString(data, 0, recv));
 
+                    // == Answer with server name ==
+                    string answer = "Server: " +Encoding.ASCII.GetString(data, 0, recv);
+                    data = Encoding.ASCII.GetBytes(answer);
+
                     server.SendTo(data, recv, SocketFlags.None, Remote);
                 }
         }
@@ -138,10 +142,14 @@ public class ServerSockets : MonoBehaviour
 
             DebugMessage(Encoding.ASCII.GetString(data, 0, recv));
 
+            // == Answer with server name ==
+            string answer = "Server: " + Encoding.ASCII.GetString(data, 0, recv);
+            data = Encoding.ASCII.GetBytes(answer);
+
             client.Send(data, recv, SocketFlags.None);
         }
 
-        DebugMessage("Disconnected from " + clientP.Address.ToString());
+        DebugMessage("This user Disconnected: " + clientP.Address.ToString());
 
         client.Close();
     }
