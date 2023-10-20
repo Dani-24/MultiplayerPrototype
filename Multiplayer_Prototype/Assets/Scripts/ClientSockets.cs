@@ -20,6 +20,7 @@ public class ClientSockets : MonoBehaviour
     int recv;
 
     [SerializeField] bool localHostIP = false;
+    [SerializeField] string IP;
     [SerializeField] int port;
 
     IPEndPoint ipep;
@@ -59,7 +60,7 @@ public class ClientSockets : MonoBehaviour
 
         if (!localHostIP)
         {
-            ipep = new IPEndPoint(IPAddress.Any, port);
+            ipep = new IPEndPoint(IPAddress.Parse(IP), port);
         }
         else
         {
