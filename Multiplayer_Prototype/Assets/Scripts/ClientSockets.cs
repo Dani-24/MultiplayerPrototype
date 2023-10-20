@@ -34,7 +34,9 @@ public class ClientSockets : MonoBehaviour
     string messagesTexts;
 
     [SerializeField] TMP_InputField textInput;
-    [SerializeField] string pendingMessage = "";
+    [SerializeField] TMP_Text textTypeConnection;
+
+    public string nickname = "";
 
     void Start()
     {
@@ -44,10 +46,12 @@ public class ClientSockets : MonoBehaviour
         {
             case socketType.TCP:
                 serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                textTypeConnection.text = "TCP";
                 break;
 
             case socketType.UDP:
                 serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                textTypeConnection.text = "UDP";
                 break;
         }
 
@@ -93,27 +97,13 @@ public class ClientSockets : MonoBehaviour
                     return;
                 }
 
-                // == Send data ==      (Meter en el while)
-                string wlcm = "TCP Client Bombardeando Renfe";
+                // == Send data ==
+                string wlcm = "TCP Connection Stablished (" + nickname + ")";
                 data = Encoding.ASCII.GetBytes(wlcm);
                 serverSocket.Send(data);
 
                 while (connected)
                 {
-                    lock (pendingMessage)
-                    {
-                        if (pendingMessage != "")
-                        {
-                            // == Send data ==
-                            data = Encoding.ASCII.GetBytes(pendingMessage);
-                            serverSocket.Send(data);
-
-                            Debug.Log("Sending: " + pendingMessage);
-
-                            pendingMessage = "";
-                        }
-                    }
-
                     // == Receive data ==
 
                     recv = serverSocket.Receive(data);
@@ -139,34 +129,23 @@ public class ClientSockets : MonoBehaviour
 
                 connected = true;
 
-                // == Send data ==      (Meter en el while)
-                string welcome = "UDP Client Bombardeando Renfe";
+                // == Send data ==
+                string welcome = "UDP Connection Stablished (" + nickname + ")";
                 data = Encoding.ASCII.GetBytes(welcome);
                 serverSocket.SendTo(data, data.Length, SocketFlags.None, ipep);
 
                 while (connected)
                 {
-                    if (pendingMessage != "")
-                    {
-                        // == Send data ==
-                        data = Encoding.ASCII.GetBytes(pendingMessage);
-                        serverSocket.SendTo(data, data.Length, SocketFlags.None, ipep);
-
-                        Debug.Log("Sending: " + pendingMessage);
-
-                        pendingMessage = "";
-                    }
-
+                    // Receive Data
                     data = new byte[1024];
                     recv = serverSocket.ReceiveFrom(data, ref Remote);
 
                     Debug.Log("Data received from " + Remote.ToString() + " : " + Encoding.ASCII.GetString(data, 0, recv));
 
-                    messagesTexts += Remote.ToString() + " : " + Encoding.ASCII.GetString(data, 0, recv) + " " + DateTime.Now + "\n";
+                    messagesTexts += Remote.ToString() + " " + Encoding.ASCII.GetString(data, 0, recv) + " " + DateTime.Now + "\n";
                 }
                 break;
         }
-        //DisconnectSocket();
     }
 
     private void Update()
@@ -182,10 +161,28 @@ public class ClientSockets : MonoBehaviour
             textOnScreen.text = messagesTexts;
         }
 
-        if(Input.GetKeyDown(KeyCode.Return)) {
-            lock (pendingMessage)
+        if (Input.GetKeyDown(KeyCode.Return) && !string.IsNullOrWhiteSpace(textInput.text))
+        {
+            // == Send data ==
+            Debug.Log("Sending: " + textInput.text);
+            string msg;
+
+            switch (typeOfSocket)
             {
-                pendingMessage = textInput.text;
+                case socketType.TCP:
+
+                    msg = nickname + " : " + textInput.text;
+                    data = Encoding.ASCII.GetBytes(msg);
+                    serverSocket.Send(data);
+
+                    break;
+                case socketType.UDP:
+
+                    msg = "as " + nickname + " said : " + textInput.text;
+                    data = Encoding.ASCII.GetBytes(msg);
+                    serverSocket.SendTo(data, data.Length, SocketFlags.None, ipep);
+
+                    break;
             }
             textInput.text = "";
         }
@@ -201,7 +198,7 @@ public class ClientSockets : MonoBehaviour
     {
         DisconnectSocket();
 
-        pendingMessage = textInput.text = "";
+        textInput.text = "";
 
         Start();
     }
@@ -218,5 +215,25 @@ public class ClientSockets : MonoBehaviour
         }
 
         serverSocket.Close();
+    }
+
+    //private void OnApplicationQuit()
+    //{
+    //    DisconnectSocket();
+    //    Debug.Log("Cerrando Socket");
+    //}
+
+    public void ChangeSocketConnection()
+    {
+        if(typeOfSocket == socketType.TCP)
+        {
+            typeOfSocket = socketType.UDP;
+            textTypeConnection.text = "UDP";
+        }
+        else
+        {
+            typeOfSocket = socketType.TCP;
+            textTypeConnection.text = "TCP";
+        }
     }
 }
