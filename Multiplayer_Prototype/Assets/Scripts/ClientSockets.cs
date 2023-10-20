@@ -39,6 +39,8 @@ public class ClientSockets : MonoBehaviour
 
     public string nickname = "";
 
+    [SerializeField] TMP_InputField ipInput;
+
     void Start()
     {
         // ======= Sockets =======
@@ -60,7 +62,15 @@ public class ClientSockets : MonoBehaviour
 
         if (!localHostIP)
         {
-            ipep = new IPEndPoint(IPAddress.Parse(IP), port);
+            try
+            {
+                ipep = new IPEndPoint(IPAddress.Parse(IP), port);
+            }
+            catch
+            {
+                Debug.Log("Incorrect IP");
+                messagesTexts += "Incorrect IP\n";
+            }
         }
         else
         {
@@ -92,7 +102,10 @@ public class ClientSockets : MonoBehaviour
                 }
                 catch (SocketException e)
                 {
-                    Debug.Log("Failed to connect to server: " + e.ToString());
+                    string errorUDP = "Failed to connect to server, try to reconnect: " + e.ToString();
+
+                    Debug.Log(errorUDP);
+                    messagesTexts += errorUDP + "\n";
 
                     connected = false;
                     return;
@@ -137,13 +150,26 @@ public class ClientSockets : MonoBehaviour
 
                 while (connected)
                 {
-                    // Receive Data
-                    data = new byte[1024];
-                    recv = serverSocket.ReceiveFrom(data, ref Remote);
+                    try
+                    {
+                        // Receive Data
+                        data = new byte[1024];
+                        recv = serverSocket.ReceiveFrom(data, ref Remote);
 
-                    Debug.Log("Data received from " + Remote.ToString() + " : " + Encoding.ASCII.GetString(data, 0, recv));
+                        Debug.Log("Data received from " + Remote.ToString() + " : " + Encoding.ASCII.GetString(data, 0, recv));
 
-                    messagesTexts += Remote.ToString() + " " + Encoding.ASCII.GetString(data, 0, recv) + " " + DateTime.Now + "\n";
+                        messagesTexts += Remote.ToString() + " " + Encoding.ASCII.GetString(data, 0, recv) + " " + DateTime.Now + "\n";
+                    }
+                    catch (SocketException e)
+                    {
+                        string errorUDP = "Failed to connect to server, try to reconnect: " + e.ToString();
+
+                        Debug.Log(errorUDP);
+                        messagesTexts += errorUDP + "\n";
+
+                        connected = false;
+                        return;
+                    }
                 }
                 break;
         }
@@ -156,12 +182,12 @@ public class ClientSockets : MonoBehaviour
             if (connected) { img.color = Color.green; }
             else { img.color = Color.red; }
         }
-
         if (textOnScreen != null)
         {
             textOnScreen.text = messagesTexts;
         }
 
+        // Press Enter to send a msg
         if (Input.GetKeyDown(KeyCode.Return) && !string.IsNullOrWhiteSpace(textInput.text))
         {
             // == Send data ==
@@ -187,6 +213,17 @@ public class ClientSockets : MonoBehaviour
             }
             textInput.text = "";
         }
+
+        // Set manual IP
+        if(ipInput.text != "")
+        {
+            IP = ipInput.text;
+            localHostIP = false;
+        }
+        else
+        {
+            localHostIP = true;
+        }
     }
 
     enum socketType
@@ -199,15 +236,13 @@ public class ClientSockets : MonoBehaviour
     {
         DisconnectSocket();
 
-        textInput.text = "";
+        textInput.text = messagesTexts = "";
 
         Start();
     }
 
     void DisconnectSocket()
     {
-        threadClient.Abort();
-
         if (serverSocket.Connected)
         {
             serverSocket.Shutdown(SocketShutdown.Both);
@@ -216,13 +251,14 @@ public class ClientSockets : MonoBehaviour
         }
 
         serverSocket.Close();
+        threadClient.Abort();
     }
 
-    //private void OnApplicationQuit()
-    //{
-    //    DisconnectSocket();
-    //    Debug.Log("Cerrando Socket");
-    //}
+    private void OnApplicationQuit()
+    {
+        DisconnectSocket();
+        Debug.Log("Closing Socket");
+    }
 
     public void ChangeSocketConnection()
     {
