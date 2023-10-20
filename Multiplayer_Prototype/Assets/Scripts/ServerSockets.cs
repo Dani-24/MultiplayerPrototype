@@ -83,19 +83,19 @@ public class ServerSockets : MonoBehaviour
                     data = new byte[1024];
                     recv = client.Receive(data);
 
-                    if (recv == 0)
-                    {
-                        break;
-                    }
+                    //if (recv == 0)
+                    //{
+                    //    break;
+                    //}
 
                     Debug.Log(Encoding.ASCII.GetString(data, 0, recv));
                     client.Send(data, recv, SocketFlags.None);
                 }
 
-                Console.WriteLine("Disconnected from " + clientP.Address.ToString());
-                client.Close();
+                //Console.WriteLine("Disconnected from " + clientP.Address.ToString());
+                //client.Close();
 
-                break; 
+                //break; 
             case socketType.UDP:
 
                 Debug.Log("Waiting for a client...");
@@ -119,14 +119,14 @@ public class ServerSockets : MonoBehaviour
                     data = new byte[1024];
                     recv = server.ReceiveFrom(data, ref Remote);
 
-                    Console.WriteLine(Encoding.ASCII.GetString(data, 0, recv));
+                    Debug.Log(Encoding.ASCII.GetString(data, 0, recv));
                     server.SendTo(data, recv, SocketFlags.None, Remote);
                 }
         }
 
         // == Disconnect ==
 
-        DisconnectSocket();
+        //DisconnectSocket();
 
     }
 

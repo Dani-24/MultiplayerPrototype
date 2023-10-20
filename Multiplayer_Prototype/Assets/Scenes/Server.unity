@@ -338,7 +338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01064457fd524e84db518ccfb3928bf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  typeOfSocket: 1
+  typeOfSocket: 0
   localHostIP: 1
   port: 9050
 --- !u!4 &2015598027

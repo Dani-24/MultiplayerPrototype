@@ -69,7 +69,7 @@ public class ClientSockets : MonoBehaviour
 
         // ======= Binding =======
 
-        serverSocket.Bind(ipep);
+        //serverSocket.Bind(ipep);
 
         // ======= Thread =======
 
