@@ -121,6 +121,13 @@ public class ClientSockets : MonoBehaviour
                     // == Receive data ==
 
                     recv = serverSocket.Receive(data);
+
+                    if (recv == 0)
+                    {
+                        connected = false;
+                        break;
+                    }
+
                     string message = Encoding.ASCII.GetString(data, 0, recv);
                     Debug.Log("Data received: " + message);
 
@@ -205,7 +212,7 @@ public class ClientSockets : MonoBehaviour
                     break;
                 case socketType.UDP:
 
-                    msg = "as " + nickname + " said : " + textInput.text;
+                    msg = nickname + " said : " + textInput.text;
                     data = Encoding.ASCII.GetBytes(msg);
                     serverSocket.SendTo(data, data.Length, SocketFlags.None, ipep);
 

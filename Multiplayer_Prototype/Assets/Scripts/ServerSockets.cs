@@ -26,6 +26,9 @@ public class ServerSockets : MonoBehaviour
     [Header("UI Inspector Things")]
     [SerializeField] TMP_Text textTypeOfConnection;
 
+    [SerializeField] TMP_Text textOnScreen;
+    string messagesTexts;
+
     void Start()
     {
         // ======= Sockets =======
@@ -60,62 +63,39 @@ public class ServerSockets : MonoBehaviour
 
         // ======= Thread =======
 
-        threadServer = new Thread(ThreadUpdate);
+        threadServer = new Thread(ServerThreadUpdate);
         threadServer.Start();
     }
 
-    void ThreadUpdate()
+    void ServerThreadUpdate()
     {
         switch (typeOfSocket) {
             case socketType.TCP:
 
-                server.Listen(10);
-                Debug.Log("Waiting for a TCP client...");
-
-                client = server.Accept();
-
-                IPEndPoint clientP = (IPEndPoint)client.RemoteEndPoint;
-
-                Debug.Log("Connected with " + clientP.Address.ToString() + " at port " + clientP.Port.ToString());
-
-                // == Send data to client ==
-                string welcome = "Bombardeen Renfe Cercanias - Server";
-                data = Encoding.ASCII.GetBytes(welcome);
-                client.Send(data, data.Length, SocketFlags.None);
-
-                // == Receive data from client ==
                 while (true)
                 {
-                    data = new byte[1024];
-                    recv = client.Receive(data);
+                    server.Listen(10);
 
-                    if (recv == 0)
-                    {
-                        break;
-                    }
+                    DebugMessage("Waiting for a TCP Client...");
 
-                    Debug.Log(Encoding.ASCII.GetString(data, 0, recv));
-                    client.Send(data, recv, SocketFlags.None);
+                    client = server.Accept();
+
+                    Thread clientThread = new Thread(ClientThreadUpdate);
+                    clientThread.Start(client);
                 }
-
-                Console.WriteLine("Disconnected from " + clientP.Address.ToString());
-                client.Close();
-
-                break;
             case socketType.UDP:
 
-                Debug.Log("Waiting for a UDP client...");
+                DebugMessage("Waiting for a UDP client...");
 
                 IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
                 EndPoint Remote = (EndPoint)(sender);
 
                 recv = server.ReceiveFrom(data, ref Remote);
 
-                Debug.Log("Message received from " + Remote.ToString());
-                Debug.Log(Encoding.ASCII.GetString(data, 0, recv));
+                DebugMessage("Message received from " + Remote.ToString() + Encoding.ASCII.GetString(data, 0, recv));
 
                 // == Send data to client ==
-                string welcome_ = "Bombardeen Renfe Cercanias - Server";
+                string welcome_ = "You have connected to a UDP Server";
                 data = Encoding.ASCII.GetBytes(welcome_);
                 server.SendTo(data, data.Length, SocketFlags.None, Remote);
 
@@ -125,10 +105,45 @@ public class ServerSockets : MonoBehaviour
                     data = new byte[1024];
                     recv = server.ReceiveFrom(data, ref Remote);
 
-                    Debug.Log(Encoding.ASCII.GetString(data, 0, recv));
+                    DebugMessage(Encoding.ASCII.GetString(data, 0, recv));
+
                     server.SendTo(data, recv, SocketFlags.None, Remote);
                 }
         }
+    }
+
+    void ClientThreadUpdate(object clientS)
+    {
+        Socket client = (Socket)clientS;
+
+        IPEndPoint clientP = (IPEndPoint)client.RemoteEndPoint;
+
+        DebugMessage("Connected with " + clientP.Address.ToString() + " at port " + clientP.Port.ToString());
+
+        // == Send data to client ==
+        string welcome = "You have connected to a TCP Server";
+        data = Encoding.ASCII.GetBytes(welcome);
+        client.Send(data, data.Length, SocketFlags.None);
+
+        // == Receive data from client ==
+        while (true)
+        {
+            data = new byte[1024];
+            recv = client.Receive(data);
+
+            if (recv == 0)
+            {
+                break;
+            }
+
+            DebugMessage(Encoding.ASCII.GetString(data, 0, recv));
+
+            client.Send(data, recv, SocketFlags.None);
+        }
+
+        DebugMessage("Disconnected from " + clientP.Address.ToString());
+
+        client.Close();
     }
 
     void DisconnectSocket()
@@ -172,5 +187,21 @@ public class ServerSockets : MonoBehaviour
     {
         DisconnectSocket();
         Debug.Log("Closing Socket");
+    }
+
+    void DebugMessage(string message)
+    {
+        Debug.Log(message);
+        messagesTexts = message + "\n" + messagesTexts;
+    }
+
+    private void Update()
+    {
+        if(textOnScreen != null) textOnScreen.text = messagesTexts;
+    }
+
+    public void CleanConsole()
+    {
+        messagesTexts = "";
     }
 }
