@@ -80,10 +80,10 @@ public class ServerSockets : MonoBehaviour
 
                     client = server.Accept();
 
-                    Thread clientThread = new Thread(ClientThreadUpdate);
+                    Thread clientThread = new Thread(ClientTCPThreadUpdate);
                     clientThread.Start(client);
                 }
-            case socketType.UDP:
+            case socketType.UDP:    // Deberia mandar pings con los clients para ver si se desconectan y que no se reciban por igual todos los clients???
 
                 DebugMessage("Waiting for a UDP client...");
 
@@ -112,7 +112,7 @@ public class ServerSockets : MonoBehaviour
         }
     }
 
-    void ClientThreadUpdate(object clientS)
+    void ClientTCPThreadUpdate(object clientS)
     {
         Socket client = (Socket)clientS;
 

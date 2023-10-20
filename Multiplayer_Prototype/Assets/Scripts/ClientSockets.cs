@@ -77,10 +77,6 @@ public class ClientSockets : MonoBehaviour
             ipep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
         }
 
-        // ======= Binding =======
-
-        //serverSocket.Bind(ipep);
-
         // ======= Thread =======
 
         threadClient = new Thread(ThreadUpdate);
@@ -119,7 +115,6 @@ public class ClientSockets : MonoBehaviour
                 while (connected)
                 {
                     // == Receive data ==
-
                     recv = serverSocket.Receive(data);
 
                     if (recv == 0)
@@ -159,7 +154,7 @@ public class ClientSockets : MonoBehaviour
                 {
                     try
                     {
-                        // Receive Data
+                        // == Receive Data ==
                         data = new byte[1024];
                         recv = serverSocket.ReceiveFrom(data, ref Remote);
 
@@ -194,7 +189,7 @@ public class ClientSockets : MonoBehaviour
             textOnScreen.text = messagesTexts;
         }
 
-        // Press Enter to send a msg
+        // == Press Enter to send a msg ==
         if (Input.GetKeyDown(KeyCode.Return) && !string.IsNullOrWhiteSpace(textInput.text))
         {
             // == Send data ==
@@ -221,7 +216,7 @@ public class ClientSockets : MonoBehaviour
             textInput.text = "";
         }
 
-        // Set manual IP
+        // == Set manual IP ==
         if(ipInput.text != "")
         {
             IP = ipInput.text;
