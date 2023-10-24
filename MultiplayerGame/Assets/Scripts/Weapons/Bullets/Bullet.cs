@@ -40,11 +40,11 @@ public class Bullet : MonoBehaviour
         {
             if (tag == "Bullet")
             {
-                rend.material.color = GameObject.FindGameObjectWithTag("SceneManager").GetComponent<SceneManager>().allyColor;
+                rend.material.color = GameObject.FindGameObjectWithTag("SceneManager").GetComponent<SceneManagerScript>().allyColor;
             }
             else
             {
-                rend.material.color = GameObject.FindGameObjectWithTag("SceneManager").GetComponent<SceneManager>().enemyColor;
+                rend.material.color = GameObject.FindGameObjectWithTag("SceneManager").GetComponent<SceneManagerScript>().enemyColor;
             }
         }
     }
