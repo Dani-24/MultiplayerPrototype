@@ -4,6 +4,8 @@ public class Bullet : MonoBehaviour
 {
     private Rigidbody rb;
 
+    [Header("Propierties")]
+
     public float speed = 10f;
 
     public float travelDistance = 5f;
@@ -13,6 +15,8 @@ public class Bullet : MonoBehaviour
     public float customGravity = -9.81f;
 
     private Renderer rend;
+
+    [Header("Painting")]
 
     public float radius = 1;
     public float strength = 1;
