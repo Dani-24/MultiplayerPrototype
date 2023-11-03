@@ -13,6 +13,20 @@ public class Shooter : Weapon
     {
         isShooting = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().weaponShooting;
 
+        // =========== ROTACIÓN DEL ARMA ===========
+
+        if (isShooting)
+        {
+            aimDirection = GetComponentInParent<PlayerMovement>().cam.transform.forward;
+            weaponMesh.transform.rotation = Quaternion.LookRotation(aimDirection, GetComponentInParent<PlayerMovement>().cam.transform.up);
+        }
+        else
+        {
+            weaponMesh.transform.rotation = Quaternion.LookRotation(transform.forward);
+        }
+
+        // ====== Disparar ======
+
         if (shootCooldown >= 0.0f)
         {
             shootCooldown -= Time.deltaTime;
@@ -21,18 +35,6 @@ public class Shooter : Weapon
         {
             Shoot();
             shootCooldown = 1 / cadence;
-        }
-
-        // =========== ROTACIÓN DEL ARMA ===========
-
-        if (isShooting)
-        { 
-            aimDirection = GetComponentInParent<PlayerMovement>().cam.transform.forward;
-            weaponMesh.transform.rotation = Quaternion.LookRotation(aimDirection, GetComponentInParent<PlayerMovement>().cam.transform.up);
-        }
-        else
-        {
-            weaponMesh.transform.rotation = Quaternion.LookRotation(transform.forward);
         }
     }
 

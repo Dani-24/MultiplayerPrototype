@@ -109,6 +109,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraOrbitObject: {fileID: 1971780595229185344}
   mouseSens: 200
+  camSpeed: 1
   cameraMaxDistance: 15
   maxHeight: 60
   minHeight: -80
@@ -550,7 +551,7 @@ Transform:
   - {fileID: 8830754645952524441}
   - {fileID: 1971780595229185344}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8850403938646090606
 MonoBehaviour:
