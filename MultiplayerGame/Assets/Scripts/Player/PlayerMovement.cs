@@ -31,7 +31,10 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Weapon")]
     public GameObject weapon;
-    public bool weaponShooting;
+    public bool weaponShooting = false;
+
+    [Header("SubWeapon")]
+    public bool subWeaponShooting = false;
 
     void Start()
     {
@@ -113,5 +116,10 @@ public class PlayerMovement : MonoBehaviour
         }
 
         weaponShooting = value.isPressed;
+    }
+
+    void OnSubFire(InputValue value)
+    {
+        subWeaponShooting = value.isPressed;
     }
 }

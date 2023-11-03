@@ -525,8 +525,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5131245121192357684}
-  - component: {fileID: 8850403938646090606}
   - component: {fileID: 4211371814449528777}
+  - component: {fileID: 8850403938646090606}
+  - component: {fileID: 4336922722577219396}
   - component: {fileID: 247857097964215285}
   - component: {fileID: 8611022976118043153}
   m_Layer: 0
@@ -553,6 +554,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4211371814449528777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7696216211473871433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15cbfcec3e11f5049bbd24c73b5d9044, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 100
+  isDead: 0
+  ink: 100
+  inkReloadSpeed: 1
+  inkReloadSpeedOnInk: 5
+  onInk: 0
+  spawnPos: {x: 0, y: 1, z: 0}
+  inkSlider: {fileID: 0}
+  inkSliderImg: {fileID: 0}
+  HPSlider: {fileID: 0}
 --- !u!114 &8850403938646090606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -579,7 +602,8 @@ MonoBehaviour:
     m_Bits: 64
   weapon: {fileID: 3597637874272683826, guid: 234fa55f3924b684fa2079555201eb96, type: 3}
   weaponShooting: 0
---- !u!114 &4211371814449528777
+  subWeaponShooting: 0
+--- !u!114 &4336922722577219396
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -588,12 +612,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 7696216211473871433}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15cbfcec3e11f5049bbd24c73b5d9044, type: 3}
+  m_Script: {fileID: 11500000, guid: 65c3dbf18990a2f4bb60a95b68387d53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 100
-  isDead: 0
-  spawnPos: {x: 0, y: 1, z: 0}
+  weaponType: 0
+  dmg: 180
+  splashDmg: 30
+  range: 5
+  cooldown: 0
+  radius: 5
+  throwCost: 70
+  isThrowingSubWeapon: 0
+  subWeaponGO: {fileID: 0}
 --- !u!114 &247857097964215285
 MonoBehaviour:
   m_ObjectHideFlags: 0

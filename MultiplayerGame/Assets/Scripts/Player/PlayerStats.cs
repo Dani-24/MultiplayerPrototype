@@ -1,22 +1,46 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerStats : MonoBehaviour
 {
+    [Header("HP")]
     public float HP = 100.0f;
     float maxHP;
 
     public bool isDead = false;
 
-    private CharacterController controller;
+    // time since last shot taken como cooldown???
 
+    [Header("Ink")]
+    public float ink = 100.0f;
+    float inkCapacity;
+
+    public float inkReloadSpeed = 1f;
+    public float inkReloadSpeedOnInk = 5f;
+    public bool onInk = false;
+
+    // time since last shot como cooldown????
+
+    [Header("Other")]
     [SerializeField]
     Vector3 spawnPos = Vector3.zero;
+
+    private CharacterController controller;
+
+    [Header("UI Things")]
+    public Slider inkSlider;
+    public Image inkSliderImg;
+
+    public Slider HPSlider;
 
     void Start()
     {
         maxHP = HP;
+        inkCapacity = ink;
 
         controller = GetComponent<CharacterController>();
+
+        inkSliderImg.color = SceneManagerScript.Instance.allyColor;
     }
 
     void Update()
@@ -32,7 +56,32 @@ public class PlayerStats : MonoBehaviour
 
             isDead = false;
             HP = maxHP;
+            ink = inkCapacity;
         }
+
+        // Update UI
+        inkSlider.value = ink;
+        HPSlider.value = HP;
+
+        // Reloading
+        ReloadInk();
+    }
+
+    void ReloadInk()
+    {
+        if(ink < inkCapacity && !GetComponent<PlayerMovement>().weaponShooting && !GetComponent<PlayerMovement>().subWeaponShooting)
+        {
+            if (onInk)
+            {
+                ink += inkReloadSpeedOnInk * Time.deltaTime;
+            }
+            else
+            {
+                ink += inkReloadSpeed * Time.deltaTime;
+            }
+        }
+
+        if(ink > inkCapacity) { ink = inkCapacity; }
     }
 
     private void OnTriggerEnter(Collider other)

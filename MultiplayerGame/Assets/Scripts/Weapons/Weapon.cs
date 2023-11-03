@@ -1,7 +1,4 @@
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.PlayerLoop;
 
 public class Weapon : MonoBehaviour
 {
@@ -17,6 +14,9 @@ public class Weapon : MonoBehaviour
     public float weaponRange = 4f;
 
     public float rng = 0f;
+
+    [Tooltip("% from the total ink that shooting once costs")]
+    public float shootCost;
 
     [Header("Position Corrections")]
     public Transform spawnBulletPosition;

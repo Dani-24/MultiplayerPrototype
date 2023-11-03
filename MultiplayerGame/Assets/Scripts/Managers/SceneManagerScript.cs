@@ -16,6 +16,21 @@ public class SceneManagerScript : MonoBehaviour
 
     [SerializeField] bool useTheseDebugColors = false;
 
+    private static SceneManagerScript _instance;
+    public static SceneManagerScript Instance { get { return _instance; } }
+
+    private void Awake()
+    {
+        if (_instance != null && Instance != null)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
+
     void Start()
     {
         if (colorPairs.Count > 0 && !useTheseDebugColors)
