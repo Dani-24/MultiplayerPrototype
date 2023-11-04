@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -95,6 +96,56 @@ public class PlayerMovement : MonoBehaviour
         }
 
         controller.Move(new Vector3(0, fallingSpeed * Time.deltaTime, 0));
+
+        CheckGroundPaint();
+    }
+
+    void CheckGroundPaint()
+    {
+        // Lanzar un raycast hacía abajo y mirar si es suelo pintable
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hit, Mathf.Infinity, groundLayer))
+        {
+            Renderer hitRenderer = hit.collider.GetComponent<Renderer>();
+
+            if (hitRenderer != null)
+            {
+                Vector2 uvCoord = hit.textureCoord;
+                Material material = hitRenderer.material;
+
+                //Texture2D texture = material.mainTexture as Texture2D;
+
+                Texture2D texture = material.GetTexture("_MaskTexture") as Texture2D;
+
+                if (texture != null)
+                {
+                    Color pixelColor = texture.GetPixelBilinear(uvCoord.x, uvCoord.y);
+
+                    Debug.Log("Color: " + pixelColor);
+
+                    if (pixelColor == SceneManagerScript.Instance.allyColor)
+                    {
+                        Debug.Log("Ally Ink");
+                    }
+                    else if (pixelColor == SceneManagerScript.Instance.enemyColor)
+                    {
+                        Debug.Log("Enemy Ink");
+                    }
+                }
+                else
+                {
+                    Debug.Log("Texture null");
+                }
+            }
+        }
+
+        // Comprobar el color del suelo y mirar si es aliado o enemigo
+
+        // Si es color aliado con shift puedes correr + rapido y recargas rapido
+
+        // Si es color enemigo te mueves mas lento, recibes un pelin de daño y usar shift te frena mas
     }
 
     void OnMove(InputValue value)

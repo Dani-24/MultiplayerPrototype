@@ -33,14 +33,16 @@ public class PlayerStats : MonoBehaviour
 
     public Slider HPSlider;
 
+    [Header("Debug")]
+    public bool infiniteInk = false;
+    public bool infiniteHP = false;
+
     void Start()
     {
         maxHP = HP;
         inkCapacity = ink;
 
         controller = GetComponent<CharacterController>();
-
-        inkSliderImg.color = SceneManagerScript.Instance.allyColor;
     }
 
     void Update()
@@ -62,9 +64,13 @@ public class PlayerStats : MonoBehaviour
         // Update UI
         inkSlider.value = ink;
         HPSlider.value = HP;
+        inkSliderImg.color = SceneManagerScript.Instance.allyColor;
 
         // Reloading
         ReloadInk();
+
+        if(infiniteHP ) { HP = maxHP; }
+        if(infiniteInk) { ink = inkCapacity; }
     }
 
     void ReloadInk()
