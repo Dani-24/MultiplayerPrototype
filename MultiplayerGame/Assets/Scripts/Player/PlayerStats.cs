@@ -75,7 +75,7 @@ public class PlayerStats : MonoBehaviour
 
     void ReloadInk()
     {
-        if(ink < inkCapacity && !GetComponent<PlayerMovement>().weaponShooting && !GetComponent<PlayerMovement>().subWeaponShooting)
+        if(ink < inkCapacity && !GetComponent<PlayerMovement>().weaponShooting /*&& !GetComponent<PlayerMovement>().subWeaponShooting*/)
         {
             if (onInk)
             {

@@ -25,6 +25,8 @@ public class SubWeapon : MonoBehaviour
     [Header("SubWeapon Prefab")]
     public GameObject subWeaponGO;
 
+    bool chargingSub = false;
+
     void Start()
     {
         
@@ -36,10 +38,22 @@ public class SubWeapon : MonoBehaviour
 
         if(isThrowingSubWeapon)
         {
+            ChargeSub();
+        }
+
+        if(chargingSub && !isThrowingSubWeapon)
+        {
             ThrowSub();
         }
     }
 
+    // Cargar/Apuntar la cosa al apretar
+    void ChargeSub()
+    {
+        chargingSub = true;
+    }
+
+    // Tirar la cosa al soltar
     void ThrowSub()
     {
         if (gameObject.GetComponent<PlayerStats>().ink >= throwCost)
@@ -50,6 +64,7 @@ public class SubWeapon : MonoBehaviour
             // Costar tinta
             gameObject.GetComponent<PlayerStats>().ink -= throwCost;
         }
+        chargingSub = false;
     }
 
     public enum subWeaponType
