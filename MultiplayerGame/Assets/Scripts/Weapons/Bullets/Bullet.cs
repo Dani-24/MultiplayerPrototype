@@ -22,13 +22,17 @@ public class Bullet : MonoBehaviour
     public float strength = 1;
     public float hardness = 1;
 
+    [Header("Other")]
+
+    [SerializeField] float minYaxis = -20;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
 
     public void Start()
-    {        
+    {
         rb.velocity = transform.forward * speed;
 
         float acc = (speed * speed) / (2 * travelDistance);
@@ -53,7 +57,7 @@ public class Bullet : MonoBehaviour
     {
         rb.velocity += new Vector3(0, customGravity, 0);
 
-        if(transform.position.y < -20)
+        if (transform.position.y < minYaxis)
         {
             Destroy(gameObject);
         }
@@ -61,15 +65,12 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag != "Bullet" && other.tag != "EnemyBullet")
+        Paintable p = other.GetComponent<Paintable>();
+        if (p != null)
         {
-            Paintable p = other.GetComponent<Paintable>();
-            if(p != null)
-            {
-                Vector3 pos = other.ClosestPointOnBounds(transform.position);
-                PaintManager.instance.paint(p, pos, radius, hardness, strength, rend.material.color);
-            }
-            Destroy(gameObject);
+            Vector3 pos = other.ClosestPointOnBounds(transform.position);
+            PaintManager.instance.paint(p, pos, radius, hardness, strength, rend.material.color);
         }
+        Destroy(gameObject);
     }
 }

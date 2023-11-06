@@ -151,7 +151,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 87
+    m_Bits: 983
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1189,7 +1189,7 @@ GameObject:
   - component: {fileID: 4336922722577219396}
   - component: {fileID: 247857097964215285}
   - component: {fileID: 8611022976118043153}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1212,7 +1212,7 @@ Transform:
   - {fileID: 8830754645952524441}
   - {fileID: 1971780595229185344}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4211371814449528777
 MonoBehaviour:
@@ -1229,13 +1229,16 @@ MonoBehaviour:
   HP: 100
   isDead: 0
   ink: 100
-  inkReloadSpeed: 1
+  inkReloadSpeed: 20
   inkReloadSpeedOnInk: 5
   onInk: 0
   spawnPos: {x: 0, y: 1, z: 0}
+  minYaxis: -20
   inkSlider: {fileID: 5743119952819625741}
   inkSliderImg: {fileID: 7884540201644135570}
   HPSlider: {fileID: 1026236064186508710}
+  infiniteInk: 0
+  infiniteHP: 0
 --- !u!114 &8850403938646090606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1256,7 +1259,7 @@ MonoBehaviour:
   maxFallingSpeed: 10
   jumpForce: 6.5
   jumping: 0
-  groundCheckDist: 1.2
+  groundCheckDist: 0.2
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -1278,12 +1281,20 @@ MonoBehaviour:
   weaponType: 0
   dmg: 180
   splashDmg: 30
-  range: 5
+  range: 15
   cooldown: 0
-  radius: 5
+  lethalRadius: 3
+  nonLethalRadius: 5
   throwCost: 70
   isThrowingSubWeapon: 0
-  subWeaponGO: {fileID: 0}
+  aimingRotation: {fileID: 8830754645952524441}
+  subWeaponsPrefabs:
+  - type: 0
+    prefab: {fileID: 4612145116355683483, guid: c298e5f021ab0d54d9b89b8975adf95b,
+      type: 3}
+  - type: 1
+    prefab: {fileID: 4612145116355683483, guid: 55f923aac6892384b88b6229c05fd927,
+      type: 3}
 --- !u!114 &247857097964215285
 MonoBehaviour:
   m_ObjectHideFlags: 0

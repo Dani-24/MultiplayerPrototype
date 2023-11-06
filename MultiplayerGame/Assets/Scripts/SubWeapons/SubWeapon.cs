@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class SubWeapon : MonoBehaviour
 {
@@ -11,8 +13,11 @@ public class SubWeapon : MonoBehaviour
     public float range;
     public float cooldown;
 
-    [Tooltip("Radius affected by this subWeapon")]
-    public float radius;
+    [Tooltip("Radius affected by this subWeapon where can kill a player")]
+    public float lethalRadius = 1f;
+
+    [Tooltip("Radius affected by this subWeapon where deals splash dmg to a player")]
+    public float nonLethalRadius = 1.25f;
 
     [Tooltip("% from the total ink that shooting once costs")]
     public float throwCost;
@@ -20,17 +25,12 @@ public class SubWeapon : MonoBehaviour
     [Header("Debug Info")]
     public bool isThrowingSubWeapon = false;
 
-    List<GameObject> subWeapons = new List<GameObject>();
+    public Transform aimingRotation;
 
     [Header("SubWeapon Prefab")]
-    public GameObject subWeaponGO;
+    public List<SubWeaponPrefabs> subWeaponsPrefabs = new List<SubWeaponPrefabs>();
 
     bool chargingSub = false;
-
-    void Start()
-    {
-        
-    }
 
     void Update()
     {
@@ -58,10 +58,59 @@ public class SubWeapon : MonoBehaviour
     {
         if (gameObject.GetComponent<PlayerStats>().ink >= throwCost)
         {
-
             // Funcionalidad de la cosa // Instanciar aqui el weaponType
 
-            // Costar tinta
+            GameObject bombToThrow = null;
+
+            // Direction & Position for the new gameObject
+            Vector3 aimTo = aimingRotation.rotation.eulerAngles;
+            aimTo.x -= 20;
+
+            Vector3 pos = transform.position;
+            pos.y += 1.5f;
+
+            // Select Bomb
+            switch (weaponType)
+            {
+                case subWeaponType.Bomb:
+                    foreach(SubWeaponPrefabs sub in subWeaponsPrefabs)
+                    {
+                        if(sub.type == subWeaponType.Bomb)
+                        {
+                            bombToThrow = Instantiate(sub.prefab, pos, Quaternion.Euler(aimTo));
+
+                            bombToThrow.GetComponent<Bomb>().dmg = dmg;
+                            bombToThrow.GetComponent<Bomb>().splashDmg = splashDmg;
+                            bombToThrow.GetComponent<Bomb>().range = range;
+                            bombToThrow.GetComponent<Bomb>().lethalRadius = lethalRadius;
+                            bombToThrow.GetComponent<Bomb>().nonLethalRadius = nonLethalRadius;
+
+                            break;
+                        }
+                    }
+                    break;
+                case subWeaponType.FastBomb:
+                    foreach (SubWeaponPrefabs sub in subWeaponsPrefabs)
+                    {
+                        if (sub.type == subWeaponType.FastBomb)
+                        {
+                            bombToThrow = Instantiate(sub.prefab, pos, Quaternion.Euler(aimTo));
+
+                            break;
+                        }
+                    }
+                    break;
+            }
+
+            if (gameObject.tag != "Enemy")
+            {
+                bombToThrow.tag = "AllyBomb";
+            }
+            else
+            {
+                bombToThrow.tag = "EnemyBomb";
+            }
+
             gameObject.GetComponent<PlayerStats>().ink -= throwCost;
         }
         chargingSub = false;
@@ -71,5 +120,18 @@ public class SubWeapon : MonoBehaviour
     {
         Bomb,
         FastBomb
+    }
+
+    [System.Serializable]
+    public struct SubWeaponPrefabs
+    {
+        public subWeaponType type;
+        public GameObject prefab;
+
+        public SubWeaponPrefabs(subWeaponType wType, GameObject go)
+        {
+            type = wType;
+            prefab = go;
+        }
     }
 }

@@ -36,14 +36,4 @@ public class Weapon : MonoBehaviour
     [Header("Weapon meshes")]
     public GameObject weaponMesh;
     public GameObject bulletPrefab;
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
 }

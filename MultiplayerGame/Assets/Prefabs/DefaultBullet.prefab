@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 100425741188441317}
   - component: {fileID: 9001144958375606953}
   - component: {fileID: 5704761857400912723}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DefaultBullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -54,6 +54,7 @@ MonoBehaviour:
   radius: 1
   strength: 1
   hardness: 1
+  minYaxis: -20
 --- !u!54 &9001144958375606953
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -113,7 +114,7 @@ GameObject:
   - component: {fileID: 3100287024124227410}
   - component: {fileID: 6912002535433302921}
   - component: {fileID: 6625674540470578224}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,7 @@ public class Shooter : Weapon
 
     void Update()
     {
-        isShooting = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().weaponShooting;
+        isShooting = GetComponentInParent<PlayerMovement>().weaponShooting;
 
         // =========== ROTACIÓN DEL ARMA ===========
 

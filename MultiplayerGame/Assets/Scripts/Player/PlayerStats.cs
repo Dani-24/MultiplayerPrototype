@@ -27,6 +27,8 @@ public class PlayerStats : MonoBehaviour
 
     private CharacterController controller;
 
+    [SerializeField] float minYaxis = -20;
+
     [Header("UI Things")]
     public Slider inkSlider;
     public Image inkSliderImg;
@@ -47,7 +49,7 @@ public class PlayerStats : MonoBehaviour
 
     void Update()
     {
-        if(transform.position.y < -20 || HP <= 0) isDead = true;
+        if(transform.position.y < minYaxis || HP <= 0) isDead = true;
 
         if (isDead)
         {

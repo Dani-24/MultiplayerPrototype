@@ -64,11 +64,11 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 moveDir = forwardRelativeVerticalInput + rigthRelativeHorizontalInput;
 
-        if (moveDir != Vector3.zero || weaponShooting)
+        if (moveDir != Vector3.zero || weaponShooting || subWeaponShooting)
         {
             Quaternion rotDes = Quaternion.identity;
 
-            if (!weaponShooting)
+            if (!weaponShooting && !subWeaponShooting)
             {
                 rotDes = Quaternion.LookRotation(moveDir, Vector3.up);
                 playerBody.transform.rotation = Quaternion.Slerp(playerBody.transform.rotation, rotDes, rotationSpeed * Time.deltaTime);

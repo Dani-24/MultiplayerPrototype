@@ -10,17 +10,22 @@ TagManager:
   - Bullet
   - Enemy
   - EnemyBullet
+  - AllyBomb
+  - EnemyBomb
+  - NonLethalAllyBomb
+  - NonLethalEnemyBomb
+  - Ally
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Ground
-  - 
-  - 
-  - 
+  - NotWithPlayer
+  - Bullet
+  - Enemy
   - 
   - 
   - 
