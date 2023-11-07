@@ -9,6 +9,11 @@ using System;
 
 public class ClientSockets : MonoBehaviour
 {
+    /// <summary>
+    ///  A UDP LE FALTA ENVIAR UNA ID PARA IDENTIFICAR QUE CLIENT ERES
+    /// </summary>
+
+
     [SerializeField] socketType typeOfSocket;
 
     Socket serverSocket;

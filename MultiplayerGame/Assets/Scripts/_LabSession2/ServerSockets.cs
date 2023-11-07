@@ -8,6 +8,10 @@ using UnityEngine;
 
 public class ServerSockets : MonoBehaviour
 {
+    /// <summary>
+    ///  A UDP LE FALTA RECIBIR UNA ID PARA IDENTIFICAR QUE CLIENT ERES
+    /// </summary>
+
     [SerializeField] socketType typeOfSocket;
 
     Socket server, client;

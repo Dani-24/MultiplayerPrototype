@@ -37,6 +37,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("SubWeapon")]
     public bool subWeaponShooting = false;
 
+    [SerializeField] Texture debugTexture;
+    [SerializeField] Texture2D debugTexture2d;
+    [SerializeField] GameObject debugGameObjectHit;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -117,11 +121,19 @@ public class PlayerMovement : MonoBehaviour
 
                 //Texture2D texture = material.mainTexture as Texture2D;
 
-                Texture2D texture = material.GetTexture("_MaskTexture") as Texture2D;
+                Texture texture = material.GetTexture("_MaskTexture");
 
-                if (texture != null)
+                debugGameObjectHit = hit.collider.gameObject;
+                debugTexture = texture;
+
+                // Crea un nuevo objeto Texture2D
+                Texture2D texture2D = toTexture2D(texture);
+
+                debugTexture2d = texture2D;
+
+                if (texture2D != null)
                 {
-                    Color pixelColor = texture.GetPixelBilinear(uvCoord.x, uvCoord.y);
+                    Color pixelColor = texture2D.GetPixelBilinear(uvCoord.x, uvCoord.y);
 
                     Debug.Log("Color: " + pixelColor);
 
@@ -146,6 +158,14 @@ public class PlayerMovement : MonoBehaviour
         // Si es color aliado con shift puedes correr + rapido y recargas rapido
 
         // Si es color enemigo te mueves mas lento, recibes un pelin de daño y usar shift te frena mas
+    }
+
+    Texture2D toTexture2D(Texture rTex)
+    {
+        Texture2D tex = new Texture2D(512, 512, TextureFormat.RGB24, false);
+        tex.ReadPixels(new Rect(0, 0, rTex.width, rTex.height), 0, 0);
+        tex.Apply();
+        return tex;
     }
 
     void OnMove(InputValue value)
