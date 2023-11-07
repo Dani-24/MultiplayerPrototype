@@ -228,9 +228,11 @@ GameObject:
   m_Component:
   - component: {fileID: 6846174359786283446}
   - component: {fileID: 833565680769700649}
+  - component: {fileID: 9041000883790263619}
+  - component: {fileID: 1206404072918386418}
   - component: {fileID: 1362627804977068714}
   - component: {fileID: 7992853077569660344}
-  - component: {fileID: 1206404072918386418}
+  - component: {fileID: 917419067122776750}
   m_Layer: 9
   m_Name: Dummy
   m_TagString: Enemy
@@ -254,7 +256,7 @@ Transform:
   - {fileID: 8046872250040209765}
   - {fileID: 5183967022910077628}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &833565680769700649
 MonoBehaviour:
@@ -269,6 +271,55 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 100
+  timeToRegen: 1.7
+--- !u!114 &9041000883790263619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3232819768978155377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 265ac23e0bebcfd4cae51d7dcabda088, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponType: 0
+  dmg: 180
+  splashDmg: 30
+  range: 15
+  cooldown: 0
+  lethalRadius: 3
+  nonLethalRadius: 5
+  paintRadius: 4
+  isThrowingSubWeapon: 0
+  subWeaponsPrefabs:
+  - type: 0
+    prefab: {fileID: 4612145116355683483, guid: c298e5f021ab0d54d9b89b8975adf95b,
+      type: 3}
+--- !u!136 &1206404072918386418
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3232819768978155377}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &1362627804977068714
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -319,29 +370,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &1206404072918386418
-CapsuleCollider:
+--- !u!114 &917419067122776750
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3232819768978155377}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7907e63ae96c5f44e940a2a3ea05c251, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  extendsIslandOffset: 1
 --- !u!1 &3853946806469942252
 GameObject:
   m_ObjectHideFlags: 0

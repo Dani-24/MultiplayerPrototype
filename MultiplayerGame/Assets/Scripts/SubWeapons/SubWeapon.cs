@@ -19,6 +19,9 @@ public class SubWeapon : MonoBehaviour
     [Tooltip("Radius affected by this subWeapon where deals splash dmg to a player")]
     public float nonLethalRadius = 1.25f;
 
+    [Tooltip("Radius painted by this subWeapon")]
+    public float paintRadius = 1.1f;
+
     [Tooltip("% from the total ink that shooting once costs")]
     public float throwCost;
 
@@ -84,6 +87,7 @@ public class SubWeapon : MonoBehaviour
                             bombToThrow.GetComponent<Bomb>().range = range;
                             bombToThrow.GetComponent<Bomb>().lethalRadius = lethalRadius;
                             bombToThrow.GetComponent<Bomb>().nonLethalRadius = nonLethalRadius;
+                            bombToThrow.GetComponent<Bomb>().paintRadius = paintRadius;
 
                             break;
                         }

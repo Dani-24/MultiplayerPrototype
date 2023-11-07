@@ -6,16 +6,6 @@ public class ShooterDummy : Weapon
     {
         isShooting = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().weaponShooting;
 
-        if (shootCooldown >= 0.0f)
-        {
-            shootCooldown -= Time.deltaTime;
-        }
-        else if (isShooting)
-        {
-            Shoot();
-            shootCooldown = 1 / cadence;
-        }
-
         // =========== ROTACIÓN DEL ARMA ===========
 
         if (isShooting)
@@ -26,6 +16,16 @@ public class ShooterDummy : Weapon
         else
         {
             weaponMesh.transform.rotation = Quaternion.LookRotation(transform.forward);
+        }
+
+        if (shootCooldown >= 0.0f)
+        {
+            shootCooldown -= Time.deltaTime;
+        }
+        else if (isShooting)
+        {
+            Shoot();
+            shootCooldown = 1 / cadence;
         }
     }
 

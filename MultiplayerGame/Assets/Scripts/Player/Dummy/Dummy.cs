@@ -7,33 +7,33 @@ public class Dummy : MonoBehaviour
     public float HP = 100.0f;
     float maxHP;
 
-    float contMax = 5;
-    float cont;
+    float contMax;
+    public float timeToRegen = 5;
 
     void Start()
     {
+        contMax = timeToRegen;
         maxHP = HP;
-        ResetCont();
     }
 
     void Update()
     {
         if (HP < 0) HP = 0;
 
-        if (cont > 0)
+        if (timeToRegen > 0 && HP != 100)
         {
-        cont -= Time.deltaTime;
+            timeToRegen -= Time.deltaTime;
         }
         else
         {
-            ResetCont();
+            ResetCont(true);
         }
     }
 
-    void ResetCont()
+    void ResetCont(bool regen = false)
     {
-        cont = contMax;
-        HP = maxHP;
+        timeToRegen = contMax;
+        if(regen) HP = maxHP;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -41,6 +41,7 @@ public class Dummy : MonoBehaviour
         if (other.CompareTag("Bullet") && HP > 0)
         {
             HP -= other.gameObject.GetComponent<Bullet>().DMG;
+            ResetCont();
         }
     }
 }

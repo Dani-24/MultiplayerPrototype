@@ -1285,6 +1285,7 @@ MonoBehaviour:
   cooldown: 0
   lethalRadius: 3
   nonLethalRadius: 5
+  paintRadius: 4
   throwCost: 70
   isThrowingSubWeapon: 0
   aimingRotation: {fileID: 8830754645952524441}

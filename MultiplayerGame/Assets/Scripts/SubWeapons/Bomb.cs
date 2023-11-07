@@ -84,7 +84,7 @@ public class Bomb : SubWeapon
             if (p != null)
             {
                 Vector3 pos = hit.ClosestPointOnBounds(transform.position);
-                PaintManager.instance.paint(p, pos, lethalRadius, hardness, strength, rend[0].material.color);
+                PaintManager.instance.paint(p, pos, paintRadius, hardness, strength, rend[0].material.color);
             }
         }
 
