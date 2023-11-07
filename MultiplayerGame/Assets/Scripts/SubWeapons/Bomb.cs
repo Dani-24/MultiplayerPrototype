@@ -80,6 +80,7 @@ public class Bomb : SubWeapon
                 hit.GetComponent<Dummy>().HP -= dmg;
             }
 
+            // Paint only objects affected by lethal dmg area???
             Paintable p = hit.GetComponent<Paintable>();
             if (p != null)
             {
@@ -104,6 +105,19 @@ public class Bomb : SubWeapon
                 hit.GetComponent<Dummy>().HP -= splashDmg;
             }
         }
+
+        // Paint all in paint Radius
+        //colliders = Physics.OverlapSphere(transform.position, paintRadius);
+
+        //foreach (Collider hit in colliders)
+        //{
+        //    Paintable p = hit.GetComponent<Paintable>();
+        //    if (p != null)
+        //    {
+        //        Vector3 pos = hit.ClosestPointOnBounds(transform.position);
+        //        PaintManager.instance.paint(p, pos, paintRadius, hardness, strength, rend[0].material.color);
+        //    }
+        //}
 
         Destroy(gameObject);
     }

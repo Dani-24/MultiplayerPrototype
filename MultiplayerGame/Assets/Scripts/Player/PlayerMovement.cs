@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using static Unity.VisualScripting.Member;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -37,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("SubWeapon")]
     public bool subWeaponShooting = false;
 
+    [Header("DEBUG Texture")]
     [SerializeField] Texture debugTexture;
     [SerializeField] Texture2D debugTexture2d;
     [SerializeField] GameObject debugGameObjectHit;
@@ -127,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
                 debugTexture = texture;
 
                 // Crea un nuevo objeto Texture2D
-                Texture2D texture2D = toTexture2D(texture);
+                Texture2D texture2D = null; //TextureToText2D(texture);
 
                 debugTexture2d = texture2D;
 
@@ -136,6 +138,12 @@ public class PlayerMovement : MonoBehaviour
                     Color pixelColor = texture2D.GetPixelBilinear(uvCoord.x, uvCoord.y);
 
                     Debug.Log("Color: " + pixelColor);
+
+                    // Comprobar el color del suelo y mirar si es aliado o enemigo
+
+                    // Si es color aliado con shift puedes correr + rapido y recargas rapido
+
+                    // Si es color enemigo te mueves mas lento, recibes un pelin de daño y usar shift te frena mas
 
                     if (pixelColor == SceneManagerScript.Instance.allyColor)
                     {
@@ -152,20 +160,28 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
-
-        // Comprobar el color del suelo y mirar si es aliado o enemigo
-
-        // Si es color aliado con shift puedes correr + rapido y recargas rapido
-
-        // Si es color enemigo te mueves mas lento, recibes un pelin de daño y usar shift te frena mas
     }
 
-    Texture2D toTexture2D(Texture rTex)
+    Texture2D TextureToText2D(Texture source)
     {
-        Texture2D tex = new Texture2D(512, 512, TextureFormat.RGB24, false);
-        tex.ReadPixels(new Rect(0, 0, rTex.width, rTex.height), 0, 0);
-        tex.Apply();
-        return tex;
+        // !!! Dentro de lo que cabe funciona pero Unity muere en el proceso
+
+        RenderTexture renderTex = RenderTexture.GetTemporary(
+               source.width,
+               source.height,
+               0,
+               RenderTextureFormat.Default,
+        RenderTextureReadWrite.Linear);
+
+        Graphics.Blit(source, renderTex);
+        RenderTexture previous = RenderTexture.active;
+        RenderTexture.active = renderTex;
+        Texture2D readableText = new Texture2D(source.width, source.height);
+        readableText.ReadPixels(new Rect(0, 0, renderTex.width, renderTex.height), 0, 0);
+        readableText.Apply();
+        RenderTexture.active = previous;
+        RenderTexture.ReleaseTemporary(renderTex);
+        return readableText;
     }
 
     void OnMove(InputValue value)
