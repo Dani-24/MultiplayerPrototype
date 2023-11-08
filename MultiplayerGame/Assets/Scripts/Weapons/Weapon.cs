@@ -18,6 +18,12 @@ public class Weapon : MonoBehaviour
     [Tooltip("% from the total ink that shooting once costs")]
     public float shootCost;
 
+    [Header("Painting (Bullet)")]
+
+    public float pRadius = 1;
+    public float pStrength = 1;
+    public float pHardness = 1;
+
     [Header("Position Corrections")]
     public Transform spawnBulletPosition;
 

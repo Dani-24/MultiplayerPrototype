@@ -53,6 +53,9 @@ public class Shooter : Weapon
             bullet.GetComponent<Bullet>().speed = bulletSpeed;
             bullet.GetComponent<Bullet>().travelDistance = weaponRange;
             bullet.GetComponent<Bullet>().DMG = shootDMG;
+            bullet.GetComponent<Bullet>().radius = pRadius;
+            bullet.GetComponent<Bullet>().hardness = pHardness;
+            bullet.GetComponent<Bullet>().strength = pStrength;
 
             // Cost ink
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>().ink -= shootCost;
