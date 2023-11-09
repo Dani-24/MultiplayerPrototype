@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraOrbitObject: {fileID: 1971780595229185344}
-  mouseSens: 200
+  mouseSens: 1000
   camSpeed: 5
   cameraMaxDistance: 15
   maxHeight: 60
@@ -1266,6 +1266,9 @@ MonoBehaviour:
   weapon: {fileID: 3597637874272683826, guid: 234fa55f3924b684fa2079555201eb96, type: 3}
   weaponShooting: 0
   subWeaponShooting: 0
+  debugTexture: {fileID: 0}
+  debugTexture2d: {fileID: 0}
+  debugGameObjectHit: {fileID: 0}
 --- !u!114 &4336922722577219396
 MonoBehaviour:
   m_ObjectHideFlags: 0

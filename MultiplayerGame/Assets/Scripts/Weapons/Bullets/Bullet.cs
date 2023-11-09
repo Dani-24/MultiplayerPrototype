@@ -73,4 +73,9 @@ public class Bullet : MonoBehaviour
         }
         Destroy(gameObject);
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        Destroy(gameObject);
+    }
 }
