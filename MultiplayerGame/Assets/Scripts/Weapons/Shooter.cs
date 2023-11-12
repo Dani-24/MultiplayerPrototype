@@ -18,6 +18,8 @@ public class Shooter : Weapon
         if (isShooting)
         {
             aimDirection = GetComponentInParent<PlayerMovement>().cam.transform.forward;
+            aimDirection.y += shootingVerticalOffset;
+
             weaponMesh.transform.rotation = Quaternion.LookRotation(aimDirection, GetComponentInParent<PlayerMovement>().cam.transform.up);
         }
         else
@@ -42,13 +44,10 @@ public class Shooter : Weapon
     {
         if (GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>().ink >= shootCost)
         {
-            // Shooting direction
-            aimDirection.y += verticalShootingOffset;
-
             // RNG
             aimDirection.x += Random.Range(-rng, rng);
 
-            GameObject bullet = Instantiate(bulletPrefab, spawnBulletPosition.position, Quaternion.LookRotation(aimDirection, Vector3.up));
+            GameObject bullet = Instantiate(bulletPrefab, spawnBulletPosition.position, Quaternion.LookRotation(aimDirection, GetComponentInParent<PlayerMovement>().cam.transform.up));
 
             bullet.GetComponent<Bullet>().speed = bulletSpeed;
             bullet.GetComponent<Bullet>().travelDistance = weaponRange;

@@ -66,6 +66,9 @@ public class Bomb : SubWeapon
     {
         // Lethal Radius
 
+        // AÑADIR Q CUANDO HITTEE AL PLAYER LANCE 2 RAYCAST, UNO A LA CABEZA Y OTRO A LOS PIES, SI ESTAN EN EL AREA DE EXPLOSION Y EL RAYCAST NO HA CHOCADO CON ALGUNA COVERTURA YENDO A ESOS PUNTOS DESDE LA BOMBA
+        // ENTONCES DAÑARÁ AL PLAYER, SI NO NO
+
         Collider[] colliders = Physics.OverlapSphere(transform.position, lethalRadius);
 
         foreach (Collider hit in colliders)

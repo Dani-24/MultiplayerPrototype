@@ -70,6 +70,10 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 moveDir = forwardRelativeVerticalInput + rigthRelativeHorizontalInput;
 
+        // !!!!!!!!!!!!!!
+        // Al resetear la camara habria que hacer una transicion smooth desde la posicion actual a la nueva para que no cambie de golpe el movimiento
+        // !!!!!!!!!!!!!!
+
         if (moveDir != Vector3.zero || weaponShooting || subWeaponShooting)
         {
             Quaternion rotDes = Quaternion.identity;
@@ -208,5 +212,10 @@ public class PlayerMovement : MonoBehaviour
     void OnSubFire(InputValue value)
     {
         subWeaponShooting = value.isPressed;
+    }
+
+    void OnCamReset(InputValue value)
+    {
+        cam.GetComponent<OrbitCamera>().ResetCamera(value.isPressed);
     }
 }

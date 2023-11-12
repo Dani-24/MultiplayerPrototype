@@ -81,10 +81,13 @@ MonoBehaviour:
   shootDMG: 35
   bulletSpeed: 40
   weaponRange: 50
-  rng: 0.05
+  rng: 0.06
   shootCost: 0.8
+  pRadius: 1.1
+  pStrength: 1
+  pHardness: 1
   spawnBulletPosition: {fileID: 3150462560917926386}
-  verticalShootingOffset: 0.5
+  shootingVerticalOffset: 0.5
   isShooting: 0
   shootCooldown: 0
   aimDirection: {x: 0, y: 0, z: 0}

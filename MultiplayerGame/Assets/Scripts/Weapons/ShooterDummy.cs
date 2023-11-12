@@ -11,6 +11,8 @@ public class ShooterDummy : Weapon
         if (isShooting)
         {
             aimDirection = transform.forward;
+            aimDirection.y += shootingVerticalOffset;
+
             weaponMesh.transform.rotation = Quaternion.LookRotation(aimDirection, transform.up);
         }
         else
@@ -31,9 +33,6 @@ public class ShooterDummy : Weapon
 
     void Shoot()
     {
-        // Shooting direction
-        aimDirection.y += verticalShootingOffset;
-
         // RNG
         aimDirection.x += Random.Range(-rng, rng);
 

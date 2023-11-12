@@ -24,10 +24,16 @@ public class Weapon : MonoBehaviour
     public float pStrength = 1;
     public float pHardness = 1;
 
+    [Tooltip("WIP")] // !!!
+    public bool paintOwnFeet = true;
+    [Tooltip("WIP")] // !!!
+    public float ownPaintRadius = 1;
+
     [Header("Position Corrections")]
     public Transform spawnBulletPosition;
 
-    public float verticalShootingOffset;
+    [Tooltip("Offset to match the reticle")]
+    public float shootingVerticalOffset = 0.5f;
 
     [Header("Debug Info")]
     public bool isShooting = false;
@@ -36,7 +42,7 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     protected float shootCooldown = 0f;
 
-    [HideInInspector]
+    [Tooltip("Direction in which is the weapon aiming to shoot")]
     public Vector3 aimDirection;
 
     [Header("Weapon meshes")]

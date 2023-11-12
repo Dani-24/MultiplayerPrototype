@@ -83,8 +83,11 @@ MonoBehaviour:
   weaponRange: 50
   rng: 0.1
   shootCost: 0.8
+  pRadius: 1
+  pStrength: 1
+  pHardness: 1
   spawnBulletPosition: {fileID: 3150462560917926386}
-  verticalShootingOffset: 0.5
+  shootingDirOffset: {x: 0, y: 0.5}
   isShooting: 0
   shootCooldown: 0
   aimDirection: {x: 0, y: 0, z: 0}
