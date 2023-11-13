@@ -18,6 +18,8 @@ public class Bomb : SubWeapon
     [Header("Other")]
     [SerializeField] float minYaxis = -20;
 
+    List<Collider> bigDmgColliders = new List<Collider>();
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -59,7 +61,16 @@ public class Bomb : SubWeapon
 
     private void OnCollisionEnter(Collision collision)
     {
-        anim.SetTrigger("megumin");
+        switch (weaponType)
+        {
+            case subWeaponType.Bomb:
+                anim.SetTrigger("megumin");
+                break;
+
+            case subWeaponType.FastBomb:
+                OnExplosion();
+                break;
+        }
     }
 
     public void OnExplosion()
@@ -90,6 +101,8 @@ public class Bomb : SubWeapon
                 Vector3 pos = hit.ClosestPointOnBounds(transform.position);
                 PaintManager.instance.paint(p, pos, paintRadius, hardness, strength, rend[0].material.color);
             }
+
+            bigDmgColliders.Add(hit);
         }
 
         // Splash Radius
@@ -98,29 +111,21 @@ public class Bomb : SubWeapon
 
         foreach (Collider hit in colliders)
         {
-            if (hit.CompareTag("Player") && this.CompareTag("EnemyBomb"))
+            if (!bigDmgColliders.Contains(hit))
             {
-                hit.GetComponent<PlayerStats>().HP -= splashDmg;
-            }
+                if (hit.CompareTag("Player") && this.CompareTag("EnemyBomb"))
+                {
+                    hit.GetComponent<PlayerStats>().HP -= splashDmg;
+                }
 
-            if (hit.CompareTag("Enemy") && this.CompareTag("AllyBomb"))
-            {
-                hit.GetComponent<Dummy>().HP -= splashDmg;
+                if (hit.CompareTag("Enemy") && this.CompareTag("AllyBomb"))
+                {
+                    hit.GetComponent<Dummy>().HP -= splashDmg;
+                }
             }
         }
 
-        // Paint all in paint Radius
-        //colliders = Physics.OverlapSphere(transform.position, paintRadius);
-
-        //foreach (Collider hit in colliders)
-        //{
-        //    Paintable p = hit.GetComponent<Paintable>();
-        //    if (p != null)
-        //    {
-        //        Vector3 pos = hit.ClosestPointOnBounds(transform.position);
-        //        PaintManager.instance.paint(p, pos, paintRadius, hardness, strength, rend[0].material.color);
-        //    }
-        //}
+        bigDmgColliders.Clear();
 
         Destroy(gameObject);
     }

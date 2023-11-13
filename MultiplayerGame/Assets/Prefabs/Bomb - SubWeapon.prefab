@@ -181,15 +181,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 0
-  dmg: 0
-  splashDmg: 0
-  range: 0
+  dmg: 180
+  splashDmg: 30
+  range: 15
   cooldown: 0
   lethalRadius: 1
-  nonLethalRadius: 1.25
-  throwCost: 0
+  nonLethalRadius: 3
+  paintRadius: 5
+  throwCost: 70
   isThrowingSubWeapon: 0
   aimingRotation: {fileID: 0}
+  aimYOffset: 0
+  posYOffset: 0
+  throwPosition: {fileID: 0}
   subWeaponsPrefabs: []
   rend:
   - {fileID: 1967691771641202558}

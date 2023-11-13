@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class SubWeapon : MonoBehaviour
 {
+    // Transferir la gestion de subs al SubWeaponController y dejar esto sin funciones solo variables (como Weapon.cs)
+
     public subWeaponType weaponType;
 
     [Header("Sub Weapon Propierties")]
@@ -29,6 +29,9 @@ public class SubWeapon : MonoBehaviour
     public bool isThrowingSubWeapon = false;
 
     public Transform aimingRotation;
+    public float aimYOffset;
+    public float posYOffset;
+    public Transform throwPosition;
 
     [Header("SubWeapon Prefab")]
     public List<SubWeaponPrefabs> subWeaponsPrefabs = new List<SubWeaponPrefabs>();
@@ -67,10 +70,10 @@ public class SubWeapon : MonoBehaviour
 
             // Direction & Position for the new gameObject
             Vector3 aimTo = aimingRotation.rotation.eulerAngles;
-            aimTo.x -= 20;
+            aimTo.x += aimYOffset;
 
-            Vector3 pos = transform.position;
-            pos.y += 1.5f;
+            Vector3 pos = throwPosition.position;
+            pos.y += posYOffset;
 
             // Select Bomb
             switch (weaponType)
@@ -99,6 +102,14 @@ public class SubWeapon : MonoBehaviour
                         if (sub.type == subWeaponType.FastBomb)
                         {
                             bombToThrow = Instantiate(sub.prefab, pos, Quaternion.Euler(aimTo));
+
+                            bombToThrow.GetComponent<Bomb>().weaponType = weaponType;
+                            bombToThrow.GetComponent<Bomb>().dmg = dmg;
+                            bombToThrow.GetComponent<Bomb>().splashDmg = splashDmg;
+                            bombToThrow.GetComponent<Bomb>().range = range;
+                            bombToThrow.GetComponent<Bomb>().lethalRadius = lethalRadius;
+                            bombToThrow.GetComponent<Bomb>().nonLethalRadius = nonLethalRadius;
+                            bombToThrow.GetComponent<Bomb>().paintRadius = paintRadius;
 
                             break;
                         }

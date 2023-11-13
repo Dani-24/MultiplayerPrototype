@@ -4118,6 +4118,46 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4211371814449528777, guid: b67d6d356db779849a9636062bb6b45c,
+        type: 3}
+      propertyPath: infiniteInk
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4336922722577219396, guid: b67d6d356db779849a9636062bb6b45c,
+        type: 3}
+      propertyPath: dmg
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 4336922722577219396, guid: b67d6d356db779849a9636062bb6b45c,
+        type: 3}
+      propertyPath: range
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4336922722577219396, guid: b67d6d356db779849a9636062bb6b45c,
+        type: 3}
+      propertyPath: throwCost
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 4336922722577219396, guid: b67d6d356db779849a9636062bb6b45c,
+        type: 3}
+      propertyPath: weaponType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4336922722577219396, guid: b67d6d356db779849a9636062bb6b45c,
+        type: 3}
+      propertyPath: paintRadius
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4336922722577219396, guid: b67d6d356db779849a9636062bb6b45c,
+        type: 3}
+      propertyPath: lethalRadius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4336922722577219396, guid: b67d6d356db779849a9636062bb6b45c,
+        type: 3}
+      propertyPath: nonLethalRadius
+      value: 3.25
+      objectReference: {fileID: 0}
     - target: {fileID: 4445439971430778224, guid: b67d6d356db779849a9636062bb6b45c,
         type: 3}
       propertyPath: m_AnchorMax.y

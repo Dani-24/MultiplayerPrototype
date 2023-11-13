@@ -892,7 +892,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8741448428192469639}
   - {fileID: 4286037829353234819}
@@ -1305,6 +1305,9 @@ MonoBehaviour:
   throwCost: 70
   isThrowingSubWeapon: 0
   aimingRotation: {fileID: 8830754645952524441}
+  aimYOffset: -22
+  posYOffset: 0
+  throwPosition: {fileID: 4286037829353234819}
   subWeaponsPrefabs:
   - type: 0
     prefab: {fileID: 4612145116355683483, guid: c298e5f021ab0d54d9b89b8975adf95b,
