@@ -14,7 +14,15 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float moveSpeed = 10.0f;
 
+    [Tooltip("Velocidad al correr")]
+    [SerializeField] private float runSpeed = 20.0f;
+
+    [Tooltip("Velocidad al correr sin estar potenciado")]
+    [SerializeField] private float runSlowSpeed = 5.0f;
+
     [SerializeField] private float rotationSpeed = 10.0f;
+
+    public bool isRunning = false;
 
     [HideInInspector] public Camera cam;
 
@@ -91,7 +99,14 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        controller.Move(moveDir * Time.deltaTime * moveSpeed);
+        if (!isRunning)
+        {
+            controller.Move(moveDir * Time.deltaTime * moveSpeed);
+        }
+        else
+        {
+            controller.Move(moveDir * Time.deltaTime * runSpeed);
+        }
 
         bool isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDist, groundLayer);
 
@@ -102,7 +117,7 @@ public class PlayerMovement : MonoBehaviour
 
         if(fallingSpeed > -maxFallingSpeed)
         {
-            fallingSpeed -= Time.deltaTime * 10f;
+            fallingSpeed -= Time.deltaTime * 20f;
         }
 
         controller.Move(new Vector3(0, fallingSpeed * Time.deltaTime, 0));
@@ -217,5 +232,10 @@ public class PlayerMovement : MonoBehaviour
     void OnCamReset(InputValue value)
     {
         cam.GetComponent<OrbitCamera>().ResetCamera(value.isPressed);
+    }
+
+    void OnRun(InputValue value)
+    {
+        isRunning = value.isPressed;
     }
 }

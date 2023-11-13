@@ -1264,10 +1264,13 @@ MonoBehaviour:
   playerBody: {fileID: 5507765789572088406}
   moveInput: {x: 0, y: 0}
   moveSpeed: 10
+  runSpeed: 20
+  runSlowSpeed: 5
   rotationSpeed: 10
+  isRunning: 0
   cam: {fileID: 0}
   maxFallingSpeed: 10
-  jumpForce: 6.5
+  jumpForce: 8
   jumping: 0
   groundCheckDist: 0.2
   groundLayer:
