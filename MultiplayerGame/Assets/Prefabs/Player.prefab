@@ -185,7 +185,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraOrbitObject: {fileID: 1971780595229185344}
   playerRotation: {fileID: 8830754645952524441}
-  mouseSens: 1000
+  mouseSens: {x: 20, y: 15}
+  gamepadSens: {x: 200, y: 100}
   camSpeed: 5
   cameraMaxDist: 20
   cameraMinDist: 5
@@ -195,6 +196,7 @@ MonoBehaviour:
   maxHeight: 60
   minHeight: -80
   cameraReseting: 0
+  playerGameObject: {fileID: 7696216211473871433}
   reticleUI: {fileID: 2084435118961727494}
   reticleMinY: 0
   reticleMaxY: 0
@@ -1276,6 +1278,9 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  camAxis: {x: 0, y: 0}
+  camGyroAxis: {x: 0, y: 0, z: 0}
+  isUsingGamepad: 0
   weapon: {fileID: 3597637874272683826, guid: 234fa55f3924b684fa2079555201eb96, type: 3}
   weaponShooting: 0
   subWeaponShooting: 0

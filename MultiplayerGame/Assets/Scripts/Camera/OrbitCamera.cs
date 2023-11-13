@@ -7,7 +7,8 @@ public class OrbitCamera : MonoBehaviour
     [SerializeField] Transform playerRotation;
 
     [Header("Camera Propierties")]
-    public float mouseSens = 100f;
+    public Vector2 mouseSens;
+    public Vector2 gamepadSens;
 
     [SerializeField] float camSpeed = 1f;
 
@@ -38,6 +39,8 @@ public class OrbitCamera : MonoBehaviour
     [Header("Debug Info")]
     public bool cameraReseting = false;
 
+    [SerializeField] GameObject playerGameObject;
+
     [Header("Reticle")]
     [SerializeField] GameObject reticleUI;
 
@@ -64,12 +67,20 @@ public class OrbitCamera : MonoBehaviour
         }
 
         // Obtener Input
-        float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime;
+        float mouseX = playerGameObject.GetComponent<PlayerMovement>().camAxis.x * Time.deltaTime; //Input.GetAxis("Mouse X") * Time.deltaTime;
+        float mouseY = playerGameObject.GetComponent<PlayerMovement>().camAxis.y * Time.deltaTime; //Input.GetAxis("Mouse Y") * Time.deltaTime;
 
         // Aplicar sensibilidad a los ejes
-        camRotX += (Mathf.Clamp(mouseX, -1.0f, 1.0f) * mouseSens);
-        camRotY += (Mathf.Clamp(mouseY, -1.0f, 1.0f) * mouseSens);
+        if (!playerGameObject.GetComponent<PlayerMovement>().isUsingGamepad)
+        {
+            camRotX += (Mathf.Clamp(mouseX, -1.0f, 1.0f) * mouseSens.x);
+            camRotY += (Mathf.Clamp(mouseY, -1.0f, 1.0f) * mouseSens.y);
+        }
+        else
+        {
+            camRotX += (Mathf.Clamp(mouseX, -1.0f, 1.0f) * gamepadSens.x);
+            camRotY += (Mathf.Clamp(mouseY, -1.0f, 1.0f) * gamepadSens.y);
+        }
 
         // Limitar altura max y min del eje Y
         camRotY = Mathf.Clamp(camRotY, minHeight, maxHeight);

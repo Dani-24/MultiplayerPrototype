@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using static Unity.VisualScripting.Member;
+using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -39,6 +40,14 @@ public class PlayerMovement : MonoBehaviour
 
     public LayerMask groundLayer;
 
+    [Header("Camera (Do not edit)")]
+    public Vector2 camAxis;
+
+    [Tooltip("WIP")]
+    public Vector3 camGyroAxis;
+
+    public bool isUsingGamepad;
+
     [Header("Weapon")]
     public GameObject weapon;
     public bool weaponShooting = false;
@@ -51,6 +60,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Texture2D debugTexture2d;
     [SerializeField] GameObject debugGameObjectHit;
 
+    PlayerInput input;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -60,10 +71,21 @@ public class PlayerMovement : MonoBehaviour
         Instantiate(weapon, weaponSpawnPoint.transform);
 
         fallingSpeed = -maxFallingSpeed;
+
+        input = GetComponent<PlayerInput>();
     }
 
     void Update()
     {
+        if (input.currentControlScheme == "Gamepad" )
+        {
+            isUsingGamepad = true;
+        }
+        else
+        {
+            isUsingGamepad = false;
+        }
+
         // Camera Rotation & applying it to the player model
         Vector3 forward = cam.transform.forward;
         Vector3 right = cam.transform.right;
@@ -234,8 +256,14 @@ public class PlayerMovement : MonoBehaviour
         cam.GetComponent<OrbitCamera>().ResetCamera(value.isPressed);
     }
 
+    // Deberia bloquearse la posibilidad de disparar al correr (o hacer que al disparar dejes de correr)
     void OnRun(InputValue value)
     {
         isRunning = value.isPressed;
+    }
+
+    void OnCamera(InputValue value)
+    {
+        camAxis = value.Get<Vector2>();
     }
 }
