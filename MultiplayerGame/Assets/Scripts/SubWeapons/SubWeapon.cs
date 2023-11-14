@@ -3,15 +3,24 @@ using UnityEngine;
 
 public class SubWeapon : MonoBehaviour
 {
-    // Transferir la gestion de subs al SubWeaponController y dejar esto sin funciones solo variables (como Weapon.cs)
+    [HideInInspector] public string teamTag;
 
-    public subWeaponType weaponType;
+    #region Propierties
 
     [Header("Sub Weapon Propierties")]
+    [Tooltip("DMG dealt in lethal Radius")]
     public float dmg;
+    [Tooltip("DMG dealt in non-lethal Radius")]
     public float splashDmg;
+    [Tooltip("Projectile speed")]
+    public float speed;
+    [Tooltip("Throw range")]
     public float range;
+    [Tooltip("Cooldown beetwen this bomb and the last one")]
     public float cooldown;
+
+    [Tooltip("If False an animator is required")]
+    public bool instantExplosion = false;
 
     [Tooltip("Radius affected by this subWeapon where can kill a player")]
     public float lethalRadius = 1f;
@@ -19,134 +28,30 @@ public class SubWeapon : MonoBehaviour
     [Tooltip("Radius affected by this subWeapon where deals splash dmg to a player")]
     public float nonLethalRadius = 1.25f;
 
+    [Header("Aim offsets")]
+    public float aimYOffset;
+
+    #endregion
+
+    #region Ink & Painting
+
     [Tooltip("Radius painted by this subWeapon")]
-    public float paintRadius = 1.1f;
+    [SerializeField] protected float paintRadius = 1.1f;
+    [SerializeField] protected float strength = 1;
+    [SerializeField] protected float hardness = 1;
 
     [Tooltip("% from the total ink that shooting once costs")]
     public float throwCost;
 
-    [Header("Debug Info")]
-    public bool isThrowingSubWeapon = false;
+    #endregion
 
-    public Transform aimingRotation;
-    public float aimYOffset;
-    public float posYOffset;
-    public Transform throwPosition;
+    #region Other
 
-    [Header("SubWeapon Prefab")]
-    public List<SubWeaponPrefabs> subWeaponsPrefabs = new List<SubWeaponPrefabs>();
+    [SerializeField] protected List<Renderer> rend = new List<Renderer>();
 
-    bool chargingSub = false;
+    [SerializeField] protected float minYaxis = -20;
 
-    void Update()
-    {
-        isThrowingSubWeapon = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().subWeaponShooting;
+    protected float customGravity;
 
-        if(isThrowingSubWeapon)
-        {
-            ChargeSub();
-        }
-
-        if(chargingSub && !isThrowingSubWeapon)
-        {
-            ThrowSub();
-        }
-    }
-
-    // Cargar/Apuntar la cosa al apretar
-    void ChargeSub()
-    {
-        chargingSub = true;
-    }
-
-    // Tirar la cosa al soltar
-    void ThrowSub()
-    {
-        if (gameObject.GetComponent<PlayerStats>().ink >= throwCost)
-        {
-            // Funcionalidad de la cosa // Instanciar aqui el weaponType
-
-            GameObject bombToThrow = null;
-
-            // Direction & Position for the new gameObject
-            Vector3 aimTo = aimingRotation.rotation.eulerAngles;
-            aimTo.x += aimYOffset;
-
-            Vector3 pos = throwPosition.position;
-            pos.y += posYOffset;
-
-            // Select Bomb
-            switch (weaponType)
-            {
-                case subWeaponType.Bomb:
-                    foreach(SubWeaponPrefabs sub in subWeaponsPrefabs)
-                    {
-                        if(sub.type == subWeaponType.Bomb)
-                        {
-                            bombToThrow = Instantiate(sub.prefab, pos, Quaternion.Euler(aimTo));
-
-                            bombToThrow.GetComponent<Bomb>().dmg = dmg;
-                            bombToThrow.GetComponent<Bomb>().splashDmg = splashDmg;
-                            bombToThrow.GetComponent<Bomb>().range = range;
-                            bombToThrow.GetComponent<Bomb>().lethalRadius = lethalRadius;
-                            bombToThrow.GetComponent<Bomb>().nonLethalRadius = nonLethalRadius;
-                            bombToThrow.GetComponent<Bomb>().paintRadius = paintRadius;
-
-                            break;
-                        }
-                    }
-                    break;
-                case subWeaponType.FastBomb:
-                    foreach (SubWeaponPrefabs sub in subWeaponsPrefabs)
-                    {
-                        if (sub.type == subWeaponType.FastBomb)
-                        {
-                            bombToThrow = Instantiate(sub.prefab, pos, Quaternion.Euler(aimTo));
-
-                            bombToThrow.GetComponent<Bomb>().weaponType = weaponType;
-                            bombToThrow.GetComponent<Bomb>().dmg = dmg;
-                            bombToThrow.GetComponent<Bomb>().splashDmg = splashDmg;
-                            bombToThrow.GetComponent<Bomb>().range = range;
-                            bombToThrow.GetComponent<Bomb>().lethalRadius = lethalRadius;
-                            bombToThrow.GetComponent<Bomb>().nonLethalRadius = nonLethalRadius;
-                            bombToThrow.GetComponent<Bomb>().paintRadius = paintRadius;
-
-                            break;
-                        }
-                    }
-                    break;
-            }
-
-            if (gameObject.tag != "Enemy")
-            {
-                bombToThrow.tag = "AllyBomb";
-            }
-            else
-            {
-                bombToThrow.tag = "EnemyBomb";
-            }
-
-            gameObject.GetComponent<PlayerStats>().ink -= throwCost;
-        }
-        chargingSub = false;
-    }
-
-    public enum subWeaponType
-    {
-        Bomb,
-        FastBomb
-    }
-
-    [System.Serializable]
-    public struct SubWeaponPrefabs
-    {
-        public subWeaponType type;
-        public GameObject prefab;
-
-        public SubWeaponPrefabs(subWeaponType wType, GameObject go)
-        {
-            type = wType;
-            prefab = go;
-        }
-    }
+    #endregion
 }

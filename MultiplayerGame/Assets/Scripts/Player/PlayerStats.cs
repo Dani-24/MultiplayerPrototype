@@ -3,7 +3,12 @@ using UnityEngine.UI;
 
 public class PlayerStats : MonoBehaviour
 {
-    public Color teamColor;
+    public string teamTag;
+
+    [Header("Debug")]
+    public bool infiniteInk = false;
+    public bool infiniteHP = false;
+    public string presetTeam;
 
     [Header("HP")]
     public float HP = 100.0f;
@@ -35,26 +40,22 @@ public class PlayerStats : MonoBehaviour
 
     public Slider HPSlider;
 
-    [Header("Debug")]
-    public bool infiniteInk = false;
-    public bool infiniteHP = false;
-
     void Start()
     {
         maxHP = HP;
         inkCapacity = ink;
 
         controller = GetComponent<CharacterController>();
+
+        teamTag = SceneManagerScript.Instance.SetTeam(this.gameObject, presetTeam);
     }
 
     void Update()
     {
-        if (teamColor != SceneManagerScript.Instance.allyColor)
-        {
-            teamColor = SceneManagerScript.Instance.allyColor;
-            teamColorGO.material.color = teamColor;
-        }
+        // Check Color
+        teamColorGO.material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
 
+        // Check Death
         if (transform.position.y < minYaxis || HP <= 0) isDead = true;
 
         if (isDead)
@@ -72,18 +73,19 @@ public class PlayerStats : MonoBehaviour
         // Update UI
         inkSlider.value = ink;
         HPSlider.value = HP;
-        inkSliderImg.color = SceneManagerScript.Instance.allyColor;
+        inkSliderImg.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
 
         // Reloading
         ReloadInk();
 
+        // Debug
         if(infiniteHP ) { HP = maxHP; }
         if(infiniteInk) { ink = inkCapacity; }
     }
 
     void ReloadInk()
     {
-        if(ink < inkCapacity && !GetComponent<PlayerMovement>().weaponShooting /*&& !GetComponent<PlayerMovement>().subWeaponShooting*/)
+        if(ink < inkCapacity && !GetComponent<PlayerArmament>().weaponShooting /*&& !GetComponent<PlayerMovement>().subWeaponShooting*/)
         {
             if (onInk)
             {
@@ -100,7 +102,7 @@ public class PlayerStats : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("EnemyBullet"))
+        if (other.CompareTag("Bullet"))
         {
             HP -= other.gameObject.GetComponent<Bullet>().DMG;
         }

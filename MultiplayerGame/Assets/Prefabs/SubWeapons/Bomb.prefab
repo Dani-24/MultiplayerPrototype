@@ -180,25 +180,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7abc8c201581c44daa55135399e77fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponType: 0
+  teamTag: 
   dmg: 180
   splashDmg: 30
-  range: 15
+  speed: 30
+  range: 80
   cooldown: 0
-  lethalRadius: 1
-  nonLethalRadius: 3
-  paintRadius: 5
-  throwCost: 70
-  isThrowingSubWeapon: 0
-  aimingRotation: {fileID: 0}
-  aimYOffset: 0
-  posYOffset: 0
-  throwPosition: {fileID: 0}
-  subWeaponsPrefabs: []
-  rend:
-  - {fileID: 1967691771641202558}
+  instantExplosion: 0
+  lethalRadius: 2.5
+  nonLethalRadius: 4
+  aimYOffset: -28
+  paintRadius: 4
   strength: 1
   hardness: 1
+  throwCost: 70
+  rend:
+  - {fileID: 1967691771641202558}
   minYaxis: -20
 --- !u!65 &5770207345693590387
 BoxCollider:
@@ -231,7 +228,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 10
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}

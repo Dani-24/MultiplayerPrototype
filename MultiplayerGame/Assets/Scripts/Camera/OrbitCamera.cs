@@ -1,109 +1,121 @@
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class OrbitCamera : MonoBehaviour
 {
-    [SerializeField] Transform cameraOrbitObject;
-    [SerializeField] Transform playerRotation;
+    #region Resources
 
-    [Header("Camera Propierties")]
+    [Header("Gameobjects needed")]
+    [SerializeField] Transform cameraOrbitPoint;
+    [SerializeField] Transform playerBodyRotation;
+
+    public Camera affectedCamera;
+
+    #endregion
+
+    #region Propierties
+
+    Vector2 camAxis;
+    Vector3 CamBaseAxis = Vector3.back;
+
+    [Header("Sensivity")]
     public Vector2 mouseSens;
     public Vector2 gamepadSens;
 
+    [Header("Camera Propierties")]
     [SerializeField] float camSpeed = 1f;
 
-    [SerializeField]
-    private float cameraMaxDist = 20.0f;
-    [SerializeField]
-    private float cameraMinDist = 5.0f;
+    float cameraDistance;
+    [SerializeField] float cameraMaxDist = 20.0f;
+    [SerializeField] float cameraMinDist = 5.0f;
 
-    private float cameraDistance;
-
-    [Tooltip("Horizontal Rotation Angle")]
-    [SerializeField] private float camRotX = 0.0f;
-    [Tooltip("Vertical Rotation Angle")]
-    [SerializeField] private float camRotY = 0.0f;
-
-    float camRotDefaultY;
-
-    /// Camera Default Direction
-    private Vector3 CamBaseAxis = Vector3.back;
-
-    [Tooltip("Distance for collisions")]
-    [SerializeField] private float CollisionReturnDis = 0.5f;
+    float camRotDefaultY = -5f;
+    [SerializeField] Vector2 camRot;
 
     [Header("Camera Vertical Limits")]
     [SerializeField] float maxHeight = 30.0f;
     [SerializeField] float minHeight = -60.0f;
 
-    [Header("Debug Info")]
-    public bool cameraReseting = false;
+    [Header("Collisions")]
+    [SerializeField] float CollisionDistance = 0.5f;
 
-    [SerializeField] GameObject playerGameObject;
+    #endregion
+
+    #region Reticle Configuration
 
     [Header("Reticle")]
     [SerializeField] GameObject reticleUI;
 
     [SerializeField] float reticleMinY = 23.0f;
     [SerializeField] float reticleMaxY = 110.0f;
-
     [SerializeField] float reticleScale = 1f;
 
+    #endregion
+
+    #region Debug
+
+    [Header("Debug Info")]
+    public bool cameraReseting = false;
     bool returningFromHit = false;
+
+    #endregion
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         cameraDistance = cameraMaxDist;
-        camRotDefaultY = camRotY;
+        camRotDefaultY = camRot.y;
     }
 
     void LateUpdate()
     {
-        if(cameraOrbitObject == null)
+        if(cameraOrbitPoint == null)
         {
             Debug.LogError("Camera Target not defined");
             return;
         }
 
-        // Obtener Input
-        float mouseX = playerGameObject.GetComponent<PlayerMovement>().camAxis.x * Time.deltaTime; //Input.GetAxis("Mouse X") * Time.deltaTime;
-        float mouseY = playerGameObject.GetComponent<PlayerMovement>().camAxis.y * Time.deltaTime; //Input.GetAxis("Mouse Y") * Time.deltaTime;
+        #region Camera Input
+
+        float mouseX = camAxis.x * Time.deltaTime;
+        float mouseY = camAxis.y * Time.deltaTime;
 
         // Aplicar sensibilidad a los ejes
-        if (!playerGameObject.GetComponent<PlayerMovement>().isUsingGamepad)
+        if (!GetComponent<PlayerMovement>().isUsingGamepad)
         {
-            camRotX += (Mathf.Clamp(mouseX, -1.0f, 1.0f) * mouseSens.x);
-            camRotY += (Mathf.Clamp(mouseY, -1.0f, 1.0f) * mouseSens.y);
+            camRot.x += (Mathf.Clamp(mouseX, -1.0f, 1.0f) * mouseSens.x);
+            camRot.y += (Mathf.Clamp(mouseY, -1.0f, 1.0f) * mouseSens.y);
         }
         else
         {
-            camRotX += (Mathf.Clamp(mouseX, -1.0f, 1.0f) * gamepadSens.x);
-            camRotY += (Mathf.Clamp(mouseY, -1.0f, 1.0f) * gamepadSens.y);
+            camRot.x += (Mathf.Clamp(mouseX, -1.0f, 1.0f) * gamepadSens.x);
+            camRot.y += (Mathf.Clamp(mouseY, -1.0f, 1.0f) * gamepadSens.y);
         }
 
         // Limitar altura max y min del eje Y
-        camRotY = Mathf.Clamp(camRotY, minHeight, maxHeight);
+        camRot.y = Mathf.Clamp(camRot.y, minHeight, maxHeight);
 
         cameraDistance = Mathf.Clamp(cameraDistance, cameraMinDist, cameraMaxDist);
 
+        #endregion
+
         // Set Camera Rotation
-        Quaternion animRotation = Quaternion.Euler(-camRotY, camRotX, 0.0f);
-        Quaternion camYRotation = Quaternion.Euler(0.0f, camRotX, 0.0f);
-        transform.rotation = animRotation;
+        Quaternion animRotation = Quaternion.Euler(-camRot.y, camRot.x, 0.0f);
+        Quaternion camYRotation = Quaternion.Euler(0.0f, camRot.x, 0.0f);
+        affectedCamera.transform.rotation = animRotation;
 
         // Set Camera Position
-        Vector3 lookatpos = new Vector3(cameraOrbitObject.position.x /*+ (camYRotation * Vector3.one).x*/, cameraOrbitObject.position.y /*+ (camYRotation * Vector3.one).y*/,cameraOrbitObject.position.z /*+ (camYRotation * Vector3.one).z*/);
+        Vector3 lookatpos = new Vector3(cameraOrbitPoint.position.x, cameraOrbitPoint.position.y,cameraOrbitPoint.position.z);
         Vector3 camdir = animRotation * CamBaseAxis;
         camdir.Normalize();
+
+        #region Camera Collisions with Terrain
 
         // Calculate camera points after collision
         RaycastHit rayhit;
         bool hit = Physics.Raycast(lookatpos, camdir, out rayhit, cameraDistance);
 
-        //transform.position = new Vector3(Mathf.Lerp(transform.position.x, lookatpos.x + camdir.x * cameraDistance, camSpeed * Time.deltaTime), Mathf.Lerp(transform.position.x, lookatpos.x + camdir.x * cameraDistance, camSpeed * Time.deltaTime), Mathf.Lerp(transform.position.x, lookatpos.x + camdir.x * cameraDistance, camSpeed * Time.deltaTime));
-
-        transform.position = lookatpos + camdir * cameraDistance;
+        affectedCamera.transform.position = lookatpos + camdir * cameraDistance;
 
         //if (hit)
         //{
@@ -143,17 +155,27 @@ public class OrbitCamera : MonoBehaviour
         //        transform.position = lookatpos + camdir * cameraDistance;
         //    }
         //}
+
+        #endregion
     }
 
-    [Tooltip("Player Input for camera reset")]
-    public void ResetCamera(bool reset)
+    #region Player Input Actions
+
+    void OnCamReset(InputValue value)
     {
-        if (reset != cameraReseting && reset == true)
+        if (value.isPressed != cameraReseting && value.isPressed == true)
         {
-            camRotX = playerRotation.transform.rotation.eulerAngles.y;
-            camRotY = camRotDefaultY;
+            camRot.x = playerBodyRotation.transform.rotation.eulerAngles.y;
+            camRot.y = camRotDefaultY;
         }
 
-        cameraReseting = reset;
+        cameraReseting = value.isPressed;
     }
+
+    void OnCamera(InputValue value)
+    {
+        camAxis = value.Get<Vector2>();
+    }
+
+    #endregion
 }

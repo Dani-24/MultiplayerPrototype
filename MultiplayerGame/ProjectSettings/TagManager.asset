@@ -7,14 +7,13 @@ TagManager:
   - SceneManager
   - Weapon
   - WeaponSpawn
-  - Bullet
-  - Enemy
-  - EnemyBullet
-  - AllyBomb
-  - EnemyBomb
-  - NonLethalAllyBomb
-  - NonLethalEnemyBomb
-  - Ally
+  - Alpha
+  - Beta
+  - AlphaBullet
+  - BetaBullet
+  - AlphaBomb
+  - BetaBomb
+  - Gamma
   layers:
   - Default
   - TransparentFX

@@ -2,25 +2,29 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    [HideInInspector] public string teamTag;
+
     private Rigidbody rb;
-
-    [Header("Propierties")]
-
-    public float speed = 10f;
-
-    public float travelDistance = 5f;
-
-    public float DMG = 35f;
-
-    public float customGravity = -9.81f;
-
     private Renderer rend;
 
-    [Header("Painting")]
+    #region Propierties
 
+    [Header("Propierties")]
+    public float speed = 10f;
+    public float range = 5f;
+    public float DMG = 35f;
+    public float customGravity = -9.81f;
+
+    #endregion
+
+    #region Paint
+
+    [Header("Painting")]
     public float radius = 1;
     public float strength = 1;
     public float hardness = 1;
+
+    #endregion
 
     [Header("Other")]
 
@@ -34,23 +38,16 @@ public class Bullet : MonoBehaviour
     public void Start()
     {
         rb.velocity = transform.forward * speed;
-
-        float acc = (speed * speed) / (2 * travelDistance);
-
+        float acc = (speed * speed) / (2 * range);
         customGravity = acc / -9.81f;
 
         rend = GetComponentInChildren<Renderer>();
         if (rend != null)
         {
-            if (tag == "Bullet")
-            {
-                rend.material.color = GameObject.FindGameObjectWithTag("SceneManager").GetComponent<SceneManagerScript>().allyColor;
-            }
-            else
-            {
-                rend.material.color = GameObject.FindGameObjectWithTag("SceneManager").GetComponent<SceneManagerScript>().enemyColor;
-            }
+            rend.material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
         }
+
+        gameObject.tag = teamTag + "Bullet";
     }
 
     private void FixedUpdate()
@@ -74,6 +71,7 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject);
     }
 
+    // Just to be secure
     private void OnTriggerStay(Collider other)
     {
         Destroy(gameObject);

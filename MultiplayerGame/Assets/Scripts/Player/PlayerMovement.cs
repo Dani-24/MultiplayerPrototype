@@ -1,78 +1,56 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
-using static Unity.VisualScripting.Member;
-using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private CharacterController controller;
+    CharacterController controller;
+    PlayerInput input;
 
     [SerializeField] private GameObject playerBody;
+
+    #region Horizontal Movement Propierties
 
     [Header("Movement")]
     [SerializeField] private Vector2 moveInput;
 
     [SerializeField] private float moveSpeed = 10.0f;
-
-    [Tooltip("Velocidad al correr")]
     [SerializeField] private float runSpeed = 20.0f;
-
-    [Tooltip("Velocidad al correr sin estar potenciado")]
-    [SerializeField] private float runSlowSpeed = 5.0f;
-
-    [SerializeField] private float rotationSpeed = 10.0f;
-
+    [SerializeField] private float slowSpeed = 5.0f;
     public bool isRunning = false;
 
-    [HideInInspector] public Camera cam;
+    [SerializeField] private float rotationSpeed = 10.0f;
+    [SerializeField] private float rotationSpeedWhileShooting = 100.0f;
 
-    [SerializeField] float maxFallingSpeed = 1.0f;
+    #endregion
 
-    float fallingSpeed = 0f;
+    #region Vertical Movement Propierties
+
+    float baseGravity;
+    [SerializeField] float gravity = 9.8f;
+    [SerializeField] float gravityMarkiplier;
 
     [Header("Jumping")]
     [SerializeField] float jumpForce = 5f;
-
     [SerializeField] bool jumping = false;
 
     [SerializeField] float groundCheckDist = 0.1f;
-
     public LayerMask groundLayer;
 
-    [Header("Camera (Do not edit)")]
-    public Vector2 camAxis;
-
-    [Tooltip("WIP")]
-    public Vector3 camGyroAxis;
+    #endregion
 
     public bool isUsingGamepad;
 
-    [Header("Weapon")]
-    public GameObject weapon;
-    public bool weaponShooting = false;
-
-    [Header("SubWeapon")]
-    public bool subWeaponShooting = false;
-
-    [Header("DEBUG Texture")]
+    [Header("Ground Color Check")]
     [SerializeField] Texture debugTexture;
     [SerializeField] Texture2D debugTexture2d;
     [SerializeField] GameObject debugGameObjectHit;
 
-    PlayerInput input;
-
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        cam = GetComponentInChildren<Camera>();
-
-        GameObject weaponSpawnPoint = GameObject.FindGameObjectWithTag("WeaponSpawn");
-        Instantiate(weapon, weaponSpawnPoint.transform);
-
-        fallingSpeed = -maxFallingSpeed;
-
         input = GetComponent<PlayerInput>();
+
+        baseGravity = gravity;
     }
 
     void Update()
@@ -87,8 +65,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Camera Rotation & applying it to the player model
-        Vector3 forward = cam.transform.forward;
-        Vector3 right = cam.transform.right;
+        Vector3 forward = GetComponent<OrbitCamera>().affectedCamera.transform.forward;
+        Vector3 right = GetComponent<OrbitCamera>().affectedCamera.transform.right;
 
         forward.y = right.y = 0;
 
@@ -100,15 +78,11 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 moveDir = forwardRelativeVerticalInput + rigthRelativeHorizontalInput;
 
-        // !!!!!!!!!!!!!!
-        // Al resetear la camara habria que hacer una transicion smooth desde la posicion actual a la nueva para que no cambie de golpe el movimiento
-        // !!!!!!!!!!!!!!
-
-        if (moveDir != Vector3.zero || weaponShooting || subWeaponShooting)
+        if (moveDir != Vector3.zero || GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
         {
             Quaternion rotDes = Quaternion.identity;
 
-            if (!weaponShooting && !subWeaponShooting)
+            if (!GetComponent<PlayerArmament>().weaponShooting && !GetComponent<PlayerArmament>().subWeaponShooting)
             {
                 rotDes = Quaternion.LookRotation(moveDir, Vector3.up);
                 playerBody.transform.rotation = Quaternion.Slerp(playerBody.transform.rotation, rotDes, rotationSpeed * Time.deltaTime);
@@ -117,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 rotDes = Quaternion.LookRotation(forward, Vector3.up);
 
-                playerBody.transform.rotation = Quaternion.Slerp(playerBody.transform.rotation, rotDes, rotationSpeed * 100 * Time.deltaTime);
+                playerBody.transform.rotation = Quaternion.Slerp(playerBody.transform.rotation, rotDes, rotationSpeedWhileShooting * Time.deltaTime);
             }
         }
 
@@ -130,22 +104,34 @@ public class PlayerMovement : MonoBehaviour
             controller.Move(moveDir * Time.deltaTime * runSpeed);
         }
 
+        #region Ground/Jump Checking
+
         bool isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDist, groundLayer);
 
         if (isGrounded && jumping)
         {
-            fallingSpeed = jumpForce;
+            gravity = jumpForce;
         }
-
-        if(fallingSpeed > -maxFallingSpeed)
+        else if (!isGrounded)
         {
-            fallingSpeed -= Time.deltaTime * 20f;
+            if (gravity > baseGravity)
+            {
+                gravity -= Time.deltaTime * gravityMarkiplier;
+            }
+        }
+        else
+        {
+            gravity = 0;
         }
 
-        controller.Move(new Vector3(0, fallingSpeed * Time.deltaTime, 0));
+        #endregion
 
-        CheckGroundPaint();
+        controller.Move(new Vector3(0, gravity * Time.deltaTime, 0));
+
+        //CheckGroundPaint();
     }
+
+    #region Ground Paint
 
     void CheckGroundPaint()
     {
@@ -186,11 +172,11 @@ public class PlayerMovement : MonoBehaviour
 
                     // Si es color enemigo te mueves mas lento, recibes un pelin de daño y usar shift te frena mas
 
-                    if (pixelColor == SceneManagerScript.Instance.allyColor)
+                    if (pixelColor == SceneManagerScript.Instance.GetTeamColor(GetComponent<PlayerStats>().teamTag))
                     {
                         Debug.Log("Ally Ink");
                     }
-                    else if (pixelColor == SceneManagerScript.Instance.enemyColor)
+                    else
                     {
                         Debug.Log("Enemy Ink");
                     }
@@ -225,6 +211,10 @@ public class PlayerMovement : MonoBehaviour
         return readableText;
     }
 
+    #endregion
+
+    #region Player Input Actions
+
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
@@ -235,35 +225,11 @@ public class PlayerMovement : MonoBehaviour
         jumping = value.isPressed;
     }
 
-    void OnFire(InputValue value)
-    {
-        if(weapon == null)
-        {
-            Debug.Log("There is no weapon to shoot");
-            return;
-        }
-
-        weaponShooting = value.isPressed;
-    }
-
-    void OnSubFire(InputValue value)
-    {
-        subWeaponShooting = value.isPressed;
-    }
-
-    void OnCamReset(InputValue value)
-    {
-        cam.GetComponent<OrbitCamera>().ResetCamera(value.isPressed);
-    }
-
     // Deberia bloquearse la posibilidad de disparar al correr (o hacer que al disparar dejes de correr)
     void OnRun(InputValue value)
     {
         isRunning = value.isPressed;
     }
 
-    void OnCamera(InputValue value)
-    {
-        camAxis = value.Get<Vector2>();
-    }
+    #endregion
 }

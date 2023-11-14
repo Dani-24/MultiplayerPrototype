@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1247713517416342436
 MonoBehaviour:
@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 513e1518b4921b040bda778b20599ad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneName: 
   colorPairs:
   - color1: {r: 0.8773585, g: 0.41320142, b: 0.19450872, a: 1}
     color2: {r: 0.11124954, g: 0.37433642, b: 0.9433962, a: 1}
@@ -58,9 +59,17 @@ MonoBehaviour:
     color2: {r: 0.9056604, g: 0.44001427, b: 0.85749006, a: 1}
   - color1: {r: 0.6469948, g: 0.9622642, b: 0.59369886, a: 1}
     color2: {r: 0.6656604, g: 0.59912777, b: 0.9150943, a: 1}
-  allyColor: {r: 1, g: 1, b: 1, a: 1}
-  enemyColor: {r: 0, g: 0, b: 0, a: 1}
+  alphaTeamColor: {r: 0, g: 0, b: 0, a: 0}
+  betaTeamColor: {r: 0, g: 0, b: 0, a: 0}
+  gammaTeamColor: {r: 1, g: 1, b: 1, a: 1}
   useTheseDebugColors: 0
+  teamTags:
+  - Alpha
+  - Beta
+  - Gamma
+  alphaTeamMembers: []
+  betaTeamMembers: []
+  maxPlayersPerTeam: 4
 --- !u!114 &5091525238335802703
 MonoBehaviour:
   m_ObjectHideFlags: 0

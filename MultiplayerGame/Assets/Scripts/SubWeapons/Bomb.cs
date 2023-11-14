@@ -6,18 +6,6 @@ public class Bomb : SubWeapon
     Animator anim;
     Rigidbody rb;
 
-    [Header(" === Bomb parts that need to match the player color ===")]
-    [SerializeField]
-    private List<Renderer> rend = new List<Renderer>();
-
-    [Header("Painting")]
-
-    public float strength = 1;
-    public float hardness = 1;
-
-    [Header("Other")]
-    [SerializeField] float minYaxis = -20;
-
     List<Collider> bigDmgColliders = new List<Collider>();
 
     private void Awake()
@@ -28,31 +16,27 @@ public class Bomb : SubWeapon
 
     void Start()
     {
-        // Set Direction??
-        rb.AddForce(transform.forward * range, ForceMode.Impulse);
+        // Set Velocity & Gravity needed to match the range
+        rb.velocity = transform.forward * speed;
+        float acc = (speed * speed) / (2 * range);
+        customGravity = acc / -9.81f;
 
         // Set Bomb Color
         if (rend.Count > 0)
         {
-            if (tag == "AllyBomb")
+            foreach (Renderer r in rend)
             {
-                foreach (Renderer r in rend)
-                {
-                    r.material.color = GameObject.FindGameObjectWithTag("SceneManager").GetComponent<SceneManagerScript>().allyColor;
-                }
-            }
-            else
-            {
-                foreach (Renderer r in rend)
-                {
-                    r.material.color = GameObject.FindGameObjectWithTag("SceneManager").GetComponent<SceneManagerScript>().enemyColor;
-                }
+                r.material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
             }
         }
+
+        gameObject.tag = teamTag + "Bomb";
     }
 
-    void Update()
+    private void FixedUpdate()
     {
+        rb.velocity += new Vector3(0, customGravity, 0);
+
         if (transform.position.y < minYaxis)
         {
             Destroy(gameObject);
@@ -61,15 +45,13 @@ public class Bomb : SubWeapon
 
     private void OnCollisionEnter(Collision collision)
     {
-        switch (weaponType)
+        if (instantExplosion)
         {
-            case subWeaponType.Bomb:
-                anim.SetTrigger("megumin");
-                break;
-
-            case subWeaponType.FastBomb:
-                OnExplosion();
-                break;
+            OnExplosion();
+        }
+        else
+        {
+            anim.SetTrigger("megumin");
         }
     }
 
@@ -84,14 +66,9 @@ public class Bomb : SubWeapon
 
         foreach (Collider hit in colliders)
         {
-            if (hit.CompareTag("Player") && this.CompareTag("EnemyBomb"))
+            if (hit.CompareTag("Player") && this.CompareTag(teamTag + "Bomb"))
             {
                 hit.GetComponent<PlayerStats>().HP -= dmg;
-            }
-
-            if (hit.CompareTag("Enemy") && this.CompareTag("AllyBomb"))
-            {
-                hit.GetComponent<Dummy>().HP -= dmg;
             }
 
             // Paint only objects affected by lethal dmg area???
@@ -116,11 +93,6 @@ public class Bomb : SubWeapon
                 if (hit.CompareTag("Player") && this.CompareTag("EnemyBomb"))
                 {
                     hit.GetComponent<PlayerStats>().HP -= splashDmg;
-                }
-
-                if (hit.CompareTag("Enemy") && this.CompareTag("AllyBomb"))
-                {
-                    hit.GetComponent<Dummy>().HP -= splashDmg;
                 }
             }
         }
