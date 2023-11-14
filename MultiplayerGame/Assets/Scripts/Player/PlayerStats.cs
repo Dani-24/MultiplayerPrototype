@@ -3,13 +3,13 @@ using UnityEngine.UI;
 
 public class PlayerStats : MonoBehaviour
 {
+    public Color teamColor;
+
     [Header("HP")]
     public float HP = 100.0f;
     float maxHP;
 
     public bool isDead = false;
-
-    // time since last shot taken como cooldown???
 
     [Header("Ink")]
     public float ink = 100.0f;
@@ -19,8 +19,6 @@ public class PlayerStats : MonoBehaviour
     public float inkReloadSpeedOnInk = 5f;
     public bool onInk = false;
 
-    // time since last shot como cooldown????
-
     [Header("Other")]
     [SerializeField]
     Vector3 spawnPos = Vector3.zero;
@@ -28,6 +26,8 @@ public class PlayerStats : MonoBehaviour
     private CharacterController controller;
 
     [SerializeField] float minYaxis = -20;
+
+    [SerializeField] MeshRenderer teamColorGO;
 
     [Header("UI Things")]
     public Slider inkSlider;
@@ -49,7 +49,13 @@ public class PlayerStats : MonoBehaviour
 
     void Update()
     {
-        if(transform.position.y < minYaxis || HP <= 0) isDead = true;
+        if (teamColor != SceneManagerScript.Instance.allyColor)
+        {
+            teamColor = SceneManagerScript.Instance.allyColor;
+            teamColorGO.material.color = teamColor;
+        }
+
+        if (transform.position.y < minYaxis || HP <= 0) isDead = true;
 
         if (isDead)
         {

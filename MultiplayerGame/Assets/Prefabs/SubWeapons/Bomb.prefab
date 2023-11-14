@@ -11,8 +11,10 @@ GameObject:
   - component: {fileID: 2862001928501535304}
   - component: {fileID: 4548218792808581518}
   - component: {fileID: 1967691771641202558}
+  - component: {fileID: 4488445393071189620}
+  - component: {fileID: 2042455714950395082}
   m_Layer: 7
-  m_Name: Mesh
+  m_Name: Bomb Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +30,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6416323034298510835}
   m_RootOrder: -1
@@ -40,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3077766158377737661}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &1967691771641202558
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -83,6 +85,54 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!95 &4488445393071189620
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3077766158377737661}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3b3a2f1c5a7d15e4eafb73c9f62a80d5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2042455714950395082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3077766158377737661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e845a4fa29b383041abcb0fd964fcb45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  functionToUse:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4764181639085258972}
+        m_TargetAssemblyTypeName: Bomb, Assembly-CSharp
+        m_MethodName: OnExplosion
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4612145116355683483
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,11 +142,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6416323034298510835}
-  - component: {fileID: 3041994832733824776}
-  - component: {fileID: 7593265050115196477}
-  - component: {fileID: 9156680916302341758}
+  - component: {fileID: 4764181639085258972}
+  - component: {fileID: 5770207345693590387}
+  - component: {fileID: 4269205765558372679}
   m_Layer: 7
-  m_Name: FastBomb - SubWeapon
+  m_Name: Bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -118,7 +168,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3041994832733824776
+--- !u!114 &4764181639085258972
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130,15 +180,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7abc8c201581c44daa55135399e77fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponType: 1
-  dmg: 60
+  weaponType: 0
+  dmg: 180
   splashDmg: 30
   range: 15
   cooldown: 0
   lethalRadius: 1
-  nonLethalRadius: 3.25
-  paintRadius: 3
-  throwCost: 35
+  nonLethalRadius: 3
+  paintRadius: 5
+  throwCost: 70
   isThrowingSubWeapon: 0
   aimingRotation: {fileID: 0}
   aimYOffset: 0
@@ -150,8 +200,8 @@ MonoBehaviour:
   strength: 1
   hardness: 1
   minYaxis: -20
---- !u!135 &7593265050115196477
-SphereCollider:
+--- !u!65 &5770207345693590387
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -169,9 +219,9 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &9156680916302341758
+--- !u!54 &4269205765558372679
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

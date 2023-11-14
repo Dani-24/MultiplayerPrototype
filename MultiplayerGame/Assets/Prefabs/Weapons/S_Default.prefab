@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 7267782849039474330}
   - component: {fileID: 3184887705818406780}
   m_Layer: 0
-  m_Name: Shooter - Weapon
+  m_Name: S_Default
   m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,14 +78,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Shooter Default
   cadence: 7
-  shootDMG: 35
-  bulletSpeed: 40
+  shootDMG: 36
+  bulletSpeed: 35
   weaponRange: 50
   rng: 0.06
   shootCost: 0.8
   pRadius: 1.1
   pStrength: 1
   pHardness: 1
+  paintOwnFeet: 1
+  ownPaintRadius: 1
   spawnBulletPosition: {fileID: 3150462560917926386}
   shootingVerticalOffset: 0.5
   isShooting: 0

@@ -546,11 +546,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7099741376332342424}
+  - {fileID: 7338671462978394166}
   m_Father: {fileID: 6846174359786283446}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &457960700875258370
+--- !u!1001 &73301343144707756
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -558,25 +558,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8046872250040209765}
     m_Modifications:
-    - target: {fileID: 1983471487978947646, guid: 7b61ec508da2a5e44a0901b5b268fef3,
-        type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703812716523884050, guid: 7b61ec508da2a5e44a0901b5b268fef3,
-        type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
     - target: {fileID: 3597637874272683826, guid: 7b61ec508da2a5e44a0901b5b268fef3,
         type: 3}
       propertyPath: m_Name
-      value: Weapon - Shooter Dummy
-      objectReference: {fileID: 0}
-    - target: {fileID: 3597637874272683826, guid: 7b61ec508da2a5e44a0901b5b268fef3,
-        type: 3}
-      propertyPath: m_Layer
-      value: 9
+      value: Dummy Shooter - Weapon
       objectReference: {fileID: 0}
     - target: {fileID: 7267782849039474330, guid: 7b61ec508da2a5e44a0901b5b268fef3,
         type: 3}
@@ -638,9 +623,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b61ec508da2a5e44a0901b5b268fef3, type: 3}
---- !u!4 &7099741376332342424 stripped
+--- !u!4 &7338671462978394166 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7267782849039474330, guid: 7b61ec508da2a5e44a0901b5b268fef3,
     type: 3}
-  m_PrefabInstance: {fileID: 457960700875258370}
+  m_PrefabInstance: {fileID: 73301343144707756}
   m_PrefabAsset: {fileID: 0}
