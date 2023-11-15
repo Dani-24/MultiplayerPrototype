@@ -22,9 +22,9 @@ TagManager:
   - Water
   - UI
   - Ground
-  - NotWithPlayer
+  - Bomb
   - Bullet
-  - Enemy
+  - 
   - 
   - 
   - 

@@ -66,7 +66,7 @@ public class Bomb : SubWeapon
 
         foreach (Collider hit in colliders)
         {
-            if (hit.CompareTag("Player") && this.CompareTag(teamTag + "Bomb"))
+            if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bomb"))
             {
                 hit.GetComponent<PlayerStats>().HP -= dmg;
             }
@@ -90,7 +90,7 @@ public class Bomb : SubWeapon
         {
             if (!bigDmgColliders.Contains(hit))
             {
-                if (hit.CompareTag("Player") && this.CompareTag("EnemyBomb"))
+                if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bomb"))
                 {
                     hit.GetComponent<PlayerStats>().HP -= splashDmg;
                 }

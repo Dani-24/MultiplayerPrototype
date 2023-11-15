@@ -79,13 +79,13 @@ public class PlayerStats : MonoBehaviour
         ReloadInk();
 
         // Debug
-        if(infiniteHP ) { HP = maxHP; }
-        if(infiniteInk) { ink = inkCapacity; }
+        if (infiniteHP) { HP = maxHP; }
+        if (infiniteInk) { ink = inkCapacity; }
     }
 
     void ReloadInk()
     {
-        if(ink < inkCapacity && !GetComponent<PlayerArmament>().weaponShooting /*&& !GetComponent<PlayerMovement>().subWeaponShooting*/)
+        if (ink < inkCapacity && !GetComponent<PlayerArmament>().weaponShooting /*&& !GetComponent<PlayerMovement>().subWeaponShooting*/)
         {
             if (onInk)
             {
@@ -97,12 +97,12 @@ public class PlayerStats : MonoBehaviour
             }
         }
 
-        if(ink > inkCapacity) { ink = inkCapacity; }
+        if (ink > inkCapacity) { ink = inkCapacity; }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Bullet"))
+        if (other.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag) + "Bullet"))
         {
             HP -= other.gameObject.GetComponent<Bullet>().DMG;
         }
