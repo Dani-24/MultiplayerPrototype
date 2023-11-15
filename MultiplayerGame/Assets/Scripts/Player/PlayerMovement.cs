@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float slowSpeed = 5.0f;
     public bool isRunning = false;
 
+    [Header("Rotation")]
     [SerializeField] private float rotationSpeed = 10.0f;
     [SerializeField] private float rotationSpeedWhileShooting = 100.0f;
 
@@ -25,14 +26,18 @@ public class PlayerMovement : MonoBehaviour
 
     #region Vertical Movement Propierties
 
-    float baseGravity;
+    [Header("Gravity")]
     [SerializeField] float gravity = 9.8f;
-    [SerializeField] float gravityMarkiplier;
-    [SerializeField] float maxGravity;
+    [SerializeField] float gravityMultiplier = 1.0f;
+    [SerializeField] float fallSpeed;
+    [SerializeField] float groundedFallSpeed = -3.0f;
+
+    [SerializeField] bool isGrounded;
+    float originalStepOffset;
 
     [Header("Jumping")]
     [SerializeField] float jumpForce = 5f;
-    [SerializeField] bool jumping = false;
+    [SerializeField] bool isJumping = false;
 
     [SerializeField] float groundCheckDist = 0.1f;
     public LayerMask groundLayer;
@@ -51,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
         controller = GetComponent<CharacterController>();
         input = GetComponent<PlayerInput>();
 
-        baseGravity = gravity;
+        originalStepOffset = controller.stepOffset;
     }
 
     void Update()
@@ -115,27 +120,28 @@ public class PlayerMovement : MonoBehaviour
 
         #region Ground/Jump Checking
 
-        bool isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDist, groundLayer);
+        fallSpeed += gravity * gravityMultiplier * Time.deltaTime;
 
-        if (isGrounded && jumping)
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDist, groundLayer);
+
+        if(isGrounded)
         {
-            gravity = jumpForce;
-        }
-        else if (!isGrounded)
-        {
-            if (gravity > maxGravity)
+            controller.stepOffset = originalStepOffset;
+            fallSpeed = groundedFallSpeed;
+
+            if (isJumping)
             {
-                gravity -= Time.deltaTime * gravityMarkiplier;
+                fallSpeed = jumpForce;
             }
         }
         else
         {
-            gravity = baseGravity;
+            controller.stepOffset = 0;
         }
 
         #endregion
 
-        controller.Move(new Vector3(0, gravity * Time.deltaTime, 0));
+        controller.Move(new Vector3(0, fallSpeed * Time.deltaTime, 0));
 
         //CheckGroundPaint();
     }
@@ -231,10 +237,9 @@ public class PlayerMovement : MonoBehaviour
 
     void OnJump(InputValue value)
     {
-        jumping = value.isPressed;
+        isJumping = value.isPressed;
     }
 
-    // Deberia bloquearse la posibilidad de disparar al correr (o hacer que al disparar dejes de correr)
     void OnRun(InputValue value)
     {
         isRunning = value.isPressed;

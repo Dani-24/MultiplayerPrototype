@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7255265454254323935}
   - component: {fileID: 1247713517416342436}
+  - component: {fileID: 2053593188729393109}
   - component: {fileID: 5091525238335802703}
   m_Layer: 0
   m_Name: SceneManager
@@ -69,7 +70,24 @@ MonoBehaviour:
   - Gamma
   alphaTeamMembers: []
   betaTeamMembers: []
+  gammaTeamMembers: []
   maxPlayersPerTeam: 4
+--- !u!114 &2053593188729393109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3996387237497895542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f19480f1393a85f4f932187df6d430c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isConnected: 0
+  isHosting: 0
+  IP: 127.0.0.1
+  port: 9050
 --- !u!114 &5091525238335802703
 MonoBehaviour:
   m_ObjectHideFlags: 0
