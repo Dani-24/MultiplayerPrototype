@@ -373,6 +373,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
         type: 3}
+      propertyPath: showConsole
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
+        type: 3}
       propertyPath: debugConsole
       value: 
       objectReference: {fileID: 1193584346}
@@ -7548,6 +7553,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Debug Console
+      objectReference: {fileID: 0}
+    - target: {fileID: 7963841811532817948, guid: 20d7599dc50b34041a033c9032c2534c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8814247109428725000, guid: 20d7599dc50b34041a033c9032c2534c,
         type: 3}
