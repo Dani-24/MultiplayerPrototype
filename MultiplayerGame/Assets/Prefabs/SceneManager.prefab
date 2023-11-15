@@ -72,6 +72,8 @@ MonoBehaviour:
   betaTeamMembers: []
   gammaTeamMembers: []
   maxPlayersPerTeam: 4
+  showConsole: 1
+  debugConsole: {fileID: 0}
 --- !u!114 &2053593188729393109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,10 +86,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19480f1393a85f4f932187df6d430c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isConnected: 0
   isHosting: 0
+  isConnected: 0
   IP: 127.0.0.1
   port: 9050
+  reconnect: 0
+  disconnect: 0
 --- !u!114 &5091525238335802703
 MonoBehaviour:
   m_ObjectHideFlags: 0

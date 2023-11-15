@@ -24,6 +24,10 @@ public class SceneManagerScript : MonoBehaviour
 
     public int maxPlayersPerTeam = 4;
 
+    [Header("Debug")]
+    public bool showConsole = false;
+    [SerializeField] GameObject debugConsole;
+
     private static SceneManagerScript _instance;
     public static SceneManagerScript Instance { get { return _instance; } }
 
@@ -47,6 +51,14 @@ public class SceneManagerScript : MonoBehaviour
 
             alphaTeamColor = colorPairs[rand].color1;
             betaTeamColor = colorPairs[rand].color2;
+        }
+    }
+
+    void Update()
+    {
+        if (debugConsole != null)
+        {
+            debugConsole.SetActive(showConsole);
         }
     }
 

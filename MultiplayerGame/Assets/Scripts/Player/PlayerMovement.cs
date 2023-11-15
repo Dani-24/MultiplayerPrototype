@@ -61,6 +61,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // Input
+        if (input.actions["ShowConsole"].WasReleasedThisFrame())
+        {
+            SceneManagerScript.Instance.showConsole = !SceneManagerScript.Instance.showConsole;
+        }
+
         if (input.currentControlScheme == "Gamepad" )
         {
             isUsingGamepad = true;
