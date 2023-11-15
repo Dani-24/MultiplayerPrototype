@@ -69,7 +69,7 @@ public class OrbitCamera : MonoBehaviour
 
     void LateUpdate()
     {
-        if(cameraOrbitPoint == null)
+        if (cameraOrbitPoint == null)
         {
             Debug.LogError("Camera Target not defined");
             return;
@@ -105,7 +105,7 @@ public class OrbitCamera : MonoBehaviour
         affectedCamera.transform.rotation = animRotation;
 
         // Set Camera Position
-        Vector3 lookatpos = new Vector3(cameraOrbitPoint.position.x, cameraOrbitPoint.position.y,cameraOrbitPoint.position.z);
+        Vector3 lookatpos = new Vector3(cameraOrbitPoint.position.x, cameraOrbitPoint.position.y, cameraOrbitPoint.position.z);
         Vector3 camdir = animRotation * CamBaseAxis;
         camdir.Normalize();
 

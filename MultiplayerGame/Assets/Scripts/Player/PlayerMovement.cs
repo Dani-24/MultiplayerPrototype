@@ -95,13 +95,21 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (!isRunning)
+        if (moveInput.x != 0 || moveInput.y != 0)
         {
-            controller.Move(moveDir * Time.deltaTime * moveSpeed);
-        }
-        else
-        {
-            controller.Move(moveDir * Time.deltaTime * runSpeed);
+            // Made so controller smoothly moves to its rotation while not shooting anything
+            if(GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
+            {
+                controller.Move(moveDir * Time.deltaTime * moveSpeed);
+            }
+            else if (!isRunning)
+            {
+                controller.Move(playerBody.transform.forward /*moveDir*/ * Time.deltaTime * moveSpeed);
+            }
+            else
+            {
+                controller.Move(playerBody.transform.forward /*moveDir*/ * Time.deltaTime * runSpeed);
+            }
         }
 
         #region Ground/Jump Checking
