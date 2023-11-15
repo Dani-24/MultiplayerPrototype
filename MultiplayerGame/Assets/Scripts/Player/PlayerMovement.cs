@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     float baseGravity;
     [SerializeField] float gravity = 9.8f;
     [SerializeField] float gravityMarkiplier;
+    [SerializeField] float maxGravity;
 
     [Header("Jumping")]
     [SerializeField] float jumpForce = 5f;
@@ -122,14 +123,14 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (!isGrounded)
         {
-            if (gravity > baseGravity)
+            if (gravity > maxGravity)
             {
                 gravity -= Time.deltaTime * gravityMarkiplier;
             }
         }
         else
         {
-            gravity = 0;
+            gravity = baseGravity;
         }
 
         #endregion

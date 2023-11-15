@@ -20,6 +20,7 @@ public class SceneManagerScript : MonoBehaviour
 
     public List<GameObject> alphaTeamMembers = new List<GameObject>();
     public List<GameObject> betaTeamMembers = new List<GameObject>();
+    public List<GameObject> gammaTeamMembers = new List<GameObject>();
 
     public int maxPlayersPerTeam = 4;
 
@@ -63,25 +64,23 @@ public class SceneManagerScript : MonoBehaviour
         }
         else
         {
-            Debug.Log("Error getting tag");
             return gammaTeamColor;
         }
     }
 
     public string GetRivalTag(string tag)
     {
-        if(tag == teamTags[0])
+        if (tag == teamTags[0])
         {
             return teamTags[1];
         }
-        else if(tag == teamTags[1])
+        else if (tag == teamTags[1])
         {
             return teamTags[0];
         }
         else
         {
-            Debug.Log("Error getting rival tag");
-            return "";
+            return teamTags[2];
         }
     }
 
@@ -90,51 +89,78 @@ public class SceneManagerScript : MonoBehaviour
     {
         bool teamAssigned = false;
 
-        if(preference == teamTags[0])
+        #region Select with Preference
+
+        if (preference == teamTags[0] && alphaTeamMembers.Count < maxPlayersPerTeam)
         {
-            go.tag = teamTags[0];
-            alphaTeamMembers.Add(go);
-            teamAssigned = true;
+            teamAssigned = TeamAssigner(go, alphaTeamMembers, 0);
+            return go.tag;
         }
-        else if(preference == teamTags[1])
+        else if (preference == teamTags[1] && betaTeamMembers.Count < maxPlayersPerTeam)
         {
-            go.tag = teamTags[0];
-            betaTeamMembers.Add(go);
-            teamAssigned = true;
+            teamAssigned = TeamAssigner(go, betaTeamMembers, 1);
+            return go.tag;
         }
+
+        #endregion
 
         while (!teamAssigned)
         {
+            // If Alpha && Beta is full -> Team = Gamma
+            if (alphaTeamMembers.Count >= maxPlayersPerTeam && betaTeamMembers.Count >= maxPlayersPerTeam)
+            {
+                teamAssigned = TeamAssigner(go, gammaTeamMembers, 2);
+                return teamTags[2];
+            }
+
+            // Assign automatically to the team with less players
+            if (alphaTeamMembers.Count > betaTeamMembers.Count && betaTeamMembers.Count < maxPlayersPerTeam)
+            {
+                teamAssigned = TeamAssigner(go, betaTeamMembers, 1);
+                return go.tag;
+            }
+            else if (alphaTeamMembers.Count < betaTeamMembers.Count && alphaTeamMembers.Count < maxPlayersPerTeam)
+            {
+                teamAssigned = TeamAssigner(go, alphaTeamMembers, 0);
+                return go.tag;
+            }
+
+            // Assign Team Randomly if they have the same number of players
             int rng = Random.Range(0, 2);
 
-            if(rng == 0)
+            if (rng == 0)
             {
-                if(alphaTeamMembers.Count < 4) { 
-                    go.tag = teamTags[0];
-                    alphaTeamMembers.Add(go); 
-                    teamAssigned = true;
+                if (alphaTeamMembers.Count < maxPlayersPerTeam)
+                {
+                    teamAssigned = TeamAssigner(go, alphaTeamMembers, 0);
                     return go.tag;
                 }
             }
             else
             {
-                if (betaTeamMembers.Count < 4)
+                if (betaTeamMembers.Count < maxPlayersPerTeam)
                 {
-                    go.tag = teamTags[1];
-                    betaTeamMembers.Add(go); 
-                    teamAssigned = true;
+                    teamAssigned = TeamAssigner(go, betaTeamMembers, 1);
                     return go.tag;
                 }
             }
         }
 
         Debug.Log("Error by Assigning team tag to gameobject");
-        return teamTags[2];
+        return "";
+    }
+
+    // Team Num are 0 for Alpha & 1 for Beta
+    private bool TeamAssigner(GameObject go, List<GameObject> teamList, int teamNum)
+    {
+        go.tag = teamTags[teamNum];
+        teamList.Add(go);
+        return true;
     }
 
     public void DeleteFromTeam(GameObject go)
     {
-        if(go.tag == teamTags[0])
+        if (go.tag == teamTags[0])
         {
             alphaTeamMembers.Remove(go);
         }
