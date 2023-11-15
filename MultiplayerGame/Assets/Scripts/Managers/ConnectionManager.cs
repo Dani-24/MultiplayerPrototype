@@ -29,6 +29,7 @@ public class ConnectionManager : MonoBehaviour
     EndPoint remote;
 
     [Header("Debug")]
+    [SerializeField] bool connectAtStart = true;
     [SerializeField] bool reconnect = false;
     [SerializeField] bool disconnect = false;
 
@@ -165,9 +166,14 @@ public class ConnectionManager : MonoBehaviour
 
     #endregion
 
+    #region Start / Update / etc
+
     void Start()
     {
-        StartConnection();
+        if (connectAtStart)
+        {
+            StartConnection();
+        }
     }
 
     void Update()
@@ -194,4 +200,6 @@ public class ConnectionManager : MonoBehaviour
             EndConnection();
         }
     }
+
+    #endregion
 }

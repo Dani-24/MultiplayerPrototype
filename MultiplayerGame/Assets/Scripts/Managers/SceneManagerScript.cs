@@ -6,6 +6,10 @@ public class SceneManagerScript : MonoBehaviour
 {
     public string sceneName;
 
+    [Header("Debug")]
+    public bool showConsole = false;
+    [SerializeField] GameObject debugConsole;
+
     [Header("Color combinations")]
     [SerializeField] public List<ColorPair> colorPairs = new List<ColorPair>();
 
@@ -23,10 +27,6 @@ public class SceneManagerScript : MonoBehaviour
     public List<GameObject> gammaTeamMembers = new List<GameObject>();
 
     public int maxPlayersPerTeam = 4;
-
-    [Header("Debug")]
-    public bool showConsole = false;
-    [SerializeField] GameObject debugConsole;
 
     private static SceneManagerScript _instance;
     public static SceneManagerScript Instance { get { return _instance; } }
