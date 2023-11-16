@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using UnityEngine;
 using System.Text;
+using System.Linq;
 
 public class ConnectionManager : MonoBehaviour
 {
@@ -22,8 +23,15 @@ public class ConnectionManager : MonoBehaviour
     byte[] data = new byte[1024];
     int recv;
 
-    [SerializeField] string IP = "127.0.0.1";
+    [SerializeField] string hostIP = "127.0.0.1";
     [SerializeField] int port = 9050;
+    [SerializeField] string myIP;
+
+    // Pinging to check connection
+    [SerializeField] float ping;
+    [SerializeField] float pingCounter;
+    bool isPinging;
+    [SerializeField] bool clientIsConnected;
 
     IPEndPoint ipep;
     EndPoint remote;
@@ -76,7 +84,7 @@ public class ConnectionManager : MonoBehaviour
         }
         else
         {
-            ipep = new IPEndPoint(IPAddress.Parse(IP), port);       // As client set the server IP
+            ipep = new IPEndPoint(IPAddress.Parse(hostIP), port);       // As client set the server IP
 
             clientThread = new Thread(ClientThreadUpdate);
             clientThread.Start();
@@ -109,6 +117,24 @@ public class ConnectionManager : MonoBehaviour
         socket.Close();
     }
 
+    public string GetLocalIPv4()
+    {
+        return Dns.GetHostEntry(Dns.GetHostName()).AddressList.First(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
+    }
+
+    public string GetLocalIPAddress()
+    {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return ip.ToString();
+            }
+        }
+        throw new System.Exception("No network adapters with an IPv4 address in the system!");
+    }
+
     #endregion
 
     #region Threads Loops
@@ -122,11 +148,48 @@ public class ConnectionManager : MonoBehaviour
 
         while (true)
         {
+            #region Check if client is still connected every X time
+
+            if (pingCounter > 0)
+            {
+                pingCounter -= 0.1f;
+            }
+            else
+            {
+                pingCounter = ping;
+
+                // PING
+                string pingMsg = "ping";
+                data = Encoding.ASCII.GetBytes(pingMsg);
+
+                socket.SendTo(data, recv, SocketFlags.None, remote);
+
+                isPinging = true;
+            }
+
+            #endregion
+
+            // Probar meter esto en el UPDATE normal y guardar el ultimo ReceiveFrom en un string???
+
             // Receive data
             data = new byte[1024];
             recv = socket.ReceiveFrom(data, ref remote);
 
             Debug.Log(remote.ToString() + " : " + Encoding.ASCII.GetString(data, 0, recv)); // Log received data
+
+            #region Check Connection Msg
+
+            clientIsConnected = true;
+
+            if (isPinging)
+            {
+                if (Encoding.ASCII.GetString(data, 0, recv) != "pong")
+                {
+                    clientIsConnected = false;
+                }
+            }
+
+            #endregion
 
             // Answer data
             string answer = "SERVER: " + Encoding.ASCII.GetString(data, 0, recv);
@@ -144,7 +207,7 @@ public class ConnectionManager : MonoBehaviour
             remote = sender;
 
             // Send data
-            string welcome = "Client Connection Stablished";
+            string welcome = "Connection Stablished";
             data = Encoding.ASCII.GetBytes(welcome);
             socket.SendTo(data, data.Length, SocketFlags.None, ipep);
 
@@ -153,6 +216,13 @@ public class ConnectionManager : MonoBehaviour
                 // Receive Data
                 data = new byte[1024];
                 recv = socket.ReceiveFrom(data, ref remote);
+
+                if (Encoding.ASCII.GetString(data, 0, recv) == "ping")
+                {
+                    string pongMsg = "pong";
+                    data = Encoding.ASCII.GetBytes(pongMsg);
+                    socket.SendTo(data, data.Length, SocketFlags.None, ipep);
+                }
 
                 Debug.Log(Encoding.ASCII.GetString(data, 0, recv)); // Log received data
             }
@@ -170,6 +240,11 @@ public class ConnectionManager : MonoBehaviour
 
     void Start()
     {
+        //myIP = GetLocalIPv4();
+        myIP = GetLocalIPAddress();
+
+        pingCounter = ping;
+
         if (connectAtStart)
         {
             StartConnection();
@@ -180,7 +255,7 @@ public class ConnectionManager : MonoBehaviour
     {
         if (reconnect)
         {
-            if(!isConnected)
+            if (!isConnected)
             {
                 StartConnection();
             }
