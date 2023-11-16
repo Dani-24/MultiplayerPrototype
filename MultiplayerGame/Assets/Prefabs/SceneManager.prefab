@@ -49,6 +49,10 @@ MonoBehaviour:
   sceneName: 
   showConsole: 1
   debugConsole: {fileID: 0}
+  addNewPlayer: 0
+  playerPrefab: {fileID: 7696216211473871433, guid: b67d6d356db779849a9636062bb6b45c,
+    type: 3}
+  playersOnScene: []
   colorPairs:
   - color1: {r: 0.8773585, g: 0.41320142, b: 0.19450872, a: 1}
     color2: {r: 0.11124954, g: 0.37433642, b: 0.9433962, a: 1}
@@ -92,6 +96,8 @@ MonoBehaviour:
   port: 9050
   myIP: 
   ping: 2
+  pingCounter: 0
+  clientIsConnected: 0
   connectAtStart: 1
   reconnect: 0
   disconnect: 0

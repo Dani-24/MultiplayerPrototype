@@ -10,16 +10,23 @@ public class SceneManagerScript : MonoBehaviour
     public bool showConsole = false;
     [SerializeField] GameObject debugConsole;
 
+    [SerializeField] bool addNewPlayer = false;
+
+    [Header("Players")]
+    [SerializeField] GameObject playerPrefab;
+    public List<GameObject> playersOnScene = new List<GameObject>();
+
     [Header("Color combinations")]
     [SerializeField] public List<ColorPair> colorPairs = new List<ColorPair>();
 
-    [Header("This Game Colors")]
+    [Header("Game Colors")]
     [SerializeField] Color alphaTeamColor;
     [SerializeField] Color betaTeamColor;
     [Tooltip("This team is for tag errors")][SerializeField] Color gammaTeamColor;
 
     [SerializeField] bool useTheseDebugColors = false;
 
+    [Header("Teams")]
     public List<string> teamTags = new List<string>();
 
     public List<GameObject> alphaTeamMembers = new List<GameObject>();
@@ -27,6 +34,8 @@ public class SceneManagerScript : MonoBehaviour
     public List<GameObject> gammaTeamMembers = new List<GameObject>();
 
     public int maxPlayersPerTeam = 4;
+
+    #region Instance
 
     private static SceneManagerScript _instance;
     public static SceneManagerScript Instance { get { return _instance; } }
@@ -42,6 +51,8 @@ public class SceneManagerScript : MonoBehaviour
             _instance = this;
         }
     }
+
+    #endregion
 
     void Start()
     {
@@ -60,6 +71,19 @@ public class SceneManagerScript : MonoBehaviour
         {
             debugConsole.SetActive(showConsole);
         }
+
+        // DEBUG
+        if (addNewPlayer)
+        {
+            CreateNewPlayer();
+            addNewPlayer = false;
+        }
+    }
+
+    public void CreateNewPlayer()
+    {
+        GameObject newP = Instantiate(playerPrefab);
+        playersOnScene.Add(newP);
     }
 
     #region Teams Management

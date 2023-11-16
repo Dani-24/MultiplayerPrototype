@@ -152,6 +152,11 @@ public class PlayerMovement : MonoBehaviour
         //CheckGroundPaint();
     }
 
+    public Vector2 GetMoveInput()
+    {
+        return moveInput;
+    }
+
     #region Ground Paint
 
     void CheckGroundPaint()

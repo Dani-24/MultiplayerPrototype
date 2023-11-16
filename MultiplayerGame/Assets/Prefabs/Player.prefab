@@ -1252,6 +1252,7 @@ GameObject:
   - component: {fileID: 8850403938646090606}
   - component: {fileID: 1999952536560265267}
   - component: {fileID: 601365694986606940}
+  - component: {fileID: 8287502409369477338}
   - component: {fileID: 247857097964215285}
   - component: {fileID: 8611022976118043153}
   m_Layer: 3
@@ -1393,6 +1394,20 @@ MonoBehaviour:
   reticleMaxY: 110
   reticleScale: 1
   cameraReseting: 0
+--- !u!114 &8287502409369477338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7696216211473871433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f0c6f5c47229644392e87dae87879be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isOwnByClient: 1
+  audioListener: {fileID: 5110794649509268068}
 --- !u!114 &247857097964215285
 MonoBehaviour:
   m_ObjectHideFlags: 0
