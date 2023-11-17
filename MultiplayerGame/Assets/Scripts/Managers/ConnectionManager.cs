@@ -27,7 +27,7 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] int port = 9050;
     [SerializeField] string myIP;
 
-    // Pinging to check connection
+    [Header("Pinging")]
     [SerializeField] float ping;
     [SerializeField] float pingCounter;
     bool isPinging;
