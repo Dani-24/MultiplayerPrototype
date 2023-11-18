@@ -49,8 +49,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: 
   showConsole: 1
-  debugConsole: {fileID: 0}
-  addNewPlayer: 0
+  debugConsole: {fileID: 7963841811532817948, guid: 20d7599dc50b34041a033c9032c2534c,
+    type: 3}
+  addNewPlayer: 1
   playerPrefab: {fileID: 8772792941313980139, guid: b67d6d356db779849a9636062bb6b45c,
     type: 3}
   playersOnScene: []
@@ -99,7 +100,7 @@ MonoBehaviour:
   packageDataSize: 5120
   pingCounter: 5
   clientIsConnected: 0
-  connectAtStart: 1
+  connectAtStart: 0
   reconnect: 0
   disconnect: 0
 --- !u!114 &5091525238335802703
@@ -127,7 +128,7 @@ PrefabInstance:
     - target: {fileID: 4466152540515630064, guid: 130e23d77bd53e54597c2157207c8b61,
         type: 3}
       propertyPath: m_Name
-      value: ConnectionCanvas
+      value: ConnectionCanvas(InputUI)
       objectReference: {fileID: 0}
     - target: {fileID: 6487867331128994501, guid: 130e23d77bd53e54597c2157207c8b61,
         type: 3}
