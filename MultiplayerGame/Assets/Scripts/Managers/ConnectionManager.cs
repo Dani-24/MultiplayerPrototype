@@ -4,6 +4,8 @@ using System.Threading;
 using UnityEngine;
 using System.Text;
 using System.Linq;
+using System.IO;
+using System;
 
 public class ConnectionManager : MonoBehaviour
 {
@@ -27,9 +29,11 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] int port = 9050;
     [SerializeField] string myIP;
 
+    [SerializeField] int packageDataSize = 1024;
+
     [Header("Pinging")]
-    [SerializeField] float ping;
     [SerializeField] float pingCounter;
+    float pingInterval;
     bool isPinging;
     [SerializeField] bool clientIsConnected;
 
@@ -40,6 +44,94 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] bool connectAtStart = true;
     [SerializeField] bool reconnect = false;
     [SerializeField] bool disconnect = false;
+
+    #endregion
+
+    #region Packages & Serialization
+
+    MemoryStream SerializeJson(Package pck)
+    {
+        string json = JsonUtility.ToJson(pck);
+        MemoryStream stream = new MemoryStream();
+        BinaryWriter writer = new BinaryWriter(stream);
+        writer.Write(json);
+
+        return stream;
+    }
+
+    Package DeserializeJson(MemoryStream stream)
+    {
+        var pck = new Package();
+        BinaryReader reader = new BinaryReader(stream);
+        stream.Seek(0, SeekOrigin.Begin);
+
+        string json = reader.ReadString();
+        pck = JsonUtility.FromJson<Package>(json);
+
+        Debug.Log("Received Pck: " + pck.type);
+
+        return pck;
+    }
+
+    Package WritePackage(Pck_type type)
+    {
+        Package pck = new Package();
+
+        pck.pckCreationTime = DateTime.UtcNow;
+        pck.IP = myIP;
+
+        switch (type)
+        {
+            case Pck_type.Player:
+
+                pck.playerPck = new PlayerPackage();
+
+                // Fill playerPck ??
+
+                pck.type = Pck_type.Player;
+
+                break;
+            case Pck_type.Ping:
+
+                pck.pingPck = new PingPackage();
+
+                // Fill pingPck ??
+
+                pck.type = Pck_type.Ping;
+
+                break;
+            case Pck_type.Connection:
+
+                pck.connPck = new ConnectionPackage();
+                pck.type = Pck_type.Connection;
+
+                break;
+        }
+
+        return pck;
+    }
+
+    void ReadPackage(Package pck)
+    {
+        Debug.Log("Package from: " + pck.IP + " created at: " + pck.pckCreationTime.ToString());
+
+        switch (pck.type)
+        {
+            case Pck_type.Player:
+
+                // Funcion de Player Networking que reciba un PlayerPackage
+
+                break;
+            case Pck_type.Ping:
+
+                // Funcion aqui que interprete PingPackage
+
+                break;
+            case Pck_type.Connection:
+                Debug.Log(pck.connPck.user + ": " + pck.connPck.message);
+                break;
+        }
+    }
 
     #endregion
 
@@ -117,11 +209,11 @@ public class ConnectionManager : MonoBehaviour
         socket.Close();
     }
 
+    // Both get local IP actually seems to do the same . . .
     public string GetLocalIPv4()
     {
         return Dns.GetHostEntry(Dns.GetHostName()).AddressList.First(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
     }
-
     public string GetLocalIPAddress()
     {
         var host = Dns.GetHostEntry(Dns.GetHostName());
@@ -148,54 +240,29 @@ public class ConnectionManager : MonoBehaviour
 
         while (true)
         {
-            #region Check if client is still connected every X time
-
-            if (pingCounter > 0)
-            {
-                pingCounter -= 0.1f;
-            }
-            else
-            {
-                pingCounter = ping;
-
-                // PING
-                string pingMsg = "ping";
-                data = Encoding.ASCII.GetBytes(pingMsg);
-
-                socket.SendTo(data, recv, SocketFlags.None, remote);
-
-                isPinging = true;
-            }
-
-            #endregion
-
-            // Probar meter esto en el UPDATE normal y guardar el ultimo ReceiveFrom en un string???
-
             // Receive data
-            data = new byte[1024];
+            data = new byte[packageDataSize];
             recv = socket.ReceiveFrom(data, ref remote);
 
-            Debug.Log(remote.ToString() + " : " + Encoding.ASCII.GetString(data, 0, recv)); // Log received data
+            // Manage Package
+            MemoryStream receiveStream = new MemoryStream(data);
+            Package rPack = DeserializeJson(receiveStream);
+            ReadPackage(rPack);
 
-            #region Check Connection Msg
-
-            clientIsConnected = true;
-
-            if (isPinging)
-            {
-                if (Encoding.ASCII.GetString(data, 0, recv) != "pong")
-                {
-                    clientIsConnected = false;
-                }
-            }
-
-            #endregion
+            //Debug.Log(remote.ToString() + " : " + Encoding.ASCII.GetString(data, 0, recv)); // Log received data
 
             // Answer data
-            string answer = "SERVER: " + Encoding.ASCII.GetString(data, 0, recv);
-            data = Encoding.ASCII.GetBytes(answer);
+            MemoryStream sendStream = new MemoryStream();
+            Package answerPck = WritePackage(Pck_type.Connection);
+            answerPck.connPck.message = rPack.connPck.message;
+            answerPck.connPck.user = Network_User.Server;
+            answerPck.connPck.isAnswer = true;
+            sendStream = SerializeJson(answerPck);
 
-            socket.SendTo(data, recv, SocketFlags.None, remote);
+            //string answer = "SERVER: " + Encoding.ASCII.GetString(data, 0, recv);
+            //data = Encoding.ASCII.GetBytes(answer);
+
+            socket.SendTo(sendStream.ToArray(), recv, SocketFlags.None, remote);
         }
     }
 
@@ -207,28 +274,43 @@ public class ConnectionManager : MonoBehaviour
             remote = sender;
 
             // Send data
-            string welcome = "Connection Stablished";
-            data = Encoding.ASCII.GetBytes(welcome);
-            socket.SendTo(data, data.Length, SocketFlags.None, ipep);
+            //string welcome = "Connection Stablished";
+            //data = Encoding.ASCII.GetBytes(welcome);
+            //socket.SendTo(data, data.Length, SocketFlags.None, ipep);
+
+            MemoryStream sendStream = new MemoryStream();
+            Package pck = WritePackage(Pck_type.Connection);
+            pck.connPck.message = "Connection Stablished";
+            pck.connPck.user = Network_User.Client;
+            sendStream = SerializeJson(pck);
+
+            socket.SendTo(sendStream.ToArray(), (int)sendStream.Length, SocketFlags.None, ipep);
 
             while (true)
             {
+                // Ping Counters
+                //if (pingCounter <= 0)
+                //{
+                //    pingCounter = pingInterval;
+
+                //    // SEND PING PACKAGE
+                //}
+
                 // Receive Data
-                data = new byte[1024];
+                data = new byte[packageDataSize];
                 recv = socket.ReceiveFrom(data, ref remote);
 
-                if (Encoding.ASCII.GetString(data, 0, recv) == "ping")
-                {
-                    string pongMsg = "pong";
-                    data = Encoding.ASCII.GetBytes(pongMsg);
-                    socket.SendTo(data, data.Length, SocketFlags.None, ipep);
-                }
+                // Manage Package
+                MemoryStream receiveStream = new MemoryStream(data);
+                ReadPackage(DeserializeJson(receiveStream));
 
-                Debug.Log(Encoding.ASCII.GetString(data, 0, recv)); // Log received data
+                //Debug.Log(Encoding.ASCII.GetString(data, 0, recv)); // Log received data
             }
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.Log("Error:" + ex.Message);
+
             Debug.Log("Server is Disconnected");
             EndConnection();
         }
@@ -243,7 +325,7 @@ public class ConnectionManager : MonoBehaviour
         //myIP = GetLocalIPv4();
         myIP = GetLocalIPAddress();
 
-        pingCounter = ping;
+        pingInterval = pingCounter;
 
         if (connectAtStart)
         {
@@ -253,6 +335,7 @@ public class ConnectionManager : MonoBehaviour
 
     void Update()
     {
+        // Connection toggles
         if (reconnect)
         {
             if (!isConnected)
@@ -266,6 +349,8 @@ public class ConnectionManager : MonoBehaviour
         {
             EndConnection();
         }
+
+        pingCounter -= Time.deltaTime;
     }
 
     private void OnApplicationQuit()
@@ -278,3 +363,58 @@ public class ConnectionManager : MonoBehaviour
 
     #endregion
 }
+
+#region Package Classes
+
+public enum Pck_type
+{
+    Player,
+    Ping,
+    Connection
+}
+
+public enum Network_User
+{
+    Server,
+    Client
+}
+
+[System.Serializable]
+class Package
+{
+    public Pck_type type;
+    public string IP;
+    public DateTime pckCreationTime;
+
+    public PlayerPackage playerPck = null;
+    public PingPackage pingPck = null;
+    public ConnectionPackage connPck = null;
+}
+
+[System.Serializable]
+public class PlayerPackage
+{
+    public Vector2 moveInput;
+
+    public bool isRunning = false;
+    public bool isJumping = false;
+
+    public bool isShooting = false;
+    public bool isSubWeapon = false;
+}
+
+[System.Serializable]
+public class PingPackage
+{
+    public string debug = "Bombardeen Renfe";
+}
+
+[System.Serializable]
+public class ConnectionPackage
+{
+    public Network_User user;
+    public string message;
+    public bool isAnswer = false;
+}
+
+#endregion
