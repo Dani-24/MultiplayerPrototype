@@ -25,8 +25,8 @@ public class ConnectionManager : MonoBehaviour
     byte[] data = new byte[1024];
     int recv;
 
-    [SerializeField] string hostIP = "127.0.0.1";
-    [SerializeField] int port = 9050;
+    [SerializeField] string hostIP = "127.0.0.1"; string defaultIP = "127.0.0.1";
+    [SerializeField] int port = 9050; int defaultPort = 9050;
     [SerializeField] string myIP;
 
     [SerializeField] int packageDataSize = 1024;
@@ -42,8 +42,8 @@ public class ConnectionManager : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] bool connectAtStart = true;
-    [SerializeField] bool reconnect = false;
-    [SerializeField] bool disconnect = false;
+    public bool reconnect = false;
+    public bool disconnect = false;
 
     #endregion
 
@@ -189,24 +189,32 @@ public class ConnectionManager : MonoBehaviour
     {
         Debug.Log(debugLog);
 
-        isConnected = false;
-        disconnect = false;
-
-        if (isHosting)
+        if (isConnected)
         {
-            serverThread.Abort();
-        }
-        else
-        {
-            clientThread.Abort();
-        }
+            isConnected = false;
+            disconnect = false;
 
-        if (socket.Connected)
-        {
-            socket.Shutdown(SocketShutdown.Both);
-        }
+            if (isHosting)
+            {
+                serverThread.Abort();
+            }
+            else
+            {
+                clientThread.Abort();
+            }
 
-        socket.Close();
+            if (socket.Connected)
+            {
+                socket.Shutdown(SocketShutdown.Both);
+            }
+
+            socket.Close();
+        }
+    }
+
+    public bool IsConnected()
+    {
+        return isConnected;
     }
 
     // Both get local IP actually seems to do the same . . .
@@ -307,12 +315,9 @@ public class ConnectionManager : MonoBehaviour
                 //Debug.Log(Encoding.ASCII.GetString(data, 0, recv)); // Log received data
             }
         }
-        catch (Exception ex)
+        catch
         {
-            Debug.Log("Error:" + ex.Message);
-
-            Debug.Log("Server is Disconnected");
-            EndConnection();
+            EndConnection("Server is Disconnected");
         }
     }
 
@@ -350,6 +355,14 @@ public class ConnectionManager : MonoBehaviour
             EndConnection();
         }
 
+        // Get values from UI
+        string getIP = GetComponent<UI_Manager>().GetIpFromInput();
+        int getPort = GetComponent<UI_Manager>().GetPortFromInput();
+
+        if (getIP != "") { hostIP = GetComponent<UI_Manager>().GetIpFromInput(); } else { hostIP = defaultIP; }
+        if (getPort != 0) { port = GetComponent<UI_Manager>().GetPortFromInput(); } else { port = defaultPort; }
+
+        // Ping
         pingCounter -= Time.deltaTime;
     }
 

@@ -27,26 +27,33 @@ public class PlayerArmament : MonoBehaviour
 
     void Update()
     {
-        // AIMING
-        if(GetComponentInParent<OrbitCamera>().affectedCamera != null)
+        if (!SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI)
         {
-            aimDirection = GetComponentInParent<OrbitCamera>().affectedCamera.transform.forward;
-        }
+            // AIMING
+            if (GetComponentInParent<OrbitCamera>().affectedCamera != null)
+            {
+                aimDirection = GetComponentInParent<OrbitCamera>().affectedCamera.transform.forward;
+            }
 
-        // WEAPON
-        if (!createdWeapon || currentWeapon.GetComponent<Weapon>().weaponName != weaponToUse.GetComponent<Weapon>().weaponName)
-        {
-            CreateWeapon();
-        }
+            // WEAPON
+            if (!createdWeapon || currentWeapon.GetComponent<Weapon>().weaponName != weaponToUse.GetComponent<Weapon>().weaponName)
+            {
+                CreateWeapon();
+            }
 
-        // SUB WEAPON
-        if (subWeaponShooting)
-        {
-            ChargeSub();
+            // SUB WEAPON
+            if (subWeaponShooting)
+            {
+                ChargeSub();
+            }
+            else if (chargingSub)
+            {
+                ThrowSub();
+            }
         }
-        else if (chargingSub)
+        else
         {
-            ThrowSub();
+            weaponShooting = false; subWeaponShooting = false; chargingSub = false;
         }
     }
 

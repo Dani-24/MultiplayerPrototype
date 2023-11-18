@@ -208,6 +208,11 @@ public class SceneManagerScript : MonoBehaviour
 
     #endregion
 
+    public void ShowUI(bool show)
+    {
+        GetComponent<UI_Manager>().showUI = show;
+    }
+
     public void ChangeScene(string sceneToChange)
     {
         SceneManager.LoadScene(sceneToChange);

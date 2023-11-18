@@ -75,29 +75,32 @@ public class OrbitCamera : MonoBehaviour
             return;
         }
 
-        #region Camera Input
-
-        float mouseX = camAxis.x * Time.deltaTime;
-        float mouseY = camAxis.y * Time.deltaTime;
-
-        // Aplicar sensibilidad a los ejes
-        if (!GetComponent<PlayerMovement>().isUsingGamepad)
+        if (!SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI)
         {
-            camRot.x += (Mathf.Clamp(mouseX, -1.0f, 1.0f) * mouseSens.x);
-            camRot.y += (Mathf.Clamp(mouseY, -1.0f, 1.0f) * mouseSens.y);
+            #region Camera Input
+
+            float mouseX = camAxis.x * Time.deltaTime;
+            float mouseY = camAxis.y * Time.deltaTime;
+
+            // Aplicar sensibilidad a los ejes
+            if (!GetComponent<PlayerMovement>().isUsingGamepad)
+            {
+                camRot.x += (Mathf.Clamp(mouseX, -1.0f, 1.0f) * mouseSens.x);
+                camRot.y += (Mathf.Clamp(mouseY, -1.0f, 1.0f) * mouseSens.y);
+            }
+            else
+            {
+                camRot.x += (Mathf.Clamp(mouseX, -1.0f, 1.0f) * gamepadSens.x);
+                camRot.y += (Mathf.Clamp(mouseY, -1.0f, 1.0f) * gamepadSens.y);
+            }
+
+            // Limitar altura max y min del eje Y
+            camRot.y = Mathf.Clamp(camRot.y, minHeight, maxHeight);
+
+            cameraDistance = Mathf.Clamp(cameraDistance, cameraMinDist, cameraMaxDist);
+
+            #endregion
         }
-        else
-        {
-            camRot.x += (Mathf.Clamp(mouseX, -1.0f, 1.0f) * gamepadSens.x);
-            camRot.y += (Mathf.Clamp(mouseY, -1.0f, 1.0f) * gamepadSens.y);
-        }
-
-        // Limitar altura max y min del eje Y
-        camRot.y = Mathf.Clamp(camRot.y, minHeight, maxHeight);
-
-        cameraDistance = Mathf.Clamp(cameraDistance, cameraMinDist, cameraMaxDist);
-
-        #endregion
 
         // Set Camera Rotation
         Quaternion animRotation = Quaternion.Euler(-camRot.y, camRot.x, 0.0f);
