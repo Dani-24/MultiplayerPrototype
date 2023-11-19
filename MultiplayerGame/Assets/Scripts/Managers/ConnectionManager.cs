@@ -20,7 +20,7 @@ public class ConnectionManager : MonoBehaviour
 
     Socket socket;
 
-    Thread serverThread, clientThread;
+    Thread serverReceiveThread, clientReceiveThread, serverSendThread, clientSendThread;
 
     byte[] data = new byte[1024];
     int recv;
@@ -29,7 +29,10 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] int port = 9050; int defaultPort = 9050;
     [SerializeField] string myIP;
 
+    [Header("Packages")]
     [SerializeField] int packageDataSize = 1024;
+    [SerializeField] float delayBetweenPckgs = 0.1f;
+    float delay;
 
     [Header("Pinging")]
     [SerializeField] float pingCounter;
@@ -44,6 +47,28 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] bool connectAtStart = true;
     public bool reconnect = false;
     public bool disconnect = false;
+
+    #region NET Data
+
+    [Header("DEBUG NET DATA")]
+    public bool literalmenteUnBoolQNoHaceNadaPQMeDabaPaloMoverElHeader;
+
+    PlayerToAdd playerToAdd = new PlayerToAdd();
+    bool addPlayer = false;
+
+    Vector3 ownPlayerPos;
+    [SerializeField] int ownPlayerNetID = -1;
+    [SerializeField] PlayerPackage ownPlayerPck;
+
+    [SerializeField] int notOwnPlayerNetID;
+    [SerializeField] PlayerPackage notOwnPlayerPck;
+
+    [SerializeField] bool ownPlayerSend = false;
+    [SerializeField] bool notOwnPlayerReceived = false;
+
+    Package receivedPck;
+
+    #endregion
 
     #endregion
 
@@ -77,15 +102,18 @@ public class ConnectionManager : MonoBehaviour
     {
         Package pck = new Package();
         pck.IP = myIP;
+        pck.type = type;
 
-        Debug.Log("Sending Pck " + pck.type + " at " + pck.pckCreationTime);
+        Debug.Log("Sending Pck " + pck.type /*+ " at " + pck.pckCreationTime*/);
 
         switch (type)
         {
             case Pck_type.Player:
 
-                pck.playerPck = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().GetPlayerPck();
-                pck.type = Pck_type.Player;
+                if (ownPlayerPck != null)
+                {
+                    pck.playerPck = ownPlayerPck;
+                }
 
                 break;
             case Pck_type.Ping:
@@ -94,13 +122,10 @@ public class ConnectionManager : MonoBehaviour
 
                 // Fill pingPck ??
 
-                pck.type = Pck_type.Ping;
-
                 break;
             case Pck_type.Connection:
 
                 pck.connPck = new ConnectionPackage();
-                pck.type = Pck_type.Connection;
 
                 break;
         }
@@ -111,16 +136,14 @@ public class ConnectionManager : MonoBehaviour
     void ReadPackage(Package pck)
     {
         int pckDelay = (DateTime.UtcNow - pck.pckCreationTime).Milliseconds;
-        string pckLog = "Package from: " + pck.user + " (" + pck.IP + ") created at: " + pck.pckCreationTime + " ms: " + pckDelay;
+        string pckLog = "Package from: " + pck.user + " (" + pck.IP + ") ms: " + pckDelay;
 
         switch (pck.type)
         {
             case Pck_type.Player:   // Funcion de Player Networking que reciba un PlayerPackage
 
-                // BUSCAR AQUI EL PLAYER CREADO CON LA networkID (PlayerNetworking) DEL PLAYER RECIBIDO en la lista de players de SceneManagerScript
-                // Y HACER UN SetPlayerInfoPck (PlayerNetworking)
-
-                pckLog += pck.playerPck.teamTag + " Input: " + pck.playerPck.moveInput + " Run: " + pck.playerPck.running;
+                notOwnPlayerNetID = pck.netID;
+                notOwnPlayerPck = pck.playerPck;
 
                 break;
             case Pck_type.Ping: // Funcion aqui que interprete PingPackage
@@ -130,6 +153,19 @@ public class ConnectionManager : MonoBehaviour
                 pckLog += " || ";
                 if (pck.connPck.isAnswer) { pckLog += "Answering to: "; };
                 pckLog += pck.connPck.message;
+
+                if (pck.connPck.createPlayer)
+                {
+                    notOwnPlayerReceived = true;
+                    Debug.Log("Creating a Player from Network");
+
+                    playerToAdd.id = pck.netID;
+                    playerToAdd.own = false;
+                    playerToAdd.position = pck.connPck.playerPos;
+
+                    addPlayer = true;
+                }
+
                 break;
         }
 
@@ -174,16 +210,25 @@ public class ConnectionManager : MonoBehaviour
 
             socket.Bind(ipep);
 
-            serverThread = new Thread(ServerThreadUpdate);
-            serverThread.Start();
+            serverReceiveThread = new Thread(ServerReceiveThreadUpdate);
+            serverReceiveThread.Start();
+
+            serverSendThread = new Thread(ServerSendThreadUpdate);
+            serverSendThread.Start();
         }
         else
         {
             ipep = new IPEndPoint(IPAddress.Parse(hostIP), port);       // As client set the server IP
 
-            clientThread = new Thread(ClientThreadUpdate);
-            clientThread.Start();
+            clientReceiveThread = new Thread(ClientReceiveThreadUpdate);
+            clientReceiveThread.Start();
+
+            clientSendThread = new Thread(ClientSendThreadUpdate);
+            clientSendThread.Start();
         }
+
+        IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
+        remote = (EndPoint)(sender);
 
         isConnected = true;
     }
@@ -196,14 +241,18 @@ public class ConnectionManager : MonoBehaviour
         {
             isConnected = false;
             disconnect = false;
+            ownPlayerSend = false;
+            notOwnPlayerReceived = false;
 
             if (isHosting)
             {
-                serverThread.Abort();
+                serverSendThread.Abort();
+                serverReceiveThread.Abort();
             }
             else
             {
-                clientThread.Abort();
+                clientSendThread.Abort();
+                clientReceiveThread.Abort();
             }
 
             if (socket.Connected)
@@ -242,12 +291,37 @@ public class ConnectionManager : MonoBehaviour
 
     #region Threads Loops
 
-    void ServerThreadUpdate()
+    void ServerSendThreadUpdate()
     {
-        Debug.Log("Waiting for a Client...");
-
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
         remote = (EndPoint)(sender);
+
+        while (true)
+        {
+            if (clientIsConnected)
+            {
+                #region Send Own Player Data
+
+                if (ownPlayerSend && delay > delayBetweenPckgs)
+                {
+                    MemoryStream sendPStream = new MemoryStream();
+                    Package pPck = WritePackage(Pck_type.Player);
+                    pPck.netID = ownPlayerNetID;
+                    pPck.user = Network_User.Client;
+                    sendPStream = SerializeJson(pPck);
+
+                    socket.SendTo(sendPStream.ToArray(), (int)sendPStream.Length, SocketFlags.None, remote);
+                    delay = 0;
+                }
+
+                #endregion
+            }
+        }
+    }
+
+    void ServerReceiveThreadUpdate()
+    {
+        Debug.Log("Waiting for a Client...");
 
         while (true)
         {
@@ -257,35 +331,54 @@ public class ConnectionManager : MonoBehaviour
 
             // Manage Package
             MemoryStream receiveStream = new MemoryStream(data);
-            Package rPack = DeserializeJson(receiveStream);
-            ReadPackage(rPack);
+            receivedPck = DeserializeJson(receiveStream);
+            ReadPackage(receivedPck);
 
-            // Answer data
-            MemoryStream sendStream = new MemoryStream();
-            Package answerPck = WritePackage(Pck_type.Connection);
-            answerPck.connPck.message = rPack.connPck.message;
-            answerPck.user = Network_User.Server;
-            answerPck.connPck.isAnswer = true;
-            sendStream = SerializeJson(answerPck);
+            if (receivedPck.type == Pck_type.Connection)
+            {
+                MemoryStream sendStream = new MemoryStream();
 
-            socket.SendTo(sendStream.ToArray(), (int)sendStream.Length, SocketFlags.None, remote);
+                Package answerPck = WritePackage(Pck_type.Connection);
+                answerPck.connPck.message = receivedPck.connPck.message;
+                answerPck.user = Network_User.Server;
+                answerPck.connPck.isAnswer = true;
+
+                if (receivedPck.connPck.createPlayer) // Devolver el player del server al client nuevo
+                {
+                    answerPck.connPck.createPlayer = true;
+                    answerPck.connPck.playerPos = ownPlayerPos;
+                    answerPck.netID = ownPlayerNetID;
+                    ownPlayerSend = true;
+                }
+
+                sendStream = SerializeJson(answerPck);
+                socket.SendTo(sendStream.ToArray(), (int)sendStream.Length, SocketFlags.None, remote);
+            }
+
+            clientIsConnected = true;
         }
     }
 
-    void ClientThreadUpdate()
+    void ClientSendThreadUpdate()
     {
         try
         {
-            IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-            remote = sender;
+            #region Stablish connection + send player start position
 
             MemoryStream sendStream = new MemoryStream();
             Package pck = WritePackage(Pck_type.Connection);
             pck.connPck.message = "Connection Stablished";
+            pck.connPck.createPlayer = true;
+            pck.connPck.playerPos = ownPlayerPos;
+            pck.netID = ownPlayerNetID;
             pck.user = Network_User.Client;
             sendStream = SerializeJson(pck);
 
             socket.SendTo(sendStream.ToArray(), (int)sendStream.Length, SocketFlags.None, ipep);
+
+            ownPlayerSend = true;
+
+            #endregion
 
             while (true)
             {
@@ -297,6 +390,37 @@ public class ConnectionManager : MonoBehaviour
                 //    // SEND PING PACKAGE
                 //}
 
+
+                #region Update/Send Player Input
+
+                if (ownPlayerSend && delay > delayBetweenPckgs)
+                {
+                    MemoryStream sendPStream = new MemoryStream();
+                    Package pPck = WritePackage(Pck_type.Player);
+                    pPck.netID = ownPlayerNetID;
+                    pPck.user = Network_User.Client;
+                    sendPStream = SerializeJson(pPck);
+
+                    socket.SendTo(sendPStream.ToArray(), (int)sendPStream.Length, SocketFlags.None, ipep);
+                    delay = 0;
+                }
+
+                #endregion
+
+            }
+        }
+        catch
+        {
+            EndConnection("Server is Disconnected (Send)");
+        }
+    }
+
+    void ClientReceiveThreadUpdate()
+    {
+        try
+        {
+            while (true)
+            {
                 // Receive Data
                 data = new byte[packageDataSize];
                 recv = socket.ReceiveFrom(data, ref remote);
@@ -308,7 +432,7 @@ public class ConnectionManager : MonoBehaviour
         }
         catch
         {
-            EndConnection("Server is Disconnected");
+            EndConnection("Server is Disconnected (Receive)");
         }
     }
 
@@ -344,6 +468,11 @@ public class ConnectionManager : MonoBehaviour
         if (disconnect)
         {
             EndConnection();
+
+            // A la tercera saldrá bien :D (Deberia arreglar esto... o no)
+            SceneManagerScript.Instance.DeleteAllNotOwnedPlayers();
+            SceneManagerScript.Instance.DeleteAllNotOwnedPlayers();
+            SceneManagerScript.Instance.DeleteAllNotOwnedPlayers();
         }
 
         // Get values from UI
@@ -353,8 +482,41 @@ public class ConnectionManager : MonoBehaviour
         if (getIP != "") { hostIP = GetComponent<UI_Manager>().GetIpFromInput(); } else { hostIP = defaultIP; }
         if (getPort != 0) { port = GetComponent<UI_Manager>().GetPortFromInput(); } else { port = defaultPort; }
 
+        delay += Time.deltaTime;
+
         // Ping
         pingCounter -= Time.deltaTime;
+
+        // Add player from the other instance
+        if (addPlayer)
+        {
+            GameObject newP = SceneManagerScript.Instance.CreateNewPlayer(playerToAdd.own, playerToAdd.position);
+            newP.GetComponent<PlayerNetworking>().networkID = playerToAdd.id;
+
+            addPlayer = false;
+        }
+
+        // Update Own Player Info
+        if (SceneManagerScript.Instance.GetOwnPlayerInstance() != null)
+        {
+            ownPlayerPos = SceneManagerScript.Instance.GetOwnPlayerInstance().transform.position;
+            ownPlayerNetID = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().networkID;
+
+            ownPlayerPck = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().GetPlayerPck();
+        }
+
+        // Update Not Own Player Info
+        if (notOwnPlayerReceived)
+        {
+            for (int i = 0; i < SceneManagerScript.Instance.playersOnScene.Count; i++)
+            {
+                if (SceneManagerScript.Instance.playersOnScene[i].GetComponent<PlayerNetworking>().networkID == notOwnPlayerNetID)
+                {
+                    SceneManagerScript.Instance.playersOnScene[i].GetComponent<PlayerNetworking>().SetPlayerInfoFromPck(notOwnPlayerPck);
+                    break;
+                }
+            }
+        }
     }
 
     private void OnApplicationQuit()
@@ -391,7 +553,7 @@ class Package
     public string IP;
     public DateTime pckCreationTime = DateTime.UtcNow;
     public Network_User user;
-    public int userID;
+    public int netID;
 
     public PlayerPackage playerPck = null;
     public PingPackage pingPck = null;
@@ -403,8 +565,8 @@ public class PlayerPackage
 {
     public string teamTag;
 
-    public Transform playerTrans;
     public Vector2 moveInput;
+    public Vector2 camRot;
 
     public bool running = false;
     public bool jumping = false;
@@ -424,6 +586,18 @@ public class ConnectionPackage
 {
     public string message;
     public bool isAnswer = false;
+
+    // At first connection pass Player Transform
+    public bool createPlayer = false;
+    public Vector3 playerPos;
+}
+
+[System.Serializable]
+public class PlayerToAdd
+{
+    public int id;
+    public bool own;
+    public Vector3 position;
 }
 
 #endregion

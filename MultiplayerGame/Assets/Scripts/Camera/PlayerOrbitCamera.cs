@@ -77,7 +77,7 @@ public class PlayerOrbitCamera : MonoBehaviour
             return;
         }
 
-        if (!SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI && GetComponent<PlayerNetworking>().isOwnByThisInstance)
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
             #region Camera Input
 
@@ -99,10 +99,10 @@ public class PlayerOrbitCamera : MonoBehaviour
             // Limitar altura max y min del eje Y
             camRot.y = Mathf.Clamp(camRot.y, minHeight, maxHeight);
 
-            cameraDistance = Mathf.Clamp(cameraDistance, cameraMinDist, cameraMaxDist);
-
             #endregion
         }
+
+        cameraDistance = Mathf.Clamp(cameraDistance, cameraMinDist, cameraMaxDist);
 
         // Set Camera Rotation
         Quaternion animRotation = Quaternion.Euler(-camRot.y, camRot.x, 0.0f);
@@ -184,6 +184,17 @@ public class PlayerOrbitCamera : MonoBehaviour
     {
         if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
             camAxis = value.Get<Vector2>();
+    }
+
+    // Net
+    public void SetCamRot(Vector2 _camRot)
+    {
+        camRot = _camRot;
+    }
+
+    public Vector2 GetCamRot()
+    {
+        return camRot;
     }
 
     #endregion

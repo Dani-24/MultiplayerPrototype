@@ -43,18 +43,20 @@ public class PlayerNetworking : MonoBehaviour
         pPck.jumping = GetComponent<PlayerMovement>().GetJumpInput();
         pPck.shooting = GetComponent<PlayerArmament>().weaponShooting;
         pPck.shootingSub = GetComponent<PlayerArmament>().subWeaponShooting;
+        pPck.camRot = GetComponent<PlayerOrbitCamera>().GetCamRot();
 
         return pPck;
     }
 
     public void SetPlayerInfoFromPck(PlayerPackage pck)
     {
-        GetComponent<PlayerStats>().ChangeTag(pck.teamTag);
+        if (GetComponent<PlayerStats>().teamTag != pck.teamTag) GetComponent<PlayerStats>().ChangeTag(pck.teamTag);
+
         GetComponent<PlayerMovement>().SetMoveInput(pck.moveInput);
         GetComponent<PlayerMovement>().SetRunInput(pck.running);
         GetComponent<PlayerMovement>().SetJumpInput(pck.jumping);
-
         GetComponent<PlayerArmament>().SetFire(pck.shooting);
         GetComponent<PlayerArmament>().SetSubFire(pck.shootingSub);
+        GetComponent<PlayerOrbitCamera>().SetCamRot(pck.camRot);
     }
 }

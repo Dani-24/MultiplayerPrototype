@@ -62,12 +62,12 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // UI Input
-        if (input.actions["ShowConsole"].WasReleasedThisFrame())
+        if (input.actions["ShowConsole"].WasReleasedThisFrame() && GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
             SceneManagerScript.Instance.showConsole = !SceneManagerScript.Instance.showConsole;
         }
 
-        if (input.actions["OpenUI"].WasReleasedThisFrame())
+        if (input.actions["OpenUI"].WasReleasedThisFrame() && GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
             SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI = !SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI;
         }
@@ -83,8 +83,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Update
-        if (!SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI && GetComponent<PlayerNetworking>().isOwnByThisInstance)
-        {
             // Camera Rotation & applying it to the player model
             Vector3 forward = GetComponent<PlayerOrbitCamera>().affectedCamera.transform.forward;
             Vector3 right = GetComponent<PlayerOrbitCamera>().affectedCamera.transform.right;
@@ -159,7 +157,6 @@ public class PlayerMovement : MonoBehaviour
             controller.Move(new Vector3(0, fallSpeed * Time.deltaTime, 0));
 
             //CheckGroundPaint();
-        }
     }
 
     #region Ground Paint

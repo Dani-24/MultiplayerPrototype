@@ -13,6 +13,8 @@ public class SceneManagerScript : MonoBehaviour
     [SerializeField] bool addNewOwnPlayer = false;
     [SerializeField] float rngSpawnDist = 15f;
 
+    [SerializeField] bool deleteAllNotOwnPlayers = false;
+
     #region Colors Propierties
 
     [Header("Color combinations")]
@@ -91,13 +93,28 @@ public class SceneManagerScript : MonoBehaviour
             CreateNewPlayer(true, spawnPos);
             addNewOwnPlayer = false;
         }
+        // DEBUG
+        if (deleteAllNotOwnPlayers)
+        {
+            DeleteAllNotOwnedPlayers();
+            deleteAllNotOwnPlayers = false;
+        }
     }
 
     #region Players Management
 
-    public GameObject CreateNewPlayer(bool own, Vector3 asignedPos)
+    public GameObject CreateNewPlayer(bool own, Transform _transform)
     {
-        GameObject newP = Instantiate(playerPrefab, asignedPos, transform.rotation);
+        GameObject newP = Instantiate(playerPrefab, _transform.position, _transform.rotation);
+
+        newP.GetComponent<PlayerNetworking>().isOwnByThisInstance = own;
+
+        playersOnScene.Add(newP);
+        return newP;
+    }
+    public GameObject CreateNewPlayer(bool own, Vector3 _position)
+    {
+        GameObject newP = Instantiate(playerPrefab, _position, transform.rotation);
 
         newP.GetComponent<PlayerNetworking>().isOwnByThisInstance = own;
 
@@ -110,6 +127,17 @@ public class SceneManagerScript : MonoBehaviour
         DeleteFromTeam(player);
         playersOnScene.Remove(player);
         Destroy(player);
+    }
+
+    public void DeleteAllNotOwnedPlayers()
+    {
+        for(int i= 0; i< playersOnScene.Count; i++)
+        {
+            if (!playersOnScene[i].GetComponent<PlayerNetworking>().isOwnByThisInstance)
+            {
+                DeletePlayer(playersOnScene[i]);
+            }
+        }
     }
 
     public GameObject GetOwnPlayerInstance()

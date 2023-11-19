@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -73,5 +74,14 @@ public class UI_Manager : MonoBehaviour
             return int.Parse(portInputF.text);
         }
         else { return 0; }
+    }
+
+    public void Button_OnExit() // Close Software
+    {
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#endif
+
+        Application.Quit();
     }
 }
