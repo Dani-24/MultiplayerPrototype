@@ -3,19 +3,25 @@ using UnityEngine;
 
 public class PlayerNetworking : MonoBehaviour
 {
-    public bool isOwnByClient;
+    public int networkID;
+    public bool isOwnByThisInstance;
     [SerializeField] List<GameObject> gameObjectsToHideIfNotOwned = new List<GameObject>();
 
     [SerializeField] AudioListener audioListener;
 
+    private void Awake()
+    {
+        networkID = Random.Range(0, 999999);
+    }
+
     void Start()
     {
-        HideGameObjects(isOwnByClient);
+        HideGameObjects(isOwnByThisInstance);
     }
 
     void Update()
     {
-        if (isOwnByClient) { audioListener.enabled = true; } else { audioListener.enabled = false; }
+        HideGameObjects(isOwnByThisInstance);
     }
 
     void HideGameObjects(bool hide)
@@ -24,5 +30,31 @@ public class PlayerNetworking : MonoBehaviour
         {
             gameObjectsToHideIfNotOwned[i].SetActive(hide);
         }
+        audioListener.enabled = hide;
+    }
+
+    public PlayerPackage GetPlayerPck()
+    {
+        PlayerPackage pPck = new PlayerPackage();
+
+        pPck.teamTag = GetComponent<PlayerStats>().teamTag;
+        pPck.moveInput = GetComponent<PlayerMovement>().GetMoveInput();
+        pPck.running = GetComponent<PlayerMovement>().GetRunInput();
+        pPck.jumping = GetComponent<PlayerMovement>().GetJumpInput();
+        pPck.shooting = GetComponent<PlayerArmament>().weaponShooting;
+        pPck.shootingSub = GetComponent<PlayerArmament>().subWeaponShooting;
+
+        return pPck;
+    }
+
+    public void SetPlayerInfoFromPck(PlayerPackage pck)
+    {
+        GetComponent<PlayerStats>().ChangeTag(pck.teamTag);
+        GetComponent<PlayerMovement>().SetMoveInput(pck.moveInput);
+        GetComponent<PlayerMovement>().SetRunInput(pck.running);
+        GetComponent<PlayerMovement>().SetJumpInput(pck.jumping);
+
+        GetComponent<PlayerArmament>().SetFire(pck.shooting);
+        GetComponent<PlayerArmament>().SetSubFire(pck.shootingSub);
     }
 }

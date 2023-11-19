@@ -76,8 +76,6 @@ public class ConnectionManager : MonoBehaviour
     Package WritePackage(Pck_type type)
     {
         Package pck = new Package();
-
-        pck.pckCreationTime = DateTime.UtcNow;
         pck.IP = myIP;
 
         Debug.Log("Sending Pck " + pck.type + " at " + pck.pckCreationTime);
@@ -86,10 +84,7 @@ public class ConnectionManager : MonoBehaviour
         {
             case Pck_type.Player:
 
-                pck.playerPck = new PlayerPackage();
-
-                // Fill playerPck ??
-
+                pck.playerPck = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().GetPlayerPck();
                 pck.type = Pck_type.Player;
 
                 break;
@@ -115,23 +110,26 @@ public class ConnectionManager : MonoBehaviour
 
     void ReadPackage(Package pck)
     {
-        string pckLog = "Package from: " + pck.user + " (" + pck.IP + ") created at: " + pck.pckCreationTime;
+        int pckDelay = (DateTime.UtcNow - pck.pckCreationTime).Milliseconds;
+        string pckLog = "Package from: " + pck.user + " (" + pck.IP + ") created at: " + pck.pckCreationTime + " ms: " + pckDelay;
 
         switch (pck.type)
         {
-            case Pck_type.Player:
+            case Pck_type.Player:   // Funcion de Player Networking que reciba un PlayerPackage
 
-                // Funcion de Player Networking que reciba un PlayerPackage
+                // BUSCAR AQUI EL PLAYER CREADO CON LA networkID (PlayerNetworking) DEL PLAYER RECIBIDO en la lista de players de SceneManagerScript
+                // Y HACER UN SetPlayerInfoPck (PlayerNetworking)
 
-                break;
-            case Pck_type.Ping:
-
-                // Funcion aqui que interprete PingPackage
+                pckLog += pck.playerPck.teamTag + " Input: " + pck.playerPck.moveInput + " Run: " + pck.playerPck.running;
 
                 break;
-            case Pck_type.Connection:
-                if (pck.connPck.isAnswer) { pckLog += " || Answering to:"; };
-                pckLog += " " + pck.connPck.message;
+            case Pck_type.Ping: // Funcion aqui que interprete PingPackage
+
+                break;
+            case Pck_type.Connection:   // Mensajes de conexión
+                pckLog += " || ";
+                if (pck.connPck.isAnswer) { pckLog += "Answering to: "; };
+                pckLog += pck.connPck.message;
                 break;
         }
 
@@ -381,6 +379,7 @@ public enum Pck_type
 
 public enum Network_User
 {
+    None,
     Server,
     Client
 }
@@ -390,8 +389,9 @@ class Package
 {
     public Pck_type type;
     public string IP;
-    public DateTime pckCreationTime;
+    public DateTime pckCreationTime = DateTime.UtcNow;
     public Network_User user;
+    public int userID;
 
     public PlayerPackage playerPck = null;
     public PingPackage pingPck = null;
@@ -401,19 +401,22 @@ class Package
 [System.Serializable]
 public class PlayerPackage
 {
+    public string teamTag;
+
+    public Transform playerTrans;
     public Vector2 moveInput;
 
-    public bool isRunning = false;
-    public bool isJumping = false;
+    public bool running = false;
+    public bool jumping = false;
 
-    public bool isShooting = false;
-    public bool isSubWeapon = false;
+    public bool shooting = false;
+    public bool shootingSub = false;
 }
 
 [System.Serializable]
 public class PingPackage
 {
-    public string debug = "Bombardeen Renfe";
+    public string msgP;
 }
 
 [System.Serializable]

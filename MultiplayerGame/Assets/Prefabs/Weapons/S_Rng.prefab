@@ -76,12 +76,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c684a59bd684054080ab1855969c842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  teamTag: 
   weaponName: Shooter Rng
   cadence: 14
   shootDMG: 24
   bulletSpeed: 37
   weaponRange: 40
-  rng: 0.3
+  rng: 0
   shootCost: 0.32
   pRadius: 1.4
   pStrength: 1
@@ -91,11 +92,11 @@ MonoBehaviour:
   spawnBulletPosition: {fileID: 3150462560917926386}
   shootingVerticalOffset: 0.52
   isShooting: 0
-  shootCooldown: 0
-  aimDirection: {x: 0, y: 0, z: 0}
+  wpAimDirection: {x: 0, y: 0, z: 0}
   weaponMesh: {fileID: 1983471487978947646}
   bulletPrefab: {fileID: 7672071070994648056, guid: 75688502e096c3f4798c1d8e465b1285,
     type: 3}
+  shootCooldown: 0
 --- !u!1001 &1677552510678923631
 PrefabInstance:
   m_ObjectHideFlags: 0

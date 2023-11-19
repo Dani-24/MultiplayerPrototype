@@ -27,12 +27,12 @@ public class PlayerArmament : MonoBehaviour
 
     void Update()
     {
-        if (!SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI)
+        if (!SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI && GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
             // AIMING
-            if (GetComponentInParent<OrbitCamera>().affectedCamera != null)
+            if (GetComponentInParent<PlayerOrbitCamera>().affectedCamera != null)
             {
-                aimDirection = GetComponentInParent<OrbitCamera>().affectedCamera.transform.forward;
+                aimDirection = GetComponentInParent<PlayerOrbitCamera>().affectedCamera.transform.forward;
             }
 
             // WEAPON
@@ -54,6 +54,12 @@ public class PlayerArmament : MonoBehaviour
         else
         {
             weaponShooting = false; subWeaponShooting = false; chargingSub = false;
+        }
+
+        // Update weapon tag
+        if (currentWeapon != null)
+        {
+            currentWeapon.GetComponent<Weapon>().teamTag = GetComponent<PlayerStats>().teamTag;
         }
     }
 
@@ -107,12 +113,25 @@ public class PlayerArmament : MonoBehaviour
 
     void OnFire(InputValue value)
     {
-        weaponShooting = value.isPressed;
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+            weaponShooting = value.isPressed;
     }
 
     void OnSubFire(InputValue value)
     {
-        subWeaponShooting = value.isPressed;
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+            subWeaponShooting = value.isPressed;
+    }
+
+    // Network
+    public void SetFire(bool _shoot)
+    {
+        weaponShooting = _shoot;
+    }
+
+    public void SetSubFire(bool _shoot)
+    {
+        subWeaponShooting = _shoot;
     }
 
     #endregion

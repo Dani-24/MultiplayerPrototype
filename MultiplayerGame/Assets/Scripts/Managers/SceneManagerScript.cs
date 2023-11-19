@@ -10,11 +10,10 @@ public class SceneManagerScript : MonoBehaviour
     public bool showConsole = false;
     [SerializeField] GameObject debugConsole;
 
-    [SerializeField] bool addNewPlayer = false;
+    [SerializeField] bool addNewOwnPlayer = false;
+    [SerializeField] float rngSpawnDist = 15f;
 
-    [Header("Players")]
-    [SerializeField] GameObject playerPrefab;
-    public List<GameObject> playersOnScene = new List<GameObject>();
+    #region Colors Propierties
 
     [Header("Color combinations")]
     [SerializeField] public List<ColorPair> colorPairs = new List<ColorPair>();
@@ -26,6 +25,14 @@ public class SceneManagerScript : MonoBehaviour
 
     [SerializeField] bool useTheseDebugColors = false;
 
+    #endregion
+
+    #region Players & Teams
+
+    [Header("Players")]
+    [SerializeField] GameObject playerPrefab;
+    public List<GameObject> playersOnScene = new List<GameObject>();
+
     [Header("Teams")]
     public List<string> teamTags = new List<string>();
 
@@ -34,6 +41,8 @@ public class SceneManagerScript : MonoBehaviour
     public List<GameObject> gammaTeamMembers = new List<GameObject>();
 
     public int maxPlayersPerTeam = 4;
+
+    #endregion
 
     #region Instance
 
@@ -73,18 +82,51 @@ public class SceneManagerScript : MonoBehaviour
         }
 
         // DEBUG
-        if (addNewPlayer)
+        if (addNewOwnPlayer)
         {
-            CreateNewPlayer();
-            addNewPlayer = false;
+            Vector3 spawnPos = transform.position;
+            spawnPos.x += Random.Range(-rngSpawnDist, rngSpawnDist);
+            spawnPos.z += Random.Range(-rngSpawnDist, rngSpawnDist);
+
+            CreateNewPlayer(true, spawnPos);
+            addNewOwnPlayer = false;
         }
     }
 
-    public void CreateNewPlayer()
+    #region Players Management
+
+    public GameObject CreateNewPlayer(bool own, Vector3 asignedPos)
     {
-        GameObject newP = Instantiate(playerPrefab);
+        GameObject newP = Instantiate(playerPrefab, asignedPos, transform.rotation);
+
+        newP.GetComponent<PlayerNetworking>().isOwnByThisInstance = own;
+
         playersOnScene.Add(newP);
+        return newP;
     }
+
+    public void DeletePlayer(GameObject player)
+    {
+        DeleteFromTeam(player);
+        playersOnScene.Remove(player);
+        Destroy(player);
+    }
+
+    public GameObject GetOwnPlayerInstance()
+    {
+        for(int i = 0; i < playersOnScene.Count; i++)
+        {
+            if (playersOnScene[i].GetComponent<PlayerNetworking>().isOwnByThisInstance)
+            {
+                return playersOnScene[i];
+            }
+        }
+
+        Debug.Log("There is no Player Own by this Instance");
+        return null;
+    }
+
+    #endregion
 
     #region Teams Management
 
@@ -123,16 +165,17 @@ public class SceneManagerScript : MonoBehaviour
     [Tooltip("Randomly assigns a team if preference != teamtags")]
     public string SetTeam(GameObject go, string preference = "none")
     {
+        DeleteFromTeam(go);
         bool teamAssigned = false;
 
         #region Select with Preference
 
-        if (preference == teamTags[0] && alphaTeamMembers.Count < maxPlayersPerTeam)
+        if (preference == teamTags[0])
         {
             teamAssigned = TeamAssigner(go, alphaTeamMembers, 0);
             return go.tag;
         }
-        else if (preference == teamTags[1] && betaTeamMembers.Count < maxPlayersPerTeam)
+        else if (preference == teamTags[1])
         {
             teamAssigned = TeamAssigner(go, betaTeamMembers, 1);
             return go.tag;
@@ -187,7 +230,7 @@ public class SceneManagerScript : MonoBehaviour
     }
 
     // Team Num are 0 for Alpha & 1 for Beta
-    private bool TeamAssigner(GameObject go, List<GameObject> teamList, int teamNum)
+    bool TeamAssigner(GameObject go, List<GameObject> teamList, int teamNum)
     {
         go.tag = teamTags[teamNum];
         teamList.Add(go);
@@ -208,14 +251,23 @@ public class SceneManagerScript : MonoBehaviour
 
     #endregion
 
-    public void ShowUI(bool show)
-    {
-        GetComponent<UI_Manager>().showUI = show;
-    }
+    #region Scene Manager
 
     public void ChangeScene(string sceneToChange)
     {
         SceneManager.LoadScene(sceneToChange);
+    }
+
+    public void ChangeSceneAsync(string sceneToChange)
+    {
+        SceneManager.LoadSceneAsync(sceneToChange);
+    }
+
+    #endregion
+
+    public void ShowUI(bool show)
+    {
+        GetComponent<UI_Manager>().showUI = show;
     }
 
     [System.Serializable]

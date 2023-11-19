@@ -1385,7 +1385,7 @@ MonoBehaviour:
   teamTag: 
   infiniteInk: 0
   infiniteHP: 0
-  presetTeam: 
+  presetTeam: none
   HP: 100
   isDead: 0
   ink: 100
@@ -1496,7 +1496,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f0c6f5c47229644392e87dae87879be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOwnByClient: 1
+  networkID: 0
+  isOwnByThisInstance: 0
   gameObjectsToHideIfNotOwned:
   - {fileID: 2906675347265298671}
   - {fileID: 8456001635881479014}
@@ -1561,7 +1562,7 @@ MonoBehaviour:
     m_ActionName: Player/Jump[/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: ee1303fb-1092-430b-8027-440256799839
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!143 &8630687105239560688

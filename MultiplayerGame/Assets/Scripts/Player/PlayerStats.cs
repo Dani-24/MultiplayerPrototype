@@ -47,11 +47,13 @@ public class PlayerStats : MonoBehaviour
 
         controller = GetComponent<CharacterController>();
 
-        teamTag = SceneManagerScript.Instance.SetTeam(this.gameObject, presetTeam);
+        teamTag = SceneManagerScript.Instance.SetTeam(gameObject, presetTeam);
     }
 
     void Update()
     {
+        teamTag = gameObject.tag;
+
         // Check Color
         teamColorGO.material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
 
@@ -105,6 +107,14 @@ public class PlayerStats : MonoBehaviour
         if (other.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag) + "Bullet"))
         {
             HP -= other.gameObject.GetComponent<Bullet>().DMG;
+        }
+    }
+
+    public void ChangeTag(string newTag)
+    {
+        if (newTag != teamTag)
+        {
+            teamTag = SceneManagerScript.Instance.SetTeam(gameObject, newTag);
         }
     }
 }

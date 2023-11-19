@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class OrbitCamera : MonoBehaviour
+public class PlayerOrbitCamera : MonoBehaviour
 {
     #region Resources
 
@@ -65,6 +65,8 @@ public class OrbitCamera : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         cameraDistance = cameraMaxDist;
         camRotDefaultY = camRot.y;
+
+        camRot.x = playerBodyRotation.transform.rotation.eulerAngles.y;
     }
 
     void LateUpdate()
@@ -75,7 +77,7 @@ public class OrbitCamera : MonoBehaviour
             return;
         }
 
-        if (!SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI)
+        if (!SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI && GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
             #region Camera Input
 
@@ -166,18 +168,22 @@ public class OrbitCamera : MonoBehaviour
 
     void OnCamReset(InputValue value)
     {
-        if (value.isPressed != cameraReseting && value.isPressed == true)
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
-            camRot.x = playerBodyRotation.transform.rotation.eulerAngles.y;
-            camRot.y = camRotDefaultY;
-        }
+            if (value.isPressed != cameraReseting && value.isPressed == true)
+            {
+                camRot.x = playerBodyRotation.transform.rotation.eulerAngles.y;
+                camRot.y = camRotDefaultY;
+            }
 
-        cameraReseting = value.isPressed;
+            cameraReseting = value.isPressed;
+        }
     }
 
     void OnCamera(InputValue value)
     {
-        camAxis = value.Get<Vector2>();
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+            camAxis = value.Get<Vector2>();
     }
 
     #endregion

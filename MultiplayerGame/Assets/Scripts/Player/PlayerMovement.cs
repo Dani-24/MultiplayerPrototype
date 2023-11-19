@@ -67,7 +67,8 @@ public class PlayerMovement : MonoBehaviour
             SceneManagerScript.Instance.showConsole = !SceneManagerScript.Instance.showConsole;
         }
 
-        if (input.actions["OpenUI"].WasReleasedThisFrame()){
+        if (input.actions["OpenUI"].WasReleasedThisFrame())
+        {
             SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI = !SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI;
         }
 
@@ -82,11 +83,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Update
-        if (!SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI)
+        if (!SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI && GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
             // Camera Rotation & applying it to the player model
-            Vector3 forward = GetComponent<OrbitCamera>().affectedCamera.transform.forward;
-            Vector3 right = GetComponent<OrbitCamera>().affectedCamera.transform.right;
+            Vector3 forward = GetComponent<PlayerOrbitCamera>().affectedCamera.transform.forward;
+            Vector3 right = GetComponent<PlayerOrbitCamera>().affectedCamera.transform.right;
 
             forward.y = right.y = 0;
 
@@ -159,11 +160,6 @@ public class PlayerMovement : MonoBehaviour
 
             //CheckGroundPaint();
         }
-    }
-
-    public Vector2 GetMoveInput()
-    {
-        return moveInput;
     }
 
     #region Ground Paint
@@ -252,17 +248,51 @@ public class PlayerMovement : MonoBehaviour
 
     void OnMove(InputValue value)
     {
-        moveInput = value.Get<Vector2>();
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+            moveInput = value.Get<Vector2>();
     }
 
     void OnJump(InputValue value)
     {
-        isJumping = value.isPressed;
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+            isJumping = value.isPressed;
     }
 
     void OnRun(InputValue value)
     {
-        isRunning = value.isPressed;
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+            isRunning = value.isPressed;
+    }
+
+    // For Network
+    public Vector2 GetMoveInput()
+    {
+        return moveInput;
+    }
+
+    public bool GetRunInput()
+    {
+        return isRunning;
+    }
+
+    public bool GetJumpInput()
+    {
+        return isJumping;
+    }
+
+    public void SetMoveInput(Vector2 _input)
+    {
+        moveInput = _input;
+    }
+
+    public void SetRunInput(bool _run)
+    {
+        isRunning = _run;
+    }
+
+    public void SetJumpInput(bool _jump)
+    {
+        isJumping = _jump;
     }
 
     #endregion
