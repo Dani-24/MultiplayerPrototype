@@ -80,6 +80,8 @@ public class ConnectionManager : MonoBehaviour
         pck.pckCreationTime = DateTime.UtcNow;
         pck.IP = myIP;
 
+        Debug.Log("Sending Pck " + pck.type + " at " + pck.pckCreationTime);
+
         switch (type)
         {
             case Pck_type.Player:
@@ -113,7 +115,7 @@ public class ConnectionManager : MonoBehaviour
 
     void ReadPackage(Package pck)
     {
-        Debug.Log("Package from: " + pck.IP + " created at: " + pck.pckCreationTime.ToString());
+        string pckLog = "Package from: " + pck.user + " (" + pck.IP + ") created at: " + pck.pckCreationTime;
 
         switch (pck.type)
         {
@@ -128,9 +130,12 @@ public class ConnectionManager : MonoBehaviour
 
                 break;
             case Pck_type.Connection:
-                Debug.Log(pck.connPck.user + ": " + pck.connPck.message);
+                if (pck.connPck.isAnswer) { pckLog += " || Answering to:"; };
+                pckLog += " " + pck.connPck.message;
                 break;
         }
+
+        Debug.Log(pckLog);
     }
 
     #endregion
@@ -257,20 +262,15 @@ public class ConnectionManager : MonoBehaviour
             Package rPack = DeserializeJson(receiveStream);
             ReadPackage(rPack);
 
-            //Debug.Log(remote.ToString() + " : " + Encoding.ASCII.GetString(data, 0, recv)); // Log received data
-
             // Answer data
             MemoryStream sendStream = new MemoryStream();
             Package answerPck = WritePackage(Pck_type.Connection);
             answerPck.connPck.message = rPack.connPck.message;
-            answerPck.connPck.user = Network_User.Server;
+            answerPck.user = Network_User.Server;
             answerPck.connPck.isAnswer = true;
             sendStream = SerializeJson(answerPck);
 
-            //string answer = "SERVER: " + Encoding.ASCII.GetString(data, 0, recv);
-            //data = Encoding.ASCII.GetBytes(answer);
-
-            socket.SendTo(sendStream.ToArray(), recv, SocketFlags.None, remote);
+            socket.SendTo(sendStream.ToArray(), (int)sendStream.Length, SocketFlags.None, remote);
         }
     }
 
@@ -281,15 +281,10 @@ public class ConnectionManager : MonoBehaviour
             IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
             remote = sender;
 
-            // Send data
-            //string welcome = "Connection Stablished";
-            //data = Encoding.ASCII.GetBytes(welcome);
-            //socket.SendTo(data, data.Length, SocketFlags.None, ipep);
-
             MemoryStream sendStream = new MemoryStream();
             Package pck = WritePackage(Pck_type.Connection);
             pck.connPck.message = "Connection Stablished";
-            pck.connPck.user = Network_User.Client;
+            pck.user = Network_User.Client;
             sendStream = SerializeJson(pck);
 
             socket.SendTo(sendStream.ToArray(), (int)sendStream.Length, SocketFlags.None, ipep);
@@ -311,8 +306,6 @@ public class ConnectionManager : MonoBehaviour
                 // Manage Package
                 MemoryStream receiveStream = new MemoryStream(data);
                 ReadPackage(DeserializeJson(receiveStream));
-
-                //Debug.Log(Encoding.ASCII.GetString(data, 0, recv)); // Log received data
             }
         }
         catch
@@ -398,6 +391,7 @@ class Package
     public Pck_type type;
     public string IP;
     public DateTime pckCreationTime;
+    public Network_User user;
 
     public PlayerPackage playerPck = null;
     public PingPackage pingPck = null;
@@ -425,7 +419,6 @@ public class PingPackage
 [System.Serializable]
 public class ConnectionPackage
 {
-    public Network_User user;
     public string message;
     public bool isAnswer = false;
 }

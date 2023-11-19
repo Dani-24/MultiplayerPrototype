@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class UI_Manager : MonoBehaviour
 {
     public bool showUI;
+    bool firstShow;
 
     [Header("Connection Config UI")]
     [SerializeField] GameObject connectionUI;
@@ -13,14 +14,31 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] TMP_InputField portInputF;
 
     [SerializeField] Image hostButton;
-
     [SerializeField] Image connectedImg;
+
+    [SerializeField] Button firstSelectButton;
 
     void Update()
     {
-        if (showUI) { connectionUI.SetActive(true); } else { connectionUI.SetActive(false); }
+        connectionUI.SetActive(showUI);
+
+        if (showUI)
+        {
+            if (firstShow)
+            {
+                SelectDefaultButton();
+                firstShow = false;
+            }
+        }
+        else { firstShow = true; };
+
         if (GetComponent<ConnectionManager>().isHosting) { hostButton.color = Color.green; } else { hostButton.color = Color.white; }
         if (GetComponent<ConnectionManager>().IsConnected()) { connectedImg.color = Color.green; } else { connectedImg.color = Color.red; }
+    }
+
+    public void SelectDefaultButton()
+    {
+        firstSelectButton.Select();
     }
 
     public void Button_OnClose()
