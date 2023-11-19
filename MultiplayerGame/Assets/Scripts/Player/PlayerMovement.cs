@@ -83,37 +83,39 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Update
-            // Camera Rotation & applying it to the player model
-            Vector3 forward = GetComponent<PlayerOrbitCamera>().affectedCamera.transform.forward;
-            Vector3 right = GetComponent<PlayerOrbitCamera>().affectedCamera.transform.right;
+        // Camera Rotation & applying it to the player model
+        Vector3 forward = GetComponent<PlayerOrbitCamera>().affectedCamera.transform.forward;
+        Vector3 right = GetComponent<PlayerOrbitCamera>().affectedCamera.transform.right;
 
-            forward.y = right.y = 0;
+        forward.y = right.y = 0;
 
-            forward = forward.normalized;
-            right = right.normalized;
+        forward = forward.normalized;
+        right = right.normalized;
 
-            Vector3 forwardRelativeVerticalInput = moveInput.y * forward;
-            Vector3 rigthRelativeHorizontalInput = moveInput.x * right;
+        Vector3 forwardRelativeVerticalInput = moveInput.y * forward;
+        Vector3 rigthRelativeHorizontalInput = moveInput.x * right;
 
-            Vector3 moveDir = forwardRelativeVerticalInput + rigthRelativeHorizontalInput;
+        Vector3 moveDir = forwardRelativeVerticalInput + rigthRelativeHorizontalInput;
 
-            if (moveDir != Vector3.zero || GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
+        if (moveDir != Vector3.zero || GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
+        {
+            Quaternion rotDes = Quaternion.identity;
+
+            if (!GetComponent<PlayerArmament>().weaponShooting && !GetComponent<PlayerArmament>().subWeaponShooting)
             {
-                Quaternion rotDes = Quaternion.identity;
-
-                if (!GetComponent<PlayerArmament>().weaponShooting && !GetComponent<PlayerArmament>().subWeaponShooting)
-                {
-                    rotDes = Quaternion.LookRotation(moveDir, Vector3.up);
-                    playerBody.transform.rotation = Quaternion.Slerp(playerBody.transform.rotation, rotDes, rotationSpeed * Time.deltaTime);
-                }
-                else
-                {
-                    rotDes = Quaternion.LookRotation(forward, Vector3.up);
-
-                    playerBody.transform.rotation = Quaternion.Slerp(playerBody.transform.rotation, rotDes, rotationSpeedWhileShooting * Time.deltaTime);
-                }
+                rotDes = Quaternion.LookRotation(moveDir, Vector3.up);
+                playerBody.transform.rotation = Quaternion.Slerp(playerBody.transform.rotation, rotDes, rotationSpeed * Time.deltaTime);
             }
+            else
+            {
+                rotDes = Quaternion.LookRotation(forward, Vector3.up);
 
+                playerBody.transform.rotation = Quaternion.Slerp(playerBody.transform.rotation, rotDes, rotationSpeedWhileShooting * Time.deltaTime);
+            }
+        }
+
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+        {
             if (moveInput.x != 0 || moveInput.y != 0)
             {
                 // Made so controller smoothly moves to its rotation while not shooting anything
@@ -130,33 +132,34 @@ public class PlayerMovement : MonoBehaviour
                     controller.Move(playerBody.transform.forward /*moveDir*/ * Time.deltaTime * runSpeed);
                 }
             }
+        }
 
-            #region Ground/Jump Checking
+        #region Ground/Jump Checking
 
-            fallSpeed += gravity * gravityMultiplier * Time.deltaTime;
+        fallSpeed += gravity * gravityMultiplier * Time.deltaTime;
 
-            isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDist, groundLayer);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDist, groundLayer);
 
-            if (isGrounded)
+        if (isGrounded)
+        {
+            controller.stepOffset = originalStepOffset;
+            fallSpeed = groundedFallSpeed;
+
+            if (isJumping)
             {
-                controller.stepOffset = originalStepOffset;
-                fallSpeed = groundedFallSpeed;
-
-                if (isJumping)
-                {
-                    fallSpeed = jumpForce;
-                }
+                fallSpeed = jumpForce;
             }
-            else
-            {
-                controller.stepOffset = 0;
-            }
+        }
+        else
+        {
+            controller.stepOffset = 0;
+        }
 
-            #endregion
+        #endregion
 
-            controller.Move(new Vector3(0, fallSpeed * Time.deltaTime, 0));
+        controller.Move(new Vector3(0, fallSpeed * Time.deltaTime, 0));
 
-            //CheckGroundPaint();
+        //CheckGroundPaint();
     }
 
     #region Ground Paint
@@ -290,6 +293,13 @@ public class PlayerMovement : MonoBehaviour
     public void SetJumpInput(bool _jump)
     {
         isJumping = _jump;
+    }
+
+    public void SetPosition(Vector3 _position)
+    {
+        controller.enabled = false;
+        controller.transform.position = Vector3.LerpUnclamped(controller.transform.position, _position, 10 * Time.deltaTime);
+        controller.enabled = true;
     }
 
     #endregion

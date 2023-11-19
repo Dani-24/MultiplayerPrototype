@@ -1920,31 +1920,12 @@ MonoBehaviour:
   port: 9050
   myIP: 
   packageDataSize: 5120
-  delayBetweenPckgs: 0.1
+  delayBetweenPckgs: 0.05
   pingCounter: 5
   clientIsConnected: 0
   connectAtStart: 0
   reconnect: 0
   disconnect: 0
-  literalmenteUnBoolQNoHaceNadaPQMeDabaPaloMoverElHeader: 0
-  ownPlayerNetID: -1
-  ownPlayerPck:
-    teamTag: 
-    moveInput: {x: 0, y: 0}
-    running: 0
-    jumping: 0
-    shooting: 0
-    shootingSub: 0
-  notOwnPlayerNetID: 0
-  notOwnPlayerPck:
-    teamTag: 
-    moveInput: {x: 0, y: 0}
-    running: 0
-    jumping: 0
-    shooting: 0
-    shootingSub: 0
-  ownPlayerSend: 0
-  nonOwnPlayerReceived: 0
 --- !u!114 &3968672849360634010
 MonoBehaviour:
   m_ObjectHideFlags: 0

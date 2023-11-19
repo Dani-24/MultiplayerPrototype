@@ -51,22 +51,25 @@ public class ConnectionManager : MonoBehaviour
     #region NET Data
 
     [Header("DEBUG NET DATA")]
-    public bool literalmenteUnBoolQNoHaceNadaPQMeDabaPaloMoverElHeader;
 
     PlayerToAdd playerToAdd = new PlayerToAdd();
     bool addPlayer = false;
 
     Vector3 ownPlayerPos;
-    [SerializeField] int ownPlayerNetID = -1;
-    [SerializeField] PlayerPackage ownPlayerPck;
+    int ownPlayerNetID = -1;
+    PlayerPackage ownPlayerPck;
 
-    [SerializeField] int notOwnPlayerNetID;
-    [SerializeField] PlayerPackage notOwnPlayerPck;
+    int notOwnPlayerNetID;
+    PlayerPackage notOwnPlayerPck;
 
-    [SerializeField] bool ownPlayerSend = false;
-    [SerializeField] bool notOwnPlayerReceived = false;
+    bool ownPlayerSend = false;
+    bool notOwnPlayerReceived = false;
 
     Package receivedPck;
+
+    Color _alphaTcolor, _betaTcolor, _NEWalphaTcolor, _NEWbetaTcolor;
+    bool changeColor;
+
 
     #endregion
 
@@ -164,6 +167,13 @@ public class ConnectionManager : MonoBehaviour
                     playerToAdd.position = pck.connPck.playerPos;
 
                     addPlayer = true;
+                }
+
+                if (pck.connPck.setColor)
+                {
+                    changeColor = true;
+                    _NEWalphaTcolor = pck.connPck.alphaColor;
+                    _NEWbetaTcolor = pck.connPck.betaColor;
                 }
 
                 break;
@@ -349,6 +359,10 @@ public class ConnectionManager : MonoBehaviour
                     answerPck.connPck.playerPos = ownPlayerPos;
                     answerPck.netID = ownPlayerNetID;
                     ownPlayerSend = true;
+
+                    answerPck.connPck.setColor = true;
+                    answerPck.connPck.alphaColor = _alphaTcolor;
+                    answerPck.connPck.betaColor = _betaTcolor;
                 }
 
                 sendStream = SerializeJson(answerPck);
@@ -517,6 +531,16 @@ public class ConnectionManager : MonoBehaviour
                 }
             }
         }
+
+        // Get Server Colors
+        _alphaTcolor = SceneManagerScript.Instance.GetTeamColor("Alpha");
+        _betaTcolor = SceneManagerScript.Instance.GetTeamColor("Beta");
+
+        if (changeColor)
+        {
+            SceneManagerScript.Instance.SetColors(_NEWalphaTcolor, _NEWbetaTcolor);
+            changeColor = false;
+        }
     }
 
     private void OnApplicationQuit()
@@ -565,6 +589,7 @@ public class PlayerPackage
 {
     public string teamTag;
 
+    public Vector3 position;
     public Vector2 moveInput;
     public Vector2 camRot;
 
@@ -590,6 +615,11 @@ public class ConnectionPackage
     // At first connection pass Player Transform
     public bool createPlayer = false;
     public Vector3 playerPos;
+
+    // Team Colors
+    public bool setColor = false;
+    public Color alphaColor;
+    public Color betaColor;
 }
 
 [System.Serializable]

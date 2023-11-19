@@ -44,6 +44,7 @@ public class PlayerNetworking : MonoBehaviour
         pPck.shooting = GetComponent<PlayerArmament>().weaponShooting;
         pPck.shootingSub = GetComponent<PlayerArmament>().subWeaponShooting;
         pPck.camRot = GetComponent<PlayerOrbitCamera>().GetCamRot();
+        pPck.position = transform.position;
 
         return pPck;
     }
@@ -58,5 +59,6 @@ public class PlayerNetworking : MonoBehaviour
         GetComponent<PlayerArmament>().SetFire(pck.shooting);
         GetComponent<PlayerArmament>().SetSubFire(pck.shootingSub);
         GetComponent<PlayerOrbitCamera>().SetCamRot(pck.camRot);
+        GetComponent<PlayerMovement>().SetPosition(pck.position);
     }
 }

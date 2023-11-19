@@ -131,7 +131,7 @@ public class SceneManagerScript : MonoBehaviour
 
     public void DeleteAllNotOwnedPlayers()
     {
-        for(int i= 0; i< playersOnScene.Count; i++)
+        for (int i = 0; i < playersOnScene.Count; i++)
         {
             if (!playersOnScene[i].GetComponent<PlayerNetworking>().isOwnByThisInstance)
             {
@@ -142,7 +142,7 @@ public class SceneManagerScript : MonoBehaviour
 
     public GameObject GetOwnPlayerInstance()
     {
-        for(int i = 0; i < playersOnScene.Count; i++)
+        for (int i = 0; i < playersOnScene.Count; i++)
         {
             if (playersOnScene[i].GetComponent<PlayerNetworking>().isOwnByThisInstance)
             {
@@ -172,6 +172,12 @@ public class SceneManagerScript : MonoBehaviour
         {
             return gammaTeamColor;
         }
+    }
+
+    public void SetColors(Color _alphaTeam, Color _betaTeam)
+    {
+        alphaTeamColor = _alphaTeam;
+        betaTeamColor = _betaTeam;
     }
 
     public string GetRivalTag(string tag)
