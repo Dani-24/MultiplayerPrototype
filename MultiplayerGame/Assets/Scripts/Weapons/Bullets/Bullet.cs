@@ -65,6 +65,7 @@ public class Bullet : MonoBehaviour
         Paintable p = other.GetComponent<Paintable>();
         if (p != null)
         {
+            // Se deberia cambiar a que pinte lo mas cercano (como las bombas, o solo pintara lo q choque primero en puntos con diversos objetos)
             Vector3 pos = other.ClosestPointOnBounds(transform.position);
             PaintManager.instance.paint(p, pos, radius, hardness, strength, rend.material.color);
         }

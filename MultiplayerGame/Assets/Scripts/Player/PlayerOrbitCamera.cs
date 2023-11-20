@@ -11,6 +11,8 @@ public class PlayerOrbitCamera : MonoBehaviour
 
     public Camera affectedCamera;
 
+    public GameObject audioListener;
+
     #endregion
 
     #region Propierties
@@ -100,6 +102,8 @@ public class PlayerOrbitCamera : MonoBehaviour
             camRot.y = Mathf.Clamp(camRot.y, minHeight, maxHeight);
 
             #endregion
+
+            audioListener.transform.rotation = affectedCamera.transform.rotation;
         }
 
         cameraDistance = Mathf.Clamp(cameraDistance, cameraMinDist, cameraMaxDist);

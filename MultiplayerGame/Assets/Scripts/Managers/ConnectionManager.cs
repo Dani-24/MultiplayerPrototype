@@ -341,6 +341,7 @@ public class ConnectionManager : MonoBehaviour
                     {
                         Debug.Log("Client has disconnected (Send)");
                         pendingToClean = true;
+                        EndConnection();
                     }
                 }
 
@@ -397,6 +398,7 @@ public class ConnectionManager : MonoBehaviour
         {
             Debug.Log("Client has disconnected (Receive)" + e.ToString());
             pendingToClean = true;
+            EndConnection();
         }
     }
 
