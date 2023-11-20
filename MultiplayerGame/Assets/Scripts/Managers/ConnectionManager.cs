@@ -48,6 +48,11 @@ public class ConnectionManager : MonoBehaviour
     IPEndPoint ipep;
     EndPoint remote;
 
+    [SerializeField] AudioClip startClip;
+    [SerializeField] AudioClip endClip;
+    AudioSource audioSource;
+    bool playJoin, playEnd;
+
     [Header("Debug")]
     [SerializeField] bool connectAtStart = true;
     public bool reconnect = false;
@@ -175,6 +180,8 @@ public class ConnectionManager : MonoBehaviour
                     playerToAdd.position = pck.connPck.playerPos;
 
                     addPlayer = true;
+
+                    playJoin = true;
                 }
 
                 if (pck.connPck.setColor)
@@ -256,6 +263,8 @@ public class ConnectionManager : MonoBehaviour
         if (isConnected)
         {
             Debug.Log(debugLog);
+
+            playEnd = true;
 
             isConnected = false;
             disconnect = false;
@@ -508,6 +517,8 @@ public class ConnectionManager : MonoBehaviour
         {
             StartConnection();
         }
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -586,6 +597,20 @@ public class ConnectionManager : MonoBehaviour
         {
             SceneManagerScript.Instance.SetColors(_NEWalphaTcolor, _NEWbetaTcolor);
             changeColor = false;
+        }
+
+        // Audio
+        if (playJoin)
+        {
+            playJoin = false;
+            audioSource.clip = startClip;
+            audioSource.Play();
+        }
+        if (playEnd)
+        {
+            playEnd = false;
+            audioSource.clip = endClip;
+            audioSource.Play();
         }
     }
 
