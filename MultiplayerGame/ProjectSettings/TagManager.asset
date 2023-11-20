@@ -21,6 +21,7 @@ TagManager:
   - showOnTitle
   - titleInput
   - titleButt
+  - teamChanger
   layers:
   - Default
   - TransparentFX
@@ -31,7 +32,7 @@ TagManager:
   - Ground
   - Bomb
   - Bullet
-  - 
+  - Door
   - 
   - 
   - 
