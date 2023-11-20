@@ -136,7 +136,12 @@ public class SceneManagerScript : MonoBehaviour
             if (!playersOnScene[i].GetComponent<PlayerNetworking>().isOwnByThisInstance)
             {
                 DeletePlayer(playersOnScene[i]);
+                break;
             }
+        }
+        if(playersOnScene.Count > 1)
+        {
+            DeleteAllNotOwnedPlayers();
         }
     }
 

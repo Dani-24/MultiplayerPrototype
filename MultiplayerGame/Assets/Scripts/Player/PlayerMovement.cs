@@ -297,9 +297,12 @@ public class PlayerMovement : MonoBehaviour
 
     public void SetPosition(Vector3 _position)
     {
-        controller.enabled = false;
-        controller.transform.position = Vector3.LerpUnclamped(controller.transform.position, _position, 10 * Time.deltaTime);
-        controller.enabled = true;
+        if (controller != null)
+        {
+            controller.enabled = false;
+            controller.transform.position = Vector3.LerpUnclamped(controller.transform.position, _position, 10 * Time.deltaTime);
+            controller.enabled = true;
+        }
     }
 
     #endregion

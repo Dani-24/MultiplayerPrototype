@@ -1919,13 +1919,37 @@ MonoBehaviour:
   hostIP: 127.0.0.1
   port: 9050
   myIP: 
-  packageDataSize: 5120
+  packageDataSize: 10240
   delayBetweenPckgs: 0.05
   pingCounter: 5
+  serverIsConnected: 0
   clientIsConnected: 0
   connectAtStart: 0
   reconnect: 0
   disconnect: 0
+  ownPlayerPck:
+    teamTag: 
+    position: {x: 0, y: 0, z: 0}
+    moveInput: {x: 0, y: 0}
+    camRot: {x: 0, y: 0}
+    running: 0
+    jumping: 0
+    shooting: 0
+    shootingSub: 0
+  notOwnPlayerNetID: 0
+  notOwnPlayerPck:
+    teamTag: 
+    position: {x: 0, y: 0, z: 0}
+    moveInput: {x: 0, y: 0}
+    camRot: {x: 0, y: 0}
+    running: 0
+    jumping: 0
+    shooting: 0
+    shootingSub: 0
+  ownPlayerSend: 0
+  notOwnPlayerReceived: 0
+  _NEWalphaTcolor: {r: 0, g: 0, b: 0, a: 0}
+  _NEWbetaTcolor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &3968672849360634010
 MonoBehaviour:
   m_ObjectHideFlags: 0

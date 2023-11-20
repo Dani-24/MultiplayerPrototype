@@ -2,7 +2,6 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using UnityEngine;
-using System.Text;
 using System.Linq;
 using System.IO;
 using System;
@@ -38,6 +37,8 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] float pingCounter;
     float pingInterval;
     bool isPinging;
+
+    [SerializeField] bool serverIsConnected;
     [SerializeField] bool clientIsConnected;
 
     IPEndPoint ipep;
@@ -50,26 +51,29 @@ public class ConnectionManager : MonoBehaviour
 
     #region NET Data
 
-    [Header("DEBUG NET DATA")]
+    //[Header("DEBUG NET DATA")]
 
     PlayerToAdd playerToAdd = new PlayerToAdd();
     bool addPlayer = false;
 
     Vector3 ownPlayerPos;
     int ownPlayerNetID = -1;
-    PlayerPackage ownPlayerPck;
+    [SerializeField] PlayerPackage ownPlayerPck;
 
-    int notOwnPlayerNetID;
-    PlayerPackage notOwnPlayerPck;
+    [Header("DEBUG NET DATA")]
+    [SerializeField] int notOwnPlayerNetID;
+    [SerializeField] PlayerPackage notOwnPlayerPck;
 
-    bool ownPlayerSend = false;
-    bool notOwnPlayerReceived = false;
+    [SerializeField] bool ownPlayerSend = false;
+    [SerializeField] bool notOwnPlayerReceived = false;
 
-    Package receivedPck;
-
-    Color _alphaTcolor, _betaTcolor, _NEWalphaTcolor, _NEWbetaTcolor;
+    Color _alphaTcolor;
+    Color _betaTcolor;
+    [SerializeField] Color _NEWalphaTcolor;
+    [SerializeField] Color _NEWbetaTcolor;
     bool changeColor;
 
+    bool pendingToClean = false;
 
     #endregion
 
@@ -113,7 +117,7 @@ public class ConnectionManager : MonoBehaviour
         {
             case Pck_type.Player:
 
-                if (ownPlayerPck != null)
+                while (ownPlayerPck == null)
                 {
                     pck.playerPck = ownPlayerPck;
                 }
@@ -245,14 +249,17 @@ public class ConnectionManager : MonoBehaviour
 
     private void EndConnection(string debugLog = "Connection Ended")
     {
-        Debug.Log(debugLog);
-
         if (isConnected)
         {
+            Debug.Log(debugLog);
+
             isConnected = false;
             disconnect = false;
             ownPlayerSend = false;
             notOwnPlayerReceived = false;
+            pendingToClean = true;
+            serverIsConnected = false;
+            clientIsConnected = false;
 
             if (isHosting)
             {
@@ -314,14 +321,23 @@ public class ConnectionManager : MonoBehaviour
 
                 if (ownPlayerSend && delay > delayBetweenPckgs)
                 {
-                    MemoryStream sendPStream = new MemoryStream();
-                    Package pPck = WritePackage(Pck_type.Player);
-                    pPck.netID = ownPlayerNetID;
-                    pPck.user = Network_User.Client;
-                    sendPStream = SerializeJson(pPck);
+                    try
+                    {
+                        MemoryStream sendPStream = new MemoryStream();
+                        Package pPck = WritePackage(Pck_type.Player);
+                        pPck.netID = ownPlayerNetID;
+                        pPck.user = Network_User.Client;
+                        sendPStream = SerializeJson(pPck);
 
-                    socket.SendTo(sendPStream.ToArray(), (int)sendPStream.Length, SocketFlags.None, remote);
-                    delay = 0;
+                        socket.SendTo(sendPStream.ToArray(), (int)sendPStream.Length, SocketFlags.None, remote);
+                        delay = 0;
+
+                    }
+                    catch
+                    {
+                        Debug.Log("Client has disconnected (Send)");
+                        pendingToClean = true;
+                    }
                 }
 
                 #endregion
@@ -332,44 +348,51 @@ public class ConnectionManager : MonoBehaviour
     void ServerReceiveThreadUpdate()
     {
         Debug.Log("Waiting for a Client...");
-
-        while (true)
+        try
         {
-            // Receive data
-            data = new byte[packageDataSize];
-            recv = socket.ReceiveFrom(data, ref remote);
-
-            // Manage Package
-            MemoryStream receiveStream = new MemoryStream(data);
-            receivedPck = DeserializeJson(receiveStream);
-            ReadPackage(receivedPck);
-
-            if (receivedPck.type == Pck_type.Connection)
+            while (true)
             {
-                MemoryStream sendStream = new MemoryStream();
+                // Receive data
+                data = new byte[packageDataSize];
+                recv = socket.ReceiveFrom(data, ref remote);
 
-                Package answerPck = WritePackage(Pck_type.Connection);
-                answerPck.connPck.message = receivedPck.connPck.message;
-                answerPck.user = Network_User.Server;
-                answerPck.connPck.isAnswer = true;
+                // Manage Package
+                MemoryStream receiveStream = new MemoryStream(data);
+                Package receivedPck = DeserializeJson(receiveStream);
+                ReadPackage(receivedPck);
 
-                if (receivedPck.connPck.createPlayer) // Devolver el player del server al client nuevo
+                if (receivedPck.type == Pck_type.Connection)
                 {
-                    answerPck.connPck.createPlayer = true;
-                    answerPck.connPck.playerPos = ownPlayerPos;
-                    answerPck.netID = ownPlayerNetID;
-                    ownPlayerSend = true;
+                    MemoryStream sendStream = new MemoryStream();
 
-                    answerPck.connPck.setColor = true;
-                    answerPck.connPck.alphaColor = _alphaTcolor;
-                    answerPck.connPck.betaColor = _betaTcolor;
+                    Package answerPck = WritePackage(Pck_type.Connection);
+                    answerPck.connPck.message = receivedPck.connPck.message;
+                    answerPck.user = Network_User.Server;
+                    answerPck.connPck.isAnswer = true;
+
+                    if (receivedPck.connPck.createPlayer) // Devolver el player del server al client nuevo
+                    {
+                        answerPck.connPck.createPlayer = true;
+                        answerPck.connPck.playerPos = ownPlayerPos;
+                        answerPck.netID = ownPlayerNetID;
+                        ownPlayerSend = true;
+
+                        answerPck.connPck.setColor = true;
+                        answerPck.connPck.alphaColor = _alphaTcolor;
+                        answerPck.connPck.betaColor = _betaTcolor;
+                    }
+
+                    sendStream = SerializeJson(answerPck);
+                    socket.SendTo(sendStream.ToArray(), (int)sendStream.Length, SocketFlags.None, remote);
                 }
 
-                sendStream = SerializeJson(answerPck);
-                socket.SendTo(sendStream.ToArray(), (int)sendStream.Length, SocketFlags.None, remote);
+                clientIsConnected = true;
             }
-
-            clientIsConnected = true;
+        }
+        catch (SystemException e)
+        {
+            Debug.Log("Client has disconnected (Receive)" + e.ToString());
+            pendingToClean = true;
         }
     }
 
@@ -377,7 +400,7 @@ public class ConnectionManager : MonoBehaviour
     {
         try
         {
-            #region Stablish connection + send player start position
+            #region Send player start position
 
             MemoryStream sendStream = new MemoryStream();
             Package pck = WritePackage(Pck_type.Connection);
@@ -404,10 +427,9 @@ public class ConnectionManager : MonoBehaviour
                 //    // SEND PING PACKAGE
                 //}
 
-
                 #region Update/Send Player Input
 
-                if (ownPlayerSend && delay > delayBetweenPckgs)
+                if (ownPlayerSend && delay > delayBetweenPckgs && serverIsConnected)
                 {
                     MemoryStream sendPStream = new MemoryStream();
                     Package pPck = WritePackage(Pck_type.Player);
@@ -423,30 +445,34 @@ public class ConnectionManager : MonoBehaviour
 
             }
         }
-        catch
+        catch (SystemException e)
         {
+            Debug.Log(e.ToString());
             EndConnection("Server is Disconnected (Send)");
         }
     }
 
     void ClientReceiveThreadUpdate()
     {
-        try
+        while (true)
         {
-            while (true)
+            try
             {
                 // Receive Data
                 data = new byte[packageDataSize];
                 recv = socket.ReceiveFrom(data, ref remote);
 
-                // Manage Package
                 MemoryStream receiveStream = new MemoryStream(data);
+
+                // Manage Package
                 ReadPackage(DeserializeJson(receiveStream));
+
+                serverIsConnected = true;
             }
-        }
-        catch
-        {
-            EndConnection("Server is Disconnected (Receive)");
+            catch (SystemException e)
+            {
+                Debug.Log(e.ToString());
+            }
         }
     }
 
@@ -482,11 +508,11 @@ public class ConnectionManager : MonoBehaviour
         if (disconnect)
         {
             EndConnection();
+        }
 
-            // A la tercera saldrá bien :D (Deberia arreglar esto... o no)
-            SceneManagerScript.Instance.DeleteAllNotOwnedPlayers();
-            SceneManagerScript.Instance.DeleteAllNotOwnedPlayers();
-            SceneManagerScript.Instance.DeleteAllNotOwnedPlayers();
+        if (pendingToClean)
+        {
+            CleanPlayers();
         }
 
         // Get values from UI
@@ -541,6 +567,12 @@ public class ConnectionManager : MonoBehaviour
             SceneManagerScript.Instance.SetColors(_NEWalphaTcolor, _NEWbetaTcolor);
             changeColor = false;
         }
+    }
+
+    void CleanPlayers()
+    {
+        SceneManagerScript.Instance.DeleteAllNotOwnedPlayers();
+        pendingToClean = false;
     }
 
     private void OnApplicationQuit()
