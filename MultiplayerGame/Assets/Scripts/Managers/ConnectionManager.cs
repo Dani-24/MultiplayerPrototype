@@ -117,7 +117,7 @@ public class ConnectionManager : MonoBehaviour
         {
             case Pck_type.Player:
 
-                while (ownPlayerPck == null)
+                if (ownPlayerPck != null)
                 {
                     pck.playerPck = ownPlayerPck;
                 }
@@ -326,7 +326,7 @@ public class ConnectionManager : MonoBehaviour
                         MemoryStream sendPStream = new MemoryStream();
                         Package pPck = WritePackage(Pck_type.Player);
                         pPck.netID = ownPlayerNetID;
-                        pPck.user = Network_User.Client;
+                        pPck.user = Network_User.Server;
                         sendPStream = SerializeJson(pPck);
 
                         socket.SendTo(sendPStream.ToArray(), (int)sendPStream.Length, SocketFlags.None, remote);
