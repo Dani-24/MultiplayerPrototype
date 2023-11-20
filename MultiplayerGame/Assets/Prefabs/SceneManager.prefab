@@ -1892,7 +1892,7 @@ MonoBehaviour:
   betaTeamColor: {r: 0, g: 0, b: 0, a: 0}
   gammaTeamColor: {r: 1, g: 1, b: 1, a: 1}
   useTheseDebugColors: 0
-  playerPrefab: {fileID: 8772792941313980139, guid: b67d6d356db779849a9636062bb6b45c,
+  playerPrefab: {fileID: 9186078847220277961, guid: b67d6d356db779849a9636062bb6b45c,
     type: 3}
   playersOnScene: []
   teamTags:

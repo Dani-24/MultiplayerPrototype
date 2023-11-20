@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerNetworking : MonoBehaviour
@@ -8,6 +9,11 @@ public class PlayerNetworking : MonoBehaviour
     [SerializeField] List<GameObject> gameObjectsToHideIfNotOwned = new List<GameObject>();
 
     [SerializeField] AudioListener audioListener;
+
+    [Header("Nametags")]
+    [SerializeField] GameObject nametagCanvas;
+    [SerializeField] TMP_Text nameTagText;
+    [SerializeField] RectTransform recTrans;
 
     private void Awake()
     {
@@ -22,6 +28,13 @@ public class PlayerNetworking : MonoBehaviour
     void Update()
     {
         HideGameObjects(isOwnByThisInstance);
+
+        // Canvas target Camera
+        if (Camera.main != null)
+        {
+            recTrans.rotation = Quaternion.LookRotation((Camera.main.transform.position - recTrans.position));
+            recTrans.Rotate(Vector3.up, 180);
+        }
     }
 
     void HideGameObjects(bool hide)
@@ -31,6 +44,7 @@ public class PlayerNetworking : MonoBehaviour
             gameObjectsToHideIfNotOwned[i].SetActive(hide);
         }
         audioListener.enabled = hide;
+        nametagCanvas.SetActive(!hide);
     }
 
     public PlayerPackage GetPlayerPck()
@@ -61,7 +75,6 @@ public class PlayerNetworking : MonoBehaviour
         GetComponent<PlayerOrbitCamera>().SetCamRot(pck.camRot);
         GetComponent<PlayerMovement>().SetPosition(pck.position);
 
-        // Hacer algo con el nombre de
-        //pck.userName;
+        nameTagText.text = pck.userName;
     }
 }
