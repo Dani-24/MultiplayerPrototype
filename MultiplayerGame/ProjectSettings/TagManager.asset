@@ -16,6 +16,11 @@ TagManager:
   - Gamma
   - GammaBullet
   - GammaBomb
+  - TitleCam
+  - MapCam
+  - showOnTitle
+  - titleInput
+  - titleButt
   layers:
   - Default
   - TransparentFX

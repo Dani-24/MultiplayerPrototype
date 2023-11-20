@@ -10,7 +10,7 @@ public class SceneManagerScript : MonoBehaviour
     public bool showConsole = false;
     [SerializeField] GameObject debugConsole;
 
-    [SerializeField] bool addNewOwnPlayer = false;
+    public bool addNewOwnPlayer = false;
     [SerializeField] float rngSpawnDist = 15f;
 
     [SerializeField] bool deleteAllNotOwnPlayers = false;
@@ -155,7 +155,7 @@ public class SceneManagerScript : MonoBehaviour
             }
         }
 
-        Debug.Log("There is no Player Own by this Instance");
+        Debug.Log("There is no Player Own by this Instance right now");
         return null;
     }
 

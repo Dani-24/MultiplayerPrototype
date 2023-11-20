@@ -10,6 +10,10 @@ public class ConnectionManager : MonoBehaviour
 {
     #region Propierties
 
+    [Header("Instance Name")]
+    public string userName;
+    string defaultUserName = "Player";
+
     [Tooltip("Is Server or Client")]
     public bool isHosting = false;
 
@@ -51,16 +55,15 @@ public class ConnectionManager : MonoBehaviour
 
     #region NET Data
 
-    //[Header("DEBUG NET DATA")]
-
     PlayerToAdd playerToAdd = new PlayerToAdd();
     bool addPlayer = false;
 
     Vector3 ownPlayerPos;
-    int ownPlayerNetID = -1;
+
+    [Header("DEBUG NET DATA (Don't Edit)")]
+    [SerializeField] int ownPlayerNetID = -1;
     [SerializeField] PlayerPackage ownPlayerPck;
 
-    [Header("DEBUG NET DATA")]
     [SerializeField] int notOwnPlayerNetID;
     [SerializeField] PlayerPackage notOwnPlayerPck;
 
@@ -69,8 +72,8 @@ public class ConnectionManager : MonoBehaviour
 
     Color _alphaTcolor;
     Color _betaTcolor;
-    [SerializeField] Color _NEWalphaTcolor;
-    [SerializeField] Color _NEWbetaTcolor;
+    Color _NEWalphaTcolor;
+    Color _NEWbetaTcolor;
     bool changeColor;
 
     bool pendingToClean = false;
@@ -120,6 +123,7 @@ public class ConnectionManager : MonoBehaviour
                 if (ownPlayerPck != null)
                 {
                     pck.playerPck = ownPlayerPck;
+                    pck.playerPck.userName = userName;
                 }
 
                 break;
@@ -518,10 +522,13 @@ public class ConnectionManager : MonoBehaviour
         // Get values from UI
         string getIP = GetComponent<UI_Manager>().GetIpFromInput();
         int getPort = GetComponent<UI_Manager>().GetPortFromInput();
+        string usName = GetComponent<UI_Manager>().GetUserName();
 
-        if (getIP != "") { hostIP = GetComponent<UI_Manager>().GetIpFromInput(); } else { hostIP = defaultIP; }
-        if (getPort != 0) { port = GetComponent<UI_Manager>().GetPortFromInput(); } else { port = defaultPort; }
+        if (getIP != "") { hostIP = getIP; } else { hostIP = defaultIP; }
+        if (getPort != 0) { port = getPort; } else { port = defaultPort; }
+        if (usName != "") { userName = usName; } else { userName = defaultUserName; }
 
+        // Delay between sending Packages
         delay += Time.deltaTime;
 
         // Ping
@@ -537,7 +544,7 @@ public class ConnectionManager : MonoBehaviour
         }
 
         // Update Own Player Info
-        if (SceneManagerScript.Instance.GetOwnPlayerInstance() != null)
+        if (SceneManagerScript.Instance.GetOwnPlayerInstance() != null && GetComponent<CameraManager>().gameState == CameraManager.GameState.Gameplay)
         {
             ownPlayerPos = SceneManagerScript.Instance.GetOwnPlayerInstance().transform.position;
             ownPlayerNetID = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().networkID;
@@ -619,6 +626,7 @@ class Package
 [System.Serializable]
 public class PlayerPackage
 {
+    public string userName;
     public string teamTag;
 
     public Vector3 position;

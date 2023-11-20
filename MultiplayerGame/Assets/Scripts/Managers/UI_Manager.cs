@@ -17,10 +17,63 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] Image hostButton;
     [SerializeField] Image connectedImg;
 
-    [SerializeField] Button firstSelectButton;
+    [SerializeField] Button connectionFirstSelectButton;
+
+    [SerializeField] GameObject titleCanvas;
+    bool firstTitleShow = false;
+    Button mainTitleButton;
+    TMP_InputField titleInput;
+    string nameFromTitle;
+
+    void Start()
+    {
+        try
+        {
+            titleCanvas = GameObject.FindGameObjectWithTag("showOnTitle");
+            mainTitleButton = GameObject.FindGameObjectWithTag("titleButt").GetComponent<Button>();
+            titleInput = GameObject.FindGameObjectWithTag("titleInput").GetComponent<TMP_InputField>();
+
+            titleCanvas.SetActive(false);
+        }
+        catch
+        {
+            Debug.Log("Title Canvas is missing");
+        }
+    }
 
     void Update()
     {
+        // Title UI
+        if (titleCanvas != null)
+        {
+            switch (GetComponent<CameraManager>().gameState)
+            {
+                case CameraManager.GameState.Title:
+                    if (!titleCanvas.activeInHierarchy)
+                    {
+                        titleCanvas.SetActive(true);
+                        firstTitleShow = true;
+                    }
+
+                    nameFromTitle = titleInput.text;
+
+                    break;
+                case CameraManager.GameState.Gameplay:
+                    if (titleCanvas.activeInHierarchy)
+                    {
+                        titleCanvas.SetActive(false);
+                    }
+                    break;
+            }
+
+            if (firstTitleShow)
+            {
+                SelectDefaultTitleButton();
+                firstTitleShow = false;
+            }
+        }
+
+        // Connection UI
         connectionUI.SetActive(showUI);
 
         if (showUI)
@@ -37,10 +90,17 @@ public class UI_Manager : MonoBehaviour
         if (GetComponent<ConnectionManager>().IsConnected()) { connectedImg.color = Color.green; } else { connectedImg.color = Color.red; }
     }
 
-    public void SelectDefaultButton()
+    void SelectDefaultButton()
     {
-        firstSelectButton.Select();
+        connectionFirstSelectButton.Select();
     }
+
+    void SelectDefaultTitleButton()
+    {
+        mainTitleButton.Select();
+    }
+
+    #region UI Inputs
 
     public void Button_OnClose()
     {
@@ -84,4 +144,16 @@ public class UI_Manager : MonoBehaviour
 
         Application.Quit();
     }
+
+    public string GetUserName()
+    {
+        return nameFromTitle;
+    }
+
+    public void Button_OnPlay()
+    {
+        SceneManagerScript.Instance.addNewOwnPlayer = true;
+    }
+
+    #endregion
 }

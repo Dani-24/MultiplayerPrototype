@@ -60,5 +60,8 @@ public class PlayerNetworking : MonoBehaviour
         GetComponent<PlayerArmament>().SetSubFire(pck.shootingSub);
         GetComponent<PlayerOrbitCamera>().SetCamRot(pck.camRot);
         GetComponent<PlayerMovement>().SetPosition(pck.position);
+
+        // Hacer algo con el nombre de
+        //pck.userName;
     }
 }

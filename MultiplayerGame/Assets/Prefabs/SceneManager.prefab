@@ -1829,6 +1829,7 @@ GameObject:
   - component: {fileID: 1247713517416342436}
   - component: {fileID: 2053593188729393109}
   - component: {fileID: 3968672849360634010}
+  - component: {fileID: 3765587210838179000}
   - component: {fileID: 5091525238335802703}
   m_Layer: 0
   m_Name: SceneManager
@@ -1914,6 +1915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19480f1393a85f4f932187df6d430c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userName: 
   isHosting: 0
   isConnected: 0
   hostIP: 127.0.0.1
@@ -1927,7 +1929,9 @@ MonoBehaviour:
   connectAtStart: 0
   reconnect: 0
   disconnect: 0
+  ownPlayerNetID: -1
   ownPlayerPck:
+    userName: 
     teamTag: 
     position: {x: 0, y: 0, z: 0}
     moveInput: {x: 0, y: 0}
@@ -1938,6 +1942,7 @@ MonoBehaviour:
     shootingSub: 0
   notOwnPlayerNetID: 0
   notOwnPlayerPck:
+    userName: 
     teamTag: 
     position: {x: 0, y: 0, z: 0}
     moveInput: {x: 0, y: 0}
@@ -1948,8 +1953,6 @@ MonoBehaviour:
     shootingSub: 0
   ownPlayerSend: 0
   notOwnPlayerReceived: 0
-  _NEWalphaTcolor: {r: 0, g: 0, b: 0, a: 0}
-  _NEWbetaTcolor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &3968672849360634010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1968,7 +1971,23 @@ MonoBehaviour:
   portInputF: {fileID: 6627830777742874890}
   hostButton: {fileID: 2890998306898776708}
   connectedImg: {fileID: 519787516971715155}
-  firstSelectButton: {fileID: 1686338235073375360}
+  connectionFirstSelectButton: {fileID: 1686338235073375360}
+  titleCanvas: {fileID: 0}
+--- !u!114 &3765587210838179000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3996387237497895542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ef4a788ed2b5e47ad61786c0f70868, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameState: 0
+  titleCamera: {fileID: 0}
+  mapCamera: {fileID: 0}
 --- !u!114 &5091525238335802703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3175,7 +3194,7 @@ GameObject:
   - component: {fileID: 4835795221442720535}
   - component: {fileID: 1771298144054247001}
   - component: {fileID: 6451079049484865883}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: ConnectionImgCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
