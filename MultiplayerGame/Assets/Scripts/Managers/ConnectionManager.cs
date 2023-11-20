@@ -340,8 +340,11 @@ public class ConnectionManager : MonoBehaviour
                     catch
                     {
                         Debug.Log("Client has disconnected (Send)");
-                        pendingToClean = true;
-                        EndConnection();
+
+                        if (clientIsConnected)
+                        {
+                            EndConnection();
+                        }
                     }
                 }
 
@@ -397,8 +400,11 @@ public class ConnectionManager : MonoBehaviour
         catch (SystemException e)
         {
             Debug.Log("Client has disconnected (Receive)" + e.ToString());
-            pendingToClean = true;
-            EndConnection();
+
+            if (clientIsConnected)
+            {
+                EndConnection();
+            }
         }
     }
 
@@ -478,6 +484,11 @@ public class ConnectionManager : MonoBehaviour
             catch (SystemException e)
             {
                 Debug.Log(e.ToString());
+
+                if (serverIsConnected)
+                {
+                    EndConnection();
+                }
             }
         }
     }
