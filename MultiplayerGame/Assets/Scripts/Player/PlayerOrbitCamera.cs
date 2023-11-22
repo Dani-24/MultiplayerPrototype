@@ -121,8 +121,8 @@ public class PlayerOrbitCamera : MonoBehaviour
         #region Camera Collisions with Terrain
 
         // Calculate camera points after collision
-        RaycastHit rayhit;
-        bool hit = Physics.Raycast(lookatpos, camdir, out rayhit, cameraDistance);
+        //RaycastHit rayhit;
+        //bool hit = Physics.Raycast(lookatpos, camdir, out rayhit, cameraDistance);
 
         affectedCamera.transform.position = lookatpos + camdir * cameraDistance;
 
