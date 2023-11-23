@@ -1121,7 +1121,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 983
+    m_Bits: 3031
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1771,9 +1771,11 @@ MonoBehaviour:
   jumpForce: 10
   isJumping: 0
   groundCheckDist: 0.2
-  groundLayer:
-    serializedVersion: 2
+  groundLayers:
+  - serializedVersion: 2
     m_Bits: 64
+  - serializedVersion: 2
+    m_Bits: 2048
   isUsingGamepad: 0
   debugTexture: {fileID: 0}
   debugTexture2d: {fileID: 0}

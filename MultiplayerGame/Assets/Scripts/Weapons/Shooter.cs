@@ -4,6 +4,11 @@ public class Shooter : Weapon
 {
     // My name is Gun, but you can call me Gus
 
+    private void Start()
+    {
+        audioS = GetComponent<AudioSource>();
+    }
+
     void Update()
     {
         isShooting = GetComponentInParent<PlayerArmament>().weaponShooting;
@@ -54,6 +59,11 @@ public class Shooter : Weapon
 
             // Cost ink
             GetComponentInParent<PlayerStats>().ink -= shootCost;
+
+            // Sound
+            audioS.volume = Random.Range(0.9f, 1.0f);
+            audioS.pitch = Random.Range(0.9f, 1.1f);
+            audioS.PlayOneShot(audioS.clip);
         }
     }
 }

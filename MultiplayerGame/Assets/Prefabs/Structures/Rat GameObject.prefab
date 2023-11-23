@@ -230,7 +230,8 @@ AudioSource:
   m_GameObject: {fileID: 9008768960062821299}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -3106121681059892975, guid: 34aa2bab0715c3041bd3d4138ab9cba2,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 0e31dfb58eef5cb438af882700778e9a, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -254,39 +255,12 @@ AudioSource:
     - serializedVersion: 3
       time: 0.33728942
       value: 1
-      inSlope: -10.0039835
-      outSlope: -10.0039835
+      inSlope: -4.727702
+      outSlope: -4.727702
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.39773864
-      value: 0.4125061
-      inSlope: -2.5009959
-      outSlope: -2.5009959
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.49603882
-      value: 0.1875
-      inSlope: -0.7816821
-      outSlope: -0.7816821
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.3086874
-    - serializedVersion: 3
-      time: 0.7971619
-      value: 0.033325195
-      inSlope: -0.15631224
-      outSlope: -0.15631224
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+      outWeight: 0.06649437
     - serializedVersion: 3
       time: 1
       value: 0

@@ -56,4 +56,6 @@ public class Weapon : MonoBehaviour
     [SerializeField] protected float shootCooldown = 0f;
 
     #endregion
+
+    protected AudioSource audioS;
 }

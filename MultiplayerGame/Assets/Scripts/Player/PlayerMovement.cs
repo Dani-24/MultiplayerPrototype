@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -40,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] bool isJumping = false;
 
     [SerializeField] float groundCheckDist = 0.1f;
-    public LayerMask groundLayer;
+    public List<LayerMask> groundLayers = new List<LayerMask>();
 
     #endregion
 
@@ -138,7 +139,12 @@ public class PlayerMovement : MonoBehaviour
 
         fallSpeed += gravity * gravityMultiplier * Time.deltaTime;
 
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDist, groundLayer);
+        foreach(var layer in groundLayers)
+        {
+            isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDist, layer);
+
+            if (isGrounded) break;
+        }
 
         if (isGrounded)
         {
@@ -168,9 +174,9 @@ public class PlayerMovement : MonoBehaviour
     {
         // Lanzar un raycast hacía abajo y mirar si es suelo pintable
 
-        RaycastHit hit;
+        //RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hit, Mathf.Infinity, groundLayer))
+        /*if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hit, Mathf.Infinity, groundLayer))
         {
             Renderer hitRenderer = hit.collider.GetComponent<Renderer>();
 
@@ -217,7 +223,7 @@ public class PlayerMovement : MonoBehaviour
                     Debug.Log("Texture null");
                 }
             }
-        }
+        }*/
     }
 
     Texture2D TextureToText2D(Texture source)
