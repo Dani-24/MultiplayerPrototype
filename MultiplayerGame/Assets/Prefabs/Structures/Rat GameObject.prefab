@@ -28,9 +28,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3615250488792505161}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.19, y: 3.58, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0.72, z: 0}
+  m_LocalScale: {x: 0.22, y: 0.22, z: 0.22}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 11427798294273908}
   m_RootOrder: -1
@@ -130,7 +130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 11427798294273908}
   - component: {fileID: 4817840331670213078}
-  - component: {fileID: 5131631757774946194}
+  - component: {fileID: 4482130091418361749}
   m_Layer: 6
   m_Name: Rat GameObject
   m_TagString: Untagged
@@ -146,13 +146,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9008768960062821299}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -17.58, y: 0.418, z: -46.190002}
-  m_LocalScale: {x: 0.22164415, y: 0.22164415, z: 0.22164415}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7885316244454402576}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &4817840331670213078
 AudioSource:
@@ -277,7 +277,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5131631757774946194
+--- !u!114 &4482130091418361749
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -289,3 +289,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f20c0c12cccf1348902584a5368b459, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 50
