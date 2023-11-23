@@ -890,7 +890,7 @@ GameObject:
   - component: {fileID: 8727077872304068772}
   - component: {fileID: 2855170670364672479}
   m_Layer: 10
-  m_Name: GameObject
+  m_Name: Platform Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

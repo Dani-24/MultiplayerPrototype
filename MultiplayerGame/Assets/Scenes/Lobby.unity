@@ -1646,7 +1646,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -2584,7 +2584,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 1402130134}
-  m_VersionIndex: 7547
+  m_VersionIndex: 7550
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -8499,8 +8499,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 272617567}
-  - {fileID: 649139539}
   - {fileID: 2070648962}
+  - {fileID: 649139539}
   - {fileID: 1752313811}
   - {fileID: 1308432935}
   - {fileID: 232581516}
