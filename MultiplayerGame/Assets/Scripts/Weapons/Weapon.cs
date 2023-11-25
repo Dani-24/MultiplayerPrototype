@@ -18,6 +18,8 @@ public class Weapon : MonoBehaviour
     [Tooltip("% from the total ink that shooting once costs")]
     public float shootCost;
 
+    public float moveSpeedMultiplier = 1.0f;
+
     #endregion
 
     #region Painting

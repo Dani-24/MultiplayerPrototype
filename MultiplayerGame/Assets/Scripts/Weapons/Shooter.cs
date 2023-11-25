@@ -20,7 +20,7 @@ public class Shooter : Weapon
             wpAimDirection = GetComponentInParent<PlayerArmament>().aimDirection;
             wpAimDirection.y += shootingVerticalOffset;
 
-            weaponMesh.transform.rotation = Quaternion.LookRotation(wpAimDirection, GetComponentInParent<PlayerOrbitCamera>().affectedCamera.transform.up);
+            weaponMesh.transform.rotation = Quaternion.LookRotation(wpAimDirection);
         }
         else
         {
@@ -47,7 +47,7 @@ public class Shooter : Weapon
             // RNG
             wpAimDirection.x += Random.Range(-rng, rng);
 
-            GameObject bullet = Instantiate(bulletPrefab, spawnBulletPosition.position, Quaternion.LookRotation(wpAimDirection, GetComponentInParent<PlayerOrbitCamera>().affectedCamera.transform.up));
+            GameObject bullet = Instantiate(bulletPrefab, spawnBulletPosition.transform.position, Quaternion.LookRotation(wpAimDirection));
 
             bullet.GetComponent<Bullet>().teamTag = teamTag;
             bullet.GetComponent<Bullet>().speed = bulletSpeed;

@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class SceneManagerScript : MonoBehaviour
 {
     public string sceneName;
+    public GameState gameState;
 
     [Header("Debug")]
     public bool showConsole = false;
@@ -306,7 +307,7 @@ public class SceneManagerScript : MonoBehaviour
 
     public void ShowUI(bool show)
     {
-        GetComponent<UI_Manager>().showUI = show;
+        //GetComponent<UI_Manager>().showUI = show;
     }
 
     [System.Serializable]
@@ -320,5 +321,11 @@ public class SceneManagerScript : MonoBehaviour
             color1 = c1;
             color2 = c2;
         }
+    }
+
+    public enum GameState
+    {
+        Title,
+        Gameplay
     }
 }

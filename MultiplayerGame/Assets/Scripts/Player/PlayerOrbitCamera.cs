@@ -1,171 +1,46 @@
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerOrbitCamera : MonoBehaviour
 {
-    #region Resources
-
-    [Header("Gameobjects needed")]
-    [SerializeField] Transform cameraOrbitPoint;
-    [SerializeField] Transform playerBodyRotation;
-
-    public Camera affectedCamera;
-
-    public GameObject audioListener;
-
-    #endregion
-
-    #region Propierties
-
-    Vector2 camAxis;
-    Vector3 CamBaseAxis = Vector3.back;
+    [SerializeField] CinemachineFreeLook cmCamera;
+    [SerializeField] Camera playerCamera;
+    Vector2 camBaseAxis;
 
     [Header("Sensivity")]
     public Vector2 mouseSens;
     public Vector2 gamepadSens;
 
-    [Header("Camera Propierties")]
-    [SerializeField] float camSpeed = 1f;
+    [SerializeField] bool cameraReseting = false;
 
-    float cameraDistance;
-    [SerializeField] float cameraMaxDist = 20.0f;
-    [SerializeField] float cameraMinDist = 5.0f;
+    [SerializeField] Transform bodyTransform;
 
-    float camRotDefaultY = -5f;
-    [SerializeField] Vector2 camRot;
-
-    [Header("Camera Vertical Limits")]
-    [SerializeField] float maxHeight = 30.0f;
-    [SerializeField] float minHeight = -60.0f;
-
-    [Header("Collisions")]
-    [SerializeField] float CollisionDistance = 0.5f;
-
-    #endregion
-
-    #region Reticle Configuration
-
-    [Header("Reticle")]
-    [SerializeField] GameObject reticleUI;
-
-    [SerializeField] float reticleMinY = 23.0f;
-    [SerializeField] float reticleMaxY = 110.0f;
-    [SerializeField] float reticleScale = 1f;
-
-    #endregion
-
-    #region Debug
-
-    [Header("Debug Info")]
-    public bool cameraReseting = false;
-    bool returningFromHit = false;
-
-    #endregion
-
-    void Start()
+    private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        cameraDistance = cameraMaxDist;
-        camRotDefaultY = camRot.y;
-
-        camRot.x = playerBodyRotation.transform.rotation.eulerAngles.y;
+        camBaseAxis.Set(bodyTransform.rotation.eulerAngles.y, cmCamera.m_YAxis.Value);
     }
 
-    void LateUpdate()
+    private void Update()
     {
-        if (cameraOrbitPoint == null)
+        // Sensivity
+        if (!GetComponent<PlayerMovement>().isUsingGamepad)
         {
-            Debug.LogError("Camera Target not defined");
-            return;
+            cmCamera.m_XAxis.m_MaxSpeed = mouseSens.x;
+            cmCamera.m_YAxis.m_MaxSpeed = mouseSens.y;
+        }
+        else
+        {
+            cmCamera.m_XAxis.m_MaxSpeed = gamepadSens.x;
+            cmCamera.m_YAxis.m_MaxSpeed = gamepadSens.y;
         }
 
-        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
-        {
-            #region Camera Input
+        camBaseAxis.x = bodyTransform.rotation.eulerAngles.y;
+    }
 
-            float mouseX = camAxis.x * Time.deltaTime;
-            float mouseY = camAxis.y * Time.deltaTime;
-
-            // Aplicar sensibilidad a los ejes
-            if (!GetComponent<PlayerMovement>().isUsingGamepad)
-            {
-                camRot.x += (Mathf.Clamp(mouseX, -1.0f, 1.0f) * mouseSens.x);
-                camRot.y += (Mathf.Clamp(mouseY, -1.0f, 1.0f) * mouseSens.y);
-            }
-            else
-            {
-                camRot.x += (Mathf.Clamp(mouseX, -1.0f, 1.0f) * gamepadSens.x);
-                camRot.y += (Mathf.Clamp(mouseY, -1.0f, 1.0f) * gamepadSens.y);
-            }
-
-            // Limitar altura max y min del eje Y
-            camRot.y = Mathf.Clamp(camRot.y, minHeight, maxHeight);
-
-            #endregion
-
-            audioListener.transform.rotation = affectedCamera.transform.rotation;
-        }
-
-        cameraDistance = Mathf.Clamp(cameraDistance, cameraMinDist, cameraMaxDist);
-
-        // Set Camera Rotation
-        Quaternion animRotation = Quaternion.Euler(-camRot.y, camRot.x, 0.0f);
-        Quaternion camYRotation = Quaternion.Euler(0.0f, camRot.x, 0.0f);
-        affectedCamera.transform.rotation = animRotation;
-
-        // Set Camera Position
-        Vector3 lookatpos = new Vector3(cameraOrbitPoint.position.x, cameraOrbitPoint.position.y, cameraOrbitPoint.position.z);
-        Vector3 camdir = animRotation * CamBaseAxis;
-        camdir.Normalize();
-
-        #region Camera Collisions with Terrain
-
-        // Calculate camera points after collision
-        //RaycastHit rayhit;
-        //bool hit = Physics.Raycast(lookatpos, camdir, out rayhit, cameraDistance);
-
-        affectedCamera.transform.position = lookatpos + camdir * cameraDistance;
-
-        //if (hit)
-        //{
-        //    returningFromHit = true;
-
-        //    // Block character collision
-        //    bool charControl = rayhit.collider as CharacterController;
-        //    if (!charControl)
-        //    {
-        //        Vector3 modifypos = rayhit.normal * CollisionReturnDis * 2.0f;
-
-        //        transform.position = Vector3.LerpUnclamped(transform.position, rayhit.point + modifypos, camSpeed * Time.deltaTime);
-
-        //        //transform.position = rayhit.point + modifypos;
-
-        //        float distance = Vector3.Distance(transform.position, lookatpos);
-        //        distance = Mathf.Clamp(distance, cameraMinDist, cameraMaxDist);
-
-        //        transform.position = Vector3.LerpUnclamped(transform.position, lookatpos + camdir * distance + modifypos, camSpeed * Time.deltaTime);
-
-        //        //transform.position = lookatpos + camdir * distance + modifypos;
-        //    }
-        //}
-        //else
-        //{
-        //    if (returningFromHit)
-        //    {
-        //        transform.position = Vector3.LerpUnclamped(transform.position, lookatpos + camdir * cameraDistance, camSpeed * Time.deltaTime);
-
-        //        if (Vector3.Distance(transform.position, lookatpos + camdir * cameraDistance) < 0.25f)
-        //        {
-        //            returningFromHit = false;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        transform.position = lookatpos + camdir * cameraDistance;
-        //    }
-        //}
-
-        #endregion
+    public Transform GetCameraTransform()
+    {
+        return playerCamera.transform;
     }
 
     #region Player Input Actions
@@ -176,29 +51,24 @@ public class PlayerOrbitCamera : MonoBehaviour
         {
             if (value.isPressed != cameraReseting && value.isPressed == true)
             {
-                camRot.x = playerBodyRotation.transform.rotation.eulerAngles.y;
-                camRot.y = camRotDefaultY;
+                cmCamera.m_XAxis.Value = camBaseAxis.x;
+                cmCamera.m_YAxis.Value = camBaseAxis.y;
             }
 
             cameraReseting = value.isPressed;
         }
     }
 
-    void OnCamera(InputValue value)
-    {
-        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
-            camAxis = value.Get<Vector2>();
-    }
-
-    // Net
+    // Network Data
     public void SetCamRot(Vector2 _camRot)
     {
-        camRot = _camRot;
+        cmCamera.m_XAxis.Value = _camRot.x;
+        cmCamera.m_YAxis.Value = _camRot.y;
     }
 
     public Vector2 GetCamRot()
     {
-        return camRot;
+        return new Vector2(cmCamera.m_XAxis.Value, cmCamera.m_YAxis.Value);
     }
 
     #endregion

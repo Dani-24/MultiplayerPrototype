@@ -85,6 +85,7 @@ MonoBehaviour:
   weaponRange: 50
   rng: 0
   shootCost: 0.8
+  moveSpeedMultiplier: 0.9
   pRadius: 1.1
   pStrength: 1
   pHardness: 1

@@ -1,0 +1,261 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3996387237497895542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7255265454254323935}
+  - component: {fileID: 1247713517416342436}
+  - component: {fileID: 2053593188729393109}
+  - component: {fileID: 3765587210838179000}
+  - component: {fileID: 5091525238335802703}
+  - component: {fileID: 6912273403661859392}
+  m_Layer: 0
+  m_Name: Scene Manager
+  m_TagString: SceneManager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7255265454254323935
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3996387237497895542}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1247713517416342436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3996387237497895542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 513e1518b4921b040bda778b20599ad3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneName: 
+  gameState: 0
+  showConsole: 1
+  debugConsole: {fileID: 7963841811532817948, guid: 20d7599dc50b34041a033c9032c2534c,
+    type: 3}
+  addNewOwnPlayer: 0
+  rngSpawnDist: 15
+  deleteAllNotOwnPlayers: 0
+  colorPairs:
+  - color1: {r: 0.8773585, g: 0.41320142, b: 0.19450872, a: 1}
+    color2: {r: 0.11124954, g: 0.37433642, b: 0.9433962, a: 1}
+  - color1: {r: 0.8784314, g: 0.19607842, b: 0.765116, a: 1}
+    color2: {r: 0.109803915, g: 0.94509804, b: 0.13145666, a: 1}
+  - color1: {r: 0.6508599, g: 0.19607842, b: 0.8784314, a: 1}
+    color2: {r: 0.94509804, g: 0.8028128, b: 0.109803915, a: 1}
+  - color1: {r: 0.8784314, g: 0.20225194, b: 0.19607842, a: 1}
+    color2: {r: 0.109803915, g: 0.8896309, b: 0.94509804, a: 1}
+  - color1: {r: 0.10980393, g: 0.89019614, b: 0.9450981, a: 1}
+    color2: {r: 0.9056604, g: 0.44001427, b: 0.85749006, a: 1}
+  - color1: {r: 0.6469948, g: 0.9622642, b: 0.59369886, a: 1}
+    color2: {r: 0.6656604, g: 0.59912777, b: 0.9150943, a: 1}
+  alphaTeamColor: {r: 0, g: 0, b: 0, a: 0}
+  betaTeamColor: {r: 0, g: 0, b: 0, a: 0}
+  gammaTeamColor: {r: 1, g: 1, b: 1, a: 1}
+  useTheseDebugColors: 0
+  playerPrefab: {fileID: 9186078847220277961, guid: b67d6d356db779849a9636062bb6b45c,
+    type: 3}
+  playersOnScene: []
+  teamTags:
+  - Alpha
+  - Beta
+  - Gamma
+  alphaTeamMembers: []
+  betaTeamMembers: []
+  gammaTeamMembers: []
+  maxPlayersPerTeam: 4
+--- !u!114 &2053593188729393109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3996387237497895542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f19480f1393a85f4f932187df6d430c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  userName: 
+  isHosting: 0
+  isConnected: 0
+  hostIP: 127.0.0.1
+  port: 9050
+  myIP: 
+  packageDataSize: 10240
+  delayBetweenPckgs: 0.05
+  pingCounter: 5
+  serverIsConnected: 0
+  clientIsConnected: 0
+  startClip: {fileID: 8300000, guid: 4004fa011becf6b4dba1ee2af01aedbe, type: 3}
+  endClip: {fileID: 8300000, guid: 73bd7e8b242154044a156aefe0fa019a, type: 3}
+  connectAtStart: 0
+  reconnect: 0
+  disconnect: 0
+  ownPlayerNetID: -1
+  ownPlayerPck:
+    userName: 
+    teamTag: 
+    position: {x: 0, y: 0, z: 0}
+    moveInput: {x: 0, y: 0}
+    camRot: {x: 0, y: 0}
+    running: 0
+    jumping: 0
+    shooting: 0
+    shootingSub: 0
+  notOwnPlayerNetID: 0
+  notOwnPlayerPck:
+    userName: 
+    teamTag: 
+    position: {x: 0, y: 0, z: 0}
+    moveInput: {x: 0, y: 0}
+    camRot: {x: 0, y: 0}
+    running: 0
+    jumping: 0
+    shooting: 0
+    shootingSub: 0
+  ownPlayerSend: 0
+  notOwnPlayerReceived: 0
+--- !u!114 &3765587210838179000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3996387237497895542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ef4a788ed2b5e47ad61786c0f70868, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5091525238335802703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3996387237497895542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e31dab0ec2502446b86a85bd10fcab3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  texturePaint: {fileID: 4800000, guid: 6dcb89ac01500544790a0f49f03f536a, type: 3}
+  extendIslands: {fileID: 4800000, guid: 8cc17bf5195a1764e8eafd14eb6390cf, type: 3}
+--- !u!82 &6912273403661859392
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3996387237497895542}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -8443876437877479199, guid: 34aa2bab0715c3041bd3d4138ab9cba2,
+    type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

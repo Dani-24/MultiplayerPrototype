@@ -16,7 +16,9 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float moveSpeed = 10.0f;
     [SerializeField] private float runSpeed = 20.0f;
-    [SerializeField] private float slowSpeed = 5.0f;
+    //[SerializeField] private float slowSpeed = 5.0f;
+    public float weaponSpeedMultiplier = 1.0f;
+
     public bool isRunning = false;
 
     [Header("Rotation")]
@@ -47,10 +49,10 @@ public class PlayerMovement : MonoBehaviour
 
     public bool isUsingGamepad;
 
-    [Header("Ground Color Check")]
-    [SerializeField] Texture debugTexture;
-    [SerializeField] Texture2D debugTexture2d;
-    [SerializeField] GameObject debugGameObjectHit;
+    //[Header("Ground Color Check")]
+    //[SerializeField] Texture debugTexture;
+    //[SerializeField] Texture2D debugTexture2d;
+    //[SerializeField] GameObject debugGameObjectHit;
 
     void Start()
     {
@@ -70,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (input.actions["OpenUI"].WasReleasedThisFrame() && GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
-            SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI = !SceneManagerScript.Instance.GetComponent<UI_Manager>().showUI;
+            UI_Manager.Instance.openSettings = !UI_Manager.Instance.openSettings;
         }
 
         // Check if using Gamepad or not
@@ -85,8 +87,8 @@ public class PlayerMovement : MonoBehaviour
 
         // Update
         // Camera Rotation & applying it to the player model
-        Vector3 forward = GetComponent<PlayerOrbitCamera>().affectedCamera.transform.forward;
-        Vector3 right = GetComponent<PlayerOrbitCamera>().affectedCamera.transform.right;
+        Vector3 forward = GetComponent<PlayerOrbitCamera>().GetCameraTransform().forward;
+        Vector3 right = GetComponent<PlayerOrbitCamera>().GetCameraTransform().right;
 
         forward.y = right.y = 0;
 
@@ -122,15 +124,15 @@ public class PlayerMovement : MonoBehaviour
                 // Made so controller smoothly moves to its rotation while not shooting anything
                 if (GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
                 {
-                    controller.Move(moveDir * Time.deltaTime * moveSpeed);
+                    controller.Move(moveDir * Time.deltaTime * moveSpeed * weaponSpeedMultiplier);
                 }
                 else if (!isRunning)
                 {
-                    controller.Move(playerBody.transform.forward /*moveDir*/ * Time.deltaTime * moveSpeed);
+                    controller.Move(moveDir * Time.deltaTime * moveSpeed);
                 }
                 else
                 {
-                    controller.Move(playerBody.transform.forward /*moveDir*/ * Time.deltaTime * runSpeed);
+                    controller.Move(moveDir * Time.deltaTime * runSpeed);
                 }
             }
         }

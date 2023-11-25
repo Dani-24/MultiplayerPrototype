@@ -8,8 +8,6 @@ public class PlayerNetworking : MonoBehaviour
     public bool isOwnByThisInstance;
     [SerializeField] List<GameObject> gameObjectsToHideIfNotOwned = new List<GameObject>();
 
-    [SerializeField] AudioListener audioListener;
-
     [Header("Nametags")]
     [SerializeField] GameObject nametagCanvas;
     [SerializeField] TMP_Text nameTagText;
@@ -43,7 +41,6 @@ public class PlayerNetworking : MonoBehaviour
         {
             gameObjectsToHideIfNotOwned[i].SetActive(hide);
         }
-        audioListener.enabled = hide;
         nametagCanvas.SetActive(!hide);
     }
 

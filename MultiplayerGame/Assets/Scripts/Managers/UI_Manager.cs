@@ -1,159 +1,104 @@
-using TMPro;
-using UnityEditor;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UI_Manager : MonoBehaviour
 {
-    public bool showUI;
-    bool firstShow;
+    public GameUIs currentCanvasMenu;
 
-    [Header("Connection Config UI")]
-    [SerializeField] GameObject connectionUI;
+    [SerializeField] List<CanvasMenu> canvasMenus = new List<CanvasMenu>();
 
-    [SerializeField] TMP_InputField ipInputF;
-    [SerializeField] TMP_InputField portInputF;
+    [SerializeField] GameObject connectionStateCanvas;
 
-    [SerializeField] Image hostButton;
-    [SerializeField] Image connectedImg;
+    [Header("Data from UIs")]
+    public string userName;
+    public string userIP;
+    public int userPort;
 
-    [SerializeField] Button connectionFirstSelectButton;
+    public bool openSettings;
 
-    [SerializeField] GameObject titleCanvas;
-    bool firstTitleShow = false;
-    Button mainTitleButton;
-    TMP_InputField titleInput;
-    string nameFromTitle;
+    [Header("Debug")]
+    public bool debugUIs = false;
+    [SerializeField] GameObject debugConsole;
+    [SerializeField] GameObject debugAnalysis;
+
+    #region Instance
+
+    private static UI_Manager _instance;
+    public static UI_Manager Instance { get { return _instance; } }
+
+    private void Awake()
+    {
+        if (_instance != null && Instance != null)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
+
+    #endregion
 
     void Start()
     {
-        try
-        {
-            titleCanvas = GameObject.FindGameObjectWithTag("showOnTitle");
-            mainTitleButton = GameObject.FindGameObjectWithTag("titleButt").GetComponent<Button>();
-            titleInput = GameObject.FindGameObjectWithTag("titleInput").GetComponent<TMP_InputField>();
-
-            titleCanvas.SetActive(false);
-        }
-        catch
-        {
-            Debug.Log("Title Canvas is missing");
-        }
+        GameObject canv = Instantiate(connectionStateCanvas);
+        canv.transform.SetParent(transform);
     }
 
     void Update()
     {
-        // Title UI
-        if (titleCanvas != null)
+        // Debug UIs
+        debugAnalysis.SetActive(debugUIs);
+        debugConsole.SetActive(debugUIs);
+
+        for (int i = 0; i < canvasMenus.Count; i++)
         {
-            switch (GetComponent<CameraManager>().gameState)
+            if (canvasMenus[i].menu == currentCanvasMenu)
             {
-                case CameraManager.GameState.Title:
-                    if (!titleCanvas.activeInHierarchy)
-                    {
-                        titleCanvas.SetActive(true);
-                        firstTitleShow = true;
-                    }
+                if (!canvasMenus[i].activated)
+                {
+                    GameObject canv = Instantiate(canvasMenus[i].canvas);
+                    canv.transform.SetParent(transform);
 
-                    nameFromTitle = titleInput.text;
-
-                    break;
-                case CameraManager.GameState.Gameplay:
-                    if (titleCanvas.activeInHierarchy)
-                    {
-                        titleCanvas.SetActive(false);
-                    }
-                    break;
+                    canvasMenus[i].activated = true;
+                }
             }
-
-            if (firstTitleShow)
+            else
             {
-                SelectDefaultTitleButton();
-                firstTitleShow = false;
+                canvasMenus[i].activated = false;
             }
         }
 
-        // Connection UI
-        connectionUI.SetActive(showUI);
-
-        if (showUI)
+        // ToggleSettings
+        if (openSettings && currentCanvasMenu != GameUIs.Sett_Connection)
         {
-            if (firstShow)
-            {
-                SelectDefaultButton();
-                firstShow = false;
-            }
+            currentCanvasMenu = GameUIs.Sett_Connection/* GameUIs.Settings*/;
         }
-        else { firstShow = true; };
-
-        if (GetComponent<ConnectionManager>().isHosting) { hostButton.color = Color.green; } else { hostButton.color = Color.white; }
-        if (GetComponent<ConnectionManager>().IsConnected()) { connectedImg.color = Color.green; } else { connectedImg.color = Color.red; }
     }
 
-    void SelectDefaultButton()
+    public enum GameUIs
     {
-        connectionFirstSelectButton.Select();
+        Title,
+        Gameplay,
+        Settings,
+        Sett_Connection,
+        Sett_Graphics
     }
 
-    void SelectDefaultTitleButton()
+    [System.Serializable]
+    public class CanvasMenu
     {
-        mainTitleButton.Select();
-    }
-
-    #region UI Inputs
-
-    public void Button_OnClose()
-    {
-        showUI = false;
-    }
-
-    public void Button_OnReconnect()
-    {
-        ConnectionManager.Instance.reconnect = true;
-    }
-
-    public void Button_Disconnect()
-    {
-        ConnectionManager.Instance.disconnect = true;
-    }
-
-    public void Button_OnHost()
-    {
-        ConnectionManager.Instance.isHosting = !ConnectionManager.Instance.isHosting;
-    }
-
-    public string GetIpFromInput()
-    {
-        return ipInputF.text;
-    }
-
-    public int GetPortFromInput()
-    {
-        if (portInputF.text != "")
+        public CanvasMenu(GameUIs menu, GameObject canvas)
         {
-            return int.Parse(portInputF.text);
+            this.menu = menu;
+            this.canvas = canvas;
         }
-        else { return 0; }
+
+        public GameUIs menu;
+        public GameObject canvas;
+
+        [HideInInspector]
+        public bool activated;
     }
-
-    public void Button_OnExit() // Close Software
-    {
-#if UNITY_EDITOR
-        EditorApplication.isPlaying = false;
-#endif
-
-        Application.Quit();
-    }
-
-    public string GetUserName()
-    {
-        return nameFromTitle;
-    }
-
-    public void Button_OnPlay()
-    {
-        SceneManagerScript.Instance.addNewOwnPlayer = true;
-    }
-
-    #endregion
 }

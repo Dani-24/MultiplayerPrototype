@@ -34,10 +34,8 @@ public class PlayerArmament : MonoBehaviour
         }
 
         // AIMING
-        if (GetComponentInParent<PlayerOrbitCamera>().affectedCamera != null)
-        {
-            aimDirection = GetComponentInParent<PlayerOrbitCamera>().affectedCamera.transform.forward;
-        }
+        aimDirection = GetComponentInParent<PlayerOrbitCamera>().GetCameraTransform().forward;
+
         // SUB WEAPON
         if (subWeaponShooting)
         {
@@ -67,6 +65,7 @@ public class PlayerArmament : MonoBehaviour
 
         currentWeapon = Instantiate(weaponToUse, weaponSpawnPoint.transform);
         currentWeapon.GetComponent<Weapon>().teamTag = GetComponent<PlayerStats>().teamTag;
+        GetComponent<PlayerMovement>().weaponSpeedMultiplier = currentWeapon.GetComponent<Weapon>().moveSpeedMultiplier;
         createdWeapon = true;
     }
 

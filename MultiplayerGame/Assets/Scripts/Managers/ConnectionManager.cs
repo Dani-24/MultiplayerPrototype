@@ -544,9 +544,9 @@ public class ConnectionManager : MonoBehaviour
         }
 
         // Get values from UI
-        string getIP = GetComponent<UI_Manager>().GetIpFromInput();
-        int getPort = GetComponent<UI_Manager>().GetPortFromInput();
-        string usName = GetComponent<UI_Manager>().GetUserName();
+        string getIP = UI_Manager.Instance.userIP;
+        int getPort = UI_Manager.Instance.userPort;
+        string usName = UI_Manager.Instance.userName;
 
         if (getIP != "") { hostIP = getIP; } else { hostIP = defaultIP; }
         if (getPort != 0) { port = getPort; } else { port = defaultPort; }
@@ -568,7 +568,7 @@ public class ConnectionManager : MonoBehaviour
         }
 
         // Update Own Player Info
-        if (SceneManagerScript.Instance.GetOwnPlayerInstance() != null && GetComponent<CameraManager>().gameState == CameraManager.GameState.Gameplay)
+        if (SceneManagerScript.Instance.GetOwnPlayerInstance() != null && SceneManagerScript.Instance.gameState == SceneManagerScript.GameState.Gameplay)
         {
             ownPlayerPos = SceneManagerScript.Instance.GetOwnPlayerInstance().transform.position;
             ownPlayerNetID = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().networkID;

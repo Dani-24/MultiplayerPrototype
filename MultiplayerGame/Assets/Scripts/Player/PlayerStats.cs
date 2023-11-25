@@ -6,9 +6,9 @@ public class PlayerStats : MonoBehaviour
     public string teamTag;
 
     [Header("Debug")]
-    public bool infiniteInk = false;
-    public bool infiniteHP = false;
-    public string presetTeam;
+    [SerializeField] bool infiniteInk = false;
+    [SerializeField] bool infiniteHP = false;
+    [SerializeField] string presetTeam;
 
     [Header("HP")]
     public float HP = 100.0f;
@@ -20,8 +20,8 @@ public class PlayerStats : MonoBehaviour
     public float ink = 100.0f;
     float inkCapacity;
 
-    public float inkReloadSpeed = 1f;
-    public float inkReloadSpeedOnInk = 5f;
+    [SerializeField] float inkReloadSpeed = 1f;
+    [SerializeField] float inkReloadSpeedOnInk = 5f;
     public bool onInk = false;
 
     [Header("Other")]
@@ -33,12 +33,6 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] float minYaxis = -20;
 
     [SerializeField] MeshRenderer teamColorGO;
-
-    [Header("UI Things")]
-    public Slider inkSlider;
-    public Image inkSliderImg;
-
-    public Slider HPSlider;
 
     void Start()
     {
@@ -71,11 +65,6 @@ public class PlayerStats : MonoBehaviour
             HP = maxHP;
             ink = inkCapacity;
         }
-
-        // Update UI
-        inkSlider.value = ink;
-        HPSlider.value = HP;
-        inkSliderImg.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
 
         // Reloading
         ReloadInk();
