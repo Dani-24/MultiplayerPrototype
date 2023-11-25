@@ -3,7 +3,6 @@ using UnityEngine;
 public class ElevatorPlat : MonoBehaviour
 {
     [SerializeField] Transform elevator;
-    //BoxCollider coll;
 
     [Header("Elevator Propierties")]
     [SerializeField] float maxHeight;
@@ -16,7 +15,6 @@ public class ElevatorPlat : MonoBehaviour
     private void Start()
     {
         startHeight = elevator.position.y;
-        //coll = GetComponent<BoxCollider>();
     }
 
     // UP
@@ -45,7 +43,7 @@ public class ElevatorPlat : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        other.transform.SetParent(transform);
+        other.transform.SetParent(elevator.transform);
     }
 
     private void OnTriggerStay(Collider other)
