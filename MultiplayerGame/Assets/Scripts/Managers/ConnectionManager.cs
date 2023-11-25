@@ -572,7 +572,6 @@ public class ConnectionManager : MonoBehaviour
         {
             ownPlayerPos = SceneManagerScript.Instance.GetOwnPlayerInstance().transform.position;
             ownPlayerNetID = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().networkID;
-
             ownPlayerPck = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().GetPlayerPck();
         }
 

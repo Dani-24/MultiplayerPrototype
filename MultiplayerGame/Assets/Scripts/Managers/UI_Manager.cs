@@ -52,6 +52,7 @@ public class UI_Manager : MonoBehaviour
         debugAnalysis.SetActive(debugUIs);
         debugConsole.SetActive(debugUIs);
 
+        // Manage UIs
         for (int i = 0; i < canvasMenus.Count; i++)
         {
             if (canvasMenus[i].menu == currentCanvasMenu)
@@ -74,6 +75,20 @@ public class UI_Manager : MonoBehaviour
         if (openSettings && currentCanvasMenu != GameUIs.Sett_Connection)
         {
             currentCanvasMenu = GameUIs.Sett_Connection/* GameUIs.Settings*/;
+        }
+
+        // Scene Game State
+        switch (currentCanvasMenu)
+        {
+            case GameUIs.Title:
+                SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Title;
+                break;
+            case GameUIs.Gameplay:
+            case GameUIs.Settings:
+            case GameUIs.Sett_Connection:
+            case GameUIs.Sett_Graphics:
+                SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Gameplay;
+                break;
         }
     }
 
