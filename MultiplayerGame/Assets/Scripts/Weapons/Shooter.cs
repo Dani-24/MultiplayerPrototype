@@ -44,10 +44,14 @@ public class Shooter : Weapon
     {
         if (GetComponentInParent<PlayerStats>().ink >= shootCost)
         {
-            // RNG
-            wpAimDirection.x += Random.Range(-rng, rng);
+            Quaternion aimDirQ = Quaternion.LookRotation(wpAimDirection);
 
-            GameObject bullet = Instantiate(bulletPrefab, spawnBulletPosition.transform.position, Quaternion.LookRotation(wpAimDirection));
+            Vector3 aimDirVec = aimDirQ.eulerAngles;
+
+            // RNG
+            aimDirVec.y += Random.Range(-rng, rng);
+
+            GameObject bullet = Instantiate(bulletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
 
             bullet.GetComponent<Bullet>().teamTag = teamTag;
             bullet.GetComponent<Bullet>().speed = bulletSpeed;

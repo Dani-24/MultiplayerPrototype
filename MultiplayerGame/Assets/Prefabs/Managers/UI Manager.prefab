@@ -134,7 +134,7 @@ MonoBehaviour:
   currentCanvasMenu: 0
   canvasMenus:
   - menu: 0
-    canvas: {fileID: 1408239694905060753, guid: 9090b6d4a72400c4ba075ca7eedcd796,
+    canvas: {fileID: 5315085011231168688, guid: 9090b6d4a72400c4ba075ca7eedcd796,
       type: 3}
     activated: 0
   - menu: 1
@@ -146,7 +146,7 @@ MonoBehaviour:
       type: 3}
     activated: 0
   - menu: 3
-    canvas: {fileID: 7417385839992843615, guid: 8898176544e6bd440991c2acc6aff874,
+    canvas: {fileID: 1232971230381155930, guid: 8898176544e6bd440991c2acc6aff874,
       type: 3}
     activated: 0
   - menu: 4

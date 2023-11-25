@@ -1561,7 +1561,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aimDirection: {x: 0, y: 0, z: 0}
   weaponSpawnPoint: {fileID: 1501752528350844541}
-  weaponToUse: {fileID: 3597637874272683826, guid: 234fa55f3924b684fa2079555201eb96,
+  weaponToUse: {fileID: 3597637874272683826, guid: b4547da01ac11514a81fc64d429289f0,
     type: 3}
   weaponShooting: 0
   subWeapon: {fileID: 4612145116355683483, guid: c298e5f021ab0d54d9b89b8975adf95b,

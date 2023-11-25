@@ -227,35 +227,42 @@ public class ConnectionManager : MonoBehaviour
             EndConnection();
         }
 
-        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-
-        if (isHosting)
+        try
         {
-            ipep = new IPEndPoint(IPAddress.Any, port);             // As server allow connections from anywhere
+            socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-            socket.Bind(ipep);
+            if (isHosting)
+            {
+                ipep = new IPEndPoint(IPAddress.Any, port);             // As server allow connections from anywhere
 
-            serverReceiveThread = new Thread(ServerReceiveThreadUpdate);
-            serverReceiveThread.Start();
+                socket.Bind(ipep);
 
-            serverSendThread = new Thread(ServerSendThreadUpdate);
-            serverSendThread.Start();
+                serverReceiveThread = new Thread(ServerReceiveThreadUpdate);
+                serverReceiveThread.Start();
+
+                serverSendThread = new Thread(ServerSendThreadUpdate);
+                serverSendThread.Start();
+            }
+            else
+            {
+                ipep = new IPEndPoint(IPAddress.Parse(hostIP), port);       // As client set the server IP
+
+                clientReceiveThread = new Thread(ClientReceiveThreadUpdate);
+                clientReceiveThread.Start();
+
+                clientSendThread = new Thread(ClientSendThreadUpdate);
+                clientSendThread.Start();
+            }
+
+            IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
+            remote = (EndPoint)(sender);
+
+            isConnected = true;
         }
-        else
+        catch
         {
-            ipep = new IPEndPoint(IPAddress.Parse(hostIP), port);       // As client set the server IP
-
-            clientReceiveThread = new Thread(ClientReceiveThreadUpdate);
-            clientReceiveThread.Start();
-
-            clientSendThread = new Thread(ClientSendThreadUpdate);
-            clientSendThread.Start();
+            Debug.Log("Incorrect IP/Port format");
         }
-
-        IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-        remote = (EndPoint)(sender);
-
-        isConnected = true;
     }
 
     private void EndConnection(string debugLog = "Connection Ended")
@@ -492,6 +499,8 @@ public class ConnectionManager : MonoBehaviour
             }
             catch (SystemException e)
             {
+                // REVISAR ESTA PARTE YA Q SI EL CLIENT SE CONECTA PRIMERO LE SALE Q ESTÁ CONECTADO A ALGO CUANDO NO LO ESTÁ
+
                 Debug.Log(e.ToString());
 
                 if (serverIsConnected)

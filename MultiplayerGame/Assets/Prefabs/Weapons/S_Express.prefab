@@ -83,10 +83,10 @@ MonoBehaviour:
   shootDMG: 28
   bulletSpeed: 37
   weaponRange: 50
-  rng: 0
+  rng: 4.5
   shootCost: 0.71
   moveSpeedMultiplier: 0.95
-  pRadius: 1.1
+  pRadius: 1.3
   pStrength: 1
   pHardness: 1
   paintOwnFeet: 1
