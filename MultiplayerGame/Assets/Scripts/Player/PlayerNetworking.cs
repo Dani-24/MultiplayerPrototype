@@ -13,6 +13,9 @@ public class PlayerNetworking : MonoBehaviour
     [SerializeField] TMP_Text nameTagText;
     [SerializeField] RectTransform recTrans;
 
+    [Header("Net data")]
+    [Tooltip("Weapon RNG")] public Random.State weaponRngState;
+
     private void Awake()
     {
         networkID = Random.Range(0, 999999);
@@ -56,6 +59,8 @@ public class PlayerNetworking : MonoBehaviour
         pPck.shootingSub = GetComponent<PlayerArmament>().subWeaponShooting;
         pPck.camRot = GetComponent<PlayerOrbitCamera>().GetCamRot();
         pPck.position = transform.position;
+        pPck.rotation = GetComponent<PlayerMovement>().playerBody.transform.rotation;
+        pPck.wpRNG = weaponRngState;
 
         return pPck;
     }
@@ -71,6 +76,8 @@ public class PlayerNetworking : MonoBehaviour
         GetComponent<PlayerArmament>().SetSubFire(pck.shootingSub);
         GetComponent<PlayerOrbitCamera>().SetCamRot(pck.camRot);
         GetComponent<PlayerMovement>().SetPosition(pck.position);
+        GetComponent<PlayerMovement>().playerBody.transform.rotation = Quaternion.LerpUnclamped(GetComponent<PlayerMovement>().playerBody.transform.rotation, pck.rotation, 10 * Time.deltaTime);
+        weaponRngState = pck.wpRNG;
 
         nameTagText.text = pck.userName;
     }

@@ -7,6 +7,7 @@ public class Shooter : Weapon
     private void Start()
     {
         audioS = GetComponent<AudioSource>();
+        Random.InitState(0);
     }
 
     void Update()
@@ -48,8 +49,24 @@ public class Shooter : Weapon
 
             Vector3 aimDirVec = aimDirQ.eulerAngles;
 
+            if (GetComponentInParent<PlayerNetworking>().isOwnByThisInstance)
+            {
+                GetComponentInParent<PlayerNetworking>().weaponRngState = Random.state;
+            }
+            else
+            {
+                Random.state = GetComponentInParent<PlayerNetworking>().weaponRngState;
+            }
+
             // RNG
-            aimDirVec.y += Random.Range(-rng, rng);
+            if (GetComponentInParent<PlayerMovement>().isGrounded)
+            {
+                aimDirVec.y += Random.Range(-rng, rng);
+            }
+            else
+            {
+                aimDirVec.y += Random.Range(-jumpRng, jumpRng);
+            }
 
             GameObject bullet = Instantiate(bulletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
 

@@ -84,6 +84,7 @@ MonoBehaviour:
   bulletSpeed: 37
   weaponRange: 75
   rng: 1.5
+  jumpRng: 3
   shootCost: 1.25
   moveSpeedMultiplier: 0.8
   pRadius: 1.2

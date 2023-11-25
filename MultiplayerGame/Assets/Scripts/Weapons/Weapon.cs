@@ -14,6 +14,7 @@ public class Weapon : MonoBehaviour
     public float bulletSpeed = 10f;
     public float weaponRange = 4f;
     public float rng = 0f;
+    public float jumpRng = 0f;
 
     [Tooltip("% from the total ink that shooting once costs")]
     public float shootCost;

@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     CharacterController controller;
     PlayerInput input;
 
-    [SerializeField] private GameObject playerBody;
+    public GameObject playerBody;
 
     #region Horizontal Movement Propierties
 
@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float fallSpeed;
     [SerializeField] float groundedFallSpeed = -3.0f;
 
-    [SerializeField] bool isGrounded;
+    public bool isGrounded;
     float originalStepOffset;
 
     [Header("Jumping")]
@@ -172,83 +172,83 @@ public class PlayerMovement : MonoBehaviour
 
     #region Ground Paint
 
-    void CheckGroundPaint()
-    {
-        // Lanzar un raycast hacía abajo y mirar si es suelo pintable
+    //void CheckGroundPaint()
+    //{
+    //    // Lanzar un raycast hacía abajo y mirar si es suelo pintable
 
-        //RaycastHit hit;
+    //    //RaycastHit hit;
 
-        /*if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hit, Mathf.Infinity, groundLayer))
-        {
-            Renderer hitRenderer = hit.collider.GetComponent<Renderer>();
+    //    /*if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hit, Mathf.Infinity, groundLayer))
+    //    {
+    //        Renderer hitRenderer = hit.collider.GetComponent<Renderer>();
 
-            if (hitRenderer != null)
-            {
-                Vector2 uvCoord = hit.textureCoord;
-                Material material = hitRenderer.material;
+    //        if (hitRenderer != null)
+    //        {
+    //            Vector2 uvCoord = hit.textureCoord;
+    //            Material material = hitRenderer.material;
 
-                //Texture2D texture = material.mainTexture as Texture2D;
+    //            //Texture2D texture = material.mainTexture as Texture2D;
 
-                Texture texture = material.GetTexture("_MaskTexture");
+    //            Texture texture = material.GetTexture("_MaskTexture");
 
-                debugGameObjectHit = hit.collider.gameObject;
-                debugTexture = texture;
+    //            debugGameObjectHit = hit.collider.gameObject;
+    //            debugTexture = texture;
 
-                // Crea un nuevo objeto Texture2D
-                Texture2D texture2D = null; //TextureToText2D(texture);
+    //            // Crea un nuevo objeto Texture2D
+    //            Texture2D texture2D = null; //TextureToText2D(texture);
 
-                debugTexture2d = texture2D;
+    //            debugTexture2d = texture2D;
 
-                if (texture2D != null)
-                {
-                    Color pixelColor = texture2D.GetPixelBilinear(uvCoord.x, uvCoord.y);
+    //            if (texture2D != null)
+    //            {
+    //                Color pixelColor = texture2D.GetPixelBilinear(uvCoord.x, uvCoord.y);
 
-                    Debug.Log("Color: " + pixelColor);
+    //                Debug.Log("Color: " + pixelColor);
 
-                    // Comprobar el color del suelo y mirar si es aliado o enemigo
+    //                // Comprobar el color del suelo y mirar si es aliado o enemigo
 
-                    // Si es color aliado con shift puedes correr + rapido y recargas rapido
+    //                // Si es color aliado con shift puedes correr + rapido y recargas rapido
 
-                    // Si es color enemigo te mueves mas lento, recibes un pelin de daño y usar shift te frena mas
+    //                // Si es color enemigo te mueves mas lento, recibes un pelin de daño y usar shift te frena mas
 
-                    if (pixelColor == SceneManagerScript.Instance.GetTeamColor(GetComponent<PlayerStats>().teamTag))
-                    {
-                        Debug.Log("Ally Ink");
-                    }
-                    else
-                    {
-                        Debug.Log("Enemy Ink");
-                    }
-                }
-                else
-                {
-                    Debug.Log("Texture null");
-                }
-            }
-        }*/
-    }
+    //                if (pixelColor == SceneManagerScript.Instance.GetTeamColor(GetComponent<PlayerStats>().teamTag))
+    //                {
+    //                    Debug.Log("Ally Ink");
+    //                }
+    //                else
+    //                {
+    //                    Debug.Log("Enemy Ink");
+    //                }
+    //            }
+    //            else
+    //            {
+    //                Debug.Log("Texture null");
+    //            }
+    //        }
+    //    }*/
+    //}
 
-    Texture2D TextureToText2D(Texture source)
-    {
-        // !!! Dentro de lo que cabe funciona pero Unity muere en el proceso
+    //Texture2D TextureToText2D(Texture source)
+    //{
+    //    // !!! Dentro de lo que cabe funciona pero Unity muere en el proceso
 
-        RenderTexture renderTex = RenderTexture.GetTemporary(
-               source.width,
-               source.height,
-               0,
-               RenderTextureFormat.Default,
-        RenderTextureReadWrite.Linear);
+    //    RenderTexture renderTex = RenderTexture.GetTemporary(
+    //           source.width,
+    //           source.height,
+    //           0,
+    //           RenderTextureFormat.Default,
+    //    RenderTextureReadWrite.Linear);
 
-        Graphics.Blit(source, renderTex);
-        RenderTexture previous = RenderTexture.active;
-        RenderTexture.active = renderTex;
-        Texture2D readableText = new Texture2D(source.width, source.height);
-        readableText.ReadPixels(new Rect(0, 0, renderTex.width, renderTex.height), 0, 0);
-        readableText.Apply();
-        RenderTexture.active = previous;
-        RenderTexture.ReleaseTemporary(renderTex);
-        return readableText;
-    }
+    //    Graphics.Blit(source, renderTex);
+    //    RenderTexture previous = RenderTexture.active;
+    //    RenderTexture.active = renderTex;
+    //    Texture2D readableText = new Texture2D(source.width, source.height);
+    //    readableText.ReadPixels(new Rect(0, 0, renderTex.width, renderTex.height), 0, 0);
+    //    readableText.Apply();
+    //    RenderTexture.active = previous;
+    //    RenderTexture.ReleaseTemporary(renderTex);
+    //    return readableText;
+    //}
 
     #endregion
 

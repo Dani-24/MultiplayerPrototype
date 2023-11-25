@@ -676,14 +676,17 @@ public class PlayerPackage
     public string teamTag;
 
     public Vector3 position;
+    public Quaternion rotation;
     public Vector2 moveInput;
-    public Vector2 camRot;
+    public Vector3 camRot;
 
     public bool running = false;
     public bool jumping = false;
 
     public bool shooting = false;
     public bool shootingSub = false;
+
+    public UnityEngine.Random.State wpRNG;
 }
 
 [System.Serializable]

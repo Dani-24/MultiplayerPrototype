@@ -16,9 +16,13 @@ public class PlayerOrbitCamera : MonoBehaviour
 
     [SerializeField] Transform bodyTransform;
 
+    [SerializeField] AudioListener playerAudioListener;
+
     private void Start()
     {
         camBaseAxis.Set(bodyTransform.rotation.eulerAngles.y, cmCamera.m_YAxis.Value);
+
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance) { cmCamera.Priority = 20; }
     }
 
     private void Update()
@@ -36,6 +40,9 @@ public class PlayerOrbitCamera : MonoBehaviour
         }
 
         camBaseAxis.x = bodyTransform.rotation.eulerAngles.y;
+
+        // Audio Stereo
+        playerAudioListener.transform.rotation = playerCamera.transform.rotation;
     }
 
     public Transform GetCameraTransform()
@@ -60,15 +67,16 @@ public class PlayerOrbitCamera : MonoBehaviour
     }
 
     // Network Data
-    public void SetCamRot(Vector2 _camRot)
+    public void SetCamRot(Vector3 _camRot)
     {
-        cmCamera.m_XAxis.Value = _camRot.x;
-        cmCamera.m_YAxis.Value = _camRot.y;
+        //cmCamera.m_XAxis.Value = _camRot.x;
+        //cmCamera.m_YAxis.Value = _camRot.y;
+        playerCamera.transform.forward = _camRot;
     }
 
-    public Vector2 GetCamRot()
+    public Vector3 GetCamRot()
     {
-        return new Vector2(cmCamera.m_XAxis.Value, cmCamera.m_YAxis.Value);
+        return playerCamera.transform.forward;
     }
 
     #endregion
