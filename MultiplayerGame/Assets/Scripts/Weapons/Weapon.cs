@@ -46,17 +46,17 @@ public class Weapon : MonoBehaviour
     public float shootingVerticalOffset = 0.5f;
 
     [Header("Debug Info")]
-    public bool isShooting = false;
+    protected bool isShooting = false;
 
     [Tooltip("Direction in which is the weapon aiming to shoot")]
-    public Vector3 wpAimDirection;
+    protected Vector3 wpAimDirection;
 
     [Header("Weapon meshes")]
     public GameObject weaponMesh;
     public GameObject bulletPrefab;
 
     // Counter entre tiro y tiro
-    [SerializeField] protected float shootCooldown = 0f;
+    protected float shootCooldown = 0f;
 
     #endregion
 

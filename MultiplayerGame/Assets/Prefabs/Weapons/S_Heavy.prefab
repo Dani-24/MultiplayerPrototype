@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 3184887705818406780}
   - component: {fileID: -4519959487617565935}
   m_Layer: 0
-  m_Name: S_Long
+  m_Name: S_Heavy
   m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,16 +78,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamTag: 
-  weaponName: Shooter Long
-  cadence: 5.5
-  shootDMG: 42
-  bulletSpeed: 45
-  weaponRange: 75
-  rng: 1.5
-  jumpRng: 3
-  shootCost: 1.25
-  moveSpeedMultiplier: 0.8
-  pRadius: 2.9
+  weaponName: Shooter Heavy
+  cadence: 5
+  shootDMG: 52
+  bulletSpeed: 30
+  weaponRange: 55
+  rng: 6.5
+  jumpRng: 10
+  shootCost: 1.7
+  moveSpeedMultiplier: 0.85
+  pRadius: 3.5
   pStrength: 1
   pHardness: 0
   paintOwnFeet: 1

@@ -8,6 +8,11 @@ public class Shooter : Weapon
     {
         audioS = GetComponent<AudioSource>();
         Random.InitState(0);
+
+        if (GetComponentInParent<PlayerNetworking>().isOwnByThisInstance)
+        {
+            audioS.spatialBlend = 0;
+        }
     }
 
     void Update()

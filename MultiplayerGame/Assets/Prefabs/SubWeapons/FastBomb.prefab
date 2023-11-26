@@ -27,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 3077766158377737661}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6416323034298510835}
   m_RootOrder: -1
@@ -133,16 +133,16 @@ MonoBehaviour:
   teamTag: 
   dmg: 60
   splashDmg: 30
-  speed: 35
+  speed: 45
   range: 80
   cooldown: 0
   instantExplosion: 1
   lethalRadius: 1
   nonLethalRadius: 2.75
   aimYOffset: -28
-  paintRadius: 2.75
+  paintRadius: 5.5
   strength: 1
-  hardness: 1
+  hardness: 0
   throwCost: 35
   rend:
   - {fileID: 1967691771641202558}
@@ -166,7 +166,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 0.65
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &9156680916302341758
 Rigidbody:
