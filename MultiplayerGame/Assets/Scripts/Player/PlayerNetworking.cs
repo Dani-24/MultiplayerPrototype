@@ -76,7 +76,7 @@ public class PlayerNetworking : MonoBehaviour
         GetComponent<PlayerArmament>().SetSubFire(pck.shootingSub);
         GetComponent<PlayerOrbitCamera>().SetCamRot(pck.camRot);
         GetComponent<PlayerMovement>().SetPosition(pck.position);
-        GetComponent<PlayerMovement>().playerBody.transform.rotation = Quaternion.LerpUnclamped(GetComponent<PlayerMovement>().playerBody.transform.rotation, pck.rotation, 10 * Time.deltaTime);
+        GetComponent<PlayerMovement>().SetRotation(pck.rotation);
         weaponRngState = pck.wpRNG;
 
         nameTagText.text = pck.userName;

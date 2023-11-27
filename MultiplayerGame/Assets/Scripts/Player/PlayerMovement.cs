@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +14,9 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField] private Vector2 moveInput;
+
+    Vector3 forward;
+    Vector3 moveDir;
 
     [SerializeField] private float moveSpeed = 10.0f;
     [SerializeField] private float runSpeed = 20.0f;
@@ -33,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float gravity = 9.8f;
     [SerializeField] float gravityMultiplier = 1.0f;
     [SerializeField] float fallSpeed;
+    [SerializeField] float maxFallSpeed;
     [SerializeField] float groundedFallSpeed = -3.0f;
 
     public bool isGrounded;
@@ -64,30 +69,46 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // UI Input
-        if (input.actions["ShowConsole"].WasReleasedThisFrame() && GetComponent<PlayerNetworking>().isOwnByThisInstance)
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
-            SceneManagerScript.Instance.showConsole = !SceneManagerScript.Instance.showConsole;
+            // UI Input
+            if (input.actions["ShowConsole"].WasReleasedThisFrame())
+            {
+                SceneManagerScript.Instance.showConsole = !SceneManagerScript.Instance.showConsole;
+            }
+
+            if (input.actions["OpenUI"].WasReleasedThisFrame())
+            {
+                UI_Manager.Instance.openSettings = !UI_Manager.Instance.openSettings;
+            }
+
+            // Check if using Gamepad or not
+            if (input.currentControlScheme == "Gamepad")
+            {
+                isUsingGamepad = true;
+            }
+            else
+            {
+                isUsingGamepad = false;
+            }
+
+            GetMovementDirection();
+            Rotation();
+            Movement();
+            JumpingAndFalling();
+
+            // Para que esté pegado al suelo
+            controller.Move(new Vector3(0, fallSpeed * Time.deltaTime, 0));
         }
 
-        if (input.actions["OpenUI"].WasReleasedThisFrame() && GetComponent<PlayerNetworking>().isOwnByThisInstance)
-        {
-            UI_Manager.Instance.openSettings = !UI_Manager.Instance.openSettings;
-        }
+        //CheckGroundPaint();
+    }
 
-        // Check if using Gamepad or not
-        if (input.currentControlScheme == "Gamepad")
-        {
-            isUsingGamepad = true;
-        }
-        else
-        {
-            isUsingGamepad = false;
-        }
+    #region Player Movement
 
-        // Update
-        // Camera Rotation & applying it to the player model
-        Vector3 forward = GetComponent<PlayerOrbitCamera>().GetCameraTransform().forward;
+    void GetMovementDirection()
+    {
+        forward = GetComponent<PlayerOrbitCamera>().GetCameraTransform().forward;
         Vector3 right = GetComponent<PlayerOrbitCamera>().GetCameraTransform().right;
 
         forward.y = right.y = 0;
@@ -98,8 +119,32 @@ public class PlayerMovement : MonoBehaviour
         Vector3 forwardRelativeVerticalInput = moveInput.y * forward;
         Vector3 rigthRelativeHorizontalInput = moveInput.x * right;
 
-        Vector3 moveDir = forwardRelativeVerticalInput + rigthRelativeHorizontalInput;
+        moveDir = forwardRelativeVerticalInput + rigthRelativeHorizontalInput;
+        moveDir.Normalize();
+    }
 
+    void Movement()
+    {
+        if (moveInput.x != 0 || moveInput.y != 0)
+        {
+            // Made so controller smoothly moves to its rotation while not shooting anything
+            if (GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
+            {
+                controller.Move(moveDir * Time.deltaTime * moveSpeed * weaponSpeedMultiplier);
+            }
+            else if (!isRunning)
+            {
+                controller.Move(moveDir * Time.deltaTime * moveSpeed);
+            }
+            else
+            {
+                controller.Move(moveDir * Time.deltaTime * runSpeed);
+            }
+        }
+    }
+
+    void Rotation()
+    {
         if (moveDir != Vector3.zero || GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
         {
             Quaternion rotDes = Quaternion.identity;
@@ -116,32 +161,20 @@ public class PlayerMovement : MonoBehaviour
                 playerBody.transform.rotation = Quaternion.Slerp(playerBody.transform.rotation, rotDes, rotationSpeedWhileShooting * Time.deltaTime);
             }
         }
+    }
 
-        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+    void JumpingAndFalling()
+    {
+        if (fallSpeed > maxFallSpeed)
         {
-            if (moveInput.x != 0 || moveInput.y != 0)
-            {
-                // Made so controller smoothly moves to its rotation while not shooting anything
-                if (GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
-                {
-                    controller.Move(moveDir * Time.deltaTime * moveSpeed * weaponSpeedMultiplier);
-                }
-                else if (!isRunning)
-                {
-                    controller.Move(moveDir * Time.deltaTime * moveSpeed);
-                }
-                else
-                {
-                    controller.Move(moveDir * Time.deltaTime * runSpeed);
-                }
-            }
+            fallSpeed += gravity * gravityMultiplier * Time.deltaTime;
+        }
+        else
+        {
+            fallSpeed = maxFallSpeed;
         }
 
-        #region Ground/Jump Checking
-
-        fallSpeed += gravity * gravityMultiplier * Time.deltaTime;
-
-        foreach(var layer in groundLayers)
+        foreach (var layer in groundLayers)
         {
             isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDist, layer);
 
@@ -162,13 +195,9 @@ public class PlayerMovement : MonoBehaviour
         {
             controller.stepOffset = 0;
         }
-
-        #endregion
-
-        controller.Move(new Vector3(0, fallSpeed * Time.deltaTime, 0));
-
-        //CheckGroundPaint();
     }
+
+    #endregion
 
     #region Ground Paint
 
@@ -308,9 +337,14 @@ public class PlayerMovement : MonoBehaviour
         if (controller != null)
         {
             controller.enabled = false;
-            controller.transform.position = Vector3.LerpUnclamped(controller.transform.position, _position, 10 * Time.deltaTime);
+            controller.transform.position = Vector3.LerpUnclamped(controller.transform.position, _position, 20 * Time.deltaTime);
             controller.enabled = true;
         }
+    }
+
+    public void SetRotation(Quaternion _rot)
+    {
+        playerBody.transform.rotation = Quaternion.LerpUnclamped(playerBody.transform.rotation, _rot, 20 * Time.deltaTime);
     }
 
     #endregion

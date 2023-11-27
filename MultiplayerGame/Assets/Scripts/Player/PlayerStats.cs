@@ -54,7 +54,7 @@ public class PlayerStats : MonoBehaviour
         // Check Death
         if (transform.position.y < minYaxis || HP <= 0) isDead = true;
 
-        if (isDead)
+        if (isDead && GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
             controller.enabled = false;
             transform.position = spawnPos;

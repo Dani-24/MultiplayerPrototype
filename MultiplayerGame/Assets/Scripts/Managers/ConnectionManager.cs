@@ -677,8 +677,8 @@ public class PlayerPackage
 
     public Vector3 position;
     public Quaternion rotation;
-    public Vector2 moveInput;
-    public Vector3 camRot;
+    public Vector2 moveInput;   // Revisar si hace falta este actualmente
+    public Vector3 camRot;      // Usar para camara de muerte??? No, q la camara de muerte sea una orbital random y ya, Quitar esto entonces.
 
     public bool running = false;
     public bool jumping = false;
@@ -717,6 +717,18 @@ public class PlayerToAdd
     public int id;
     public bool own;
     public Vector3 position;
+}
+
+// Scenes Packages
+[System.Serializable]
+public class LobbyObjectsToSync
+{
+    // Literalmente se mueven en un único eje
+    public float ratRot;
+    public float clockRot;
+    public float elevatorPos;
+
+    public int jukeBoxSong; 
 }
 
 #endregion
