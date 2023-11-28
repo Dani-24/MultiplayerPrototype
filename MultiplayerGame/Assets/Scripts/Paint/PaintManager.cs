@@ -1,8 +1,9 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class PaintManager : Singleton<PaintManager>{
-
+public class PaintManager : Singleton<PaintManager>
+{
     public Shader texturePaint;
     public Shader extendIslands;
 
@@ -22,16 +23,18 @@ public class PaintManager : Singleton<PaintManager>{
 
     CommandBuffer command;
 
-    public override void Awake(){
+    public override void Awake()
+    {
         base.Awake();
-        
+
         paintMaterial = new Material(texturePaint);
         extendMaterial = new Material(extendIslands);
         command = new CommandBuffer();
         command.name = "CommmandBuffer - " + gameObject.name;
     }
 
-    public void initTextures(Paintable paintable){
+    public void InitTextures(Paintable paintable)
+    {
         RenderTexture mask = paintable.getMask();
         RenderTexture uvIslands = paintable.getUVIslands();
         RenderTexture extend = paintable.getExtend();
@@ -50,8 +53,8 @@ public class PaintManager : Singleton<PaintManager>{
         command.Clear();
     }
 
-
-    public void paint(Paintable paintable, Vector3 pos, float radius = 1f, float hardness = .5f, float strength = .5f, Color? color = null){
+    public void Paint(Paintable paintable, Vector3 pos, float radius = 1f, float hardness = .5f, float strength = .5f, Color? color = null)
+    {
 
         RenderTexture mask = paintable.getMask();
         RenderTexture uvIslands = paintable.getUVIslands();
@@ -82,4 +85,20 @@ public class PaintManager : Singleton<PaintManager>{
         command.Clear();
     }
 
+    //public Texture GetPaintColor(Paintable paintable, Vector3 pos)
+    //{
+    //    return paintable.getRenderer().material.GetTexture("_MaskTexture");
+    //        //paintMaterial.GetColor(colorID);
+
+    //    // Esto está pillando el color de lo ultimo q ha pasado por Paint()
+    //    // Como hago q pille de algo en especifico
+
+    //    //RenderTexture mask = paintable.getMask();
+
+    //    //command.SetRenderTarget(mask);
+
+    //    //paintMaterial.SetVector(positionID, pos);
+
+    //    //return paintMaterial.GetColor(colorID);
+    //}
 }

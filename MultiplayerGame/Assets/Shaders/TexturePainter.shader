@@ -35,11 +35,13 @@
                 float4 worldPos : TEXCOORD1;
             };
 
+			// Masking
             float mask(float3 position, float3 center, float radius, float hardness){
                 float m = distance(center, position);
                 return 1 - smoothstep(radius * hardness, radius, m);    
             }
 
+			// World Pos -> UV Space
             v2f vert (appdata v){
                 v2f o;
 				o.worldPos = mul(unity_ObjectToWorld, v.vertex);
@@ -50,6 +52,7 @@
                 return o;
             }
 
+			// Brush
             fixed4 frag (v2f i) : SV_Target{   
                 if(_PrepareUV > 0 ){
                     return float4(0, 0, 1, 1);

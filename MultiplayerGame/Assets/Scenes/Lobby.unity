@@ -2019,6 +2019,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
+  maskTextureID: 660
+  clean: 0
 --- !u!65 &272617569
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3575,6 +3577,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
+  maskTextureID: 660
+  clean: 0
 --- !u!64 &494747594
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5453,7 +5457,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &696332814 stripped
 Transform:
@@ -6521,6 +6525,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
+  maskTextureID: 660
+  clean: 0
 --- !u!4 &794416535 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1513714617451474349, guid: db3080465c9785f4fb04c75e02285850,
@@ -7644,8 +7650,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1177031518}
-  m_LocalRotation: {x: 0.032619074, y: 0.3730463, z: -0.0131246, w: 0.9271463}
-  m_LocalPosition: {x: -2.9112797, y: -2.7285714, z: -14.26027}
+  m_LocalRotation: {x: 0.032619108, y: 0.3730463, z: -0.013124614, w: 0.9271463}
+  m_LocalPosition: {x: -3.3164256, y: -0.34761882, z: -14.711332}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7996,6 +8002,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
+  maskTextureID: 660
+  clean: 0
 --- !u!64 &1322241041
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -11543,7 +11551,7 @@ PrefabInstance:
     - target: {fileID: 7255265454254323935, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7255265454254323935, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
         type: 3}
@@ -12564,6 +12572,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
+  maskTextureID: 660
+  clean: 0
 --- !u!64 &1901209350
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -13302,6 +13312,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
+  maskTextureID: 660
+  clean: 0
 --- !u!64 &2070648964
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -16001,11 +16013,6 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1413630011}
-    - target: {fileID: 5376530380615723722, guid: 4b59d13ce21820d4d8fe343199a08048,
-        type: 3}
-      propertyPath: speed
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 5376530380615723722, guid: 4b59d13ce21820d4d8fe343199a08048,
         type: 3}
       propertyPath: elevator

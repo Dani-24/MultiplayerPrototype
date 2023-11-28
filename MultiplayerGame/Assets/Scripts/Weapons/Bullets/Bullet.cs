@@ -67,7 +67,7 @@ public class Bullet : MonoBehaviour
         {
             // Se deberia cambiar a que pinte lo mas cercano (como las bombas, o solo pintara lo q choque primero en puntos con diversos objetos)
             Vector3 pos = other.ClosestPointOnBounds(transform.position);
-            PaintManager.instance.paint(p, pos, radius, hardness, strength, rend.material.color);
+            PaintManager.instance.Paint(p, pos, radius, hardness, strength, rend.material.color);
         }
         Destroy(gameObject);
     }

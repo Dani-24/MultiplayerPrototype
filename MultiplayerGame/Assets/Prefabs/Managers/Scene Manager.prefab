@@ -73,7 +73,7 @@ MonoBehaviour:
   betaTeamColor: {r: 0, g: 0, b: 0, a: 0}
   gammaTeamColor: {r: 1, g: 1, b: 1, a: 1}
   useTheseDebugColors: 0
-  playerPrefab: {fileID: 8365932484709195724, guid: b67d6d356db779849a9636062bb6b45c,
+  playerPrefab: {fileID: 1747472560784089855, guid: b67d6d356db779849a9636062bb6b45c,
     type: 3}
   playersOnScene: []
   teamTags:
@@ -117,23 +117,35 @@ MonoBehaviour:
     userName: 
     teamTag: 
     position: {x: 0, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
     moveInput: {x: 0, y: 0}
-    camRot: {x: 0, y: 0}
+    camRot: {x: 0, y: 0, z: 0}
     running: 0
     jumping: 0
     shooting: 0
     shootingSub: 0
+    wpRNG:
+      s0: 0
+      s1: 0
+      s2: 0
+      s3: 0
   notOwnPlayerNetID: 0
   notOwnPlayerPck:
     userName: 
     teamTag: 
     position: {x: 0, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
     moveInput: {x: 0, y: 0}
-    camRot: {x: 0, y: 0}
+    camRot: {x: 0, y: 0, z: 0}
     running: 0
     jumping: 0
     shooting: 0
     shootingSub: 0
+    wpRNG:
+      s0: 0
+      s1: 0
+      s2: 0
+      s3: 0
   ownPlayerSend: 0
   notOwnPlayerReceived: 0
 --- !u!114 &3765587210838179000

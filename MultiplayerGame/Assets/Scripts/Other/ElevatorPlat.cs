@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ElevatorPlat : MonoBehaviour
@@ -17,23 +18,23 @@ public class ElevatorPlat : MonoBehaviour
         startHeight = elevator.position.y;
     }
 
-    // UP
     private void FixedUpdate()
     {
+        // UP
         if (elevator.position.y < (maxHeight) && goUp)
         {
             elevator.Translate(new Vector3(0, speed * Time.deltaTime, 0));
         }
-    }
 
-    // DOWN
-    private void Update()
-    {
+        // Down
         if (elevator.position.y > startHeight && !goUp)
         {
             elevator.Translate(new Vector3(0, -speed * Time.deltaTime, 0));
         }
+    }
 
+    private void Update()
+    {
         // Avoid Bugs
         if (elevator.position.y < startHeight)
         {

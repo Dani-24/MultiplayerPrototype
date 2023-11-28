@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.PlayerSettings;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -54,10 +55,8 @@ public class PlayerMovement : MonoBehaviour
 
     public bool isUsingGamepad;
 
-    //[Header("Ground Color Check")]
-    //[SerializeField] Texture debugTexture;
-    //[SerializeField] Texture2D debugTexture2d;
-    //[SerializeField] GameObject debugGameObjectHit;
+    [SerializeField] Texture maskT;
+    [SerializeField] Texture2D texture;
 
     void Start()
     {
@@ -65,6 +64,9 @@ public class PlayerMovement : MonoBehaviour
         input = GetComponent<PlayerInput>();
 
         originalStepOffset = controller.stepOffset;
+
+        texture = new Texture2D(1024, 1024, TextureFormat.RGBA32, false);
+
     }
 
     void Update()
@@ -101,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
             controller.Move(new Vector3(0, fallSpeed * Time.deltaTime, 0));
         }
 
-        //CheckGroundPaint();
+        CheckGroundPaint();
     }
 
     #region Player Movement
@@ -201,83 +203,51 @@ public class PlayerMovement : MonoBehaviour
 
     #region Ground Paint
 
-    //void CheckGroundPaint()
-    //{
-    //    // Lanzar un raycast hacía abajo y mirar si es suelo pintable
+    void CheckGroundPaint()
+    {
+        // Lanzar un raycast hacía abajo y mirar si es suelo pintable
+        RaycastHit hit;
 
-    //    //RaycastHit hit;
+        for (int i = 0; i < groundLayers.Count; i++)
+        {
+            if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hit, Mathf.Infinity, groundLayers[i]))
+            {
+                Paintable hitPaintable = hit.collider.GetComponent<Paintable>();
 
-    //    /*if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hit, Mathf.Infinity, groundLayer))
-    //    {
-    //        Renderer hitRenderer = hit.collider.GetComponent<Renderer>();
+                //Debug.Log(texture.GetPixel((int)pos.x, (int)pos.y));
 
-    //        if (hitRenderer != null)
-    //        {
-    //            Vector2 uvCoord = hit.textureCoord;
-    //            Material material = hitRenderer.material;
+                /*Color colorGround = */
 
-    //            //Texture2D texture = material.mainTexture as Texture2D;
+                maskT = hitPaintable.getRenderer().material.GetTexture("_MaskTexture"); //PaintManager.instance.GetPaintColor(hitPaintable, hit.point);
 
-    //            Texture texture = material.GetTexture("_MaskTexture");
+                Graphics.CopyTexture(maskT, texture);
 
-    //            debugGameObjectHit = hit.collider.gameObject;
-    //            debugTexture = texture;
+                float xNormalized = hit.point.x / texture.width;
+                float yNormalized = hit.point.y / texture.height;
 
-    //            // Crea un nuevo objeto Texture2D
-    //            Texture2D texture2D = null; //TextureToText2D(texture);
+                int x = Mathf.FloorToInt(xNormalized);
+                int y = Mathf.FloorToInt(yNormalized);
 
-    //            debugTexture2d = texture2D;
+                Debug.Log(texture.GetPixel(x, y) + " at: " + x + " " + y);
 
-    //            if (texture2D != null)
-    //            {
-    //                Color pixelColor = texture2D.GetPixelBilinear(uvCoord.x, uvCoord.y);
-
-    //                Debug.Log("Color: " + pixelColor);
-
-    //                // Comprobar el color del suelo y mirar si es aliado o enemigo
-
-    //                // Si es color aliado con shift puedes correr + rapido y recargas rapido
-
-    //                // Si es color enemigo te mueves mas lento, recibes un pelin de daño y usar shift te frena mas
-
-    //                if (pixelColor == SceneManagerScript.Instance.GetTeamColor(GetComponent<PlayerStats>().teamTag))
-    //                {
-    //                    Debug.Log("Ally Ink");
-    //                }
-    //                else
-    //                {
-    //                    Debug.Log("Enemy Ink");
-    //                }
-    //            }
-    //            else
-    //            {
-    //                Debug.Log("Texture null");
-    //            }
-    //        }
-    //    }*/
-    //}
-
-    //Texture2D TextureToText2D(Texture source)
-    //{
-    //    // !!! Dentro de lo que cabe funciona pero Unity muere en el proceso
-
-    //    RenderTexture renderTex = RenderTexture.GetTemporary(
-    //           source.width,
-    //           source.height,
-    //           0,
-    //           RenderTextureFormat.Default,
-    //    RenderTextureReadWrite.Linear);
-
-    //    Graphics.Blit(source, renderTex);
-    //    RenderTexture previous = RenderTexture.active;
-    //    RenderTexture.active = renderTex;
-    //    Texture2D readableText = new Texture2D(source.width, source.height);
-    //    readableText.ReadPixels(new Rect(0, 0, renderTex.width, renderTex.height), 0, 0);
-    //    readableText.Apply();
-    //    RenderTexture.active = previous;
-    //    RenderTexture.ReleaseTemporary(renderTex);
-    //    return readableText;
-    //}
+                //if (hitPaintable != null)
+                //{
+                //    if (colorGround == SceneManagerScript.Instance.GetTeamColor("Alpha"))
+                //    {
+                //        Debug.Log("Alpha team Ink:" + colorGround);
+                //    }
+                //    else if (colorGround == SceneManagerScript.Instance.GetTeamColor("Beta"))
+                //    {
+                //        Debug.Log("Beta team Ink:" + colorGround);
+                //    }
+                //    else
+                //    {
+                //        Debug.Log("No Ink?");
+                //    }
+                //}
+            }
+        }
+    }
 
     #endregion
 

@@ -434,6 +434,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   elevator: {fileID: 8865675472876816750}
   maxHeight: 0
-  speed: 10
+  speed: 2
   startHeight: 0
   goUp: 0
