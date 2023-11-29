@@ -2019,7 +2019,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
-  maskTextureID: 660
   clean: 0
 --- !u!65 &272617569
 BoxCollider:
@@ -3577,7 +3576,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
-  maskTextureID: 660
   clean: 0
 --- !u!64 &494747594
 MeshCollider:
@@ -6525,7 +6523,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
-  maskTextureID: 660
   clean: 0
 --- !u!4 &794416535 stripped
 Transform:
@@ -8002,7 +7999,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
-  maskTextureID: 660
   clean: 0
 --- !u!64 &1322241041
 MeshCollider:
@@ -11538,6 +11534,11 @@ PrefabInstance:
       propertyPath: showConsole
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2053593188729393109, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
+        type: 3}
+      propertyPath: sceneRoot
+      value: 
+      objectReference: {fileID: 1667144601}
     - target: {fileID: 3996387237497895542, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
         type: 3}
       propertyPath: m_Name
@@ -12572,7 +12573,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
-  maskTextureID: 660
   clean: 0
 --- !u!64 &1901209350
 MeshCollider:
@@ -13312,7 +13312,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
-  maskTextureID: 660
   clean: 0
 --- !u!64 &2070648964
 MeshCollider:

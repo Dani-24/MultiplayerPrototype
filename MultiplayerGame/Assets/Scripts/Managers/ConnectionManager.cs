@@ -87,6 +87,9 @@ public class ConnectionManager : MonoBehaviour
 
     #endregion
 
+    bool cleanPaint= false;
+    [SerializeField] GameObject sceneRoot;
+
     #region Packages & Serialization
 
     MemoryStream SerializeJson(Package pck)
@@ -281,6 +284,8 @@ public class ConnectionManager : MonoBehaviour
             serverIsConnected = false;
             clientIsConnected = false;
 
+            cleanPaint = true;
+
             if (isHosting)
             {
                 serverSendThread.Abort();
@@ -410,7 +415,11 @@ public class ConnectionManager : MonoBehaviour
                     socket.SendTo(sendStream.ToArray(), (int)sendStream.Length, SocketFlags.None, remote);
                 }
 
-                clientIsConnected = true;
+                if (!clientIsConnected)
+                {
+                    clientIsConnected = true;
+                    cleanPaint = true;
+                }
             }
         }
         catch (SystemException e)
@@ -495,7 +504,11 @@ public class ConnectionManager : MonoBehaviour
                 // Manage Package
                 ReadPackage(DeserializeJson(receiveStream));
 
-                serverIsConnected = true;
+                if (!serverIsConnected)
+                {
+                    serverIsConnected = true;
+                    cleanPaint = true;
+                }
             }
             catch (SystemException e)
             {
@@ -550,6 +563,12 @@ public class ConnectionManager : MonoBehaviour
         if (pendingToClean)
         {
             CleanPlayers();
+        }
+
+        if (cleanPaint)
+        {
+            sceneRoot.BroadcastMessage("CleanPaint");
+            cleanPaint = false;
         }
 
         // Get values from UI

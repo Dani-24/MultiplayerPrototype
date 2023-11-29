@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.PlayerSettings;
-using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -212,39 +210,46 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hit, Mathf.Infinity, groundLayers[i]))
             {
-                Paintable hitPaintable = hit.collider.GetComponent<Paintable>();
+                try
+                {
+                    Paintable hitPaintable = hit.collider.GetComponent<Paintable>();
 
-                //Debug.Log(texture.GetPixel((int)pos.x, (int)pos.y));
+                    //Debug.Log(texture.GetPixel((int)pos.x, (int)pos.y));
 
-                /*Color colorGround = */
+                    /*Color colorGround = */
 
-                maskT = hitPaintable.getRenderer().material.GetTexture("_MaskTexture"); //PaintManager.instance.GetPaintColor(hitPaintable, hit.point);
+                    maskT = hitPaintable.getRenderer().material.GetTexture("_MaskTexture"); //PaintManager.instance.GetPaintColor(hitPaintable, hit.point);
 
-                Graphics.CopyTexture(maskT, texture);
+                    Graphics.CopyTexture(maskT, texture);
 
-                float xNormalized = hit.point.x / texture.width;
-                float yNormalized = hit.point.y / texture.height;
+                    float xNormalized = hit.point.x / texture.width;
+                    float yNormalized = hit.point.y / texture.height;
 
-                int x = Mathf.FloorToInt(xNormalized);
-                int y = Mathf.FloorToInt(yNormalized);
+                    int x = Mathf.FloorToInt(xNormalized);
+                    int y = Mathf.FloorToInt(yNormalized);
 
-                Debug.Log(texture.GetPixel(x, y) + " at: " + x + " " + y);
+                    Debug.Log(texture.GetPixel(x, y) + " at: " + x + " " + y);
 
-                //if (hitPaintable != null)
-                //{
-                //    if (colorGround == SceneManagerScript.Instance.GetTeamColor("Alpha"))
-                //    {
-                //        Debug.Log("Alpha team Ink:" + colorGround);
-                //    }
-                //    else if (colorGround == SceneManagerScript.Instance.GetTeamColor("Beta"))
-                //    {
-                //        Debug.Log("Beta team Ink:" + colorGround);
-                //    }
-                //    else
-                //    {
-                //        Debug.Log("No Ink?");
-                //    }
-                //}
+                    //if (hitPaintable != null)
+                    //{
+                    //    if (colorGround == SceneManagerScript.Instance.GetTeamColor("Alpha"))
+                    //    {
+                    //        Debug.Log("Alpha team Ink:" + colorGround);
+                    //    }
+                    //    else if (colorGround == SceneManagerScript.Instance.GetTeamColor("Beta"))
+                    //    {
+                    //        Debug.Log("Beta team Ink:" + colorGround);
+                    //    }
+                    //    else
+                    //    {
+                    //        Debug.Log("No Ink?");
+                    //    }
+                    //}
+                }
+                catch
+                {
+                    // No Paintable Component
+                }
             }
         }
     }
