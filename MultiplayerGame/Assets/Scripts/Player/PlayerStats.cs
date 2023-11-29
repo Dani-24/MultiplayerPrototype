@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -12,9 +11,14 @@ public class PlayerStats : MonoBehaviour
 
     [Header("HP")]
     public float HP = 100.0f;
-    float maxHP;
+    [HideInInspector] public float maxHP;
 
     public bool isDead = false;
+
+    [SerializeField][Tooltip("Time without taking dmg needed to start regen HP")] float recoveryTime = 1.5f;
+    [SerializeField] float regenHPSpeed = 2f;
+    float lastFrameHP;
+    float regenCount;
 
     [Header("Ink")]
     public float ink = 100.0f;
@@ -36,7 +40,7 @@ public class PlayerStats : MonoBehaviour
 
     void Start()
     {
-        maxHP = HP;
+        lastFrameHP = maxHP = HP;
         inkCapacity = ink;
 
         controller = GetComponent<CharacterController>();
@@ -66,6 +70,14 @@ public class PlayerStats : MonoBehaviour
             ink = inkCapacity;
         }
 
+        // Healing
+        if (HP != maxHP)
+        {
+            RegenHealth();
+        }
+
+        if (HP > maxHP) { HP = maxHP; }
+
         // Reloading
         ReloadInk();
 
@@ -89,6 +101,25 @@ public class PlayerStats : MonoBehaviour
         }
 
         if (ink > inkCapacity) { ink = inkCapacity; }
+    }
+
+    void RegenHealth()
+    {
+        if (HP == lastFrameHP)
+        {
+            regenCount -= Time.deltaTime;
+
+            if (regenCount <= 0)
+            {
+                HP += regenHPSpeed * Time.deltaTime;
+            }
+        }
+        else
+        {
+            regenCount = recoveryTime;
+        }
+
+        lastFrameHP = HP;
     }
 
     private void OnTriggerEnter(Collider other)

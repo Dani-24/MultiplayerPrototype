@@ -101,7 +101,7 @@ public class PlayerMovement : MonoBehaviour
             controller.Move(new Vector3(0, fallSpeed * Time.deltaTime, 0));
         }
 
-        CheckGroundPaint();
+        //CheckGroundPaint();
     }
 
     #region Player Movement

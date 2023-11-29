@@ -14,7 +14,7 @@ public class PlayerNetworking : MonoBehaviour
     [SerializeField] RectTransform recTrans;
 
     [Header("Net data")]
-    [Tooltip("Weapon RNG")] public Random.State weaponRngState;
+    [HideInInspector] public Random.State weaponRngState;
 
     private void Awake()
     {

@@ -20,7 +20,8 @@ public class PlayerOrbitCamera : MonoBehaviour
 
     private void Start()
     {
-        camBaseAxis.Set(bodyTransform.rotation.eulerAngles.y, cmCamera.m_YAxis.Value);
+        camBaseAxis.Set(bodyTransform.rotation.eulerAngles.y, 0.5f);
+        cmCamera.m_YAxis.Value = 0.5f;
 
         if (GetComponent<PlayerNetworking>().isOwnByThisInstance) { cmCamera.Priority = 20; }
     }
