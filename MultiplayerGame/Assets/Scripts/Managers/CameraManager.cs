@@ -70,7 +70,7 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
-        if (currentCam == playerCamera && !brain.IsBlending)
+        if (currentCam == playerCamera && !brain.IsBlending && SceneManagerScript.Instance.gameState == SceneManagerScript.GameState.Gameplay)
         {
             SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().playerInputEnabled = true;
         }
