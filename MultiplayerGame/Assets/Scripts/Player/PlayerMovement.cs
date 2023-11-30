@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance && GetComponent<PlayerStats>().playerInputEnabled)
         {
             // UI Input
             if (input.actions["ShowConsole"].WasReleasedThisFrame())

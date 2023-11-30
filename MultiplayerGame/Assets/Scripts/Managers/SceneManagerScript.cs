@@ -11,7 +11,6 @@ public class SceneManagerScript : MonoBehaviour
     public bool showConsole = false;
     [SerializeField] GameObject debugConsole;
 
-    public bool addNewOwnPlayer = false;
     [SerializeField] float rngSpawnDist = 15f;
 
     [SerializeField] bool deleteAllNotOwnPlayers = false;
@@ -33,7 +32,7 @@ public class SceneManagerScript : MonoBehaviour
     #region Players & Teams
 
     [Header("Players")]
-    [SerializeField] GameObject playerPrefab;
+    [SerializeField] GameObject playerGOAtScene;
     public List<GameObject> playersOnScene = new List<GameObject>();
 
     [Header("Teams")]
@@ -75,6 +74,9 @@ public class SceneManagerScript : MonoBehaviour
             alphaTeamColor = colorPairs[rand].color1;
             betaTeamColor = colorPairs[rand].color2;
         }
+
+        // Add Base Player to players List
+        playersOnScene.Add(playerGOAtScene);
     }
 
     void Update()
@@ -84,16 +86,6 @@ public class SceneManagerScript : MonoBehaviour
             debugConsole.SetActive(showConsole);
         }
 
-        // DEBUG
-        if (addNewOwnPlayer)
-        {
-            Vector3 spawnPos = transform.position;
-            spawnPos.x += Random.Range(-rngSpawnDist, rngSpawnDist);
-            spawnPos.z += Random.Range(-rngSpawnDist, rngSpawnDist);
-
-            CreateNewPlayer(true, spawnPos);
-            addNewOwnPlayer = false;
-        }
         // DEBUG
         if (deleteAllNotOwnPlayers)
         {
@@ -106,7 +98,7 @@ public class SceneManagerScript : MonoBehaviour
 
     public GameObject CreateNewPlayer(bool own, Transform _transform)
     {
-        GameObject newP = Instantiate(playerPrefab, _transform.position, _transform.rotation);
+        GameObject newP = Instantiate(playerGOAtScene, _transform.position, _transform.rotation);
 
         newP.GetComponent<PlayerNetworking>().isOwnByThisInstance = own;
 
@@ -115,7 +107,7 @@ public class SceneManagerScript : MonoBehaviour
     }
     public GameObject CreateNewPlayer(bool own, Vector3 _position)
     {
-        GameObject newP = Instantiate(playerPrefab, _position, transform.rotation);
+        GameObject newP = Instantiate(playerGOAtScene, _position, transform.rotation);
 
         newP.GetComponent<PlayerNetworking>().isOwnByThisInstance = own;
 
@@ -140,7 +132,7 @@ public class SceneManagerScript : MonoBehaviour
                 break;
             }
         }
-        if(playersOnScene.Count > 1)
+        if (playersOnScene.Count > 1)
         {
             DeleteAllNotOwnedPlayers();
         }
@@ -148,16 +140,18 @@ public class SceneManagerScript : MonoBehaviour
 
     public GameObject GetOwnPlayerInstance()
     {
-        for (int i = 0; i < playersOnScene.Count; i++)
-        {
-            if (playersOnScene[i].GetComponent<PlayerNetworking>().isOwnByThisInstance)
-            {
-                return playersOnScene[i];
-            }
-        }
+        //for (int i = 0; i < playersOnScene.Count; i++)
+        //{
+        //    if (playersOnScene[i].GetComponent<PlayerNetworking>().isOwnByThisInstance)
+        //    {
+        //        return playersOnScene[i];
+        //    }
+        //}
 
-        Debug.Log("There is no Player Own by this Instance right now");
-        return null;
+        //Debug.Log("There is no Player Own by this Instance right now");
+        //return null;
+
+        return playerGOAtScene;
     }
 
     #endregion
@@ -305,11 +299,6 @@ public class SceneManagerScript : MonoBehaviour
 
     #endregion
 
-    public void ShowUI(bool show)
-    {
-        //GetComponent<UI_Manager>().showUI = show;
-    }
-
     [System.Serializable]
     public struct ColorPair
     {
@@ -326,6 +315,7 @@ public class SceneManagerScript : MonoBehaviour
     public enum GameState
     {
         Title,
-        Gameplay
+        Gameplay,
+        Settings
     }
 }

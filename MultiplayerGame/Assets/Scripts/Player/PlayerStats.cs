@@ -29,6 +29,9 @@ public class PlayerStats : MonoBehaviour
     public bool onInk = false;
 
     [Header("Other")]
+
+    public bool playerInputEnabled;
+
     [SerializeField]
     Vector3 spawnPos = Vector3.zero;
 

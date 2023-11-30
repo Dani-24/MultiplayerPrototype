@@ -4,17 +4,93 @@ using System.Collections.Generic;
 
 public class CameraManager : MonoBehaviour
 {
-    [SerializeField] List<CinemachineVirtualCamera> sceneCameras = new List<CinemachineVirtualCamera>();
+    List<CinemachineFreeLook> sceneCameras = new List<CinemachineFreeLook>();
 
-    public static CinemachineVirtualCamera activeCamera;
+    [Tooltip("Current displaying camera")]
+    [SerializeField] CinemachineFreeLook currentCam;
+
+    [Header("Scene Cameras")]
+
+    [SerializeField] CinemachineBrain brain;
+
+    [Tooltip("Camera to display at start")]
+    [SerializeField] CinemachineFreeLook startCam;
+
+    [Tooltip("Title Screen Camera")]
+    public CinemachineFreeLook titleCamera;
+
+    [Tooltip("3rd Person Player Camera")]
+    public CinemachineFreeLook playerCamera;
+
+    #region Instance
+
+    private static CameraManager _instance;
+    public static CameraManager Instance { get { return _instance; } }
+
+    private void Awake()
+    {
+        if (_instance != null && Instance != null)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
+
+    #endregion
 
     void Start()
     {
-        
+        if (titleCamera != null)
+        {
+            sceneCameras.Add(titleCamera);
+        }
+
+        if (playerCamera != null)
+        {
+            sceneCameras.Add(playerCamera);
+        }
+
+        currentCam = startCam;
+
+        for (int i = 0; i < sceneCameras.Count; i++)
+        {
+            if (sceneCameras[i] == currentCam)
+            {
+                sceneCameras[i].Priority = 20;
+            }
+            else
+            {
+                sceneCameras[i].Priority = 10;
+            }
+        }
     }
 
-    void Update()
+    private void Update()
     {
+        if (currentCam == playerCamera && !brain.IsBlending)
+        {
+            SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().playerInputEnabled = true;
+        }
+        else
+        {
+            SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().playerInputEnabled = false;
+        }
+    }
 
+    public void SwitchCamera(CinemachineFreeLook camera)
+    {
+        currentCam = camera;
+        currentCam.Priority = 20;
+
+        for (int i = 0; i < sceneCameras.Count; i++)
+        {
+            if (sceneCameras[i] != currentCam)
+            {
+                sceneCameras[i].Priority = 10;
+            }
+        }
     }
 }

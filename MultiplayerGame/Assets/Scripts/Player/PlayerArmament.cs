@@ -104,13 +104,13 @@ public class PlayerArmament : MonoBehaviour
 
     void OnFire(InputValue value)
     {
-        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance && GetComponent<PlayerStats>().playerInputEnabled)
             weaponShooting = value.isPressed;
     }
 
     void OnSubFire(InputValue value)
     {
-        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance && GetComponent<PlayerStats>().playerInputEnabled)
             subWeaponShooting = value.isPressed;
     }
 

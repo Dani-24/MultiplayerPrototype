@@ -19,7 +19,8 @@ public class CanvasS_Title : MonoBehaviour
 
     public void Button_OnPlay()
     {
-        SceneManagerScript.Instance.addNewOwnPlayer = true;
+        CameraManager.Instance.SwitchCamera(CameraManager.Instance.playerCamera);
+
         UI_Manager.Instance.userName = nameInputField.text;
         UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Gameplay;
 

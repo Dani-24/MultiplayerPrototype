@@ -18,10 +18,14 @@ public class PlayerOrbitCamera : MonoBehaviour
 
     [SerializeField] AudioListener playerAudioListener;
 
+    [SerializeField] CinemachineInputProvider inputProviderCM;
+
     private void Start()
     {
-        camBaseAxis.Set(bodyTransform.rotation.eulerAngles.y, 0.5f);
+        // Default Rotation Values
+        cmCamera.m_XAxis.Value = bodyTransform.rotation.eulerAngles.y;
         cmCamera.m_YAxis.Value = 0.5f;
+        camBaseAxis.Set(cmCamera.m_XAxis.Value, cmCamera.m_YAxis.Value);
 
         if (GetComponent<PlayerNetworking>().isOwnByThisInstance) { cmCamera.Priority = 20; }
     }
@@ -44,6 +48,16 @@ public class PlayerOrbitCamera : MonoBehaviour
 
         // Audio Stereo
         playerAudioListener.transform.rotation = playerCamera.transform.rotation;
+
+        // Inputs Enabled/Disabled
+        if(GetComponent<PlayerNetworking>().isOwnByThisInstance && GetComponent<PlayerStats>().playerInputEnabled)
+        {
+            inputProviderCM.enabled = true;
+        }
+        else
+        {
+            inputProviderCM.enabled = false;
+        }
     }
 
     public Transform GetCameraTransform()
@@ -55,7 +69,7 @@ public class PlayerOrbitCamera : MonoBehaviour
 
     void OnCamReset(InputValue value)
     {
-        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance && GetComponent<PlayerStats>().playerInputEnabled)
         {
             if (value.isPressed != cameraReseting && value.isPressed == true)
             {
@@ -70,8 +84,6 @@ public class PlayerOrbitCamera : MonoBehaviour
     // Network Data
     public void SetCamRot(Vector3 _camRot)
     {
-        //cmCamera.m_XAxis.Value = _camRot.x;
-        //cmCamera.m_YAxis.Value = _camRot.y;
         playerCamera.transform.forward = _camRot;
     }
 

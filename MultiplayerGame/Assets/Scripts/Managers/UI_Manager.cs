@@ -84,10 +84,12 @@ public class UI_Manager : MonoBehaviour
                 SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Title;
                 break;
             case GameUIs.Gameplay:
+                SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Gameplay;
+                break;
             case GameUIs.Settings:
             case GameUIs.Sett_Connection:
             case GameUIs.Sett_Graphics:
-                SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Gameplay;
+                SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Settings;
                 break;
         }
     }
