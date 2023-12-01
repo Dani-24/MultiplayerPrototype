@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class Shooter : Weapon
 {
-    // My name is Gun, but you can call me Gus
-
     private void Start()
     {
         audioS = GetComponent<AudioSource>();
@@ -82,6 +80,21 @@ public class Shooter : Weapon
             bullet.GetComponent<Bullet>().radius = pRadius;
             bullet.GetComponent<Bullet>().hardness = pHardness;
             bullet.GetComponent<Bullet>().strength = pStrength;
+            bullet.GetComponent<Bullet>().meshScale = 1;
+
+            for (int i = 0; i < sprayDropletsNum; i++)
+            {
+                GameObject sprayDrop = Instantiate(bulletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
+
+                sprayDrop.GetComponent<Bullet>().teamTag = teamTag;
+                sprayDrop.GetComponent<Bullet>().speed = bulletSpeed;
+                sprayDrop.GetComponent<Bullet>().range = Random.Range(0, weaponRange);
+                sprayDrop.GetComponent<Bullet>().DMG = 0;
+                sprayDrop.GetComponent<Bullet>().radius = sprayPaintRadius;
+                sprayDrop.GetComponent<Bullet>().hardness = pHardness;
+                sprayDrop.GetComponent<Bullet>().strength = pStrength;
+                sprayDrop.GetComponent<Bullet>().meshScale = sprayDropRadius;
+            }
 
             // Cost ink
             GetComponentInParent<PlayerStats>().ink -= shootCost;

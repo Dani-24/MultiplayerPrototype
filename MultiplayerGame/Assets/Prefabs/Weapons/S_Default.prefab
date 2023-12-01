@@ -90,6 +90,9 @@ MonoBehaviour:
   pRadius: 3
   pStrength: 1
   pHardness: 0
+  sprayDropletsNum: 3
+  sprayDropRadius: 0.55
+  sprayPaintRadius: 2
   paintOwnFeet: 1
   ownPaintRadius: 1
   spawnBulletPosition: {fileID: 3150462560917926386}

@@ -15,6 +15,9 @@ public class Bullet : MonoBehaviour
     public float DMG = 35f;
     public float customGravity = -9.81f;
 
+    public float meshScale = 1f;
+    Vector3 meshScaleVec;
+
     #endregion
 
     #region Paint
@@ -29,6 +32,7 @@ public class Bullet : MonoBehaviour
     [Header("Other")]
 
     [SerializeField] float minYaxis = -20;
+    [SerializeField] Transform meshTransform;
 
     private void Awake()
     {
@@ -46,6 +50,10 @@ public class Bullet : MonoBehaviour
         {
             rend.material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
         }
+
+        meshScaleVec.Set(meshScale, meshScale, meshScale);
+
+        meshTransform.localScale = meshScaleVec;
 
         gameObject.tag = teamTag + "Bullet";
     }

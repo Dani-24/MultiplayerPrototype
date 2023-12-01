@@ -30,6 +30,13 @@ public class Weapon : MonoBehaviour
     public float pStrength = 1;
     public float pHardness = 1;
 
+    [Tooltip("Painting bullets (no dmg just paint)")]
+    [SerializeField] protected int sprayDropletsNum = 0;
+    [Tooltip("Radius from that bullet (mesh)")]
+    [SerializeField] protected float sprayDropRadius = 1.0f;
+    [Tooltip("Paint radius from that spray")]
+    [SerializeField] protected float sprayPaintRadius = 1.0f;
+
     [Tooltip("WIP")] // !!!
     public bool paintOwnFeet = true;
     [Tooltip("WIP")] // !!!

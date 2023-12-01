@@ -135,10 +135,12 @@ MonoBehaviour:
   range: 5
   DMG: 35
   customGravity: 9.81
+  meshScale: 1
   radius: 1
   strength: 1
   hardness: 1
   minYaxis: -20
+  meshTransform: {fileID: 1513989519296947346}
 --- !u!54 &4648429456704870101
 Rigidbody:
   m_ObjectHideFlags: 0
