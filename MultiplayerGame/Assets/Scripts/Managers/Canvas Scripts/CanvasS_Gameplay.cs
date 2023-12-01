@@ -17,9 +17,13 @@ public class CanvasS_Gameplay : MonoBehaviour
 
     [SerializeField] GameObject playerGameObject;
 
+    CanvasGroup canvasGroup;
+
     void Start()
     {
         playerGameObject = SceneManagerScript.Instance.GetOwnPlayerInstance();
+        canvasGroup = GetComponent<CanvasGroup>();
+        canvasGroup.alpha = 0;
     }
 
     void Update()
@@ -29,6 +33,11 @@ public class CanvasS_Gameplay : MonoBehaviour
             lifeSlider.value = playerGameObject.GetComponent<PlayerStats>().HP;
             inkSlider.value = playerGameObject.GetComponent<PlayerStats>().ink;
             inkSliderImg.color = SceneManagerScript.Instance.GetTeamColor(playerGameObject.GetComponent<PlayerStats>().teamTag);
+        }
+
+        if(canvasGroup.alpha < 1)
+        {
+            canvasGroup.alpha += 0.5f * Time.deltaTime;
         }
     }
 }
