@@ -134,7 +134,7 @@ MonoBehaviour:
   currentCanvasMenu: 0
   canvasMenus:
   - menu: 0
-    canvas: {fileID: 5315085011231168688, guid: 9090b6d4a72400c4ba075ca7eedcd796,
+    canvas: {fileID: 2284472479918644155, guid: 9090b6d4a72400c4ba075ca7eedcd796,
       type: 3}
     activated: 0
   - menu: 1
@@ -424,6 +424,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5766786234382338324, guid: 20d7599dc50b34041a033c9032c2534c,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 7f0db3cf23c93fc4eac01cb3a52388ee,
+        type: 3}
     - target: {fileID: 5775490893003805001, guid: 20d7599dc50b34041a033c9032c2534c,
         type: 3}
       propertyPath: m_AnchorMax.y

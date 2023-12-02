@@ -7,11 +7,12 @@ public class SceneManagerScript : MonoBehaviour
     public string sceneName;
     public GameState gameState;
 
+    [SerializeField] string sceneToLoad;
+    [SerializeField] bool loadScene = false;
+
     [Header("Debug")]
     public bool showConsole = false;
     [SerializeField] GameObject debugConsole;
-
-    [SerializeField] float rngSpawnDist = 15f;
 
     [SerializeField] bool deleteAllNotOwnPlayers = false;
 
@@ -67,6 +68,11 @@ public class SceneManagerScript : MonoBehaviour
 
     void Start()
     {
+        if (loadScene)
+        {
+            ChangeSceneAsync(sceneToLoad);
+        }
+
         if (colorPairs.Count > 0 && !useTheseDebugColors)
         {
             int rand = Random.Range(0, colorPairs.Count);
@@ -76,7 +82,10 @@ public class SceneManagerScript : MonoBehaviour
         }
 
         // Add Base Player to players List
-        playersOnScene.Add(playerGOAtScene);
+        if (playerGOAtScene != null)
+        {
+            playersOnScene.Add(playerGOAtScene);
+        }
     }
 
     void Update()
@@ -92,6 +101,8 @@ public class SceneManagerScript : MonoBehaviour
             DeleteAllNotOwnedPlayers();
             deleteAllNotOwnPlayers = false;
         }
+
+        sceneName = SceneManager.GetActiveScene().name;
     }
 
     #region Players Management
@@ -140,17 +151,6 @@ public class SceneManagerScript : MonoBehaviour
 
     public GameObject GetOwnPlayerInstance()
     {
-        //for (int i = 0; i < playersOnScene.Count; i++)
-        //{
-        //    if (playersOnScene[i].GetComponent<PlayerNetworking>().isOwnByThisInstance)
-        //    {
-        //        return playersOnScene[i];
-        //    }
-        //}
-
-        //Debug.Log("There is no Player Own by this Instance right now");
-        //return null;
-
         return playerGOAtScene;
     }
 
@@ -316,6 +316,7 @@ public class SceneManagerScript : MonoBehaviour
     {
         Title,
         Gameplay,
-        Settings
+        Settings,
+        Loading
     }
 }

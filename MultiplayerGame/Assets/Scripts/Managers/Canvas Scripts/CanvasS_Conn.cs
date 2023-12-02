@@ -21,7 +21,7 @@ public class CanvasS_Conn : MonoBehaviour
 
     void Update()
     {
-        if (SceneManagerScript.Instance.gameObject.GetComponent<ConnectionManager>().isHosting) { hostButton.color = Color.green; } else { hostButton.color = Color.white; }
+        if (ConnectionManager.Instance.isHosting) { hostButton.color = Color.green; } else { hostButton.color = Color.white; }
 
         UI_Manager.Instance.userIP = ipInputF.text;
         if (portInputF.text != "") { UI_Manager.Instance.userPort = int.Parse(portInputF.text); } else { UI_Manager.Instance.userPort = 0; }

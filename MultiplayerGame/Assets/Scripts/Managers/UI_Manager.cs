@@ -100,7 +100,8 @@ public class UI_Manager : MonoBehaviour
         Gameplay,
         Settings,
         Sett_Connection,
-        Sett_Graphics
+        Sett_Graphics,
+        None
     }
 
     [System.Serializable]
