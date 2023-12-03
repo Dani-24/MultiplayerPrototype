@@ -81,17 +81,17 @@ MonoBehaviour:
   weaponName: Shooter Default
   cadence: 7
   shootDMG: 36
-  bulletSpeed: 35
+  bulletSpeed: 50
   weaponRange: 50
   rng: 4
   jumpRng: 6
   shootCost: 0.8
-  moveSpeedMultiplier: 0.9
+  moveSpeedMultiplier: 0.65
   pRadius: 3
   pStrength: 1
   pHardness: 0
   sprayDropletsNum: 3
-  sprayDropRadius: 0.55
+  sprayDropRadius: 0.65
   sprayPaintRadius: 2
   paintOwnFeet: 1
   ownPaintRadius: 1
