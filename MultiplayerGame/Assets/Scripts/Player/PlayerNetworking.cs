@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class PlayerNetworking : MonoBehaviour
     public int networkID;
     public bool isOwnByThisInstance;
     [SerializeField] List<GameObject> gameObjectsToHideIfNotOwned = new List<GameObject>();
+    [Tooltip("To disable")][SerializeField] CinemachineBrain cameraBrain;
 
     [Header("Nametags")]
     [SerializeField] GameObject nametagCanvas;
@@ -19,6 +21,7 @@ public class PlayerNetworking : MonoBehaviour
     private void Awake()
     {
         networkID = Random.Range(0, 999999);
+        cameraBrain.enabled = isOwnByThisInstance;
     }
 
     void Start()
@@ -44,6 +47,7 @@ public class PlayerNetworking : MonoBehaviour
         {
             gameObjectsToHideIfNotOwned[i].SetActive(hide);
         }
+
         nametagCanvas.SetActive(!hide);
     }
 

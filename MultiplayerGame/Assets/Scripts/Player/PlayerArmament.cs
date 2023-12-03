@@ -12,8 +12,8 @@ public class PlayerArmament : MonoBehaviour
     public GameObject weaponToUse;
     public bool weaponShooting = false;
 
-    GameObject currentWeapon;
-    bool createdWeapon = false;
+    [SerializeField] GameObject currentWeapon;
+    [SerializeField] bool createdWeapon = false;
 
     [Header("SubWeapon")]
     public GameObject subWeapon;

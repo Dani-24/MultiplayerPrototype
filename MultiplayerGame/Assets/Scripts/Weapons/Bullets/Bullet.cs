@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [HideInInspector] public string teamTag;
+    public string teamTag;
 
     private Rigidbody rb;
     private Renderer rend;
