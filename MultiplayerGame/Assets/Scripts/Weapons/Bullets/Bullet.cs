@@ -70,19 +70,17 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Paintable p = other.GetComponent<Paintable>();
-        if (p != null)
-        {
-            // Se deberia cambiar a que pinte lo mas cercano (como las bombas, o solo pintara lo q choque primero en puntos con diversos objetos)
-            Vector3 pos = other.ClosestPointOnBounds(transform.position);
-            PaintManager.instance.Paint(p, pos, radius, hardness, strength, rend.material.color);
-        }
-        Destroy(gameObject);
-    }
+        Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
 
-    // Just to be secure
-    private void OnTriggerStay(Collider other)
-    {
+        foreach(Collider collider in colliders)
+        {
+            Paintable p = collider.gameObject.GetComponent<Paintable>();
+            if (p != null)
+            {
+                Vector3 pos = other.ClosestPointOnBounds(transform.position);
+                PaintManager.instance.Paint(p, pos, radius, hardness, strength, rend.material.color);
+            }
+        }
         Destroy(gameObject);
     }
 }

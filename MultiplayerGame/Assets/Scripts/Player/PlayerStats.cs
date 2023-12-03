@@ -15,8 +15,8 @@ public class PlayerStats : MonoBehaviour
 
     public bool isDead = false;
 
-    [SerializeField][Tooltip("Time without taking dmg needed to start regen HP")] float recoveryTime = 1.5f;
-    [SerializeField] float regenHPSpeed = 2f;
+    [SerializeField][Tooltip("Time without taking dmg needed to start regen HP")][Range(0f, 3f)] float recoveryTime = 1.5f;
+    [SerializeField][Range(1f, 5f)] float regenHPSpeed = 2f;
     float lastFrameHP;
     float regenCount;
 
@@ -24,8 +24,8 @@ public class PlayerStats : MonoBehaviour
     public float ink = 100.0f;
     float inkCapacity;
 
-    [SerializeField] float inkReloadSpeed = 1f;
-    [SerializeField] float inkReloadSpeedOnInk = 5f;
+    [SerializeField][Range(1f, 10f)] float inkReloadSpeed = 1f;
+    [SerializeField][Range(1f, 10f)] float inkReloadSpeedOnInk = 5f;
     public bool onInk = false;
 
     [Header("Other")]

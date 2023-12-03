@@ -17,19 +17,9 @@ public class Shooter : Weapon
     {
         isShooting = GetComponentInParent<PlayerArmament>().weaponShooting;
 
-        // =========== ROTACIÓN DEL ARMA ===========
-
-        if (isShooting)
-        {
-            wpAimDirection = GetComponentInParent<PlayerArmament>().aimDirection;
-            wpAimDirection.y += shootingVerticalOffset;
-
-            weaponMesh.transform.rotation = Quaternion.LookRotation(wpAimDirection);
-        }
-        else
-        {
-            weaponMesh.transform.rotation = Quaternion.LookRotation(transform.forward);
-        }
+        // Rotation (for fixedUpdate)
+        wpAimDirection = GetComponentInParent<PlayerArmament>().aimDirection;
+        wpAimDirection.y += shootingVerticalOffset;
 
         // ====== Disparar ======
 
@@ -41,6 +31,20 @@ public class Shooter : Weapon
         {
             Shoot();
             shootCooldown = 1 / cadence;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        // =========== ROTACIÓN DEL ARMA ===========
+
+        if (isShooting)
+        {
+            weaponMesh.transform.rotation = Quaternion.LookRotation(wpAimDirection);
+        }
+        else
+        {
+            weaponMesh.transform.rotation = Quaternion.LookRotation(transform.forward);
         }
     }
 

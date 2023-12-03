@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
 
     public GameObject playerBody;
 
+    public bool isUsingGamepad;
+
     #region Horizontal Movement Propierties
 
     [Header("Movement")]
@@ -17,10 +19,10 @@ public class PlayerMovement : MonoBehaviour
     Vector3 forward;
     Vector3 moveDir;
 
-    [SerializeField] private float moveSpeed = 10.0f;
-    [SerializeField] private float runSpeed = 20.0f;
+    [SerializeField][Range(0.1f, 25f)] private float moveSpeed = 10.0f;
+    [SerializeField][Range(0.1f, 25f)] private float runSpeed = 20.0f;
     //[SerializeField] private float slowSpeed = 5.0f;
-    public float weaponSpeedMultiplier = 1.0f;
+    [Range(1f, 10f)] public float weaponSpeedMultiplier = 1.0f;
 
     public bool isRunning = false;
 
@@ -46,13 +48,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpForce = 5f;
     [SerializeField] bool isJumping = false;
 
-    [SerializeField] float groundCheckDist = 0.1f;
+    [SerializeField][Range(0f, 2f)] float groundCheckDist = 0.1f;
     public List<LayerMask> groundLayers = new List<LayerMask>();
 
     #endregion
 
-    public bool isUsingGamepad;
+    [Header("Network")]
+    [SerializeField] int interpolationSpeed = 20;
 
+    [Header("Ground Paint")]
     [SerializeField] Texture maskT;
     [SerializeField] Texture2D texture;
 
@@ -93,15 +97,17 @@ public class PlayerMovement : MonoBehaviour
             }
 
             GetMovementDirection();
-            Rotation();
+            BodyRotation();
             Movement();
             JumpingAndFalling();
-
-            // Para que esté pegado al suelo
-            controller.Move(new Vector3(0, fallSpeed * Time.deltaTime, 0));
         }
 
         //CheckGroundPaint();
+    }
+
+    private void FixedUpdate()
+    {
+        controller.Move(moveDir * Time.deltaTime);
     }
 
     #region Player Movement
@@ -125,25 +131,24 @@ public class PlayerMovement : MonoBehaviour
 
     void Movement()
     {
-        if (moveInput.x != 0 || moveInput.y != 0)
+        if (moveInput != Vector2.zero)
         {
-            // Made so controller smoothly moves to its rotation while not shooting anything
             if (GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
             {
-                controller.Move(moveDir * Time.deltaTime * moveSpeed * weaponSpeedMultiplier);
+                moveDir *= moveSpeed * weaponSpeedMultiplier;
             }
             else if (!isRunning)
             {
-                controller.Move(moveDir * Time.deltaTime * moveSpeed);
+                moveDir *= moveSpeed;
             }
             else
             {
-                controller.Move(moveDir * Time.deltaTime * runSpeed);
+                moveDir *= runSpeed;
             }
         }
     }
 
-    void Rotation()
+    void BodyRotation()
     {
         if (moveDir != Vector3.zero || GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
         {
@@ -157,7 +162,6 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 rotDes = Quaternion.LookRotation(forward, Vector3.up);
-
                 playerBody.transform.rotation = Quaternion.Slerp(playerBody.transform.rotation, rotDes, rotationSpeedWhileShooting * Time.deltaTime);
             }
         }
@@ -195,6 +199,8 @@ public class PlayerMovement : MonoBehaviour
         {
             controller.stepOffset = 0;
         }
+
+        moveDir.y += fallSpeed;
     }
 
     #endregion
@@ -312,14 +318,14 @@ public class PlayerMovement : MonoBehaviour
         if (controller != null)
         {
             controller.enabled = false;
-            controller.transform.position = Vector3.LerpUnclamped(controller.transform.position, _position, 20 * Time.deltaTime);
+            controller.transform.position = Vector3.LerpUnclamped(controller.transform.position, _position, interpolationSpeed * Time.deltaTime);
             controller.enabled = true;
         }
     }
 
     public void SetRotation(Quaternion _rot)
     {
-        playerBody.transform.rotation = Quaternion.LerpUnclamped(playerBody.transform.rotation, _rot, 20 * Time.deltaTime);
+        playerBody.transform.rotation = Quaternion.LerpUnclamped(playerBody.transform.rotation, _rot, interpolationSpeed * Time.deltaTime);
     }
 
     #endregion

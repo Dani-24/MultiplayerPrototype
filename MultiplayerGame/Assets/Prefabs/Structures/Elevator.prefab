@@ -366,6 +366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
+  clean: 0
 --- !u!1 &6097006411322481009
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,8 +419,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 5.5, y: 0.35, z: 5.5}
-  m_Center: {x: 0, y: 5.17, z: 0}
+  m_Size: {x: 5.5, y: 3, z: 5.5}
+  m_Center: {x: 0, y: 6.5, z: 0}
 --- !u!114 &5376530380615723722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,6 +435,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   elevator: {fileID: 8865675472876816750}
   maxHeight: 0
-  speed: 2
+  speed: 4
   startHeight: 0
   goUp: 0
