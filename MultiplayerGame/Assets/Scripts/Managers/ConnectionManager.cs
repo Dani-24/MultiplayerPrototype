@@ -36,6 +36,7 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] int packageDataSize = 1024;
     [SerializeField] float delayBetweenPckgs = 0.1f;
     float delay;
+    [SerializeField] bool enablePckLogs = true;
 
     [Header("Pinging")]
     [SerializeField] float pingCounter;
@@ -87,7 +88,7 @@ public class ConnectionManager : MonoBehaviour
 
     #endregion
 
-    bool cleanPaint= false;
+    bool cleanPaint = false;
     [SerializeField] GameObject sceneRoot;
 
     #region Packages & Serialization
@@ -111,7 +112,7 @@ public class ConnectionManager : MonoBehaviour
         string json = reader.ReadString();
         pck = JsonUtility.FromJson<Package>(json);
 
-        Debug.Log("Received Pck: " + pck.type);
+        if (enablePckLogs) Debug.Log("Received Pck: " + pck.type);
 
         return pck;
     }
@@ -122,7 +123,7 @@ public class ConnectionManager : MonoBehaviour
         pck.IP = myIP;
         pck.type = type;
 
-        Debug.Log("Sending Pck " + pck.type /*+ " at " + pck.pckCreationTime*/);
+        if (enablePckLogs) Debug.Log("Sending Pck " + pck.type /*+ " at " + pck.pckCreationTime*/);
 
         switch (type)
         {
@@ -176,7 +177,8 @@ public class ConnectionManager : MonoBehaviour
                 if (pck.connPck.createPlayer)
                 {
                     notOwnPlayerReceived = true;
-                    Debug.Log("Creating a Player from Network");
+
+                    if (enablePckLogs) Debug.Log("Creating a Player from Network");
 
                     playerToAdd.id = pck.netID;
                     playerToAdd.own = false;
@@ -197,7 +199,7 @@ public class ConnectionManager : MonoBehaviour
                 break;
         }
 
-        Debug.Log(pckLog);
+        if (enablePckLogs) Debug.Log(pckLog);
     }
 
     #endregion
@@ -747,7 +749,7 @@ public class LobbyObjectsToSync
     public float clockRot;
     public float elevatorPos;
 
-    public int jukeBoxSong; 
+    public int jukeBoxSong;
 }
 
 #endregion
