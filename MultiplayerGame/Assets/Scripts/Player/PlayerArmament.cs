@@ -12,8 +12,10 @@ public class PlayerArmament : MonoBehaviour
     public GameObject weaponToUse;
     public bool weaponShooting = false;
 
-    [SerializeField] GameObject currentWeapon;
+    public GameObject currentWeapon;
     [SerializeField] bool createdWeapon = false;
+
+    [HideInInspector] public Random.State weaponRngState;
 
     [Header("SubWeapon")]
     public GameObject subWeapon;
@@ -30,7 +32,7 @@ public class PlayerArmament : MonoBehaviour
         // WEAPON
         if (!createdWeapon || currentWeapon.GetComponent<Weapon>().weaponName != weaponToUse.GetComponent<Weapon>().weaponName)
         {
-            CreateWeapon();
+            SetWeapon();
         }
 
         // AIMING
@@ -55,7 +57,7 @@ public class PlayerArmament : MonoBehaviour
 
     #region Main Weapon
 
-    void CreateWeapon()
+    void SetWeapon()
     {
         if (currentWeapon != null)
         {

@@ -82,14 +82,17 @@ public class UI_Manager : MonoBehaviour
         {
             case GameUIs.Title:
                 SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Title;
+                Cursor.lockState = CursorLockMode.None;
                 break;
             case GameUIs.Gameplay:
                 SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Gameplay;
+                Cursor.lockState = CursorLockMode.Locked;
                 break;
             case GameUIs.Settings:
             case GameUIs.Sett_Connection:
             case GameUIs.Sett_Graphics:
                 SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Settings;
+                Cursor.lockState = CursorLockMode.None;
                 break;
         }
     }

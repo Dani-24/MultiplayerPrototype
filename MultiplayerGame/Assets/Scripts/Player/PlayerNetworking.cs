@@ -15,9 +15,6 @@ public class PlayerNetworking : MonoBehaviour
     [SerializeField] TMP_Text nameTagText;
     [SerializeField] RectTransform recTrans;
 
-    [Header("Net data")]
-    [HideInInspector] public Random.State weaponRngState;
-
     private void Awake()
     {
         networkID = Random.Range(0, 999999);
@@ -59,12 +56,21 @@ public class PlayerNetworking : MonoBehaviour
         pPck.moveInput = GetComponent<PlayerMovement>().GetMoveInput();
         pPck.running = GetComponent<PlayerMovement>().GetRunInput();
         pPck.jumping = GetComponent<PlayerMovement>().GetJumpInput();
-        pPck.shooting = GetComponent<PlayerArmament>().weaponShooting;
-        pPck.shootingSub = GetComponent<PlayerArmament>().subWeaponShooting;
+
+        if (GetComponent<PlayerStats>().ink >= GetComponent<PlayerArmament>().currentWeapon.GetComponent<Weapon>().shootCost)
+            pPck.shooting = GetComponent<PlayerArmament>().weaponShooting;
+        else
+            pPck.shooting = false;
+
+        if (GetComponent<PlayerStats>().ink >= GetComponent<PlayerArmament>().subWeapon.GetComponent<SubWeapon>().throwCost)
+            pPck.shootingSub = GetComponent<PlayerArmament>().subWeaponShooting;
+        else
+            pPck.shootingSub = false;
+
         pPck.camRot = GetComponent<PlayerOrbitCamera>().GetCamRot();
         pPck.position = transform.position;
         pPck.rotation = GetComponent<PlayerMovement>().playerBody.transform.rotation;
-        pPck.wpRNG = weaponRngState;
+        pPck.wpRNG = GetComponent<PlayerArmament>().weaponRngState;
 
         return pPck;
     }
@@ -81,7 +87,7 @@ public class PlayerNetworking : MonoBehaviour
         GetComponent<PlayerOrbitCamera>().SetCamRot(pck.camRot);
         GetComponent<PlayerMovement>().SetPosition(pck.position);
         GetComponent<PlayerMovement>().SetRotation(pck.rotation);
-        weaponRngState = pck.wpRNG;
+        GetComponent<PlayerArmament>().weaponRngState = pck.wpRNG;
 
         nameTagText.text = pck.userName;
     }

@@ -107,15 +107,6 @@ public class SceneManagerScript : MonoBehaviour
 
     #region Players Management
 
-    public GameObject CreateNewPlayer(bool own, Transform _transform)
-    {
-        GameObject newP = Instantiate(playerGOAtScene, _transform.position, _transform.rotation);
-
-        newP.GetComponent<PlayerNetworking>().isOwnByThisInstance = own;
-
-        playersOnScene.Add(newP);
-        return newP;
-    }
     public GameObject CreateNewPlayer(bool own, Vector3 _position)
     {
         GameObject newP = Instantiate(playerGOAtScene, _position, transform.rotation);

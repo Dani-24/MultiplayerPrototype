@@ -684,6 +684,7 @@ class Package
     public DateTime pckCreationTime = DateTime.UtcNow;
     public Network_User user;
     public int netID;
+    public string currentScene;
 
     public PlayerPackage playerPck = null;
     public PingPackage pingPck = null;

@@ -32,11 +32,8 @@ public class Shooter : Weapon
             Shoot();
             shootCooldown = 1 / cadence;
         }
-    }
 
-    private void FixedUpdate()
-    {
-        // =========== ROTACIÓN DEL ARMA ===========
+        // =========== ROTACIÓN DEL ARMA (Da tirones) ===========
 
         if (isShooting)
         {
@@ -58,11 +55,11 @@ public class Shooter : Weapon
 
             if (GetComponentInParent<PlayerNetworking>().isOwnByThisInstance)
             {
-                GetComponentInParent<PlayerNetworking>().weaponRngState = Random.state;
+                GetComponentInParent<PlayerArmament>().weaponRngState = Random.state;
             }
             else
             {
-                Random.state = GetComponentInParent<PlayerNetworking>().weaponRngState;
+                Random.state = GetComponentInParent<PlayerArmament>().weaponRngState;
             }
 
             // RNG
