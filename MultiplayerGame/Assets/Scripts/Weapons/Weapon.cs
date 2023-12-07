@@ -38,12 +38,6 @@ public class Weapon : MonoBehaviour
     [Tooltip("Paint radius from that spray")]
     [SerializeField] protected float sprayPaintRadius = 1.0f;
 
-    [Header("Painting (Own Character Position)")]
-    [Tooltip("Paint own feet when shooting")]
-    public bool paintOwnFeet = true;
-    [Tooltip("Probability to paint your own feet each shoot")][Range(0.0f, 1.0f)] public float paintProbability = 1f;
-    public float ownPaintRadius = 1;
-
     #endregion
 
     #region Debug

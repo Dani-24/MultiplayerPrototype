@@ -101,17 +101,6 @@ public class Shooter : Weapon
                 sprayDrop.GetComponent<Bullet>().meshScale = sprayDropRadius;
             }
 
-            // Paint own feet
-            if (Random.Range(0.0f, 1.0f) < paintProbability)
-            {
-                RaycastHit hit;
-                Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hit, 2f, GetComponentInParent<PlayerMovement>().groundLayers[0]);
-                if (hit.collider.GetComponent<Paintable>())
-                {
-                    PaintManager.instance.Paint(hit.collider.GetComponent<Paintable>(), hit.point, ownPaintRadius, pHardness, pStrength, SceneManagerScript.Instance.GetTeamColor(teamTag));
-                }
-            }
-
             // Cost ink
             GetComponentInParent<PlayerStats>().ink -= shootCost;
 
