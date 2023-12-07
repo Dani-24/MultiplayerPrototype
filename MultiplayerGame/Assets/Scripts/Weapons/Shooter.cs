@@ -86,6 +86,7 @@ public class Shooter : Weapon
             bullet.GetComponent<Bullet>().strength = pStrength;
             bullet.GetComponent<Bullet>().meshScale = 1;
 
+            // Ink droplets
             for (int i = 0; i < sprayDropletsNum; i++)
             {
                 GameObject sprayDrop = Instantiate(bulletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
@@ -98,6 +99,17 @@ public class Shooter : Weapon
                 sprayDrop.GetComponent<Bullet>().hardness = pHardness;
                 sprayDrop.GetComponent<Bullet>().strength = pStrength;
                 sprayDrop.GetComponent<Bullet>().meshScale = sprayDropRadius;
+            }
+
+            // Paint own feet
+            if (Random.Range(0.0f, 1.0f) < paintProbability)
+            {
+                RaycastHit hit;
+                Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hit, 2f, GetComponentInParent<PlayerMovement>().groundLayers[0]);
+                if (hit.collider.GetComponent<Paintable>())
+                {
+                    PaintManager.instance.Paint(hit.collider.GetComponent<Paintable>(), hit.point, ownPaintRadius, pHardness, pStrength, SceneManagerScript.Instance.GetTeamColor(teamTag));
+                }
             }
 
             // Cost ink

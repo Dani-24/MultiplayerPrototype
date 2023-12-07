@@ -94,7 +94,8 @@ MonoBehaviour:
   sprayDropRadius: 0.7
   sprayPaintRadius: 2.25
   paintOwnFeet: 1
-  ownPaintRadius: 1
+  paintProbability: 0.65
+  ownPaintRadius: 1.5
   spawnBulletPosition: {fileID: 3150462560917926386}
   shootingVerticalOffset: 0.52
   weaponMesh: {fileID: 1983471487978947646}

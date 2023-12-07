@@ -30,6 +30,7 @@ public class Weapon : MonoBehaviour
     public float pStrength = 1;
     public float pHardness = 1;
 
+    [Header("Painting (Droplets)")]
     [Tooltip("Painting bullets (no dmg just paint)")]
     [SerializeField] protected int sprayDropletsNum = 0;
     [Tooltip("Radius from that bullet (mesh)")]
@@ -37,9 +38,10 @@ public class Weapon : MonoBehaviour
     [Tooltip("Paint radius from that spray")]
     [SerializeField] protected float sprayPaintRadius = 1.0f;
 
-    [Tooltip("WIP")] // !!!
+    [Header("Painting (Own Character Position)")]
+    [Tooltip("Paint own feet when shooting")]
     public bool paintOwnFeet = true;
-    [Tooltip("WIP")] // !!!
+    [Tooltip("Probability to paint your own feet each shoot")][Range(0.0f, 1.0f)] public float paintProbability = 1f;
     public float ownPaintRadius = 1;
 
     #endregion
