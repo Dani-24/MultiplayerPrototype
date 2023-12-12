@@ -72,23 +72,28 @@ public class PlayerNetworking : MonoBehaviour
         pPck.rotation = GetComponent<PlayerMovement>().playerBody.transform.rotation;
         pPck.wpRNG = GetComponent<PlayerArmament>().weaponRngState;
 
+        pPck.netID = networkID;
+
         return pPck;
     }
 
     public void SetPlayerInfoFromPck(PlayerPackage pck)
     {
-        if (GetComponent<PlayerStats>().teamTag != pck.teamTag) GetComponent<PlayerStats>().ChangeTag(pck.teamTag);
+        if (!isOwnByThisInstance)
+        {
+            if (GetComponent<PlayerStats>().teamTag != pck.teamTag) GetComponent<PlayerStats>().ChangeTag(pck.teamTag);
 
-        GetComponent<PlayerMovement>().SetMoveInput(pck.moveInput);
-        GetComponent<PlayerMovement>().SetRunInput(pck.running);
-        GetComponent<PlayerMovement>().SetJumpInput(pck.jumping);
-        GetComponent<PlayerArmament>().SetFire(pck.shooting);
-        GetComponent<PlayerArmament>().SetSubFire(pck.shootingSub);
-        GetComponent<PlayerOrbitCamera>().SetCamRot(pck.camRot);
-        GetComponent<PlayerMovement>().SetPosition(pck.position);
-        GetComponent<PlayerMovement>().SetRotation(pck.rotation);
-        GetComponent<PlayerArmament>().weaponRngState = pck.wpRNG;
+            GetComponent<PlayerMovement>().SetMoveInput(pck.moveInput);
+            GetComponent<PlayerMovement>().SetRunInput(pck.running);
+            GetComponent<PlayerMovement>().SetJumpInput(pck.jumping);
+            GetComponent<PlayerArmament>().SetFire(pck.shooting);
+            GetComponent<PlayerArmament>().SetSubFire(pck.shootingSub);
+            GetComponent<PlayerOrbitCamera>().SetCamRot(pck.camRot);
+            GetComponent<PlayerMovement>().SetPosition(pck.position);
+            GetComponent<PlayerMovement>().SetRotation(pck.rotation);
+            GetComponent<PlayerArmament>().weaponRngState = pck.wpRNG;
 
-        nameTagText.text = pck.userName;
+            nameTagText.text = pck.userName;
+        }
     }
 }

@@ -68,7 +68,6 @@ public class PlayerMovement : MonoBehaviour
         originalStepOffset = controller.stepOffset;
 
         texture = new Texture2D(1024, 1024, TextureFormat.RGBA32, false);
-
     }
 
     void Update()
