@@ -757,14 +757,9 @@ public class ConnectionPackage
     public bool setColor = false;
     public Color alphaColor;
     public Color betaColor;
-}
 
-[System.Serializable]
-public class PlayerToAdd
-{
-    public int id;
-    public bool own;
-    public Vector3 position;
+    // Manual Disconnect
+    public bool setDisconnected = false;
 }
 
 // Scenes Packages
