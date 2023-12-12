@@ -79,10 +79,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   teamTag: 
   weaponName: Shooter Rng
-  cadence: 13
+  cadence: 15
   shootDMG: 24
   bulletSpeed: 50
-  weaponRange: 40
+  weaponRange: 12.5
   rng: 20
   jumpRng: 30
   shootCost: 0.32
@@ -91,13 +91,10 @@ MonoBehaviour:
   pStrength: 1
   pHardness: 0
   sprayDropletsNum: 4
-  sprayDropRadius: 0.7
+  sprayDropRadius: 0.65
   sprayPaintRadius: 2.25
-  paintOwnFeet: 1
-  paintProbability: 0.65
-  ownPaintRadius: 1.5
   spawnBulletPosition: {fileID: 3150462560917926386}
-  shootingVerticalOffset: 0.52
+  shootingVerticalOffset: 0.225
   weaponMesh: {fileID: 1983471487978947646}
   bulletPrefab: {fileID: 4972482428676012466, guid: 75688502e096c3f4798c1d8e465b1285,
     type: 3}

@@ -111,7 +111,7 @@ Transform:
   m_GameObject: {fileID: 4972482428676012466}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.55, y: 0.55, z: 0.55}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1513989519296947346}
@@ -134,11 +134,13 @@ MonoBehaviour:
   speed: 10
   range: 5
   DMG: 35
-  customGravity: 9.81
+  customGravity: -17.5
+  fallSpeedMultiplier: 10
   meshScale: 1
   radius: 1
   strength: 1
   hardness: 1
+  bulletState: 0
   minYaxis: -20
   meshTransform: {fileID: 1513989519296947346}
 --- !u!54 &4648429456704870101
@@ -149,7 +151,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4972482428676012466}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 100
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

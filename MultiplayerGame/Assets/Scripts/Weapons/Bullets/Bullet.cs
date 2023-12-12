@@ -13,7 +13,10 @@ public class Bullet : MonoBehaviour
     public float speed = 10f;
     public float range = 5f;
     public float DMG = 35f;
-    public float customGravity = -9.81f;
+    [SerializeField] float customGravity = -9.8f;
+    [SerializeField] float fallSpeedMultiplier = 1f;
+
+    Vector3 initPos;
 
     public float meshScale = 1f;
     Vector3 meshScaleVec;
@@ -31,7 +34,9 @@ public class Bullet : MonoBehaviour
 
     [Header("Other")]
 
-    [SerializeField] float minYaxis = -20;
+    [SerializeField] BulletState bulletState;
+
+    [Tooltip("Y pos where bullet gets destroyed")][SerializeField] float minYaxis = -20;
     [SerializeField] Transform meshTransform;
 
     private void Awake()
@@ -42,8 +47,6 @@ public class Bullet : MonoBehaviour
     public void Start()
     {
         rb.velocity = transform.forward * speed;
-        float acc = (speed * speed) / (2 * range);
-        customGravity = acc / -9.81f;
 
         rend = GetComponentInChildren<Renderer>();
         if (rend != null)
@@ -56,12 +59,34 @@ public class Bullet : MonoBehaviour
         meshTransform.localScale = meshScaleVec;
 
         gameObject.tag = teamTag + "Bullet";
+
+        initPos = transform.position;
+
+        bulletState = BulletState.Shoot;
     }
 
     private void FixedUpdate()
     {
-        rb.velocity += new Vector3(0, customGravity, 0);
+        switch (bulletState)
+        {
+            case BulletState.Shoot:
 
+                // Range
+                if (Vector3.Distance(transform.position, initPos) > range)
+                {
+                    rb.velocity = Vector3.zero;
+                    bulletState = BulletState.Fall;
+                }
+
+                break;
+            case BulletState.Fall:
+
+                rb.velocity = new Vector3(Mathf.LerpUnclamped(rb.velocity.x, 0, fallSpeedMultiplier * Time.deltaTime), Mathf.LerpUnclamped(rb.velocity.y, customGravity, fallSpeedMultiplier/2 * Time.deltaTime), Mathf.LerpUnclamped(rb.velocity.z, 0, fallSpeedMultiplier * Time.deltaTime));
+
+                break;
+        }
+
+        // Delete if fall from the map
         if (transform.position.y < minYaxis)
         {
             Destroy(gameObject);
@@ -72,7 +97,7 @@ public class Bullet : MonoBehaviour
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
 
-        foreach(Collider collider in colliders)
+        foreach (Collider collider in colliders)
         {
             Paintable p = collider.gameObject.GetComponent<Paintable>();
             if (p != null)
@@ -82,5 +107,11 @@ public class Bullet : MonoBehaviour
             }
         }
         Destroy(gameObject);
+    }
+
+    public enum BulletState
+    {
+        Shoot,
+        Fall
     }
 }

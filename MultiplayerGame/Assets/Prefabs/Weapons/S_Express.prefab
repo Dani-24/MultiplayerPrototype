@@ -79,25 +79,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   teamTag: 
   weaponName: Shooter Express
-  cadence: 10
+  cadence: 12
   shootDMG: 28
-  bulletSpeed: 50
-  weaponRange: 50
-  rng: 4.5
-  jumpRng: 7
+  bulletSpeed: 60
+  weaponRange: 15
+  rng: 2.5
+  jumpRng: 6
   shootCost: 0.71
   moveSpeedMultiplier: 0.7
   pRadius: 3.1
   pStrength: 1
   pHardness: 0
   sprayDropletsNum: 4
-  sprayDropRadius: 0.65
+  sprayDropRadius: 0.6
   sprayPaintRadius: 2
-  paintOwnFeet: 1
-  paintProbability: 0.9
-  ownPaintRadius: 1.5
   spawnBulletPosition: {fileID: 3150462560917926386}
-  shootingVerticalOffset: 0.5
+  shootingVerticalOffset: 0.225
   weaponMesh: {fileID: 1983471487978947646}
   bulletPrefab: {fileID: 4972482428676012466, guid: 75688502e096c3f4798c1d8e465b1285,
     type: 3}
