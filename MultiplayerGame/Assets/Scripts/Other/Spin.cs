@@ -4,10 +4,16 @@ public class Spin : MonoBehaviour
 {
     [SerializeField] float speed = 1.0f;
 
-    
+    [SerializeField] bool useNet = true;
 
     void FixedUpdate()
     {
+        if (!useNet)
+        {
+            transform.Rotate(0, speed * Time.deltaTime, 0);
+            return;
+        }
+
         if (!GetComponent<NetGameObject>().connectedToServer)
         {
             transform.Rotate(0, speed * Time.deltaTime, 0);
