@@ -371,7 +371,7 @@ public class ConnectionManager : MonoBehaviour
             {
                 #region Send Own Player Data
 
-                if (connectionStablished && delay > delayBetweenPckgs)
+                if (connectionStablished /*&& delay > delayBetweenPckgs*/)
                 {
                     try
                     {
@@ -476,7 +476,7 @@ public class ConnectionManager : MonoBehaviour
             {
                 #region Update/Send Player Input
 
-                if (connectionStablished && delay > delayBetweenPckgs && serverIsConnected)
+                if (connectionStablished /*&& delay > delayBetweenPckgs*/ && serverIsConnected)
                 {
                     MemoryStream sendPStream = new MemoryStream();
                     Package pPck = WritePackage(Pck_type.Player);
