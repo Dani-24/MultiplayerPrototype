@@ -34,7 +34,7 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] string myIP;
 
     [Header("Packages")]
-    [SerializeField] int packageDataSize = 1024;
+    [SerializeField] int packageDataSize = 10240;
     [SerializeField] float delayBetweenPckgs = 0.1f;
     float delay;
     [SerializeField] bool enablePckLogs = true;
@@ -54,6 +54,9 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] AudioClip endClip;
     AudioSource audioSource;
     bool playJoin, playEnd;
+
+    [Header("Current Scene Online GameObjects")]
+    [SerializeField] List<NetGameObject> netGOs;
 
     [Header("Debug")]
     [SerializeField] bool connectAtStart = true;
@@ -549,6 +552,13 @@ public class ConnectionManager : MonoBehaviour
         }
 
         audioSource = GetComponent<AudioSource>();
+
+        int num = 0;
+        foreach(NetGameObject n in netGOs)
+        {
+            n.gOId = num;
+            num++;
+        }
     }
 
     void Update()
@@ -766,12 +776,9 @@ public class ConnectionPackage
 [System.Serializable]
 public class LobbyObjectsToSync
 {
-    // Literalmente se mueven en un único eje
     public float ratRot;
     public float clockRot;
     public float elevatorPos;
-
-    public int jukeBoxSong;
 }
 
 #endregion

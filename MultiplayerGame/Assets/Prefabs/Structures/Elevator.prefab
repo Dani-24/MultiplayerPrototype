@@ -378,8 +378,9 @@ GameObject:
   - component: {fileID: 5226698763872449355}
   - component: {fileID: 6007846490875011009}
   - component: {fileID: 5376530380615723722}
+  - component: {fileID: 2856658039719431961}
   m_Layer: 10
-  m_Name: Platform Trigger
+  m_Name: Elevator Platform Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -438,3 +439,18 @@ MonoBehaviour:
   speed: 8
   startHeight: 0
   goUp: 0
+--- !u!114 &2856658039719431961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6097006411322481009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a42e4f903198d2543a923b2ef4f00918, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gOId: 0
+  netValue: 0
+  connectedToServer: 0

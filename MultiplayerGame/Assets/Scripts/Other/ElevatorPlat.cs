@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ElevatorPlat : MonoBehaviour
@@ -20,25 +19,31 @@ public class ElevatorPlat : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // UP
-        if (elevator.position.y < (maxHeight) && goUp)
+        if (!GetComponent<NetGameObject>().connectedToServer)
         {
-            elevator.Translate(new Vector3(0, speed * Time.deltaTime, 0));
-        }
+            // UP
+            if (elevator.position.y < (maxHeight) && goUp)
+            {
+                elevator.Translate(new Vector3(0, speed * Time.deltaTime, 0));
+            }
 
-        // Down
-        if (elevator.position.y > startHeight && !goUp)
-        {
-            elevator.Translate(new Vector3(0, -speed * Time.deltaTime, 0));
-        }
-    }
+            // Down
+            if (elevator.position.y > startHeight && !goUp)
+            {
+                elevator.Translate(new Vector3(0, -speed * Time.deltaTime, 0));
+            }
 
-    private void Update()
-    {
-        // Avoid Bugs
-        if (elevator.position.y < startHeight)
+            // Avoid Bugs
+            if (elevator.position.y < startHeight)
+            {
+                elevator.position.Set(0, startHeight, 0);
+            }
+
+            GetComponent<NetGameObject>().netValue = elevator.position.y;
+        }
+        else
         {
-            elevator.position.Set(0, startHeight, 0);
+            elevator.position = new Vector3(transform.position.x, Mathf.LerpUnclamped(transform.position.y, GetComponent<NetGameObject>().netValue, speed * Time.deltaTime), transform.position.z);
         }
     }
 
