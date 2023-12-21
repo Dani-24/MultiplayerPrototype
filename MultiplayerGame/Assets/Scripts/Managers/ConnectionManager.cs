@@ -56,7 +56,8 @@ public class ConnectionManager : MonoBehaviour
     bool playJoin, playEnd;
 
     [Header("Current Scene Online GameObjects")]
-    [SerializeField] List<NetGameObject> netGOs, newNetGOs;
+    [SerializeField] List<NetGameObject> netGOs;
+    [SerializeField] List<netGO> newNetGOs;
 
     [Header("Debug")]
     [SerializeField] bool connectAtStart = true;
@@ -123,7 +124,19 @@ public class ConnectionManager : MonoBehaviour
         pck.type = type;
         pck.currentScene = sceneName;
 
-        if (isHosting) { pck.sceneNetGO = netGOs; }
+        #region Net Scene GameObject
+        if (isHosting && netGOs.Count > 0)
+        {
+            for(int i = 0; i < netGOs.Count; i++)
+            {
+                netGO netGO = new netGO();
+                netGO.id = netGOs[i].GOid;
+                netGO.variable = netGOs[i].netValue;
+
+                pck.sceneNetGO.Add(netGO);
+            }
+        }
+        #endregion
 
         if (enablePckLogs) Debug.Log("Sending Pck " + pck.type);
 
@@ -180,7 +193,10 @@ public class ConnectionManager : MonoBehaviour
             // CHANGE SCENE
         }
 
-        if (!isHosting && isConnected) { newNetGOs = pck.sceneNetGO; }
+        if (!isHosting && isConnected)
+        {
+            newNetGOs = pck.sceneNetGO;
+        }
 
         switch (pck.type)
         {
@@ -317,6 +333,11 @@ public class ConnectionManager : MonoBehaviour
             clientIsConnected = false;
 
             cleanPaint = true;
+
+            foreach(NetGameObject n in netGOs)
+            {
+                n.connectedToServer = false;
+            }
 
             playerPackages.Clear();
 
@@ -613,62 +634,7 @@ public class ConnectionManager : MonoBehaviour
         // Ping
         pingCounter -= Time.deltaTime;
 
-        #region Update GameObjects / Players
-
-        // Update Own Player Info
-        if (SceneManagerScript.Instance.GetOwnPlayerInstance() != null && SceneManagerScript.Instance.gameState == SceneManagerScript.GameState.Gameplay)
-        {
-            ownPlayerNetID = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().networkID;
-            ownPlayerPck = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().GetPlayerPck();
-            ownPlayerPck.userName = userName;
-        }
-
-        if (isConnected)
-        {
-            // Net GO Update (Client only)
-            if (!isHosting)
-            {
-                for (int i = 0; i < netGOs.Count; i++)
-                {
-                    for (int j = 0; j < newNetGOs.Count; j++)
-                    {
-                        if (netGOs[i].GOid == newNetGOs[j].GOid)
-                        {
-                            netGOs[i].connectedToServer = true;
-                            netGOs[i].netValue = newNetGOs[j].netValue;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (isHosting && playerPackages.Count == 0)
-            {
-                playerPackages.Add(ownPlayerPck);
-            }
-
-            for (int i = 0; i < playerPackages.Count; i++)
-            {
-                bool alreadyExists = false;
-                for (int j = 0; j < SceneManagerScript.Instance.playersOnScene.Count; j++)
-                {
-                    if (SceneManagerScript.Instance.playersOnScene[j].GetComponent<PlayerNetworking>().networkID == playerPackages[i].netID)
-                    {
-                        SceneManagerScript.Instance.playersOnScene[j].GetComponent<PlayerNetworking>().SetPlayerInfoFromPck(playerPackages[i]);
-                        alreadyExists = true;
-                        break;
-                    }
-                }
-
-                if (!alreadyExists)
-                {
-                    GameObject newP = SceneManagerScript.Instance.CreateNewPlayer(false, playerPackages[i].position);
-                    newP.GetComponent<PlayerNetworking>().networkID = playerPackages[i].netID;
-                }
-            }
-        }
-
-        #endregion
+        UpdateGameObjects();
 
         sceneName = SceneManager.GetActiveScene().name;
 
@@ -701,6 +667,64 @@ public class ConnectionManager : MonoBehaviour
         }
 
         #endregion
+    }
+
+    void UpdateGameObjects()
+    {
+
+        // Update Own Player Info
+        if (SceneManagerScript.Instance.GetOwnPlayerInstance() != null && SceneManagerScript.Instance.gameState == SceneManagerScript.GameState.Gameplay)
+        {
+            ownPlayerNetID = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().networkID;
+            ownPlayerPck = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().GetPlayerPck();
+            ownPlayerPck.userName = userName;
+        }
+
+        if (isConnected)
+        {
+            // Net GO Update (Client only)
+            if (!isHosting)
+            {
+                for (int i = 0; i < netGOs.Count; i++)
+                {
+                    for (int j = 0; j < newNetGOs.Count; j++)
+                    {
+                        if (netGOs[i].GOid == newNetGOs[j].id)
+                        {
+                            netGOs[i].connectedToServer = true;
+                            netGOs[i].netValue = newNetGOs[j].variable;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (isHosting && playerPackages.Count == 0)
+            {
+                playerPackages.Add(ownPlayerPck);
+            }
+
+            for (int i = 0; i < playerPackages.Count; i++)
+            {
+                bool alreadyExists = false;
+                for (int j = 0; j < SceneManagerScript.Instance.playersOnScene.Count; j++)
+                {
+                    if (SceneManagerScript.Instance.playersOnScene[j].GetComponent<PlayerNetworking>().networkID == playerPackages[i].netID)
+                    {
+                        SceneManagerScript.Instance.playersOnScene[j].GetComponent<PlayerNetworking>().SetPlayerInfoFromPck(playerPackages[i]);
+                        alreadyExists = true;
+                        break;
+                    }
+                }
+
+                if (!alreadyExists)
+                {
+                    GameObject newP = SceneManagerScript.Instance.CreateNewPlayer(false, playerPackages[i].position);
+                    newP.GetComponent<PlayerNetworking>().networkID = playerPackages[i].netID;
+                }
+            }
+        }
+
     }
 
     void CleanPlayers()
@@ -747,7 +771,7 @@ class Package
     public int netID;
 
     public string currentScene;
-    public List<NetGameObject> sceneNetGO;
+    public List<netGO> sceneNetGO = new List<netGO>();
 
     public PlayerPackage playerPck = null;                                  // Esto lo devuelve el client
     public List<PlayerPackage> playersListPck = new List<PlayerPackage>();  // Esto lo devuelve el Server
@@ -798,13 +822,11 @@ public class ConnectionPackage
     public bool setDisconnected = false;
 }
 
-// Scenes Packages
 [System.Serializable]
-public class LobbyObjectsToSync
+public class netGO
 {
-    public float ratRot;
-    public float clockRot;
-    public float elevatorPos;
+    public int id;
+    public float variable;
 }
 
 #endregion
