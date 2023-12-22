@@ -154,12 +154,17 @@ public class ConnectionManager : MonoBehaviour
             case Pck_type.PlayerList:   // SERVER
 
                 // Update own player
-                for (int i = 0; i < playerPackages.Count; i++)
+                if (delay > delayBetweenPckgs)  // Eliminar este if mas adelante haciendo un buen delay enviando paquetes desde el server
                 {
-                    if (playerPackages[i].netID == ownPlayerPck.netID)
+                    delay = 0;
+
+                    for (int i = 0; i < playerPackages.Count; i++)
                     {
-                        playerPackages[i] = ownPlayerPck;
-                        break;
+                        if (playerPackages[i].netID == ownPlayerPck.netID)
+                        {
+                            playerPackages[i] = ownPlayerPck;
+                            break;
+                        }
                     }
                 }
 
@@ -409,7 +414,7 @@ public class ConnectionManager : MonoBehaviour
                         sendPStream = SerializeJson(pPck);
 
                         socket.SendTo(sendPStream.ToArray(), (int)sendPStream.Length, SocketFlags.None, remote);
-                        delay = 0;
+                        //delay = 0;
 
                     }
                     catch
@@ -504,7 +509,7 @@ public class ConnectionManager : MonoBehaviour
             {
                 #region Update/Send Player Input
 
-                if (connectionStablished /*&& delay > delayBetweenPckgs*/ && serverIsConnected)
+                if (connectionStablished && delay > delayBetweenPckgs && serverIsConnected)
                 {
                     MemoryStream sendPStream = new MemoryStream();
                     Package pPck = WritePackage(Pck_type.Player);
@@ -721,6 +726,7 @@ public class ConnectionManager : MonoBehaviour
                 {
                     GameObject newP = SceneManagerScript.Instance.CreateNewPlayer(false, playerPackages[i].position);
                     newP.GetComponent<PlayerNetworking>().networkID = playerPackages[i].netID;
+                    cleanPaint = true;
                 }
             }
         }
