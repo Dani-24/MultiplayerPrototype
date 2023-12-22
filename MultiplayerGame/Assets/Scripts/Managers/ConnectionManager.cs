@@ -728,7 +728,7 @@ public class ConnectionManager : MonoBehaviour
                 {
                     GameObject newP = SceneManagerScript.Instance.CreateNewPlayer(false, playerPackages[i].position);
                     newP.GetComponent<PlayerNetworking>().networkID = playerPackages[i].netID;
-                    cleanPaint = true;
+                    //cleanPaint = true;
                 }
             }
 
