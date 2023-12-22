@@ -114,11 +114,16 @@ public class SceneManagerScript : MonoBehaviour
         newP.GetComponent<PlayerNetworking>().isOwnByThisInstance = own;
 
         playersOnScene.Add(newP);
+
+        Debug.Log("Created new player at: " + _position);
+
         return newP;
     }
 
     public void DeletePlayer(GameObject player)
     {
+        Debug.Log("Deleting Player " + player.name);
+
         DeleteFromTeam(player);
         playersOnScene.Remove(player);
         Destroy(player);

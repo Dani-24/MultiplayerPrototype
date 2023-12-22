@@ -39,13 +39,12 @@ public class ConnectionManager : MonoBehaviour
     float delay;
     [SerializeField] bool enablePckLogs = true;
 
-    [Header("Pinging")]
-    [SerializeField] float pingCounter;
-    float pingInterval;
-    bool isPinging;
+    [SerializeField][Tooltip("In sec.")] float disconnectionTime = 5;
 
     [SerializeField] bool serverIsConnected;
     [SerializeField] bool clientIsConnected;
+
+    DateTime lastPckgDateTime;
 
     IPEndPoint ipep;
     EndPoint remote;
@@ -85,10 +84,10 @@ public class ConnectionManager : MonoBehaviour
 
     #endregion
 
-    #endregion
-
     bool cleanPaint = false;
     [SerializeField] GameObject sceneRoot;
+
+    #endregion
 
     #region Packages & Serialization
 
@@ -171,13 +170,6 @@ public class ConnectionManager : MonoBehaviour
                 pck.playersListPck = playerPackages;
 
                 break;
-            case Pck_type.Ping:
-
-                pck.pingPck = new PingPackage();
-
-                // Fill pingPck ??
-
-                break;
             case Pck_type.Connection:
 
                 pck.connPck = new ConnectionPackage();
@@ -190,7 +182,8 @@ public class ConnectionManager : MonoBehaviour
 
     void ReadPackage(Package pck)
     {
-        int pckDelay = (DateTime.UtcNow - pck.pckCreationTime).Milliseconds;
+        lastPckgDateTime = pck.pckCreationTime;
+        int pckDelay = (DateTime.UtcNow - lastPckgDateTime).Milliseconds;
         string pckLog = "Package from: " + pck.user + " (" + pck.IP + ") ms: " + pckDelay;
 
         if (pck.currentScene != sceneName)
@@ -228,9 +221,6 @@ public class ConnectionManager : MonoBehaviour
             case Pck_type.PlayerList:   // CLIENT
 
                 playerPackages = pck.playersListPck;
-
-                break;
-            case Pck_type.Ping: // Funcion aqui que interprete PingPackage
 
                 break;
             case Pck_type.Connection:   // Mensajes de conexión
@@ -574,8 +564,6 @@ public class ConnectionManager : MonoBehaviour
         //myIP = GetLocalIPv4();
         myIP = GetLocalIPAddress();
 
-        pingInterval = pingCounter;
-
         if (connectAtStart)
         {
             StartConnection();
@@ -636,8 +624,6 @@ public class ConnectionManager : MonoBehaviour
 
         // Delay between sending Packages
         delay += Time.deltaTime;
-        // Ping
-        pingCounter -= Time.deltaTime;
 
         UpdateGameObjects();
 
@@ -676,7 +662,6 @@ public class ConnectionManager : MonoBehaviour
 
     void UpdateGameObjects()
     {
-
         // Update Own Player Info
         if (SceneManagerScript.Instance.GetOwnPlayerInstance() != null && SceneManagerScript.Instance.gameState == SceneManagerScript.GameState.Gameplay)
         {
@@ -709,6 +694,7 @@ public class ConnectionManager : MonoBehaviour
                 playerPackages.Add(ownPlayerPck);
             }
 
+            // Manage Player Packages
             for (int i = 0; i < playerPackages.Count; i++)
             {
                 bool alreadyExists = false;
@@ -716,18 +702,40 @@ public class ConnectionManager : MonoBehaviour
                 {
                     if (SceneManagerScript.Instance.playersOnScene[j].GetComponent<PlayerNetworking>().networkID == playerPackages[i].netID)
                     {
-                        SceneManagerScript.Instance.playersOnScene[j].GetComponent<PlayerNetworking>().SetPlayerInfoFromPck(playerPackages[i]);
-                        alreadyExists = true;
-                        break;
+                        if (!SceneManagerScript.Instance.playersOnScene[j].GetComponent<PlayerNetworking>().isOwnByThisInstance)
+                        {
+                            SceneManagerScript.Instance.playersOnScene[j].GetComponent<PlayerNetworking>().SetPlayerInfoFromPck(playerPackages[i]);
+                            alreadyExists = true;
+
+                            // Check Client Disconnection
+                            if (playerPackages[i].setDisconnected || (DateTime.UtcNow - playerPackages[i].playerPckCreationTime).Seconds > disconnectionTime)
+                            {
+                                SceneManagerScript.Instance.DeletePlayer(SceneManagerScript.Instance.playersOnScene[j]);
+                                playerPackages[i].setDisconnected = true;
+                            }
+
+                            break;
+                        }
+                        else if (SceneManagerScript.Instance.playersOnScene[j].GetComponent<PlayerNetworking>().isOwnByThisInstance)
+                        {
+                            alreadyExists = true;
+                            break;
+                        }
                     }
                 }
 
-                if (!alreadyExists)
+                if (!alreadyExists && !playerPackages[i].setDisconnected)
                 {
                     GameObject newP = SceneManagerScript.Instance.CreateNewPlayer(false, playerPackages[i].position);
                     newP.GetComponent<PlayerNetworking>().networkID = playerPackages[i].netID;
                     cleanPaint = true;
                 }
+            }
+
+            // Disconnect yourself (Client)
+            if (!isHosting && serverIsConnected && (DateTime.UtcNow - lastPckgDateTime).Seconds > disconnectionTime)
+            {
+                disconnect = true;
             }
         }
 
@@ -756,7 +764,6 @@ public enum Pck_type
 {
     Player,
     PlayerList,
-    Ping,
     Connection
 }
 
@@ -782,7 +789,6 @@ class Package
     public PlayerPackage playerPck = null;                                  // Esto lo devuelve el client
     public List<PlayerPackage> playersListPck = new List<PlayerPackage>();  // Esto lo devuelve el Server
 
-    public PingPackage pingPck = null;
     public ConnectionPackage connPck = null;
 }
 
@@ -805,12 +811,10 @@ public class PlayerPackage
     public bool shootingSub = false;
 
     public UnityEngine.Random.State wpRNG;
-}
+    public DateTime playerPckCreationTime = DateTime.UtcNow;
 
-[System.Serializable]
-public class PingPackage
-{
-    public string msgP;
+    // Manual Disconnect
+    public bool setDisconnected = false;
 }
 
 [System.Serializable]
@@ -823,9 +827,6 @@ public class ConnectionPackage
     public bool setColor = false;
     public Color alphaColor;
     public Color betaColor;
-
-    // Manual Disconnect
-    public bool setDisconnected = false;
 }
 
 [System.Serializable]
