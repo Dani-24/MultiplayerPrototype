@@ -1,0 +1,52 @@
+--- Music ---
+000 Lobby Music		- ""				-> Diversas musicas q cambien cada X tiempo
+000 Lobby Ambient	- ""				-> Sonido de ambiente de ciudad
+001 Bridge Music	- ""				-> Musica random de una seleccion
+001 Bridge Ambient	- ""				-> Sonidos de poligono industrial
+002 Pool Music		- ""				-> Musica random de una seleccion
+002 Pool Ambient	- ""				-> Sonidos de magma + gas a presión + cacerolas
+003 Park Music		- ""				-> Musica random de una seleccion
+003 Park Ambient	- ""				-> Sonidos de parque + pajaros + aire + coches + gente blablabla
+
+--- UI ---
+Conectarse		- Discord Disc. Sound		-> Sonido de conexion o antena 
+Desconectarse		- Discord Conn. Sound		-> Sonido de apagado de luces o motor
+Conn. Error		- ""				-> Sonido de rechazo
+Button Accept		- ""				-> Sonido futurista simple
+Button Back		- ""				-> Sonido futurista simple
+
+--- Lobby ---
+Team Changer		- Impostor sfx			-> TO DELETE
+Match ready		- ""				-> Buscar sfx de microondas
+
+--- Mecanismos ---
+Rata q gira		- Free Bird (loop)
+Reloj			- "" (loop)			-> Buscar sonido de plataforma mecanica
+
+--- Player ---
+Walk			- ""				-> A cada paso de la animación (Buscar variaciones de terreno)
+Run			- "" (loop)			-> Sonido de bola metalica rodando (variacion en tinta / fuera de tinta)
+Jump:			- ""				-> Sonido de piston neumatico similar a salto
+Get Hit			- ""				-> Algun sonido que permita saber q te acaban de pegar
+Die			- ""				-> Algo rollo barra de metal cayendo
+Respawn (Lobby)		- ""				-> Sonido de iman???
+Respawn (In-game)	- ""				-> Gorrocoptero
+
+--- Weapons ---
+Shoot (S_Default)	- Weapon_Shot
+Shoot (S_Express)	- ""				-> Sonido de pote de pintura
+Shoot (S_Heavy)		- ""				-> Sonido de bidón o agua grave
+Shoot (S_Long)		- ""				-> Sonido relacionado con submarinos
+Shoot (S_Rng)		- ""				-> Sonido simple de pintura
+Shoot (GS_Default)	- Proyecto 3 Gun sfx
+
+Bullet Hit (S)		- ""				-> Para cuando choca con un player (Y la has disparado tu)
+Bullet Hit (GS)		- ""				-> Lo mismo pero version escopeta (Variante para si das todas las balas o no)
+Bullet Impact		- ""				-> Para el resto de choques y situaciones
+
+Throw Sub			- ""				-> Sonido igual en todas las subs cuando se lanzan
+Detonate (B_Default)		- ""				-> Explosion sfx
+Detonate (B_Delay)		- ""				-> Explosion sfx
+Activate Detonation (B_Default) - ""				-> Sonido de inflar o cargar algo
+Activate Detonation (B_Delay)	- ""				-> Tres pitidos suenan con un mismo delay y al cuarto peta
+Detonate (B_Fast)		- ""				-> Sonido de globo petando
