@@ -227,7 +227,7 @@ MonoBehaviour:
   maxFallSpeed: -15
   groundedFallSpeed: -6
   isGrounded: 0
-  jumpForce: 10
+  jumpForce: 11
   isJumping: 0
   groundCheckDist: 0.3
   groundLayers:

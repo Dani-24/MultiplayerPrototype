@@ -1,18 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PoolPlatform : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public bool changeWaterLevel = false;
+
+    [Header("Propierties")]
+    [SerializeField] float speed = 1f;
+    [SerializeField] float targetY;
+
+    private void FixedUpdate()
     {
-        
+        if (changeWaterLevel && transform.localPosition.y > targetY)
+        {
+            transform.Translate(speed * Time.deltaTime * -Vector3.up);
+        }
+        else if (changeWaterLevel)  // Just to be secure
+        {
+            transform.localPosition.Set(0, transform.localPosition.y, 0);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ChangeWaterLevel()
     {
-        
+        changeWaterLevel = true;
     }
 }
