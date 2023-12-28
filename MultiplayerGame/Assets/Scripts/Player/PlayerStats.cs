@@ -37,7 +37,7 @@ public class PlayerStats : MonoBehaviour
 
     private CharacterController controller;
 
-    [SerializeField] float minYaxis = -20;
+    [SerializeField][Range(-25f, 0f)] float minYaxis = -20;
 
     [SerializeField] MeshRenderer teamColorGO;
 

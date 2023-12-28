@@ -213,6 +213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerBody: {fileID: 3691067429168480238}
+  isUsingGamepad: 0
   moveInput: {x: 0, y: 0}
   moveSpeed: 7
   runSpeed: 15
@@ -228,13 +229,13 @@ MonoBehaviour:
   isGrounded: 0
   jumpForce: 10
   isJumping: 0
-  groundCheckDist: 0.25
+  groundCheckDist: 0.3
   groundLayers:
   - serializedVersion: 2
     m_Bits: 64
   - serializedVersion: 2
     m_Bits: 2048
-  isUsingGamepad: 0
+  interpolationSpeed: 20
   maskT: {fileID: 0}
   texture: {fileID: 0}
 --- !u!114 &2627168621151155890
@@ -256,6 +257,11 @@ MonoBehaviour:
   weaponShooting: 0
   currentWeapon: {fileID: 0}
   createdWeapon: 0
+  weaponRngState:
+    s0: 0
+    s1: 0
+    s2: 0
+    s3: 0
   subWeapon: {fileID: 4612145116355683483, guid: c298e5f021ab0d54d9b89b8975adf95b,
     type: 3}
   subWeaponShooting: 0
@@ -303,11 +309,6 @@ MonoBehaviour:
   nametagCanvas: {fileID: 6756723587330921007}
   nameTagText: {fileID: 3976171595095854184}
   recTrans: {fileID: 3926773513844841554}
-  weaponRngState:
-    s0: 0
-    s1: 0
-    s2: 0
-    s3: 0
 --- !u!114 &2185253808813212917
 MonoBehaviour:
   m_ObjectHideFlags: 0

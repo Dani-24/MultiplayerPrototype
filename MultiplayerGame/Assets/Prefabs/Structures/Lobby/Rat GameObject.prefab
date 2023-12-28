@@ -243,7 +243,7 @@ AudioSource:
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 1
+  DopplerLevel: 0
   MinDistance: 1
   MaxDistance: 20
   Pan2D: 0
@@ -333,6 +333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 50
+  useNet: 1
 --- !u!114 &2819590735596733047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,6 +346,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a42e4f903198d2543a923b2ef4f00918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gOId: 0
+  GOid: -1
   netValue: 0
   connectedToServer: 0

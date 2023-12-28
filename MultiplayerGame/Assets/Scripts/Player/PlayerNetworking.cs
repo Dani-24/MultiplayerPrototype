@@ -57,10 +57,13 @@ public class PlayerNetworking : MonoBehaviour
         pPck.running = GetComponent<PlayerMovement>().GetRunInput();
         pPck.jumping = GetComponent<PlayerMovement>().GetJumpInput();
 
-        if (GetComponent<PlayerStats>().ink >= GetComponent<PlayerArmament>().currentWeapon.GetComponent<Weapon>().shootCost)
-            pPck.shooting = GetComponent<PlayerArmament>().weaponShooting;
-        else
-            pPck.shooting = false;
+        if (GetComponent<PlayerArmament>().currentWeapon != null)
+        {
+            if (GetComponent<PlayerStats>().ink >= GetComponent<PlayerArmament>().currentWeapon.GetComponent<Weapon>().shootCost)
+                pPck.shooting = GetComponent<PlayerArmament>().weaponShooting;
+            else
+                pPck.shooting = false;
+        }
 
         if (GetComponent<PlayerStats>().ink >= GetComponent<PlayerArmament>().subWeapon.GetComponent<SubWeapon>().throwCost)
             pPck.shootingSub = GetComponent<PlayerArmament>().subWeaponShooting;
