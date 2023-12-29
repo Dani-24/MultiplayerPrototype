@@ -22,7 +22,7 @@ public class ElevatorPlat : MonoBehaviour
         if (!GetComponent<NetGameObject>().connectedToServer)
         {
             // UP
-            if (elevator.localPosition.y < (maxHeight) && goUp)
+            if (elevator.localPosition.y < maxHeight && goUp)
             {
                 elevator.Translate(new Vector3(0, speed * Time.deltaTime, 0));
             }
@@ -33,17 +33,22 @@ public class ElevatorPlat : MonoBehaviour
                 elevator.Translate(new Vector3(0, -speed * Time.deltaTime, 0));
             }
 
-            // Avoid Bugs
-            if (elevator.localPosition.y < startHeight)
+            #region Avoid Bugs
+            if (elevator.localPosition.y < startHeight && !goUp)
             {
                 elevator.localPosition.Set(0, startHeight, 0);
             }
+            if(elevator.localPosition.y > maxHeight && goUp)
+            {
+                elevator.localPosition.Set(0, maxHeight, 0);
+            }
+            #endregion
 
             GetComponent<NetGameObject>().netValue = elevator.localPosition.y;
         }
         else
         {
-            elevator.localPosition = new Vector3(transform.localPosition.x, Mathf.LerpUnclamped(transform.localPosition.y, GetComponent<NetGameObject>().netValue, speed * Time.deltaTime), transform.localPosition.z);
+            elevator.localPosition = new Vector3(elevator.localPosition.x, Mathf.LerpUnclamped(elevator.localPosition.y, GetComponent<NetGameObject>().netValue, speed * Time.deltaTime), elevator.localPosition.z);
         }
     }
 
