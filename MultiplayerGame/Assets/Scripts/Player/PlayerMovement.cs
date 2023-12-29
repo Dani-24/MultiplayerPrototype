@@ -74,26 +74,20 @@ public class PlayerMovement : MonoBehaviour
     {
         if (GetComponent<PlayerNetworking>().isOwnByThisInstance && GetComponent<PlayerStats>().playerInputEnabled)
         {
-            // UI Input
-            if (input.actions["ShowConsole"].WasReleasedThisFrame())
-            {
-                SceneManagerScript.Instance.showConsole = !SceneManagerScript.Instance.showConsole;
-            }
+            #region UI Input
 
-            if (input.actions["OpenUI"].WasReleasedThisFrame())
-            {
-                UI_Manager.Instance.openSettings = !UI_Manager.Instance.openSettings;
-            }
+            if (input.actions["ShowConsole"].WasReleasedThisFrame()) SceneManagerScript.Instance.showConsole = !SceneManagerScript.Instance.showConsole;
 
+            if (input.actions["OpenUI"].WasReleasedThisFrame()) 
+                if (UI_Manager.Instance.currentCanvasMenu != UI_Manager.GameUIs.Settings) UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Settings; else UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Gameplay;
+
+            if (input.actions["OpenOnline"].WasReleasedThisFrame())
+                if (UI_Manager.Instance.currentCanvasMenu != UI_Manager.GameUIs.Sett_Connection) UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Sett_Connection; else UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Gameplay;
+            
             // Check if using Gamepad or not
-            if (input.currentControlScheme == "Gamepad")
-            {
-                isUsingGamepad = true;
-            }
-            else
-            {
-                isUsingGamepad = false;
-            }
+            if (input.currentControlScheme == "Gamepad") isUsingGamepad = true; else isUsingGamepad = false;
+            
+            #endregion
 
             GetMovementDirection();
             BodyRotation();

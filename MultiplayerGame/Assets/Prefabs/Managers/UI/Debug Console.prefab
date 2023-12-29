@@ -3632,7 +3632,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4983333183252304621
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3739,7 +3739,7 @@ MonoBehaviour:
   startInPopupMode: 1
   startMinimized: 0
   toggleWithKey: 1
-  toggleKey: 9
+  toggleKey: 282
   enableSearchbar: 0
   topSearchbarMinWidth: 360
   receiveLogsWhileInactive: 0

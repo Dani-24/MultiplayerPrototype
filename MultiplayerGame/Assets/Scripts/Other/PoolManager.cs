@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PoolManager : MonoBehaviour
@@ -9,6 +10,8 @@ public class PoolManager : MonoBehaviour
     [SerializeField] GameObject TerrainBeta;
     [SerializeField] GameObject Water;
 
+    [SerializeField] List<AudioSource> audioSources = new List<AudioSource>();
+
     private void Update()
     {
         if (changeWaterLevel && !done || Input.GetKeyDown(KeyCode.Alpha0)) ChangeWaterLevel();
@@ -19,6 +22,12 @@ public class PoolManager : MonoBehaviour
         if (TerrainAlpha != null) TerrainAlpha.BroadcastMessage("ChangeWaterLevel");
         if (TerrainBeta != null) TerrainBeta.BroadcastMessage("ChangeWaterLevel");
         if (Water != null) Water.BroadcastMessage("ChangeWaterLevel");
+
+        foreach (var audioSource in audioSources)
+        {
+            audioSource.Play();
+        }
+
         done = true;
     }
 }

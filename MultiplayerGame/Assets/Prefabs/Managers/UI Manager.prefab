@@ -142,15 +142,12 @@ MonoBehaviour:
       type: 3}
     activated: 0
   - menu: 2
-    canvas: {fileID: 4802957401354487523, guid: 34fbb66b566dd2947a64c37a5193c3da,
+    canvas: {fileID: 4802957401354487523, guid: a613cea18b690f84885c524f3600a365,
       type: 3}
     activated: 0
   - menu: 3
     canvas: {fileID: 1232971230381155930, guid: 8898176544e6bd440991c2acc6aff874,
       type: 3}
-    activated: 0
-  - menu: 4
-    canvas: {fileID: 423162038235324111, guid: a613cea18b690f84885c524f3600a365, type: 3}
     activated: 0
   connectionStateCanvas: {fileID: 2823271574132684868, guid: 4fa5f018a7560d24aba0ad6f9e6a875a,
     type: 3}

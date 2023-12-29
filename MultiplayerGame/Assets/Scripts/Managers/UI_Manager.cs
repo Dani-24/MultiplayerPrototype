@@ -14,8 +14,6 @@ public class UI_Manager : MonoBehaviour
     public string userIP;
     public int userPort;
 
-    public bool openSettings;
-
     [Header("Debug")]
     public bool debugUIs = false;
     [SerializeField] GameObject debugConsole;
@@ -71,12 +69,6 @@ public class UI_Manager : MonoBehaviour
             }
         }
 
-        // ToggleSettings
-        if (openSettings && currentCanvasMenu != GameUIs.Sett_Connection)
-        {
-            currentCanvasMenu = GameUIs.Sett_Connection/* GameUIs.Settings*/;
-        }
-
         // Scene Game State
         switch (currentCanvasMenu)
         {
@@ -90,7 +82,6 @@ public class UI_Manager : MonoBehaviour
                 break;
             case GameUIs.Settings:
             case GameUIs.Sett_Connection:
-            case GameUIs.Sett_Graphics:
                 SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Settings;
                 Cursor.lockState = CursorLockMode.None;
                 break;
@@ -103,7 +94,6 @@ public class UI_Manager : MonoBehaviour
         Gameplay,
         Settings,
         Sett_Connection,
-        Sett_Graphics,
         None
     }
 
