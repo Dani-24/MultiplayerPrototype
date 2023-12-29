@@ -26,7 +26,7 @@ public class CanvasS_Conn : MonoBehaviour
         UI_Manager.Instance.userIP = ipInputF.text;
         if (portInputF.text != "") { UI_Manager.Instance.userPort = int.Parse(portInputF.text); } else { UI_Manager.Instance.userPort = 0; }
 
-        if (UI_Manager.Instance.currentCanvasMenu != UI_Manager.GameUIs.Sett_Connection) Button_OnClose();
+        if (!UI_Manager.Instance.openNetSettings) Button_OnClose();
     }
 
     void SelectDefaultButton()
@@ -38,6 +38,7 @@ public class CanvasS_Conn : MonoBehaviour
 
     public void Button_OnClose()
     {
+        UI_Manager.Instance.openNetSettings = false;
         UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Gameplay;
         Destroy(gameObject);
     }

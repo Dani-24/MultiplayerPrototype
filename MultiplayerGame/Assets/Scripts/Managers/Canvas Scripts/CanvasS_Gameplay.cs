@@ -24,6 +24,8 @@ public class CanvasS_Gameplay : MonoBehaviour
         playerGameObject = SceneManagerScript.Instance.GetOwnPlayerInstance();
         canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0;
+
+        UI_Manager.Instance.gameplayMenuCreated = true;
     }
 
     void Update()

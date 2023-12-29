@@ -15,35 +15,37 @@ public class CanvasS_Settings : MonoBehaviour
             if(menu.option == option) menu.panel.SetActive(true); else menu.panel.SetActive(false);
         }
 
-        if (UI_Manager.Instance.currentCanvasMenu != GameUIs.Settings) CloseSettings();
+        if (!UI_Manager.Instance.openSettings) CloseSettings();
     }
 
     void CloseSettings()
     {
+        UI_Manager.Instance.openNetSettings = false;
+        UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Gameplay;
         Destroy(gameObject);
     }
-}
 
-public enum SettingsOption
-{
-    Graphics,
-    Audio,
-    Input,
-    User
-}
-
-[System.Serializable]
-public class SettingsMenu
-{
-    public SettingsMenu(SettingsOption option, GameObject panel)
+    public enum SettingsOption
     {
-        this.option = option;
-        this.panel = panel;
+        Graphics,
+        Audio,
+        Input,
+        User
     }
 
-    public SettingsOption option;
-    public GameObject panel;
+    [System.Serializable]
+    public class SettingsMenu
+    {
+        public SettingsMenu(SettingsOption option, GameObject panel)
+        {
+            this.option = option;
+            this.panel = panel;
+        }
 
-    [HideInInspector]
-    public bool activated;
+        public SettingsOption option;
+        public GameObject panel;
+
+        [HideInInspector]
+        public bool activated;
+    }
 }

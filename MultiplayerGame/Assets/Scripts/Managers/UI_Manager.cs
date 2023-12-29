@@ -19,6 +19,10 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] GameObject debugConsole;
     [SerializeField] GameObject debugAnalysis;
 
+    public bool openSettings;
+    public bool openNetSettings;
+    public bool gameplayMenuCreated = false;
+
     #region Instance
 
     private static UI_Manager _instance;
@@ -50,11 +54,25 @@ public class UI_Manager : MonoBehaviour
         debugAnalysis.SetActive(debugUIs);
         debugConsole.SetActive(debugUIs);
 
-        // Manage UIs
+        #region Manage UIs
+
+        if (openSettings && currentCanvasMenu != GameUIs.Settings)
+        {
+            currentCanvasMenu = GameUIs.Settings;
+        }
+        else if (openNetSettings && currentCanvasMenu != GameUIs.Sett_Connection)
+        {
+            currentCanvasMenu = GameUIs.Sett_Connection;
+        }
+
         for (int i = 0; i < canvasMenus.Count; i++)
         {
             if (canvasMenus[i].menu == currentCanvasMenu)
             {
+                if (currentCanvasMenu == GameUIs.Gameplay && gameplayMenuCreated)
+                {
+                    continue;
+                }
                 if (!canvasMenus[i].activated)
                 {
                     GameObject canv = Instantiate(canvasMenus[i].canvas);
@@ -69,6 +87,13 @@ public class UI_Manager : MonoBehaviour
             }
         }
 
+        #endregion
+
+        ChangeGameState();
+    }
+
+    void ChangeGameState()
+    {
         // Scene Game State
         switch (currentCanvasMenu)
         {
@@ -86,6 +111,16 @@ public class UI_Manager : MonoBehaviour
                 Cursor.lockState = CursorLockMode.None;
                 break;
         }
+    }
+
+    public void ToggleSettings()
+    {
+        if(!openNetSettings) openSettings = !openSettings;
+    }
+
+    public void ToggleNetSettings()
+    {
+        if (!openSettings) openNetSettings = !openNetSettings;
     }
 
     public enum GameUIs

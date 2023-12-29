@@ -142,7 +142,7 @@ MonoBehaviour:
       type: 3}
     activated: 0
   - menu: 2
-    canvas: {fileID: 4802957401354487523, guid: a613cea18b690f84885c524f3600a365,
+    canvas: {fileID: 4897284113006708189, guid: a613cea18b690f84885c524f3600a365,
       type: 3}
     activated: 0
   - menu: 3
@@ -154,10 +154,12 @@ MonoBehaviour:
   userName: 
   userIP: 
   userPort: 0
-  openSettings: 0
   debugUIs: 1
   debugConsole: {fileID: 2791430834509912977}
   debugAnalysis: {fileID: 4515374472990123131}
+  openSettings: 0
+  openNetSettings: 0
+  gameplayMenuCreated: 0
 --- !u!1001 &5203936183005494669
 PrefabInstance:
   m_ObjectHideFlags: 0

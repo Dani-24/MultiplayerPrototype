@@ -72,23 +72,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        UIInputs();
+
         if (GetComponent<PlayerNetworking>().isOwnByThisInstance && GetComponent<PlayerStats>().playerInputEnabled)
         {
-            #region UI Input
-
-            if (input.actions["ShowConsole"].WasReleasedThisFrame()) SceneManagerScript.Instance.showConsole = !SceneManagerScript.Instance.showConsole;
-
-            if (input.actions["OpenUI"].WasReleasedThisFrame()) 
-                if (UI_Manager.Instance.currentCanvasMenu != UI_Manager.GameUIs.Settings) UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Settings; else UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Gameplay;
-
-            if (input.actions["OpenOnline"].WasReleasedThisFrame())
-                if (UI_Manager.Instance.currentCanvasMenu != UI_Manager.GameUIs.Sett_Connection) UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Sett_Connection; else UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Gameplay;
-            
-            // Check if using Gamepad or not
-            if (input.currentControlScheme == "Gamepad") isUsingGamepad = true; else isUsingGamepad = false;
-            
-            #endregion
-
             GetMovementDirection();
             BodyRotation();
             Movement();
@@ -257,6 +244,22 @@ public class PlayerMovement : MonoBehaviour
 
     #region Player Input Actions
 
+    void UIInputs()
+    {
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+        {
+            if (input.actions["ShowConsole"].WasReleasedThisFrame()) SceneManagerScript.Instance.showConsole = !SceneManagerScript.Instance.showConsole;
+
+            if (input.actions["OpenUI"].WasReleasedThisFrame()) UI_Manager.Instance.ToggleSettings();
+
+            if (input.actions["OpenOnline"].WasReleasedThisFrame()) UI_Manager.Instance.ToggleNetSettings();
+
+            // Check if using Gamepad or not
+            if (input.currentControlScheme == "Gamepad") isUsingGamepad = true; else isUsingGamepad = false;
+        }
+    }
+
+    // Movement
     void OnMove(InputValue value)
     {
         if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
