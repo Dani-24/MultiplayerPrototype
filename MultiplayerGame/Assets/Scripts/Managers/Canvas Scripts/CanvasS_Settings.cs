@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class CanvasS_Settings : MonoBehaviour
 {
-    [SerializeField] Button selectedButton;
+    [SerializeField][Tooltip("Button selected once the menu is open")] Button selectedButton;
 
     [SerializeField] SettingsOption option = SettingsOption.Graphics;
 
@@ -20,7 +20,11 @@ public class CanvasS_Settings : MonoBehaviour
     public Resolution[] resolutions;
     public List<string> resolutionOptions = new List<string>();
 
+    [Header("UI Elements to update")]
     [SerializeField] AudioMixer audioMixer;
+    [SerializeField] Slider masterVSlider;
+    [SerializeField] Slider musicVSlider;
+    [SerializeField] Slider sfxVSlider;
 
     [SerializeField] Slider mouseXSlider;
     [SerializeField] Slider mouseYSlider;
@@ -53,7 +57,7 @@ public class CanvasS_Settings : MonoBehaviour
             string option = resolutions[i].width + " x " + resolutions[i].height + " at " + resolutions[i].refreshRateRatio + "Hz";
             resolutionOptions.Add(option);
 
-            if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
+            if (resolutions[i].width == 1280 && resolutions[i].height == 720)
             {
                 currentOption = i;
             }
@@ -75,6 +79,10 @@ public class CanvasS_Settings : MonoBehaviour
         gamepadXText.text = gamepadXSlider.value.ToString();
         gamepadYText.text = gamepadYSlider.value.ToString();
 
+        // --- Audio ---
+        // Con un Save Manager guardar el volumen y aqui aplicarlo al Slider.value
+
+        // --- User ---
         changeName.text = UI_Manager.Instance.userName;
     }
 
@@ -86,6 +94,8 @@ public class CanvasS_Settings : MonoBehaviour
         }
 
         if (!UI_Manager.Instance.openSettings) CloseSettings();
+
+        Debug.Log(Screen.width + Screen.height);
     }
 
     void CloseSettings()
