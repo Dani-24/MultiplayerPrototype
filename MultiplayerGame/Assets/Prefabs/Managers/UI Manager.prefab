@@ -142,7 +142,7 @@ MonoBehaviour:
       type: 3}
     activated: 0
   - menu: 2
-    canvas: {fileID: 4897284113006708189, guid: a613cea18b690f84885c524f3600a365,
+    canvas: {fileID: 2382224418969265659, guid: a613cea18b690f84885c524f3600a365,
       type: 3}
     activated: 0
   - menu: 3

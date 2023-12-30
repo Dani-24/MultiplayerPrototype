@@ -25,6 +25,11 @@ public class CanvasS_Settings : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void ChangeMenu(int _option)
+    {
+        option = menus[_option].option;
+    }
+
     public enum SettingsOption
     {
         Graphics,
