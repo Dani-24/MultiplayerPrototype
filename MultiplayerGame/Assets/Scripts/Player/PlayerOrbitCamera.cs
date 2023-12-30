@@ -65,6 +65,32 @@ public class PlayerOrbitCamera : MonoBehaviour
         return playerCamera.transform;
     }
 
+    public void ChangeSens(bool mouse, bool xAxis, float value)
+    {
+        if (mouse)
+        {
+            if (xAxis)
+            {
+                mouseSens.x = value;
+            }
+            else
+            {
+                mouseSens.y = value;
+            }
+        }
+        else
+        {
+            if (xAxis)
+            {
+                gamepadSens.x = value;
+            }
+            else
+            {
+                gamepadSens.y = value;
+            }
+        }
+    }
+
     #region Player Input Actions
 
     void OnCamReset(InputValue value)
