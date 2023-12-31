@@ -707,7 +707,7 @@ public class ConnectionManager : MonoBehaviour
     void UpdateGameObjects()
     {
         // Update Own Player Info
-        if (SceneManagerScript.Instance.GetOwnPlayerInstance() != null && SceneManagerScript.Instance.gameState == SceneManagerScript.GameState.Gameplay)
+        if (SceneManagerScript.Instance.GetOwnPlayerInstance() != null/* && SceneManagerScript.Instance.gameState == SceneManagerScript.GameState.Gameplay*/)
         {
             ownPlayerNetID = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().networkID;
             ownPlayerPck = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().GetPlayerPck();
@@ -756,6 +756,7 @@ public class ConnectionManager : MonoBehaviour
                             {
                                 SceneManagerScript.Instance.DeletePlayer(SceneManagerScript.Instance.playersOnScene[j]);
                                 playerPackages[i].setDisconnected = true;
+                                playEnd = true;
                             }
 
                             break;
@@ -772,7 +773,7 @@ public class ConnectionManager : MonoBehaviour
                 {
                     GameObject newP = SceneManagerScript.Instance.CreateNewPlayer(false, playerPackages[i].position);
                     newP.GetComponent<PlayerNetworking>().networkID = playerPackages[i].netID;
-                    //cleanPaint = true;
+                    cleanPaint = true;
                 }
             }
 
@@ -845,8 +846,8 @@ public class PlayerPackage
 
     public Vector3 position;
     public Quaternion rotation;
-    public Vector2 moveInput;   // Revisar si hace falta este actualmente
-    public Vector3 camRot;      // Usar para camara de muerte??? No, q la camara de muerte sea una orbital random y ya, Quitar esto entonces.
+    //public Vector2 moveInput;
+    public Vector3 camRot;      // Revisar si se quiere esto aun
 
     public bool running = false;
     public bool jumping = false;
@@ -857,6 +858,7 @@ public class PlayerPackage
     public UnityEngine.Random.State wpRNG;
     public DateTime playerPckCreationTime = DateTime.UtcNow;
 
+    public bool inputEnabled = false;
     // Manual Disconnect
     public bool setDisconnected = false;
 }

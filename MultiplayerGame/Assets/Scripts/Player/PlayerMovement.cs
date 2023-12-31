@@ -74,12 +74,21 @@ public class PlayerMovement : MonoBehaviour
     {
         UIInputs();
 
-        if (GetComponent<PlayerNetworking>().isOwnByThisInstance && GetComponent<PlayerStats>().playerInputEnabled)
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
-            GetMovementDirection();
-            BodyRotation();
-            Movement();
-            JumpingAndFalling();
+            if (GetComponent<PlayerStats>().playerInputEnabled)
+            {
+                GetMovementDirection();
+                BodyRotation();
+                Movement();
+                JumpingAndFalling();
+            }
+            else
+            {
+                Falling();
+
+                moveDir.Set(0, fallSpeed, 0);
+            }
         }
 
         //CheckGroundPaint();
@@ -147,7 +156,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void JumpingAndFalling()
+    void Falling()
     {
         if (fallSpeed > maxFallSpeed)
         {
@@ -157,6 +166,11 @@ public class PlayerMovement : MonoBehaviour
         {
             fallSpeed = maxFallSpeed;
         }
+    }
+
+    void JumpingAndFalling()
+    {
+        Falling();
 
         foreach (var layer in groundLayers)
         {
@@ -279,10 +293,11 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // For Network
-    public Vector2 GetMoveInput()
-    {
-        return moveInput;
-    }
+
+    //public Vector2 GetMoveInput()
+    //{
+    //    return moveInput;
+    //}
 
     public bool GetRunInput()
     {
@@ -294,10 +309,10 @@ public class PlayerMovement : MonoBehaviour
         return isJumping;
     }
 
-    public void SetMoveInput(Vector2 _input)
-    {
-        moveInput = _input;
-    }
+    //public void SetMoveInput(Vector2 _input)
+    //{
+    //    moveInput = _input;
+    //}
 
     public void SetRunInput(bool _run)
     {

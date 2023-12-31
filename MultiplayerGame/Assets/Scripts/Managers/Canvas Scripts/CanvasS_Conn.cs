@@ -82,6 +82,10 @@ public class CanvasS_Conn : MonoBehaviour
         switch (playMode)
         {
             case PlayMode.Local:
+
+                ConnectionManager.Instance.SetIP("");
+                ConnectionManager.Instance.SetPort(0);
+
                 ConnectionManager.Instance.reconnect = true;
                 currentPanel = PanelOptions.Room;
 
@@ -122,6 +126,8 @@ public class CanvasS_Conn : MonoBehaviour
         ConnectionManager.Instance.SetIP(inputField[0]);
         ConnectionManager.Instance.SetPort(int.Parse(inputField[1]));
         ConnectionManager.Instance.reconnect = true;
+
+        currentPanel = PanelOptions.Room;
 
         // Aqui se deberia hacer un check para ver si la IP introducida conecta a algo / es el formato que se pide
     }

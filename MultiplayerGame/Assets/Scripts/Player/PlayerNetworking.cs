@@ -53,7 +53,7 @@ public class PlayerNetworking : MonoBehaviour
         PlayerPackage pPck = new PlayerPackage();
 
         pPck.teamTag = GetComponent<PlayerStats>().teamTag;
-        pPck.moveInput = GetComponent<PlayerMovement>().GetMoveInput();
+        //pPck.moveInput = GetComponent<PlayerMovement>().GetMoveInput();
         pPck.running = GetComponent<PlayerMovement>().GetRunInput();
         pPck.jumping = GetComponent<PlayerMovement>().GetJumpInput();
 
@@ -77,6 +77,8 @@ public class PlayerNetworking : MonoBehaviour
 
         pPck.netID = networkID;
 
+        pPck.inputEnabled = GetComponent<PlayerStats>().playerInputEnabled;
+
         return pPck;
     }
 
@@ -84,7 +86,7 @@ public class PlayerNetworking : MonoBehaviour
     {
         if (GetComponent<PlayerStats>().teamTag != pck.teamTag) GetComponent<PlayerStats>().ChangeTag(pck.teamTag);
 
-        GetComponent<PlayerMovement>().SetMoveInput(pck.moveInput);
+        //GetComponent<PlayerMovement>().SetMoveInput(pck.moveInput);
         GetComponent<PlayerMovement>().SetRunInput(pck.running);
         GetComponent<PlayerMovement>().SetJumpInput(pck.jumping);
         GetComponent<PlayerArmament>().SetFire(pck.shooting);
@@ -93,6 +95,15 @@ public class PlayerNetworking : MonoBehaviour
         GetComponent<PlayerMovement>().SetPosition(pck.position);
         GetComponent<PlayerMovement>().SetRotation(pck.rotation);
         GetComponent<PlayerArmament>().weaponRngState = pck.wpRNG;
+
+        if (!pck.inputEnabled)
+        {
+            nameTagText.color = Color.grey;
+        }
+        else
+        {
+            nameTagText.color = Color.white;
+        }
 
         nameTagText.text = pck.userName;
     }
