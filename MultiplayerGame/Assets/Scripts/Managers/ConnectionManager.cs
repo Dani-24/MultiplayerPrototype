@@ -603,10 +603,7 @@ public class ConnectionManager : MonoBehaviour
             {
                 Debug.Log(e.ToString());
 
-                //if (serverIsConnected)
-                //{
-                    EndConnection();
-                //}
+                EndConnection();
             }
         }
     }
