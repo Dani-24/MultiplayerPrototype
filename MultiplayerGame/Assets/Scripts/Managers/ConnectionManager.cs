@@ -7,6 +7,7 @@ using System.IO;
 using System;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using Unity.Mathematics;
 
 public class ConnectionManager : MonoBehaviour
 {
@@ -397,10 +398,11 @@ public class ConnectionManager : MonoBehaviour
 
         for (int i = 1; i <= 9050; i++)
         {
-            if (IsPortAvailable(i))
+            int j = UnityEngine.Random.Range(0, 9050);
+            if (IsPortAvailable(j))
             {
-                Debug.Log("Port " + i + " is available");
-                return i;
+                Debug.Log("Port " + j + " is available");
+                return j;
             }
         }
 
