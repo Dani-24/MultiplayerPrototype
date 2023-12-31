@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,8 +8,10 @@ public class SceneManagerScript : MonoBehaviour
     public string sceneName;
     public GameState gameState;
 
+    [Header("Scene Transitioning")]
     [SerializeField] string sceneToLoad;
     [SerializeField] bool loadScene = false;
+    [SerializeField] float timeToLoad = 5.0f;
 
     [Header("Debug")]
     public bool showConsole = false;
@@ -68,10 +71,7 @@ public class SceneManagerScript : MonoBehaviour
 
     void Start()
     {
-        if (loadScene)
-        {
-            ChangeSceneAsync(sceneToLoad);
-        }
+        if (loadScene) return;
 
         if (colorPairs.Count > 0 && !useTheseDebugColors)
         {
@@ -90,6 +90,20 @@ public class SceneManagerScript : MonoBehaviour
 
     void Update()
     {
+        if (loadScene)
+        {
+            if (timeToLoad > 0)
+            {
+                timeToLoad -= Time.deltaTime;
+            }
+            else
+            {
+                loadScene = false;
+                ChangeSceneAsync(sceneToLoad);
+            }
+            return;
+        }
+
         if (debugConsole != null)
         {
             debugConsole.SetActive(showConsole);
