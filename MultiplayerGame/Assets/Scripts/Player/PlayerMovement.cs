@@ -313,9 +313,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (controller != null)
         {
-            controller.enabled = false;
-            controller.transform.position = Vector3.LerpUnclamped(controller.transform.position, _position, interpolationSpeed * Time.deltaTime);
-            controller.enabled = true;
+            controller.Move(Vector3.LerpUnclamped(controller.transform.position, _position, interpolationSpeed * Time.deltaTime) - controller.transform.position);
         }
     }
 
