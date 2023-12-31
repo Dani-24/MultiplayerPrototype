@@ -94,8 +94,6 @@ public class CanvasS_Settings : MonoBehaviour
         }
 
         if (!UI_Manager.Instance.openSettings) CloseSettings();
-
-        Debug.Log(Screen.width + Screen.height);
     }
 
     void CloseSettings()
@@ -206,8 +204,5 @@ public class CanvasS_Settings : MonoBehaviour
 
         public SettingsOption option;
         public GameObject panel;
-
-        [HideInInspector]
-        public bool activated;
     }
 }

@@ -147,8 +147,7 @@ MonoBehaviour:
       type: 3}
     activated: 0
   - menu: 3
-    canvas: {fileID: 1232971230381155930, guid: 8898176544e6bd440991c2acc6aff874,
-      type: 3}
+    canvas: {fileID: 882168975451079490, guid: 8898176544e6bd440991c2acc6aff874, type: 3}
     activated: 0
   connectionStateCanvas: {fileID: 7742388779496106335, guid: 4fa5f018a7560d24aba0ad6f9e6a875a,
     type: 3}

@@ -11,8 +11,6 @@ public class UI_Manager : MonoBehaviour
 
     [Header("Data from UIs")]
     public string userName;
-    public string userIP;
-    public int userPort;
 
     [Header("Debug")]
     public bool debugUIs = false;

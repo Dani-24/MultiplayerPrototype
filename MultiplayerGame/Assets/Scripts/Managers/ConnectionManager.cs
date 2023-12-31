@@ -20,7 +20,6 @@ public class ConnectionManager : MonoBehaviour
     public bool isHosting = false;
 
     [Header("Connection Propierties")]
-
     [SerializeField] bool isConnected = false;
 
     Socket socket;
@@ -28,6 +27,8 @@ public class ConnectionManager : MonoBehaviour
     Thread serverReceiveThread, clientReceiveThread, serverSendThread, clientSendThread;
 
     byte[] data = new byte[1024];
+
+    public bool localHost = false;
 
     [SerializeField] string hostIP = "127.0.0.1"; string defaultIP = "127.0.0.1";
     [SerializeField] int port = 9050; int defaultPort = 9050;
@@ -126,7 +127,7 @@ public class ConnectionManager : MonoBehaviour
         #region Net Scene GameObject
         if (isHosting && netGOs.Count > 0)
         {
-            for(int i = 0; i < netGOs.Count; i++)
+            for (int i = 0; i < netGOs.Count; i++)
             {
                 netGO netGO = new netGO();
                 netGO.id = netGOs[i].GOid;
@@ -280,7 +281,9 @@ public class ConnectionManager : MonoBehaviour
 
             if (isHosting)
             {
-                ipep = new IPEndPoint(IPAddress.Any, port);             // As server allow connections from anywhere
+                port = FindAvailablePort();
+
+                ipep = new IPEndPoint(IPAddress.Any, port); // As server allow connections from anywhere
 
                 socket.Bind(ipep);
 
@@ -329,7 +332,7 @@ public class ConnectionManager : MonoBehaviour
 
             cleanPaint = true;
 
-            foreach(NetGameObject n in netGOs)
+            foreach (NetGameObject n in netGOs)
             {
                 n.connectedToServer = false;
             }
@@ -377,6 +380,59 @@ public class ConnectionManager : MonoBehaviour
             }
         }
         throw new System.Exception("No network adapters with an IPv4 address in the system!");
+    }
+
+    public string GetHostIP()
+    {
+        return hostIP;
+    }
+
+    public int GetCurrentPort()
+    {
+        return port;
+    }
+
+    int FindAvailablePort()
+    {
+        if (localHost) return defaultPort;
+
+        for (int i = 1; i <= 9050; i++)
+        {
+            if (IsPortAvailable(i))
+            {
+                Debug.Log("Port " + i + " is available");
+                return i;
+            }
+        }
+
+        throw new Exception("There is no Port Available");
+    }
+
+    bool IsPortAvailable(int _port)
+    {
+        try
+        {
+            using var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            ipep = new IPEndPoint(IPAddress.Any, _port); // As server allow connections from anywhere
+
+            socket.Bind(ipep);
+
+            return true;
+        }
+        catch (SocketException)
+        {
+            return false;
+        }
+    }
+
+    public void SetIP(string _ip)
+    {
+        if (_ip != "") { hostIP = _ip; } else { hostIP = defaultIP; }
+    }
+
+    public void SetPort(int _port)
+    {
+        if (_port != 0) { port = _port; } else { port = defaultPort; }
     }
 
     #endregion
@@ -522,6 +578,8 @@ public class ConnectionManager : MonoBehaviour
 
     void ClientReceiveThreadUpdate()
     {
+        Thread.Sleep(100);
+
         while (true)
         {
             try
@@ -543,14 +601,12 @@ public class ConnectionManager : MonoBehaviour
             }
             catch (SystemException e)
             {
-                // REVISAR ESTA PARTE YA Q SI EL CLIENT SE CONECTA PRIMERO LE SALE Q ESTÁ CONECTADO A ALGO CUANDO NO LO ESTÁ
-
                 Debug.Log(e.ToString());
 
-                if (serverIsConnected)
-                {
+                //if (serverIsConnected)
+                //{
                     EndConnection();
-                }
+                //}
             }
         }
     }
@@ -610,17 +666,8 @@ public class ConnectionManager : MonoBehaviour
 
         #endregion
 
-        #region Get values from UI
-
-        string getIP = UI_Manager.Instance.userIP;
-        int getPort = UI_Manager.Instance.userPort;
         string usName = UI_Manager.Instance.userName;
-
-        if (getIP != "") { hostIP = getIP; } else { hostIP = defaultIP; }
-        if (getPort != 0) { port = getPort; } else { port = defaultPort; }
         if (usName != "") { userName = usName; } else { userName = defaultUserName; }
-
-        #endregion
 
         // Delay between sending Packages
         delay += Time.deltaTime;
