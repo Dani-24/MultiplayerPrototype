@@ -37,6 +37,7 @@ public class CanvasS_Settings : MonoBehaviour
     [SerializeField] TMP_Text gamepadYText;
 
     [SerializeField] TMP_InputField changeName;
+    [SerializeField] TMP_Text namePlaceholder;
 
     void Start()
     {
@@ -83,7 +84,7 @@ public class CanvasS_Settings : MonoBehaviour
         // Con un Save Manager guardar el volumen y aqui aplicarlo al Slider.value
 
         // --- User ---
-        changeName.text = UI_Manager.Instance.userName;
+        namePlaceholder.text = UI_Manager.Instance.userName;
     }
 
     void Update()
@@ -96,13 +97,11 @@ public class CanvasS_Settings : MonoBehaviour
         if (!UI_Manager.Instance.openSettings) CloseSettings();
     }
 
-    void CloseSettings()
+    public void CloseSettings()
     {
-        UI_Manager.Instance.openNetSettings = false;
-        UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Gameplay;
+        if(changeName.text != UI_Manager.Instance.userName && changeName.text != "") UI_Manager.Instance.userName = changeName.text;
 
-        if(changeName.text != UI_Manager.Instance.userName) UI_Manager.Instance.userName = changeName.text;
-
+        UI_Manager.Instance.ToggleNetSettings();
         Destroy(gameObject);
     }
 
@@ -172,15 +171,6 @@ public class CanvasS_Settings : MonoBehaviour
     {
         SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().ChangeSens(false, false, value);
         gamepadYText.text = gamepadYSlider.value.ToString();
-    }
-
-    public void CloseGame()
-    {
-#if UNITY_EDITOR
-        EditorApplication.isPlaying = false;
-#endif
-
-        Application.Quit();
     }
 
     #endregion

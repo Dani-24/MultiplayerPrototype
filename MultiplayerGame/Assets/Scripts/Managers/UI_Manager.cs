@@ -11,6 +11,7 @@ public class UI_Manager : MonoBehaviour
 
     [Header("Data from UIs")]
     public string userName;
+    public string defaultName = "Player";
 
     [Header("Debug")]
     public bool debugUIs = false;
@@ -44,6 +45,7 @@ public class UI_Manager : MonoBehaviour
     {
         GameObject canv = Instantiate(connectionStateCanvas);
         canv.transform.SetParent(transform);
+        userName = defaultName;
     }
 
     void Update()
@@ -113,12 +115,14 @@ public class UI_Manager : MonoBehaviour
 
     public void ToggleSettings()
     {
-        if(!openNetSettings) openSettings = !openSettings;
+        openNetSettings = false;
+        openSettings = !openSettings;
     }
 
     public void ToggleNetSettings()
     {
-        if (!openSettings) openNetSettings = !openNetSettings;
+        openSettings = false;
+        openNetSettings = !openNetSettings;
     }
 
     public enum GameUIs

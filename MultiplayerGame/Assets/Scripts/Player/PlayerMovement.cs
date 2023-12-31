@@ -264,9 +264,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (input.actions["ShowConsole"].WasReleasedThisFrame()) SceneManagerScript.Instance.showConsole = !SceneManagerScript.Instance.showConsole;
 
-            if (input.actions["OpenUI"].WasReleasedThisFrame()) UI_Manager.Instance.ToggleSettings();
-
-            if (input.actions["OpenOnline"].WasReleasedThisFrame()) UI_Manager.Instance.ToggleNetSettings();
+            if (input.actions["OpenUI"].WasReleasedThisFrame()) UI_Manager.Instance.ToggleNetSettings();
 
             // Check if using Gamepad or not
             if (input.currentControlScheme == "Gamepad") isUsingGamepad = true; else isUsingGamepad = false;

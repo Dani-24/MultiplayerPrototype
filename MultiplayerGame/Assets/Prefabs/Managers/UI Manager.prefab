@@ -143,16 +143,17 @@ MonoBehaviour:
       type: 3}
     activated: 0
   - menu: 2
-    canvas: {fileID: 6016858368670607091, guid: a613cea18b690f84885c524f3600a365,
+    canvas: {fileID: 6338368243122574718, guid: a613cea18b690f84885c524f3600a365,
       type: 3}
     activated: 0
   - menu: 3
-    canvas: {fileID: 6735364564816721261, guid: 8898176544e6bd440991c2acc6aff874,
+    canvas: {fileID: 5070121001945324932, guid: 8898176544e6bd440991c2acc6aff874,
       type: 3}
     activated: 0
   connectionStateCanvas: {fileID: 7742388779496106335, guid: 4fa5f018a7560d24aba0ad6f9e6a875a,
     type: 3}
   userName: 
+  defaultName: Player
   debugUIs: 1
   debugConsole: {fileID: 2791430834509912977}
   debugAnalysis: {fileID: 4515374472990123131}

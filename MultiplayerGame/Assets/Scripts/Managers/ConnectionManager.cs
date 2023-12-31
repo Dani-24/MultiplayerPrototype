@@ -14,7 +14,6 @@ public class ConnectionManager : MonoBehaviour
 
     [Header("Instance Name")]
     public string userName;
-    string defaultUserName = "Player";
 
     [Tooltip("Is Server or Client")]
     public bool isHosting = false;
@@ -663,8 +662,7 @@ public class ConnectionManager : MonoBehaviour
 
         #endregion
 
-        string usName = UI_Manager.Instance.userName;
-        if (usName != "") { userName = usName; } else { userName = defaultUserName; }
+        userName = UI_Manager.Instance.userName;
 
         // Delay between sending Packages
         delay += Time.deltaTime;

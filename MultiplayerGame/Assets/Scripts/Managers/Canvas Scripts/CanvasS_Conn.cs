@@ -156,6 +156,17 @@ public class CanvasS_Conn : MonoBehaviour
         Application.Quit();
     }
 
+    // UI
+    public void OpenSettings()
+    {
+        UI_Manager.Instance.ToggleSettings();
+    }
+
+    public void OpenGear()
+    {
+        // WIP
+    }
+
     #endregion
 
     public enum PlayMode

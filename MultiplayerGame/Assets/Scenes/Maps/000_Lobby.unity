@@ -18146,6 +18146,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Debugging Quality
       objectReference: {fileID: 0}
+    - target: {fileID: 8802093922264436402, guid: 779b1e817705c4348803ded85f118d8f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

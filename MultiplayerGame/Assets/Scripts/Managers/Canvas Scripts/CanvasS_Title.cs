@@ -21,7 +21,11 @@ public class CanvasS_Title : MonoBehaviour
     {
         CameraManager.Instance.SwitchCamera(CameraManager.Instance.playerCamera);
 
-        UI_Manager.Instance.userName = nameInputField.text;
+        if(nameInputField.text != "")
+        {
+            UI_Manager.Instance.userName = nameInputField.text;
+        }
+
         UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Gameplay;
 
         Destroy(gameObject);
