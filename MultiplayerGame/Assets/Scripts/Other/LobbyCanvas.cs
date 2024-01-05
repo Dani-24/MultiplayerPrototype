@@ -22,14 +22,15 @@ public class LobbyCanvas : MonoBehaviour
 
         for (int i = 0; i < roomPlayersTexts.Count; i++)
         {
+            if (i < ConnectionManager.Instance.playerPackages.Count)
+            {
+                roomPlayersTexts[i].text = ConnectionManager.Instance.playerPackages[i].userName;
+                roomPlayersTexts[i].gameObject.GetComponentInChildren<Image>().color = SceneManagerScript.Instance.GetTeamColor(ConnectionManager.Instance.playerPackages[i].teamTag);
+                continue;
+            }
+
             roomPlayersTexts[i].text = "... ... ...";
             roomPlayersTexts[i].gameObject.GetComponentInChildren<Image>().color = new Vector4(1, 1, 1, 0.2f);
-        }
-
-        for (int i = 0; i < ConnectionManager.Instance.playerPackages.Count; i++)
-        {
-            roomPlayersTexts[i].text = ConnectionManager.Instance.playerPackages[i].userName;
-            roomPlayersTexts[i].gameObject.GetComponentInChildren<Image>().color = SceneManagerScript.Instance.GetTeamColor(ConnectionManager.Instance.playerPackages[i].teamTag);
         }
     }
 }

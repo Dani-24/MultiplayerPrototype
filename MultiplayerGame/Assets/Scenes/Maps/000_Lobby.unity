@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 3220073}
   - component: {fileID: 3220075}
   - component: {fileID: 3220074}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Team Color (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -478,7 +478,7 @@ GameObject:
   - component: {fileID: 149376123}
   - component: {fileID: 149376125}
   - component: {fileID: 149376124}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP) - Player (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -614,7 +614,7 @@ GameObject:
   - component: {fileID: 172331308}
   - component: {fileID: 172331310}
   - component: {fileID: 172331309}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP) - Player (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1626,7 +1626,7 @@ GameObject:
   - component: {fileID: 280008030}
   - component: {fileID: 280008032}
   - component: {fileID: 280008031}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Team Color
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3086,7 +3086,7 @@ GameObject:
   - component: {fileID: 485592088}
   - component: {fileID: 485592090}
   - component: {fileID: 485592089}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Team Color (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3694,7 +3694,7 @@ GameObject:
   - component: {fileID: 531631868}
   - component: {fileID: 531631870}
   - component: {fileID: 531631869}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP) - Player (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3830,7 +3830,7 @@ GameObject:
   - component: {fileID: 556501064}
   - component: {fileID: 556501066}
   - component: {fileID: 556501065}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Team Color
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6851,7 +6851,7 @@ GameObject:
   - component: {fileID: 789486722}
   - component: {fileID: 789486724}
   - component: {fileID: 789486723}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP) - Player (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8161,7 +8161,7 @@ GameObject:
   - component: {fileID: 915039394}
   - component: {fileID: 915039396}
   - component: {fileID: 915039395}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP) - Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9054,7 +9054,7 @@ GameObject:
   - component: {fileID: 947099782}
   - component: {fileID: 947099784}
   - component: {fileID: 947099783}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP) - Player (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9559,7 +9559,7 @@ GameObject:
   - component: {fileID: 1015809506}
   - component: {fileID: 1015809508}
   - component: {fileID: 1015809507}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Team Color
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11495,7 +11495,7 @@ GameObject:
   - component: {fileID: 1250770565}
   - component: {fileID: 1250770563}
   - component: {fileID: 1250770567}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Lobby Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11597,7 +11597,7 @@ GameObject:
   - component: {fileID: 1280254521}
   - component: {fileID: 1280254523}
   - component: {fileID: 1280254522}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Team Color
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13295,7 +13295,7 @@ GameObject:
   - component: {fileID: 1503632958}
   - component: {fileID: 1503632960}
   - component: {fileID: 1503632959}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP) - Player (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14150,7 +14150,7 @@ GameObject:
   - component: {fileID: 1636359558}
   - component: {fileID: 1636359560}
   - component: {fileID: 1636359559}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP) - Player (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14286,7 +14286,7 @@ GameObject:
   - component: {fileID: 1642415743}
   - component: {fileID: 1642415745}
   - component: {fileID: 1642415744}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Team Color
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14362,7 +14362,7 @@ GameObject:
   - component: {fileID: 1650824609}
   - component: {fileID: 1650824611}
   - component: {fileID: 1650824610}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP) - Player (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18107,7 +18107,7 @@ GameObject:
   - component: {fileID: 1933301638}
   - component: {fileID: 1933301640}
   - component: {fileID: 1933301639}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Team Color
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18711,13 +18711,13 @@ GameObject:
   - component: {fileID: 1977363655}
   - component: {fileID: 1977363657}
   - component: {fileID: 1977363656}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Panel - Room
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1977363655
 RectTransform:
   m_ObjectHideFlags: 0

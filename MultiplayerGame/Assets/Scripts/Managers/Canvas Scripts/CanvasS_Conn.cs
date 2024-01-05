@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-using static CanvasS_Settings;
 
 public class CanvasS_Conn : MonoBehaviour
 {
@@ -19,6 +17,9 @@ public class CanvasS_Conn : MonoBehaviour
     [Header("Connection Config UI")]
     [SerializeField] TMP_InputField ipInputF;
     [SerializeField] TMP_Text roomID;
+
+    [Header("Room Players")]
+    [SerializeField] List<TMP_Text> roomPlayersTexts = new List<TMP_Text>();
 
     void Start()
     {
@@ -39,6 +40,19 @@ public class CanvasS_Conn : MonoBehaviour
         if (currentPanel == PanelOptions.Room)
         {
             roomID.text = "Room ID: " + ConnectionManager.Instance.GetHostIP() + ":" + ConnectionManager.Instance.GetCurrentPort();
+        }
+
+        for (int i = 0; i < roomPlayersTexts.Count; i++)
+        {
+            if (i < ConnectionManager.Instance.playerPackages.Count)
+            {
+                roomPlayersTexts[i].text = ConnectionManager.Instance.playerPackages[i].userName;
+                roomPlayersTexts[i].gameObject.GetComponentInChildren<Image>().color = SceneManagerScript.Instance.GetTeamColor(ConnectionManager.Instance.playerPackages[i].teamTag);
+                continue;
+            }
+
+            roomPlayersTexts[i].text = "... ... ...";
+            roomPlayersTexts[i].gameObject.GetComponentInChildren<Image>().color = new Vector4(1, 1, 1, 0.2f);
         }
     }
 
