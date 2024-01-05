@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TowerObjective : MonoBehaviour
@@ -29,12 +30,21 @@ public class TowerObjective : MonoBehaviour
     float alphaCurrentDist = 0;
     float betaCurrentDist = 0;
 
+    [SerializeField] AudioClip alphaAudio;
+    [SerializeField] AudioClip betaAudio;
+    [SerializeField] AudioClip backwardsAudio;
+    AudioSource audioSource;
+
+    [SerializeField] MeshRenderer flag;
+
     [Header("Debug")]
     [SerializeField] float towerToTargetDist = 0.1f;
     [SerializeField] float backCont = 0f;
 
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         // Start ID
         for (int i = 0; i < checkpoints.Length; i++)
         {
@@ -45,13 +55,18 @@ public class TowerObjective : MonoBehaviour
             }
         }
 
-        //// Checkpoints Line between them
-        //for (int i = 0; i < checkpoints.Length; i++)
-        //{
-        //    LineRenderer lr = checkpoints[i].GetComponent<LineRenderer>();
+        // Checkpoints Line between them
+        LineRenderer lr;
+        for (int i = 0; i < checkpoints.Length - 1; i++)
+        {
+            lr = checkpoints[i].GetComponent<LineRenderer>();
 
-        //    lr.SetPosition(0, transform.position);
-        //}
+            lr.SetPosition(0, checkpoints[i].position);
+            lr.SetPosition(1, checkpoints[i + 1].position);
+        }
+
+        lr = checkpoints[checkpoints.Length - 1].GetComponent<LineRenderer>();
+        lr.enabled = false;
 
         // Total dist Alpha
         for (int i = nextCheckpointId; i < checkpoints.Length - 1; i++)
@@ -93,6 +108,8 @@ public class TowerObjective : MonoBehaviour
                     ChangeCheckpoint();
                 }
                 state = TowerState.Moving;
+
+                if (teamOnTower == "Alpha") audioSource.clip = alphaAudio; else audioSource.clip = betaAudio;
             }
             else
             {
@@ -123,6 +140,10 @@ public class TowerObjective : MonoBehaviour
         {
             case TowerState.Resting:
 
+                flag.material.color = Color.white;
+
+                audioSource.Stop();
+
                 if (Vector3.Distance(transform.position, checkpoints[startCheckpointId].position) < towerToTargetDist)
                 {
                     break;
@@ -135,6 +156,7 @@ public class TowerObjective : MonoBehaviour
                     {
                         backCont = 0;
                         if (teamOnTower == "Alpha") teamOnTower = "Beta"; else teamOnTower = "Alpha";
+
                         state = TowerState.Backing;
                         ChangeCheckpoint();
                     }
@@ -146,8 +168,22 @@ public class TowerObjective : MonoBehaviour
 
                 break;
             case TowerState.Moving:
+
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.Play();
+                    flag.material.color = SceneManagerScript.Instance.GetTeamColor(teamOnTower);
+                }
+                backCont = 0;
+
                 break;
             case TowerState.Backing:
+
+                if (!audioSource.isPlaying && audioSource.clip != backwardsAudio)
+                {
+                    audioSource.clip = backwardsAudio;
+                    audioSource.Play();
+                }
 
                 // End Backing
                 if (Vector3.Distance(transform.position, checkpoints[startCheckpointId].position) < towerToTargetDist)
@@ -164,13 +200,20 @@ public class TowerObjective : MonoBehaviour
         {
             nextCheckpointId++;
 
-            if (state != TowerState.Backing) state = TowerState.Moving;
+            if (state == TowerState.Backing) return;
+
+            state = TowerState.Moving;
+            if (audioSource.clip != alphaAudio) audioSource.clip = alphaAudio;
 
         }
         else if (teamOnTower == "Beta" && checkpoints[nextCheckpointId] != checkpoints[0])
         {
             nextCheckpointId--;
-            if (state != TowerState.Backing) state = TowerState.Moving;
+
+            if (state == TowerState.Backing) return;
+
+            state = TowerState.Moving;
+            if (audioSource.clip != betaAudio) audioSource.clip = betaAudio;
         }
         else
         {
@@ -184,17 +227,22 @@ public class TowerObjective : MonoBehaviour
         betaCurrentDist = 0;
 
         // Current dist for each team
-        for (int i = startCheckpointId; i < nextCheckpointId; i++)
+        if (teamOnTower == "Alpha")
         {
-            alphaCurrentDist += Vector3.Distance(checkpoints[i].position, checkpoints[i + 1].position);
+            for (int i = startCheckpointId; i < nextCheckpointId; i++)
+            {
+                alphaCurrentDist += Vector3.Distance(checkpoints[i].position, checkpoints[i + 1].position);
+            }
+            alphaCurrentDist -= Vector3.Distance(transform.position, checkpoints[nextCheckpointId].position);
         }
-        alphaCurrentDist -= Vector3.Distance(transform.position, checkpoints[nextCheckpointId].position);
-
-        for (int i = startCheckpointId; i > nextCheckpointId; i--)
+        else
         {
-            betaCurrentDist += Vector3.Distance(checkpoints[i].position, checkpoints[i - 1].position);
+            for (int i = startCheckpointId; i > nextCheckpointId; i--)
+            {
+                betaCurrentDist += Vector3.Distance(checkpoints[i].position, checkpoints[i - 1].position);
+            }
+            betaCurrentDist -= Vector3.Distance(transform.position, checkpoints[nextCheckpointId].position);
         }
-        betaCurrentDist -= Vector3.Distance(transform.position, checkpoints[nextCheckpointId].position);
 
         // Result
         alphaTravelDist = Mathf.Clamp01(alphaCurrentDist / alphaTotalDist);
