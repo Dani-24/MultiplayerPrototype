@@ -43,6 +43,19 @@ public class Shooter : Weapon
         {
             weaponMesh.transform.rotation = Quaternion.LookRotation(transform.forward);
         }
+
+        MaterialsFromTeamColor();
+    }
+
+    void MaterialsFromTeamColor()
+    {
+        if (rend.Count > 0)
+        {
+            foreach (Renderer r in rend)
+            {
+                r.material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
+            }
+        }
     }
 
     void Shoot()

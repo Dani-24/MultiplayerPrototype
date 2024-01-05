@@ -73,7 +73,7 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] int ownPlayerNetID = -1;
     [SerializeField] PlayerPackage ownPlayerPck;
 
-    [SerializeField] List<PlayerPackage> playerPackages = new List<PlayerPackage>();
+    public List<PlayerPackage> playerPackages = new List<PlayerPackage>();
 
     Color _alphaTcolor;
     Color _betaTcolor;
@@ -801,6 +801,14 @@ public class ConnectionManager : MonoBehaviour
     }
 
     #endregion
+}
+
+public enum ConnectionGameplayState
+{
+    Lobby,
+    Room,
+    ReadyToPlay,
+    Playing
 }
 
 #region Package Classes

@@ -99,6 +99,8 @@ MonoBehaviour:
   weaponMesh: {fileID: 2785036439796178944}
   bulletPrefab: {fileID: 4972482428676012466, guid: 75688502e096c3f4798c1d8e465b1285,
     type: 3}
+  rend:
+  - {fileID: 1505176968016637067}
 --- !u!82 &4956808182179389473
 AudioSource:
   m_ObjectHideFlags: 0
@@ -279,16 +281,47 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -6707136701357701900, guid: be0cc7447b5e8d848a8bfd3d81286dd3,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0bcbcf96661c9ab4d9194fcd62be6c0a, type: 2}
+    - target: {fileID: -6647513483498149043, guid: be0cc7447b5e8d848a8bfd3d81286dd3,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0bcbcf96661c9ab4d9194fcd62be6c0a, type: 2}
     - target: {fileID: 919132149155446097, guid: be0cc7447b5e8d848a8bfd3d81286dd3,
         type: 3}
       propertyPath: m_Name
       value: S_Default_low
       objectReference: {fileID: 0}
+    - target: {fileID: 4504848987222176218, guid: be0cc7447b5e8d848a8bfd3d81286dd3,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3b5bb737c8e510e46b63ce10bfde6075, type: 2}
+    - target: {fileID: 4649355186110187587, guid: be0cc7447b5e8d848a8bfd3d81286dd3,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4a275ed13fc0edc489122105e041b961, type: 2}
+    - target: {fileID: 6019422034700750476, guid: be0cc7447b5e8d848a8bfd3d81286dd3,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0bcbcf96661c9ab4d9194fcd62be6c0a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be0cc7447b5e8d848a8bfd3d81286dd3, type: 3}
+--- !u!23 &1505176968016637067 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4504848987222176218, guid: be0cc7447b5e8d848a8bfd3d81286dd3,
+    type: 3}
+  m_PrefabInstance: {fileID: 3055417688384658769}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2785036439796178944 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: be0cc7447b5e8d848a8bfd3d81286dd3,
