@@ -7,7 +7,6 @@ using System.IO;
 using System;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using Unity.Mathematics;
 
 public class ConnectionManager : MonoBehaviour
 {
@@ -18,6 +17,10 @@ public class ConnectionManager : MonoBehaviour
 
     [Tooltip("Is Server or Client")]
     public bool isHosting = false;
+
+    [Header("Room Specs")]
+    public int maxPlayers = 8;
+    public ConnectionGameplayState connGameplayState;
 
     [Header("Connection Propierties")]
     [SerializeField] bool isConnected = false;
@@ -64,6 +67,9 @@ public class ConnectionManager : MonoBehaviour
     public bool reconnect = false;
     public bool disconnect = false;
 
+    bool changeScene;
+    string sceneToChange;
+
     #region NET Data
 
     [Header("DEBUG NET DATA (Don't Edit)")]
@@ -84,9 +90,6 @@ public class ConnectionManager : MonoBehaviour
     bool pendingToClean = false;
 
     #endregion
-
-    bool cleanPaint = false;
-    [SerializeField] GameObject sceneRoot;
 
     #endregion
 
@@ -187,9 +190,11 @@ public class ConnectionManager : MonoBehaviour
         int pckDelay = (DateTime.UtcNow - lastPckgDateTime).Milliseconds;
         string pckLog = "Package from: " + pck.user + " (" + pck.IP + ") ms: " + pckDelay;
 
-        if (pck.currentScene != sceneName)
+        if (!isHosting && pck.currentScene != sceneName)
         {
             // CHANGE SCENE
+            sceneToChange = pck.currentScene;
+            changeScene = true;
         }
 
         if (!isHosting && isConnected)
@@ -226,6 +231,13 @@ public class ConnectionManager : MonoBehaviour
                 break;
             case Pck_type.Connection:   // Mensajes de conexión
 
+                if (!pck.connPck.canConnect && pck.IP == myIP)
+                {
+                    // Limit players
+                    EndConnection();
+                    break;
+                }
+
                 pckLog += " || ";
                 if (pck.connPck.isAnswer) { pckLog += "Answering to: "; };
                 pckLog += pck.connPck.message;
@@ -261,6 +273,7 @@ public class ConnectionManager : MonoBehaviour
         else
         {
             _instance = this;
+            DontDestroyOnLoad(this.gameObject);
         }
     }
 
@@ -330,7 +343,7 @@ public class ConnectionManager : MonoBehaviour
             serverIsConnected = false;
             clientIsConnected = false;
 
-            cleanPaint = true;
+            SceneManagerScript.Instance.cleanPaint = true;
 
             foreach (NetGameObject n in netGOs)
             {
@@ -501,14 +514,22 @@ public class ConnectionManager : MonoBehaviour
                     MemoryStream sendStream = new MemoryStream();
 
                     Package answerPck = WritePackage(Pck_type.Connection);
+                    answerPck.IP = receivedPck.IP; // Return same IP
                     answerPck.connPck.message = receivedPck.connPck.message;
                     answerPck.user = Network_User.Server;
                     answerPck.connPck.isAnswer = true;
 
-                    // Set Team Colors
-                    answerPck.connPck.setColor = true;
-                    answerPck.connPck.alphaColor = _alphaTcolor;
-                    answerPck.connPck.betaColor = _betaTcolor;
+                    if (playerPackages.Count >= maxPlayers || connGameplayState != ConnectionGameplayState.Lobby)
+                    {
+                        answerPck.connPck.canConnect = false;
+                    }
+                    else
+                    {
+                        // Set Team Colors
+                        answerPck.connPck.setColor = true;
+                        answerPck.connPck.alphaColor = _alphaTcolor;
+                        answerPck.connPck.betaColor = _betaTcolor;
+                    }
 
                     sendStream = SerializeJson(answerPck);
                     socket.SendTo(sendStream.ToArray(), (int)sendStream.Length, SocketFlags.None, remote);
@@ -519,7 +540,7 @@ public class ConnectionManager : MonoBehaviour
                 if (!clientIsConnected)
                 {
                     clientIsConnected = true;
-                    cleanPaint = true;
+                    SceneManagerScript.Instance.cleanPaint = true;
                 }
             }
         }
@@ -597,7 +618,7 @@ public class ConnectionManager : MonoBehaviour
                 if (!serverIsConnected)
                 {
                     serverIsConnected = true;
-                    cleanPaint = true;
+                    SceneManagerScript.Instance.cleanPaint = true;
                 }
             }
             catch (SystemException e)
@@ -656,12 +677,6 @@ public class ConnectionManager : MonoBehaviour
             CleanPlayers();
         }
 
-        if (cleanPaint)
-        {
-            sceneRoot.BroadcastMessage("CleanPaint");
-            cleanPaint = false;
-        }
-
         #endregion
 
         userName = UI_Manager.Instance.userName;
@@ -671,7 +686,15 @@ public class ConnectionManager : MonoBehaviour
 
         UpdateGameObjects();
 
+        // SCENE UPDATES
         sceneName = SceneManager.GetActiveScene().name;
+        if (changeScene)
+        {
+            changeScene = false;
+            netGOs.Clear();
+            SceneManagerScript.Instance.ChangeScene(sceneToChange);
+            sceneToChange = "";
+        }
 
         #region Get Server Colors
 
@@ -773,7 +796,7 @@ public class ConnectionManager : MonoBehaviour
                 {
                     GameObject newP = SceneManagerScript.Instance.CreateNewPlayer(false, playerPackages[i].position);
                     newP.GetComponent<PlayerNetworking>().networkID = playerPackages[i].netID;
-                    cleanPaint = true;
+                    SceneManagerScript.Instance.cleanPaint = true;
                 }
             }
 
@@ -806,8 +829,6 @@ public class ConnectionManager : MonoBehaviour
 public enum ConnectionGameplayState
 {
     Lobby,
-    Room,
-    ReadyToPlay,
     Playing
 }
 
@@ -855,7 +876,8 @@ public class PlayerPackage
     public Vector3 position;
     public Quaternion rotation;
     //public Vector2 moveInput;
-    public Vector3 camRot;      // Revisar si se quiere esto aun
+
+    public Vector3 camRot;
 
     public bool running = false;
     public bool jumping = false;
@@ -867,6 +889,7 @@ public class PlayerPackage
     public DateTime playerPckCreationTime = DateTime.UtcNow;
 
     public bool inputEnabled = false;
+
     // Manual Disconnect
     public bool setDisconnected = false;
 }
@@ -881,6 +904,9 @@ public class ConnectionPackage
     public bool setColor = false;
     public Color alphaColor;
     public Color betaColor;
+
+    // Ask server if the client can connect to the server
+    public bool canConnect = true;
 }
 
 [System.Serializable]

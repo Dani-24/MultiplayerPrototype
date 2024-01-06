@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -49,6 +48,10 @@ public class SceneManagerScript : MonoBehaviour
     public int maxPlayersPerTeam = 4;
 
     #endregion
+
+    [Header("For net")]
+    public bool cleanPaint = false;
+    [SerializeField] GameObject sceneRoot;
 
     #region Instance
 
@@ -117,6 +120,12 @@ public class SceneManagerScript : MonoBehaviour
         }
 
         sceneName = SceneManager.GetActiveScene().name;
+
+        if (cleanPaint)
+        {
+            sceneRoot.BroadcastMessage("CleanPaint");
+            cleanPaint = false;
+        }
     }
 
     #region Players Management

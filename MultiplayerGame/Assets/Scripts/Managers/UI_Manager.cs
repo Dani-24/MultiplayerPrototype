@@ -60,7 +60,7 @@ public class UI_Manager : MonoBehaviour
         {
             currentCanvasMenu = GameUIs.Settings;
         }
-        else if (openNetSettings && currentCanvasMenu != GameUIs.Sett_Connection)
+        else if (openNetSettings && currentCanvasMenu != GameUIs.Sett_Connection && currentCanvasMenu != GameUIs.Title)
         {
             currentCanvasMenu = GameUIs.Sett_Connection;
         }

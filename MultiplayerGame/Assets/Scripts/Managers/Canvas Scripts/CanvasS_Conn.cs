@@ -181,6 +181,11 @@ public class CanvasS_Conn : MonoBehaviour
         // WIP
     }
 
+    public void StartGame(string scene)
+    {
+        SceneManagerScript.Instance.ChangeScene(scene);
+    }
+
     #endregion
 
     public enum PlayMode
