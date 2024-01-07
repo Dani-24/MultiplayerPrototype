@@ -87,6 +87,11 @@ public class SceneManagerScript : MonoBehaviour
         // Add Base Player to players List
         if (playerGOAtScene != null)
         {
+            if (ConnectionManager.Instance.IsConnected() && ConnectionManager.Instance.ownPlayerNetID != -1)
+            {
+                playerGOAtScene.GetComponent<PlayerNetworking>().networkID = ConnectionManager.Instance.ownPlayerNetID;
+                playerGOAtScene.GetComponent<PlayerStats>().teamTag = ConnectionManager.Instance.ownPlayerPck.teamTag;
+            }
             playersOnScene.Add(playerGOAtScene);
         }
     }

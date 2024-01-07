@@ -76,8 +76,8 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] bool connectionStablished = false;
     string sceneName;
 
-    [SerializeField] int ownPlayerNetID = -1;
-    [SerializeField] PlayerPackage ownPlayerPck;
+    public int ownPlayerNetID = -1;
+    public PlayerPackage ownPlayerPck;
 
     public List<PlayerPackage> playerPackages = new List<PlayerPackage>();
 
