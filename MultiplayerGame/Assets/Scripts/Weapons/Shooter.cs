@@ -17,7 +17,7 @@ public class Shooter : Weapon
     {
         isShooting = GetComponentInParent<PlayerArmament>().weaponShooting;
 
-        // Rotation (for fixedUpdate)
+        // Aiming Rotation
         wpAimDirection = GetComponentInParent<PlayerArmament>().aimDirection;
         wpAimDirection.y += shootingVerticalOffset;
 
@@ -33,7 +33,12 @@ public class Shooter : Weapon
             shootCooldown = 1 / cadence;
         }
 
-        // =========== ROTACIÓN DEL ARMA (Da tirones) ===========
+        MaterialsFromTeamColor();
+    }
+
+    private void FixedUpdate()
+    {
+        // =========== ROTACIÓN DEL ARMA ===========
 
         if (isShooting)
         {
@@ -43,8 +48,6 @@ public class Shooter : Weapon
         {
             weaponMesh.transform.rotation = Quaternion.LookRotation(transform.forward);
         }
-
-        MaterialsFromTeamColor();
     }
 
     void MaterialsFromTeamColor()

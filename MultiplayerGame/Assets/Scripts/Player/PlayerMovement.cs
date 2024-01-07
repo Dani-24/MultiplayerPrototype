@@ -74,6 +74,11 @@ public class PlayerMovement : MonoBehaviour
     {
         UIInputs();
 
+        //CheckGroundPaint();
+    }
+
+    private void FixedUpdate()
+    {
         if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
             if (GetComponent<PlayerStats>().playerInputEnabled)
@@ -90,12 +95,6 @@ public class PlayerMovement : MonoBehaviour
                 moveDir.Set(0, fallSpeed, 0);
             }
         }
-
-        //CheckGroundPaint();
-    }
-
-    private void FixedUpdate()
-    {
         controller.Move(moveDir * Time.deltaTime);
     }
 
