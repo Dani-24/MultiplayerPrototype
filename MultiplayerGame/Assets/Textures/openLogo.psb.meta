@@ -94,7 +94,7 @@ ScriptedImporter:
     spritePosition: {x: 0, y: 0}
   mosaicSpriteImportData: []
   rigSpriteImportData:
-  - name: 4
+  - name: Demo Day Edition
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -102,10 +102,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 504
-      width: 193
-      height: 247
-    spriteID: d21f0f90cd144914bb10f3525d2de310
+      y: 808
+      width: 835
+      height: 265
+    spriteID: aa9d5928e9f29624f9cc96eb5cea2a7e
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -113,9 +113,9 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 504}
-    spritePosition: {x: 752, y: 608}
-  - name: LabSes
+    uvTransform: {x: 4, y: 808}
+    spritePosition: {x: 98, y: 301}
+  - name: openLogo
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -124,9 +124,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 862
-      height: 315
-    spriteID: e2b87c75110120f458bca465d6401f15
+      width: 1016
+      height: 796
+    spriteID: e082380804e93464ca06349a5829aae7
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -135,27 +135,6 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
-    spritePosition: {x: 70, y: 595}
-  - name: SayMyName
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 327
-      width: 1016
-      height: 169
-    spriteID: 33288f013da9e7d4283cc09ff36d47e9
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 327}
     spritePosition: {x: 0, y: 114}
   characterData:
     bones: []
@@ -191,33 +170,23 @@ ScriptedImporter:
   resliceFromLayer: 0
   mosaicPSDLayers: []
   rigPSDLayers:
-  - name: 4
-    spriteName: 4
+  - name: Demo Day Edition
+    spriteName: Demo Day Edition
     isGroup: 0
     parentIndex: -1
-    spriteID: d21f0f90cd144914bb10f3525d2de310
-    layerID: 31
-    mosaicPosition: {x: 4, y: 504}
+    spriteID: aa9d5928e9f29624f9cc96eb5cea2a7e
+    layerID: 5
+    mosaicPosition: {x: 4, y: 808}
     flatten: 0
     isImported: 1
     isVisible: 1
-  - name: LabSes
-    spriteName: LabSes
+  - name: openLogo
+    spriteName: openLogo
     isGroup: 0
     parentIndex: -1
-    spriteID: e2b87c75110120f458bca465d6401f15
-    layerID: 6
+    spriteID: e082380804e93464ca06349a5829aae7
+    layerID: 2
     mosaicPosition: {x: 4, y: 4}
-    flatten: 0
-    isImported: 1
-    isVisible: 1
-  - name: SayMyName
-    spriteName: SayMyName
-    isGroup: 0
-    parentIndex: -1
-    spriteID: 33288f013da9e7d4283cc09ff36d47e9
-    layerID: 13
-    mosaicPosition: {x: 4, y: 327}
     flatten: 0
     isImported: 1
     isVisible: 1
