@@ -334,5 +334,12 @@ public class PlayerMovement : MonoBehaviour
         playerBody.transform.rotation = Quaternion.LerpUnclamped(playerBody.transform.rotation, _rot, interpolationSpeed * Time.deltaTime);
     }
 
+    public void TeleportToSpawnPos()
+    {
+        controller.enabled = false;
+        transform.position = GetComponent<PlayerStats>().spawnPos;
+        controller.enabled = true;
+    }
+
     #endregion
 }

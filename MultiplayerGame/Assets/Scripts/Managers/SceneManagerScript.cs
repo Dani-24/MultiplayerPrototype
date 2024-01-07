@@ -53,6 +53,9 @@ public class SceneManagerScript : MonoBehaviour
     public bool cleanPaint = false;
     [SerializeField] GameObject sceneRoot;
 
+    [SerializeField] bool useSpawnPoints = false;
+    [SerializeField] Transform[] spawnPoints;
+
     #region Instance
 
     private static SceneManagerScript _instance;
@@ -99,6 +102,21 @@ public class SceneManagerScript : MonoBehaviour
 
     void Update()
     {
+        // Set your spawn position
+        if (useSpawnPoints)
+        {
+            useSpawnPoints = false;
+            for (int i = 0; i < ConnectionManager.Instance.playerPackages.Count; i++)
+            {
+                if (ConnectionManager.Instance.playerPackages[i].netID == playerGOAtScene.GetComponent<PlayerNetworking>().networkID)
+                {
+                    playerGOAtScene.GetComponent<PlayerStats>().spawnPos = spawnPoints[i].position;
+                    playerGOAtScene.GetComponent<PlayerMovement>().TeleportToSpawnPos();
+                    break;
+                }
+            }
+        }
+
         if (loadScene)
         {
             if (timeToLoad > 0)

@@ -32,8 +32,7 @@ public class PlayerStats : MonoBehaviour
 
     public bool playerInputEnabled;
 
-    [SerializeField]
-    Vector3 spawnPos = Vector3.zero;
+    public Vector3 spawnPos = Vector3.zero;
 
     private CharacterController controller;
 
@@ -73,8 +72,7 @@ public class PlayerStats : MonoBehaviour
             if (isDead)
             {
                 controller.enabled = false;
-                transform.position = spawnPos;
-                transform.rotation = Quaternion.Euler(Vector3.zero);
+                transform.SetPositionAndRotation(spawnPos, Quaternion.Euler(Vector3.zero));
                 controller.enabled = true;
 
                 isDead = false;
@@ -146,25 +144,7 @@ public class PlayerStats : MonoBehaviour
             HP -= other.gameObject.GetComponent<Bullet>().DMG;
         }
 
-        if (other.CompareTag("teamChanger") && ConnectionManager.Instance.isHosting)
-        {
-            if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
-            {
-                ChangeTag(SceneManagerScript.Instance.GetRivalTag(teamTag));
-                return;
-            }
-
-            for (int i = 0; i < ConnectionManager.Instance.playerPackages.Count; i++)
-            {
-                if (ConnectionManager.Instance.playerPackages[i].netID == GetComponent<PlayerNetworking>().networkID)
-                {
-                    ConnectionManager.Instance.playerPackages[i].teamTag = SceneManagerScript.Instance.GetRivalTag(teamTag);
-                    return;
-                }
-            }
-        }
-
-        if (other.CompareTag("teamChanger") && !ConnectionManager.Instance.IsConnected() /*&& GetComponent<PlayerNetworking>().isOwnByThisInstance*/)
+        if (other.CompareTag("teamChanger") /*&& GetComponent<PlayerNetworking>().isOwnByThisInstance*/)
         {
             ChangeTag(SceneManagerScript.Instance.GetRivalTag(teamTag));
         }
