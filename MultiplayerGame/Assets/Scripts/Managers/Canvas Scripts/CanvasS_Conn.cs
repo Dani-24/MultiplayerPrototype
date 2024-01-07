@@ -42,7 +42,15 @@ public class CanvasS_Conn : MonoBehaviour
         if (currentPanel == PanelOptions.Room)
         {
             roomID.text = "Room ID: " + ConnectionManager.Instance.GetHostIP() + ":" + ConnectionManager.Instance.GetCurrentPort();
-            startGameButton.SetActive(ConnectionManager.Instance.isHosting);
+
+            if (ConnectionManager.Instance.isHosting && SceneManagerScript.Instance.sceneName == ConnectionManager.Instance.lobbyScene)
+            {
+                startGameButton.SetActive(true);
+            }
+            else
+            {
+                startGameButton.SetActive(false);
+            }
         }
 
         for (int i = 0; i < roomPlayersTexts.Count; i++)

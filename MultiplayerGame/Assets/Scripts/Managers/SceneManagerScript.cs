@@ -95,6 +95,13 @@ public class SceneManagerScript : MonoBehaviour
                 playerGOAtScene.GetComponent<PlayerNetworking>().networkID = ConnectionManager.Instance.ownPlayerNetID;
                 playerGOAtScene.GetComponent<PlayerStats>().ChangeTag(ConnectionManager.Instance.ownTeamTagOnSceneChange);
                 UI_Manager.Instance.gameplayMenuCreated = false;
+
+                Package cPck = ConnectionManager.Instance.WritePackage(Pck_type.Connection);
+                cPck.connPck.setColor = true;
+                cPck.connPck.alphaColor = alphaTeamColor;
+                cPck.connPck.betaColor = betaTeamColor;
+
+                ConnectionManager.Instance.SendPackage(cPck);
             }
             playersOnScene.Add(playerGOAtScene);
         }

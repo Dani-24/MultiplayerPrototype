@@ -138,8 +138,7 @@ public class PlayerStats : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag) + "Bullet") && GetComponent<PlayerNetworking>().isOwnByThisInstance
-            && playerInputEnabled && SceneManagerScript.Instance.sceneName == ConnectionManager.Instance.lobbyScene)
+        if (other.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag) + "Bullet") && GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
             HP -= other.gameObject.GetComponent<Bullet>().DMG;
         }

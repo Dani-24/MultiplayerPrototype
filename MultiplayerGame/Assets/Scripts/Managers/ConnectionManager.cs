@@ -92,6 +92,10 @@ public class ConnectionManager : MonoBehaviour
     bool pendingToClean = false;
     [SerializeField] bool showCommError = false;
 
+    int cont = 0;
+
+    Package randomPackageToSend = null;
+
     #endregion
 
     #endregion
@@ -122,7 +126,7 @@ public class ConnectionManager : MonoBehaviour
         return pck;
     }
 
-    Package WritePackage(Pck_type type)
+    public Package WritePackage(Pck_type type)
     {
         Package pck = new Package();
         pck.netID = ownPlayerNetID;
@@ -245,8 +249,6 @@ public class ConnectionManager : MonoBehaviour
                 if (pck.connPck.isAnswer) { pckLog += "Answering to: "; };
                 pckLog += pck.connPck.message;
 
-                playJoin = true;
-
                 if (pck.connPck.setColor)
                 {
                     changeColor = true;
@@ -258,6 +260,11 @@ public class ConnectionManager : MonoBehaviour
         }
 
         if (enablePckLogs) Debug.Log(pckLog);
+    }
+
+    public void SendPackage(Package pck)
+    {
+        randomPackageToSend = pck;
     }
 
     #endregion
@@ -480,11 +487,21 @@ public class ConnectionManager : MonoBehaviour
                         MemoryStream sendPStream = new MemoryStream();
                         Package pPck = WritePackage(Pck_type.PlayerList);
                         pPck.user = Network_User.Server;
+
                         sendPStream = SerializeJson(pPck);
 
                         socket.SendTo(sendPStream.ToArray(), (int)sendPStream.Length, SocketFlags.None, remote);
                         //delay = 0;
 
+                        if (randomPackageToSend != null)
+                        {
+                            MemoryStream sendPStreamB = new MemoryStream();
+                            sendPStreamB = SerializeJson(randomPackageToSend);
+
+                            socket.SendTo(sendPStreamB.ToArray(), (int)sendPStreamB.Length, SocketFlags.None, remote);
+
+                            randomPackageToSend = null;
+                        }
                     }
                     catch
                     {
@@ -730,6 +747,12 @@ public class ConnectionManager : MonoBehaviour
 
         #region AUDIO
 
+        if (cont < playerPackages.Count)
+        {
+            playJoin = true;
+            cont++;
+        }
+
         if (playJoin)
         {
             playJoin = false;
@@ -877,7 +900,7 @@ public enum Network_User
 }
 
 [System.Serializable]
-class Package
+public class Package
 {
     public Pck_type type;
     public string IP;

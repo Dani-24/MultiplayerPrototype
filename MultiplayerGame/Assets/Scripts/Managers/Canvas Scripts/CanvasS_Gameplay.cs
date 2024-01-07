@@ -19,6 +19,25 @@ public class CanvasS_Gameplay : MonoBehaviour
 
     CanvasGroup canvasGroup;
 
+    #region Instance
+
+    private static CanvasS_Gameplay _instance;
+    public static CanvasS_Gameplay Instance { get { return _instance; } }
+
+    private void Awake()
+    {
+        if (_instance != null && Instance != null)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
+
+    #endregion
+
     void Start()
     {
         playerGameObject = SceneManagerScript.Instance.GetOwnPlayerInstance();
@@ -35,6 +54,10 @@ public class CanvasS_Gameplay : MonoBehaviour
             lifeSlider.value = playerGameObject.GetComponent<PlayerStats>().HP;
             inkSlider.value = playerGameObject.GetComponent<PlayerStats>().ink;
             inkSliderImg.color = SceneManagerScript.Instance.GetTeamColor(playerGameObject.GetComponent<PlayerStats>().teamTag);
+        }
+        else
+        {
+            playerGameObject = SceneManagerScript.Instance.GetOwnPlayerInstance();
         }
 
         if(canvasGroup.alpha < 1)
