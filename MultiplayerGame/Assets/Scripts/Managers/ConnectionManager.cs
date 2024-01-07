@@ -90,6 +90,7 @@ public class ConnectionManager : MonoBehaviour
     bool changeColor;
 
     bool pendingToClean = false;
+    [SerializeField] bool showCommError = false;
 
     #endregion
 
@@ -326,7 +327,8 @@ public class ConnectionManager : MonoBehaviour
         }
         catch
         {
-            Debug.Log("Incorrect IP/Port format");
+            Debug.Log("Incorrect IP/Port format | Can't start a Connection");
+            UI_Manager.Instance.PopUp_LogMessage("Can't start a Connection", 3);
         }
     }
 
@@ -335,8 +337,6 @@ public class ConnectionManager : MonoBehaviour
         if (isConnected)
         {
             Debug.Log(debugLog);
-
-            playEnd = true;
 
             isConnected = false;
             disconnect = false;
@@ -490,6 +490,8 @@ public class ConnectionManager : MonoBehaviour
                     {
                         Debug.Log("Client has disconnected (Send)");
 
+                        showCommError = true;
+
                         if (clientIsConnected)
                         {
                             EndConnection();
@@ -556,7 +558,7 @@ public class ConnectionManager : MonoBehaviour
         catch (SystemException e)
         {
             Debug.Log("Client has disconnected (Receive)" + e.ToString());
-
+            showCommError = true;
             if (clientIsConnected)
             {
                 EndConnection();
@@ -603,6 +605,7 @@ public class ConnectionManager : MonoBehaviour
         catch (SystemException e)
         {
             Debug.Log(e.ToString());
+            showCommError = true;
             EndConnection("Server is Disconnected (Send)");
         }
     }
@@ -633,8 +636,8 @@ public class ConnectionManager : MonoBehaviour
             catch (SystemException e)
             {
                 Debug.Log(e.ToString());
-
-                EndConnection();
+                showCommError = true;
+                EndConnection("Server is Disconnected (Receive)");
             }
         }
     }
@@ -686,6 +689,12 @@ public class ConnectionManager : MonoBehaviour
             CleanPlayers();
         }
 
+        if (showCommError)
+        {
+            showCommError = false;
+            UI_Manager.Instance.PopUp_LogMessage("A connection error has ocurred", 3.5f, true, lobbyScene);
+        }
+
         #endregion
 
         userName = UI_Manager.Instance.userName;
@@ -703,6 +712,8 @@ public class ConnectionManager : MonoBehaviour
             SceneManagerScript.Instance.ChangeScene(sceneToChange);
             sceneToChange = "";
         }
+
+        if (activeSceneName != lobbyScene) connGameplayState = ConnectionGameplayState.Playing; else connGameplayState = ConnectionGameplayState.Lobby;
 
         #region Get Server Colors
 
@@ -786,7 +797,10 @@ public class ConnectionManager : MonoBehaviour
                             if (playerPackages[i].setDisconnected || (DateTime.UtcNow - playerPackages[i].playerPckCreationTime).Seconds > disconnectionTime)
                             {
                                 SceneManagerScript.Instance.DeletePlayer(SceneManagerScript.Instance.playersOnScene[j]);
+
                                 playerPackages[i].setDisconnected = true;
+                                playerPackages[i].userName = "DC - " + playerPackages[i].userName;
+
                                 playEnd = true;
                             }
 
@@ -794,6 +808,10 @@ public class ConnectionManager : MonoBehaviour
                         }
                         else if (SceneManagerScript.Instance.playersOnScene[j].GetComponent<PlayerNetworking>().isOwnByThisInstance)
                         {
+                            if (SceneManagerScript.Instance.playersOnScene[j].GetComponent<PlayerStats>().teamTag != playerPackages[i].teamTag && !isHosting)
+                            {
+                                SceneManagerScript.Instance.playersOnScene[j].GetComponent<PlayerStats>().ChangeTag(playerPackages[i].teamTag);
+                            }
                             alreadyExists = true;
                             break;
                         }
@@ -804,6 +822,7 @@ public class ConnectionManager : MonoBehaviour
                 {
                     GameObject newP = SceneManagerScript.Instance.CreateNewPlayer(false, playerPackages[i].position);
                     newP.GetComponent<PlayerNetworking>().networkID = playerPackages[i].netID;
+
                     SceneManagerScript.Instance.cleanPaint = true;
                 }
             }
@@ -837,6 +856,7 @@ public class ConnectionManager : MonoBehaviour
 public enum ConnectionGameplayState
 {
     Lobby,
+    Loading,
     Playing
 }
 
@@ -883,7 +903,6 @@ public class PlayerPackage
 
     public Vector3 position;
     public Quaternion rotation;
-    //public Vector2 moveInput;
 
     public Vector3 camRot;
 

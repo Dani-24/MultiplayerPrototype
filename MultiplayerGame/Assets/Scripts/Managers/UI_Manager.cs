@@ -21,6 +21,9 @@ public class UI_Manager : MonoBehaviour
     public bool openSettings;
     public bool openNetSettings;
     public bool gameplayMenuCreated = false;
+    public bool alreadyShownTitle = false;
+
+    public PopUpMsgLog popUpMsgLog;
 
     #region Instance
 
@@ -69,10 +72,7 @@ public class UI_Manager : MonoBehaviour
         {
             if (canvasMenus[i].menu == currentCanvasMenu)
             {
-                if (currentCanvasMenu == GameUIs.Gameplay && gameplayMenuCreated)
-                {
-                    continue;
-                }
+                if (currentCanvasMenu == GameUIs.Gameplay && gameplayMenuCreated) continue;
                 if (!canvasMenus[i].activated)
                 {
                     GameObject canv = Instantiate(canvasMenus[i].canvas);
@@ -100,6 +100,7 @@ public class UI_Manager : MonoBehaviour
             case GameUIs.Title:
                 SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Title;
                 Cursor.lockState = CursorLockMode.None;
+                alreadyShownTitle = true;
                 break;
             case GameUIs.Gameplay:
                 SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Gameplay;
@@ -109,6 +110,10 @@ public class UI_Manager : MonoBehaviour
             case GameUIs.Sett_Connection:
                 SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Settings;
                 Cursor.lockState = CursorLockMode.None;
+                break;
+            case GameUIs.Msg_Log:
+                SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Loading;
+                Cursor.lockState = CursorLockMode.Locked;
                 break;
         }
     }
@@ -125,12 +130,33 @@ public class UI_Manager : MonoBehaviour
         openNetSettings = !openNetSettings;
     }
 
+    public void PopUp_LogMessage(string _msg, float _duration = 5.0f, bool _visible = true, string _goToThisScene = "")
+    {
+        openNetSettings = openSettings = false;
+        currentCanvasMenu = GameUIs.Msg_Log;
+
+        popUpMsgLog = new PopUpMsgLog
+        {
+            msg = _msg,
+            duration = _duration,
+            visible = _visible,
+            goToThisScene = _goToThisScene
+        };
+    }
+
+    public void CloseAll()
+    {
+        openNetSettings = openSettings = false;
+        currentCanvasMenu = GameUIs.Gameplay;
+    }
+
     public enum GameUIs
     {
         Title,
         Gameplay,
         Settings,
         Sett_Connection,
+        Msg_Log,
         None
     }
 
@@ -148,5 +174,14 @@ public class UI_Manager : MonoBehaviour
 
         [HideInInspector]
         public bool activated;
+    }
+
+    [System.Serializable]
+    public struct PopUpMsgLog
+    {
+        public string msg;
+        public float duration;
+        public bool visible;
+        public string goToThisScene;
     }
 }

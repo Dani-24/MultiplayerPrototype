@@ -308,6 +308,25 @@ public class SceneManagerScript : MonoBehaviour
         }
     }
 
+    public void TeamsForBattle()
+    {
+        alphaTeamMembers.Clear();
+        betaTeamMembers.Clear();
+
+        for (int i = 0; i < playersOnScene.Count; i++)
+        {
+            SetTeam(playersOnScene[i]);
+            for (var j = 0; j < ConnectionManager.Instance.playerPackages.Count; j++)
+            {
+                if (playersOnScene[i].GetComponent<PlayerNetworking>().networkID == ConnectionManager.Instance.playerPackages[j].netID)
+                {
+                    ConnectionManager.Instance.playerPackages[i].teamTag = playersOnScene[i].GetComponent<PlayerStats>().teamTag;
+                    return;
+                }
+            }
+        }
+    }
+
     #endregion
 
     #region Scene Manager

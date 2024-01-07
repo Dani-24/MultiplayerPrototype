@@ -4,16 +4,16 @@ using UnityEngine.UI;
 public class CanvasS_StateConn : MonoBehaviour
 {
     [SerializeField] Image connectedImg;
-    CanvasGroup canGroup;
+    CanvasGroup canvasGroup;
 
     private void Start()
     {
-        canGroup = GetComponent<CanvasGroup>();
+        canvasGroup = GetComponent<CanvasGroup>();
     }
 
     void Update()
     {
-        if (SceneManagerScript.Instance.gameState == SceneManagerScript.GameState.Loading) { canGroup.alpha = 0; } else { canGroup.alpha = 1; }
+        if (SceneManagerScript.Instance.gameState == SceneManagerScript.GameState.Loading) { canvasGroup.alpha = 0; } else { canvasGroup.alpha = 1; }
         if (ConnectionManager.Instance.IsConnected()) { connectedImg.color = Color.green; } else { connectedImg.color = Color.red; }
     }
 }

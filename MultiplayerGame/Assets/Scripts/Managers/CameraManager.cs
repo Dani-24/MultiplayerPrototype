@@ -43,17 +43,10 @@ public class CameraManager : MonoBehaviour
 
     void Start()
     {
-        if (titleCamera != null)
-        {
-            sceneCameras.Add(titleCamera);
-        }
+        if (titleCamera != null) sceneCameras.Add(titleCamera);
+        if (playerCamera != null) sceneCameras.Add(playerCamera);
 
-        if (playerCamera != null)
-        {
-            sceneCameras.Add(playerCamera);
-        }
-
-        currentCam = startCam;
+        if (UI_Manager.Instance.alreadyShownTitle) currentCam = playerCamera; else currentCam = startCam;
 
         for (int i = 0; i < sceneCameras.Count; i++)
         {

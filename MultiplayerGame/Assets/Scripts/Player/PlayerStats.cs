@@ -53,24 +53,34 @@ public class PlayerStats : MonoBehaviour
 
     void Update()
     {
-        teamTag = gameObject.tag;
-
         // Check Color
         teamColorGO.material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
 
         // Check Death
         if (transform.position.y < minYaxis || HP <= 0) isDead = true;
 
-        if (isDead && GetComponent<PlayerNetworking>().isOwnByThisInstance)
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
-            controller.enabled = false;
-            transform.position = spawnPos;
-            transform.rotation = Quaternion.Euler(Vector3.zero);
-            controller.enabled = true;
+            for (int i = 0; i < ConnectionManager.Instance.playerPackages.Count; i++)
+            {
+                if (ConnectionManager.Instance.playerPackages[i].netID == GetComponent<PlayerNetworking>().networkID)
+                {
+                    if (i % 2 == 0) ChangeTag("Alpha"); else ChangeTag("Beta");
+                    break;
+                }
+            }
 
-            isDead = false;
-            HP = maxHP;
-            ink = inkCapacity;
+            if (isDead)
+            {
+                controller.enabled = false;
+                transform.position = spawnPos;
+                transform.rotation = Quaternion.Euler(Vector3.zero);
+                controller.enabled = true;
+
+                isDead = false;
+                HP = maxHP;
+                ink = inkCapacity;
+            }
         }
 
         // Healing
@@ -130,12 +140,31 @@ public class PlayerStats : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag) + "Bullet") && GetComponent<PlayerNetworking>().isOwnByThisInstance && playerInputEnabled)
+        if (other.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag) + "Bullet") && GetComponent<PlayerNetworking>().isOwnByThisInstance
+            && playerInputEnabled && SceneManagerScript.Instance.sceneName == ConnectionManager.Instance.lobbyScene)
         {
             HP -= other.gameObject.GetComponent<Bullet>().DMG;
         }
 
-        if (other.CompareTag("teamChanger") && GetComponent<PlayerNetworking>().isOwnByThisInstance)
+        if (other.CompareTag("teamChanger") && ConnectionManager.Instance.isHosting)
+        {
+            if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+            {
+                ChangeTag(SceneManagerScript.Instance.GetRivalTag(teamTag));
+                return;
+            }
+
+            for (int i = 0; i < ConnectionManager.Instance.playerPackages.Count; i++)
+            {
+                if (ConnectionManager.Instance.playerPackages[i].netID == GetComponent<PlayerNetworking>().networkID)
+                {
+                    ConnectionManager.Instance.playerPackages[i].teamTag = SceneManagerScript.Instance.GetRivalTag(teamTag);
+                    return;
+                }
+            }
+        }
+
+        if (other.CompareTag("teamChanger") && !ConnectionManager.Instance.IsConnected() /*&& GetComponent<PlayerNetworking>().isOwnByThisInstance*/)
         {
             ChangeTag(SceneManagerScript.Instance.GetRivalTag(teamTag));
         }

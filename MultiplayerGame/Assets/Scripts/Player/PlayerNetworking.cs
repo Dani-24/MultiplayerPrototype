@@ -50,12 +50,18 @@ public class PlayerNetworking : MonoBehaviour
 
     public PlayerPackage GetPlayerPck()
     {
-        PlayerPackage pPck = new PlayerPackage();
-
-        pPck.teamTag = GetComponent<PlayerStats>().teamTag;
-        //pPck.moveInput = GetComponent<PlayerMovement>().GetMoveInput();
-        pPck.running = GetComponent<PlayerMovement>().GetRunInput();
-        pPck.jumping = GetComponent<PlayerMovement>().GetJumpInput();
+        PlayerPackage pPck = new PlayerPackage
+        {
+            teamTag = GetComponent<PlayerStats>().teamTag,
+            running = GetComponent<PlayerMovement>().GetRunInput(),
+            jumping = GetComponent<PlayerMovement>().GetJumpInput(),
+            camRot = GetComponent<PlayerOrbitCamera>().GetCamRot(),
+            position = transform.position,
+            rotation = GetComponent<PlayerMovement>().playerBody.transform.rotation,
+            wpRNG = GetComponent<PlayerArmament>().weaponRngState,
+            netID = networkID,
+            inputEnabled = GetComponent<PlayerStats>().playerInputEnabled
+        };
 
         if (GetComponent<PlayerArmament>().currentWeapon != null)
         {
@@ -70,15 +76,6 @@ public class PlayerNetworking : MonoBehaviour
         else
             pPck.shootingSub = false;
 
-        pPck.camRot = GetComponent<PlayerOrbitCamera>().GetCamRot();
-        pPck.position = transform.position;
-        pPck.rotation = GetComponent<PlayerMovement>().playerBody.transform.rotation;
-        pPck.wpRNG = GetComponent<PlayerArmament>().weaponRngState;
-
-        pPck.netID = networkID;
-
-        pPck.inputEnabled = GetComponent<PlayerStats>().playerInputEnabled;
-
         return pPck;
     }
 
@@ -86,7 +83,6 @@ public class PlayerNetworking : MonoBehaviour
     {
         if (GetComponent<PlayerStats>().teamTag != pck.teamTag) GetComponent<PlayerStats>().ChangeTag(pck.teamTag);
 
-        //GetComponent<PlayerMovement>().SetMoveInput(pck.moveInput);
         GetComponent<PlayerMovement>().SetRunInput(pck.running);
         GetComponent<PlayerMovement>().SetJumpInput(pck.jumping);
         GetComponent<PlayerArmament>().SetFire(pck.shooting);
@@ -96,14 +92,7 @@ public class PlayerNetworking : MonoBehaviour
         GetComponent<PlayerMovement>().SetRotation(pck.rotation);
         GetComponent<PlayerArmament>().weaponRngState = pck.wpRNG;
 
-        if (!pck.inputEnabled)
-        {
-            nameTagText.color = Color.grey;
-        }
-        else
-        {
-            nameTagText.color = Color.white;
-        }
+        if (!pck.inputEnabled) nameTagText.color = Color.grey; else nameTagText.color = Color.white;
 
         nameTagText.text = pck.userName;
     }

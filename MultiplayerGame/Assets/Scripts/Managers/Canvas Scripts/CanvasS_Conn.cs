@@ -186,7 +186,8 @@ public class CanvasS_Conn : MonoBehaviour
 
     public void StartGame(string scene)
     {
-        SceneManagerScript.Instance.ChangeSceneConnected(scene);
+        UI_Manager.Instance.PopUp_LogMessage("Starting Battle", 1, true, scene);
+        SceneManagerScript.Instance.TeamsForBattle();
     }
 
     #endregion
