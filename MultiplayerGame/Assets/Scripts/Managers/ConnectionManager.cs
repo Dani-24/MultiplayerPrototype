@@ -21,6 +21,7 @@ public class ConnectionManager : MonoBehaviour
     [Header("Room Specs")]
     public int maxPlayers = 8;
     public ConnectionGameplayState connGameplayState;
+    public string lobbyScene;
 
     [Header("Connection Propierties")]
     [SerializeField] bool isConnected = false;
@@ -74,10 +75,11 @@ public class ConnectionManager : MonoBehaviour
 
     [Header("DEBUG NET DATA (Don't Edit)")]
     [SerializeField] bool connectionStablished = false;
-    string sceneName;
+    string activeSceneName;
 
     public int ownPlayerNetID = -1;
     public PlayerPackage ownPlayerPck;
+    [HideInInspector] public string ownTeamTagOnSceneChange = "";
 
     public List<PlayerPackage> playerPackages = new List<PlayerPackage>();
 
@@ -125,7 +127,7 @@ public class ConnectionManager : MonoBehaviour
         pck.netID = ownPlayerNetID;
         pck.IP = myIP;
         pck.type = type;
-        pck.currentScene = sceneName;
+        pck.currentScene = activeSceneName;
 
         #region Net Scene GameObject
         if (isHosting && netGOs.Count > 0)
@@ -190,7 +192,7 @@ public class ConnectionManager : MonoBehaviour
         int pckDelay = (DateTime.UtcNow - lastPckgDateTime).Milliseconds;
         string pckLog = "Package from: " + pck.user + " (" + pck.IP + ") ms: " + pckDelay;
 
-        if (!isHosting && pck.currentScene != sceneName)
+        if (!isHosting && pck.currentScene != activeSceneName)
         {
             // CHANGE SCENE
             sceneToChange = pck.currentScene;
@@ -369,6 +371,13 @@ public class ConnectionManager : MonoBehaviour
             }
 
             socket.Close();
+
+            if (activeSceneName != lobbyScene)
+            {
+                activeSceneName = lobbyScene;
+                Debug.Log("Connection Lost: Returning to Lobby");
+                SceneManagerScript.Instance.ChangeScene(lobbyScene);
+            }
         }
     }
 
@@ -680,14 +689,13 @@ public class ConnectionManager : MonoBehaviour
         #endregion
 
         userName = UI_Manager.Instance.userName;
+        activeSceneName = SceneManager.GetActiveScene().name;
 
         // Delay between sending Packages
         delay += Time.deltaTime;
 
         UpdateGameObjects();
 
-        // SCENE UPDATES
-        sceneName = SceneManager.GetActiveScene().name;
         if (changeScene)
         {
             changeScene = false;

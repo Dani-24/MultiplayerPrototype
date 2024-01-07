@@ -87,10 +87,11 @@ public class SceneManagerScript : MonoBehaviour
         // Add Base Player to players List
         if (playerGOAtScene != null)
         {
-            if (ConnectionManager.Instance.IsConnected() && ConnectionManager.Instance.ownPlayerNetID != -1)
+            if (ConnectionManager.Instance.IsConnected() && ConnectionManager.Instance.ownPlayerNetID != -1) // When changing scene while connected
             {
                 playerGOAtScene.GetComponent<PlayerNetworking>().networkID = ConnectionManager.Instance.ownPlayerNetID;
-                playerGOAtScene.GetComponent<PlayerStats>().teamTag = ConnectionManager.Instance.ownPlayerPck.teamTag;
+                playerGOAtScene.GetComponent<PlayerStats>().ChangeTag(ConnectionManager.Instance.ownTeamTagOnSceneChange);
+                UI_Manager.Instance.gameplayMenuCreated = false;
             }
             playersOnScene.Add(playerGOAtScene);
         }
@@ -319,6 +320,12 @@ public class SceneManagerScript : MonoBehaviour
     public void ChangeSceneAsync(string sceneToChange)
     {
         SceneManager.LoadSceneAsync(sceneToChange);
+    }
+
+    public void ChangeSceneConnected(string sceneToChange)
+    {
+        ConnectionManager.Instance.ownTeamTagOnSceneChange = ConnectionManager.Instance.ownPlayerPck.teamTag;
+        SceneManager.LoadScene(sceneToChange);
     }
 
     #endregion

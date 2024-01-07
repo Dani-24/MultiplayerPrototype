@@ -21,6 +21,8 @@ public class CanvasS_Conn : MonoBehaviour
     [Header("Room Players")]
     [SerializeField] List<TMP_Text> roomPlayersTexts = new List<TMP_Text>();
 
+    [SerializeField] Button startGameButton;
+
     void Start()
     {
         SelectDefaultButton();
@@ -40,6 +42,7 @@ public class CanvasS_Conn : MonoBehaviour
         if (currentPanel == PanelOptions.Room)
         {
             roomID.text = "Room ID: " + ConnectionManager.Instance.GetHostIP() + ":" + ConnectionManager.Instance.GetCurrentPort();
+            startGameButton.enabled = ConnectionManager.Instance.isHosting;
         }
 
         for (int i = 0; i < roomPlayersTexts.Count; i++)
@@ -183,7 +186,7 @@ public class CanvasS_Conn : MonoBehaviour
 
     public void StartGame(string scene)
     {
-        SceneManagerScript.Instance.ChangeScene(scene);
+        SceneManagerScript.Instance.ChangeSceneConnected(scene);
     }
 
     #endregion
