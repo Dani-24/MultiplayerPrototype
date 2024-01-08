@@ -68,17 +68,17 @@ public class PlayerStats : MonoBehaviour
                     break;
                 }
             }
+        }
 
-            if (isDead)
-            {
-                controller.enabled = false;
-                transform.SetPositionAndRotation(spawnPos, Quaternion.Euler(Vector3.zero));
-                controller.enabled = true;
+        if (isDead)
+        {
+            controller.enabled = false;
+            transform.SetPositionAndRotation(spawnPos, Quaternion.Euler(Vector3.zero));
+            controller.enabled = true;
 
-                isDead = false;
-                HP = maxHP;
-                ink = inkCapacity;
-            }
+            isDead = false;
+            HP = maxHP;
+            ink = inkCapacity;
         }
 
         // Healing

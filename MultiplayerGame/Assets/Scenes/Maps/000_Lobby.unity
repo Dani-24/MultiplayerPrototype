@@ -11577,6 +11577,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 702488119523010262, guid: b67d6d356db779849a9636062bb6b45c,
+        type: 3}
+      propertyPath: minYaxis
+      value: -0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1747472560784089855, guid: b67d6d356db779849a9636062bb6b45c,
         type: 3}
       propertyPath: m_Name

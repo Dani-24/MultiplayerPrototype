@@ -834,7 +834,7 @@ public class ConnectionManager : MonoBehaviour
 
                 if (!alreadyExists && !playerPackages[i].setDisconnected)
                 {
-                    GameObject newP = SceneManagerScript.Instance.CreateNewPlayer(false, playerPackages[i].position);
+                    GameObject newP = SceneManagerScript.Instance.CreateNewPlayer(false, new Vector3(0, 2, 0));
                     newP.GetComponent<PlayerNetworking>().networkID = playerPackages[i].netID;
 
                     SceneManagerScript.Instance.cleanPaint = true;

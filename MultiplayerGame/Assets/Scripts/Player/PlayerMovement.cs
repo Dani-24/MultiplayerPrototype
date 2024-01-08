@@ -334,6 +334,15 @@ public class PlayerMovement : MonoBehaviour
         playerBody.transform.rotation = Quaternion.LerpUnclamped(playerBody.transform.rotation, _rot, interpolationSpeed * Time.deltaTime);
     }
 
+    public void SetFacing(float angle)
+    {
+        Vector3 rot = transform.eulerAngles;
+        rot.y = angle;
+        transform.eulerAngles = rot;
+
+        GetComponent<PlayerOrbitCamera>().CameraSetView(angle);
+    }
+
     public void TeleportToSpawnPos()
     {
         controller.enabled = false;

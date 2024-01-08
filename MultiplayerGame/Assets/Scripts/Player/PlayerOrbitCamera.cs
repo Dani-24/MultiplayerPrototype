@@ -99,12 +99,22 @@ public class PlayerOrbitCamera : MonoBehaviour
         {
             if (value.isPressed != cameraReseting && value.isPressed == true)
             {
-                cmCamera.m_XAxis.Value = camBaseAxis.x;
-                cmCamera.m_YAxis.Value = camBaseAxis.y;
+                CameraResetView();
             }
 
             cameraReseting = value.isPressed;
         }
+    }
+
+    public void CameraResetView()
+    {
+        cmCamera.m_XAxis.Value = camBaseAxis.x;
+        cmCamera.m_YAxis.Value = camBaseAxis.y;
+    }
+
+    public void CameraSetView(float value)
+    {
+        cmCamera.m_XAxis.Value = value;
     }
 
     // Network Data

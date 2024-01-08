@@ -24,6 +24,8 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] NetGameObject timerNetGo;
     [SerializeField] NetGameObject matchStateNetGo;
 
+    float hostSetColorCont = 0;
+
     [Header("Posibles GameModes")]
     //[SerializeField] Combatcentrik;
     [SerializeField] TowerObjective tower;
@@ -67,6 +69,24 @@ public class GameManagerScript : MonoBehaviour
                 {
                     matchState = MatchState.playing;
                     timerCount = matchTimes[1].time;
+                }
+
+                if (ConnectionManager.Instance.isHosting)
+                {
+                    if (hostSetColorCont < 0)
+                    {
+                        Package cPck = ConnectionManager.Instance.WritePackage(Pck_type.Connection);
+                        cPck.connPck.setColor = true;
+                        cPck.connPck.alphaColor = SceneManagerScript.Instance.GetTeamColor("Alpha");
+                        cPck.connPck.betaColor = SceneManagerScript.Instance.GetTeamColor("Beta");
+
+                        ConnectionManager.Instance.SendPackage(cPck);
+                        hostSetColorCont = 1;
+                    }
+                    else
+                    {
+                        hostSetColorCont -= Time.deltaTime;
+                    }
                 }
 
                 break;

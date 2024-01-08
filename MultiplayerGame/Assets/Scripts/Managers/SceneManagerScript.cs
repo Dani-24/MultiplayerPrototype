@@ -98,13 +98,6 @@ public class SceneManagerScript : MonoBehaviour
                 playerGOAtScene.GetComponent<PlayerNetworking>().networkID = ConnectionManager.Instance.ownPlayerNetID;
                 playerGOAtScene.GetComponent<PlayerStats>().ChangeTag(ConnectionManager.Instance.ownTeamTagOnSceneChange);
                 UI_Manager.Instance.gameplayMenuCreated = false;
-
-                Package cPck = ConnectionManager.Instance.WritePackage(Pck_type.Connection);
-                cPck.connPck.setColor = true;
-                cPck.connPck.alphaColor = alphaTeamColor;
-                cPck.connPck.betaColor = betaTeamColor;
-
-                ConnectionManager.Instance.SendPackage(cPck);
             }
             playersOnScene.Add(playerGOAtScene);
         }
@@ -129,6 +122,15 @@ public class SceneManagerScript : MonoBehaviour
                 {
                     playerGOAtScene.GetComponent<PlayerStats>().spawnPos = spawnPoints[i].position;
                     playerGOAtScene.GetComponent<PlayerMovement>().TeleportToSpawnPos();
+
+                    if (playerGOAtScene.GetComponent<PlayerStats>().teamTag == "Alpha")
+                    {
+                        playerGOAtScene.GetComponent<PlayerMovement>().SetFacing(0);
+                    }
+                    else
+                    {
+                        playerGOAtScene.GetComponent<PlayerMovement>().SetFacing(180);
+                    }
                     break;
                 }
             }
@@ -368,6 +370,7 @@ public class SceneManagerScript : MonoBehaviour
 
     public void ChangeScene(string sceneToChange)
     {
+        UI_Manager.Instance.CloseAll();
         SceneManager.LoadScene(sceneToChange);
     }
 
@@ -378,6 +381,7 @@ public class SceneManagerScript : MonoBehaviour
 
     public void ChangeSceneConnected(string sceneToChange)
     {
+        UI_Manager.Instance.CloseAll();
         ConnectionManager.Instance.ownTeamTagOnSceneChange = ConnectionManager.Instance.ownPlayerPck.teamTag;
         SceneManager.LoadScene(sceneToChange);
     }

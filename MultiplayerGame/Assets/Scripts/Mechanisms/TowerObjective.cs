@@ -41,6 +41,14 @@ public class TowerObjective : MonoBehaviour
     [SerializeField] float towerToTargetDist = 0.1f;
     [SerializeField] float backCont = 0f;
 
+    [Header("Net GOs")]
+    [SerializeField] NetGameObject netNextCP;
+    [SerializeField] NetGameObject netPosX;
+    [SerializeField] NetGameObject netPosY;
+    [SerializeField] NetGameObject netPosZ;
+
+    [SerializeField] float interpolationSpeed = 1.0f;
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -134,6 +142,19 @@ public class TowerObjective : MonoBehaviour
         }
 
         if (GameManagerScript.Instance.matchState != GameManagerScript.MatchState.playing) audioSource.volume = 0; else audioSource.volume = 1;
+
+        // Netcode
+        if (!netNextCP.connectedToServer)
+        {
+            netNextCP.netValue = nextCheckpointId;
+            netPosX.netValue = transform.position.x;
+            netPosY.netValue = transform.position.y;
+            netPosZ.netValue = transform.position.z;
+        }
+        else
+        {
+            nextCheckpointId = (int)netNextCP.netValue;
+        }
     }
 
     void TowerStates()
@@ -261,6 +282,12 @@ public class TowerObjective : MonoBehaviour
         if (state != TowerState.Resting)
         {
             transform.Translate(dir * speed * Time.deltaTime);
+        }
+
+        if (netNextCP.connectedToServer)
+        {
+            transform.position = Vector3.LerpUnclamped(transform.position, new Vector3(netPosX.netValue, netPosY.netValue, netPosZ.netValue), interpolationSpeed * Time.deltaTime);
+
         }
     }
 
