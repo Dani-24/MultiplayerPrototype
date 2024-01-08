@@ -59,8 +59,6 @@ public class ConnectionManager : MonoBehaviour
     AudioSource audioSource;
     bool playJoin, playEnd;
 
-    [Header("Current Scene Online GameObjects")]
-    [SerializeField] List<NetGameObject> netGOs;
     [SerializeField] List<netGO> newNetGOs;
 
     [Header("Debug")]
@@ -135,13 +133,13 @@ public class ConnectionManager : MonoBehaviour
         pck.currentScene = activeSceneName;
 
         #region Net Scene GameObject
-        if (isHosting && netGOs.Count > 0)
+        if (isHosting && SceneManagerScript.Instance.netGOs.Count > 0)
         {
-            for (int i = 0; i < netGOs.Count; i++)
+            for (int i = 0; i < SceneManagerScript.Instance.netGOs.Count; i++)
             {
                 netGO netGO = new netGO();
-                netGO.id = netGOs[i].GOid;
-                netGO.variable = netGOs[i].netValue;
+                netGO.id = SceneManagerScript.Instance.netGOs[i].GOid;
+                netGO.variable = SceneManagerScript.Instance.netGOs[i].netValue;
 
                 pck.sceneNetGO.Add(netGO);
             }
@@ -354,7 +352,7 @@ public class ConnectionManager : MonoBehaviour
 
             SceneManagerScript.Instance.cleanPaint = true;
 
-            foreach (NetGameObject n in netGOs)
+            foreach (NetGameObject n in SceneManagerScript.Instance.netGOs)
             {
                 n.connectedToServer = false;
             }
@@ -674,13 +672,6 @@ public class ConnectionManager : MonoBehaviour
         }
 
         audioSource = GetComponent<AudioSource>();
-
-        int num = 0;
-        foreach (NetGameObject n in netGOs)
-        {
-            n.GOid = num;
-            num++;
-        }
     }
 
     void Update()
@@ -725,7 +716,7 @@ public class ConnectionManager : MonoBehaviour
         if (changeScene)
         {
             changeScene = false;
-            netGOs.Clear();
+            SceneManagerScript.Instance.netGOs.Clear();
             SceneManagerScript.Instance.ChangeScene(sceneToChange);
             sceneToChange = "";
         }
@@ -784,14 +775,14 @@ public class ConnectionManager : MonoBehaviour
             // Net GO Update (Client only)
             if (!isHosting)
             {
-                for (int i = 0; i < netGOs.Count; i++)
+                for (int i = 0; i < SceneManagerScript.Instance.netGOs.Count; i++)
                 {
                     for (int j = 0; j < newNetGOs.Count; j++)
                     {
-                        if (netGOs[i].GOid == newNetGOs[j].id)
+                        if (SceneManagerScript.Instance.netGOs[i].GOid == newNetGOs[j].id)
                         {
-                            netGOs[i].connectedToServer = true;
-                            netGOs[i].netValue = newNetGOs[j].variable;
+                            SceneManagerScript.Instance.netGOs[i].connectedToServer = true;
+                            SceneManagerScript.Instance.netGOs[i].netValue = newNetGOs[j].variable;
                             break;
                         }
                     }

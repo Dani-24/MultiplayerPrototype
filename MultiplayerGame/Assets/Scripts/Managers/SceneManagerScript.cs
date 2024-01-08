@@ -56,6 +56,9 @@ public class SceneManagerScript : MonoBehaviour
     [SerializeField] bool useSpawnPoints = false;
     [SerializeField] Transform[] spawnPoints;
 
+    [Header("Current Scene Online GameObjects")]
+    public List<NetGameObject> netGOs;
+
     #region Instance
 
     private static SceneManagerScript _instance;
@@ -104,6 +107,13 @@ public class SceneManagerScript : MonoBehaviour
                 ConnectionManager.Instance.SendPackage(cPck);
             }
             playersOnScene.Add(playerGOAtScene);
+        }
+
+        int num = 0;
+        foreach (NetGameObject n in netGOs)
+        {
+            n.GOid = num;
+            num++;
         }
     }
 

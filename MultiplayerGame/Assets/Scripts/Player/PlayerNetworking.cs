@@ -12,7 +12,7 @@ public class PlayerNetworking : MonoBehaviour
 
     [Header("Nametags")]
     [SerializeField] GameObject nametagCanvas;
-    [SerializeField] TMP_Text nameTagText;
+    public TMP_Text nameTagText;
     [SerializeField] RectTransform recTrans;
 
     private void Awake()

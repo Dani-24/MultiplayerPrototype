@@ -132,6 +132,8 @@ public class TowerObjective : MonoBehaviour
         {
             Debug.DrawLine(checkpoints[i].position, checkpoints[i + 1].position);
         }
+
+        if (GameManagerScript.Instance.matchState != GameManagerScript.MatchState.playing) audioSource.volume = 0; else audioSource.volume = 1;
     }
 
     void TowerStates()
