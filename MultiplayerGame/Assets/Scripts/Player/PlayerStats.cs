@@ -24,8 +24,8 @@ public class PlayerStats : MonoBehaviour
     public float ink = 100.0f;
     float inkCapacity;
 
-    [SerializeField][Range(1f, 10f)] float inkReloadSpeed = 1f;
-    [SerializeField][Range(1f, 10f)] float inkReloadSpeedOnInk = 5f;
+    [SerializeField][Range(1f, 20f)] float inkReloadSpeed = 1f;
+    [SerializeField][Range(1f, 20f)] float inkReloadSpeedOnInk = 5f;
     public bool onInk = false;
 
     [Header("Other")]

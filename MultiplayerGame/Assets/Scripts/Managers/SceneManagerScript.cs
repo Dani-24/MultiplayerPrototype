@@ -59,6 +59,10 @@ public class SceneManagerScript : MonoBehaviour
     [Header("Current Scene Online GameObjects")]
     public List<NetGameObject> netGOs;
 
+    [Header("Weapons Available")]
+    public GameObject[] mainWeapons;
+    public GameObject[] subWeapons;
+
     #region Instance
 
     private static SceneManagerScript _instance;
@@ -97,6 +101,8 @@ public class SceneManagerScript : MonoBehaviour
             {
                 playerGOAtScene.GetComponent<PlayerNetworking>().networkID = ConnectionManager.Instance.ownPlayerNetID;
                 playerGOAtScene.GetComponent<PlayerStats>().ChangeTag(ConnectionManager.Instance.ownTeamTagOnSceneChange);
+                playerGOAtScene.GetComponent<PlayerArmament>().ChangeWeapon(ConnectionManager.Instance.ownPlayerPck.mainWeapon);
+                playerGOAtScene.GetComponent<PlayerArmament>().ChangeSubWeapon(ConnectionManager.Instance.ownPlayerPck.subWeapon);
                 UI_Manager.Instance.gameplayMenuCreated = false;
             }
             playersOnScene.Add(playerGOAtScene);

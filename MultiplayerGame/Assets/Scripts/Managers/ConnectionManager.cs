@@ -926,6 +926,9 @@ public class PlayerPackage
     public bool shooting = false;
     public bool shootingSub = false;
 
+    public int mainWeapon;
+    public int subWeapon;
+
     public UnityEngine.Random.State wpRNG;
     public DateTime playerPckCreationTime = DateTime.UtcNow;
 

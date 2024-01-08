@@ -13,12 +13,15 @@ public class PlayerArmament : MonoBehaviour
     public bool weaponShooting = false;
 
     public GameObject currentWeapon;
+    [HideInInspector] public int currentWeaponId = 0;
+
     [SerializeField] bool createdWeapon = false;
 
     [HideInInspector] public Random.State weaponRngState;
 
     [Header("SubWeapon")]
     public GameObject subWeapon;
+    [HideInInspector] public int currentSubWeaponId = 0;
     public bool subWeaponShooting = false;
 
     bool chargingSub = false;
@@ -71,6 +74,15 @@ public class PlayerArmament : MonoBehaviour
         createdWeapon = true;
     }
 
+    public void ChangeWeapon(int id)
+    {
+        if (currentWeapon != SceneManagerScript.Instance.mainWeapons[id])
+        {
+            weaponToUse = SceneManagerScript.Instance.mainWeapons[id];
+            currentWeaponId = id;
+        }
+    }
+
     #endregion
 
     #region Sub Weapon
@@ -98,6 +110,15 @@ public class PlayerArmament : MonoBehaviour
             gameObject.GetComponent<PlayerStats>().ink -= subWeapon.GetComponent<SubWeapon>().throwCost;
         }
         chargingSub = false;
+    }
+
+    public void ChangeSubWeapon(int id)
+    {
+        if (subWeapon != SceneManagerScript.Instance.subWeapons[id])
+        {
+            subWeapon = SceneManagerScript.Instance.subWeapons[id];
+            currentSubWeaponId = id;
+        }
     }
 
     #endregion

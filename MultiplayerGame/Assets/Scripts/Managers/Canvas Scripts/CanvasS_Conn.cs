@@ -23,6 +23,8 @@ public class CanvasS_Conn : MonoBehaviour
 
     [SerializeField] GameObject startGameButton;
 
+    [SerializeField] Button gearButton;
+
     void Start()
     {
         SelectDefaultButton();
@@ -65,6 +67,11 @@ public class CanvasS_Conn : MonoBehaviour
             roomPlayersTexts[i].text = "... ... ...";
             roomPlayersTexts[i].gameObject.GetComponentInChildren<Image>().color = new Vector4(1, 1, 1, 0.2f);
         }
+
+        if (SceneManagerScript.Instance.sceneName != ConnectionManager.Instance.lobbyScene)
+            gearButton.interactable = false;
+        else
+            gearButton.interactable = true;
     }
 
     void SelectDefaultButton()
@@ -189,7 +196,7 @@ public class CanvasS_Conn : MonoBehaviour
 
     public void OpenGear()
     {
-        // WIP
+        UI_Manager.Instance.ToggleGear();
     }
 
     public void StartGame(string scene)

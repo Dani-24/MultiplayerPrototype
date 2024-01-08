@@ -48,6 +48,7 @@ MonoBehaviour:
   gameState: 0
   sceneToLoad: 
   loadScene: 0
+  timeToLoad: 5
   showConsole: 1
   debugConsole: {fileID: 7963841811532817948, guid: 20d7599dc50b34041a033c9032c2534c,
     type: 3}
@@ -79,3 +80,17 @@ MonoBehaviour:
   betaTeamMembers: []
   gammaTeamMembers: []
   maxPlayersPerTeam: 4
+  cleanPaint: 0
+  sceneRoot: {fileID: 0}
+  useSpawnPoints: 0
+  spawnPoints: []
+  netGOs: []
+  mainWeapons:
+  - {fileID: 3597637874272683826, guid: 234fa55f3924b684fa2079555201eb96, type: 3}
+  - {fileID: 3597637874272683826, guid: b4547da01ac11514a81fc64d429289f0, type: 3}
+  - {fileID: 3597637874272683826, guid: fe5c66b36c08728478d68bf000c81a4d, type: 3}
+  - {fileID: 3597637874272683826, guid: 3a90c2bfa639f794986351efc452c80b, type: 3}
+  - {fileID: 9156943298703554230, guid: 907314e2baa82564cacf82c8c250a93c, type: 3}
+  subWeapons:
+  - {fileID: 4612145116355683483, guid: c298e5f021ab0d54d9b89b8975adf95b, type: 3}
+  - {fileID: 4612145116355683483, guid: 55f923aac6892384b88b6229c05fd927, type: 3}

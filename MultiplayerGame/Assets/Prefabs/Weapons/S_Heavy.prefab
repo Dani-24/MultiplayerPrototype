@@ -98,6 +98,8 @@ MonoBehaviour:
   weaponMesh: {fileID: 1983471487978947646}
   bulletPrefab: {fileID: 4972482428676012466, guid: 75688502e096c3f4798c1d8e465b1285,
     type: 3}
+  rend: []
+  weaponSprite: {fileID: 21300000, guid: c2220e9a1a6ee0343ac83981b915f32f, type: 3}
 --- !u!82 &-4519959487617565935
 AudioSource:
   m_ObjectHideFlags: 0
@@ -278,6 +280,11 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: c4696c03664f00b4eafbaf20b3efc947,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 088e00d4e29d835438dbd6a997a087f4, type: 2}
     - target: {fileID: 919132149155446097, guid: c4696c03664f00b4eafbaf20b3efc947,
         type: 3}
       propertyPath: m_Name

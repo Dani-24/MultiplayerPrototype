@@ -67,4 +67,6 @@ public class Weapon : MonoBehaviour
     protected AudioSource audioS;
 
     [SerializeField] protected List<Renderer> rend = new List<Renderer>();
+
+    public Sprite weaponSprite;
 }

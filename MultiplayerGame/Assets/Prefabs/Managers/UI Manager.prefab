@@ -147,9 +147,14 @@ MonoBehaviour:
       type: 3}
     activated: 0
   - menu: 3
-    canvas: {fileID: 120545686579361429, guid: 8898176544e6bd440991c2acc6aff874, type: 3}
+    canvas: {fileID: 8033800672844654340, guid: 8898176544e6bd440991c2acc6aff874,
+      type: 3}
     activated: 0
   - menu: 4
+    canvas: {fileID: 9064120846817569833, guid: 4682c65d0da20e84cb6e9267e47ef3ab,
+      type: 3}
+    activated: 0
+  - menu: 5
     canvas: {fileID: 7050244984396838166, guid: 086a33b1e3d544446b3a989379d3893f,
       type: 3}
     activated: 0
@@ -162,7 +167,14 @@ MonoBehaviour:
   debugAnalysis: {fileID: 4515374472990123131}
   openSettings: 0
   openNetSettings: 0
+  openGear: 0
   gameplayMenuCreated: 0
+  alreadyShownTitle: 0
+  popUpMsgLog:
+    msg: 
+    duration: 0
+    visible: 0
+    goToThisScene: 
 --- !u!1001 &5203936183005494669
 PrefabInstance:
   m_ObjectHideFlags: 0

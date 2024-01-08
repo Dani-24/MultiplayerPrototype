@@ -193,7 +193,7 @@ MonoBehaviour:
   recoveryTime: 2.5
   regenHPSpeed: 5
   ink: 100
-  inkReloadSpeed: 10
+  inkReloadSpeed: 20
   inkReloadSpeedOnInk: 5
   onInk: 0
   playerInputEnabled: 0
@@ -256,6 +256,7 @@ MonoBehaviour:
     type: 3}
   weaponShooting: 0
   currentWeapon: {fileID: 0}
+  currentWeaponId: 0
   createdWeapon: 0
   weaponRngState:
     s0: 0
@@ -264,6 +265,7 @@ MonoBehaviour:
     s3: 0
   subWeapon: {fileID: 4612145116355683483, guid: c298e5f021ab0d54d9b89b8975adf95b,
     type: 3}
+  currentSubWeaponId: 0
   subWeaponShooting: 0
   specialWeapon: {fileID: 0}
   specialWeaponShooting: 0

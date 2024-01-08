@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 1c80628a4933ea944b4f0fefcc88c7c6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -181,6 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamTag: 
+  weaponName: Delay Bomb
   dmg: 180
   splashDmg: 30
   speed: 30
@@ -197,6 +198,7 @@ MonoBehaviour:
   rend:
   - {fileID: 1967691771641202558}
   minYaxis: -20
+  weaponSprite: {fileID: 21300000, guid: 4997721ed0bc66744bc3b2496d8e4a9e, type: 3}
 --- !u!65 &5770207345693590387
 BoxCollider:
   m_ObjectHideFlags: 0

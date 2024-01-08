@@ -7,6 +7,8 @@ public class SubWeapon : MonoBehaviour
 
     #region Propierties
 
+    public string weaponName;
+
     [Header("Sub Weapon Propierties")]
     [Tooltip("DMG dealt in lethal Radius")]
     public float dmg;
@@ -54,4 +56,6 @@ public class SubWeapon : MonoBehaviour
     protected float customGravity;
 
     #endregion
+
+    public Sprite weaponSprite;
 }

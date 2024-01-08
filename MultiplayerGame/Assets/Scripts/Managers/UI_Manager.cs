@@ -20,6 +20,7 @@ public class UI_Manager : MonoBehaviour
 
     public bool openSettings;
     public bool openNetSettings;
+    public bool openGear;
     public bool gameplayMenuCreated = false;
     public bool alreadyShownTitle = false;
 
@@ -67,6 +68,10 @@ public class UI_Manager : MonoBehaviour
         {
             currentCanvasMenu = GameUIs.Sett_Connection;
         }
+        else if(openGear && currentCanvasMenu != GameUIs.Sett_Gear)
+        {
+            currentCanvasMenu= GameUIs.Sett_Gear;
+        }
 
         for (int i = 0; i < canvasMenus.Count; i++)
         {
@@ -108,6 +113,7 @@ public class UI_Manager : MonoBehaviour
                 break;
             case GameUIs.Settings:
             case GameUIs.Sett_Connection:
+            case GameUIs.Sett_Gear:
                 SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Settings;
                 Cursor.lockState = CursorLockMode.None;
                 break;
@@ -126,8 +132,14 @@ public class UI_Manager : MonoBehaviour
 
     public void ToggleNetSettings()
     {
-        openSettings = false;
+        openSettings = openGear = false;
         openNetSettings = !openNetSettings;
+    }
+
+    public void ToggleGear()
+    {
+        openNetSettings = false;
+        openGear = !openGear;
     }
 
     public void PopUp_LogMessage(string _msg, float _duration = 5.0f, bool _visible = true, string _goToThisScene = "")
@@ -146,7 +158,7 @@ public class UI_Manager : MonoBehaviour
 
     public void CloseAll()
     {
-        openNetSettings = openSettings = false;
+        openNetSettings = openSettings = openGear = false;
         currentCanvasMenu = GameUIs.Gameplay;
     }
 
@@ -156,6 +168,7 @@ public class UI_Manager : MonoBehaviour
         Gameplay,
         Settings,
         Sett_Connection,
+        Sett_Gear,
         Msg_Log,
         None
     }
