@@ -92,5 +92,5 @@ MonoBehaviour:
   - {fileID: 3597637874272683826, guid: 3a90c2bfa639f794986351efc452c80b, type: 3}
   - {fileID: 9156943298703554230, guid: 907314e2baa82564cacf82c8c250a93c, type: 3}
   subWeapons:
-  - {fileID: 4612145116355683483, guid: c298e5f021ab0d54d9b89b8975adf95b, type: 3}
+  - {fileID: 3241901033288120645, guid: c298e5f021ab0d54d9b89b8975adf95b, type: 3}
   - {fileID: 4612145116355683483, guid: 55f923aac6892384b88b6229c05fd927, type: 3}

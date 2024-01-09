@@ -55,17 +55,19 @@ MonoBehaviour:
   range: 80
   cooldown: 0
   instantExplosion: 1
-  lethalRadius: 1
-  nonLethalRadius: 2.75
+  lethalRadius: 2
+  nonLethalRadius: 3
   aimYOffset: -28
   paintRadius: 5.5
   strength: 1
   hardness: 0
-  throwCost: 35
+  throwCost: 50
   rend:
   - {fileID: 6193764339262719274}
   minYaxis: -20
   weaponSprite: {fileID: 21300000, guid: b3309afc0f6bedf44bdec04d7a025e6a, type: 3}
+  explosionObject: {fileID: 8046681831239978808, guid: 2428890993db8eb48a044045d416ebac,
+    type: 3}
 --- !u!135 &7593265050115196477
 SphereCollider:
   m_ObjectHideFlags: 0

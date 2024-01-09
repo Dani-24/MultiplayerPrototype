@@ -13,13 +13,16 @@ EditorBuildSettings:
     guid: 903beed277ae7c8419848aa46962f4b3
   - enabled: 0
     path: Assets/Scenes/Maps/001_Bridge_Default.unity
-    guid: 9fc7c9fdf10aaa145b3fab9821fe67a7
+    guid: 5804d2ad143d2274ea10a3bded6bdeb1
   - enabled: 1
     path: Assets/Scenes/Maps/001_Bridge_Tower.unity
     guid: 85e408bd8732899428441665bdad0c7c
   - enabled: 0
     path: Assets/Scenes/Maps/002_Pool_Default.unity
     guid: 507e2b5d9f18a6c4aad773d0e085f599
+  - enabled: 1
+    path: Assets/Scenes/Maps/002_Pool_Tower.unity
+    guid: f7f5cffde68d62e44a9927866cb390a6
   - enabled: 0
     path: Assets/Scenes/Maps/003_Park_Default.unity
     guid: 184c7f4656efff74ea8bcb63bf2c28f7

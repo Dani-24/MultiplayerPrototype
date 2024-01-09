@@ -48,6 +48,7 @@ public class TowerObjective : MonoBehaviour
     [SerializeField] NetGameObject netPosZ;
 
     [SerializeField] float interpolationSpeed = 1.0f;
+    [SerializeField] float towerPlayerMaxDist;
 
     void Start()
     {
@@ -63,30 +64,8 @@ public class TowerObjective : MonoBehaviour
             }
         }
 
-        // Checkpoints Line between them
-        LineRenderer lr;
-        for (int i = 0; i < checkpoints.Length - 1; i++)
-        {
-            lr = checkpoints[i].GetComponent<LineRenderer>();
-
-            lr.SetPosition(0, checkpoints[i].position);
-            lr.SetPosition(1, checkpoints[i + 1].position);
-        }
-
-        lr = checkpoints[checkpoints.Length - 1].GetComponent<LineRenderer>();
-        lr.enabled = false;
-
-        // Total dist Alpha
-        for (int i = nextCheckpointId; i < checkpoints.Length - 1; i++)
-        {
-            alphaTotalDist += Vector3.Distance(checkpoints[i].position, checkpoints[i + 1].position);
-        }
-
-        // Total dist Beta
-        for (int i = nextCheckpointId; i > 0; i--)
-        {
-            betaTotalDist += Vector3.Distance(checkpoints[i].position, checkpoints[i - 1].position);
-        }
+        DrawTowerPath();
+        RecalculatePathLength();
     }
 
     void Update()
@@ -136,11 +115,6 @@ public class TowerObjective : MonoBehaviour
         // Progress
         CalcProgress();
 
-        for (var i = 0; i < checkpoints.Length - 1; i++)
-        {
-            Debug.DrawLine(checkpoints[i].position, checkpoints[i + 1].position);
-        }
-
         if (GameManagerScript.Instance.matchState != GameManagerScript.MatchState.playing) audioSource.volume = 0; else audioSource.volume = 1;
 
         // Netcode
@@ -154,6 +128,17 @@ public class TowerObjective : MonoBehaviour
         else
         {
             nextCheckpointId = (int)netNextCP.netValue;
+        }
+
+        // Check players deaths
+        for (int i = 0; i < playersOnTower.Count; i++)
+        {
+            if (Vector3.Distance(playersOnTower[i].transform.position, transform.position) > towerPlayerMaxDist)
+            {
+                playersOnTower[i].transform.SetParent(null);
+                playersOnTower.Remove(playersOnTower[i]);
+                break;
+            }
         }
     }
 
@@ -310,5 +295,38 @@ public class TowerObjective : MonoBehaviour
         Moving,
         Resting,
         Backing
+    }
+
+    public void DrawTowerPath()
+    {
+        // Checkpoints Line between them
+        LineRenderer lr;
+        for (int i = 0; i < checkpoints.Length - 1; i++)
+        {
+            lr = checkpoints[i].GetComponent<LineRenderer>();
+
+            lr.SetPosition(0, checkpoints[i].position);
+            lr.SetPosition(1, checkpoints[i + 1].position);
+        }
+
+        lr = checkpoints[checkpoints.Length - 1].GetComponent<LineRenderer>();
+        lr.enabled = false;
+    }
+
+    public void RecalculatePathLength()
+    {
+        alphaTotalDist = betaTotalDist = 0;
+
+        // Total dist Alpha
+        for (int i = startCheckpointId; i < checkpoints.Length - 1; i++)
+        {
+            alphaTotalDist += Vector3.Distance(checkpoints[i].position, checkpoints[i + 1].position);
+        }
+
+        // Total dist Beta
+        for (int i = startCheckpointId; i > 0; i--)
+        {
+            betaTotalDist += Vector3.Distance(checkpoints[i].position, checkpoints[i - 1].position);
+        }
     }
 }

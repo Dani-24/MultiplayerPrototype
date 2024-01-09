@@ -1294,7 +1294,7 @@ PrefabInstance:
     - target: {fileID: 4527986074025683099, guid: f975b4175d3a89b42b96b63c4b3a768f,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 4527986074025683099, guid: f975b4175d3a89b42b96b63c4b3a768f,
         type: 3}
@@ -12476,7 +12476,7 @@ PrefabInstance:
     - target: {fileID: 870351403364887287, guid: 453b4dbef51770a42970dd4272f561a6,
         type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 870351403364887287, guid: 453b4dbef51770a42970dd4272f561a6,
         type: 3}
@@ -15748,7 +15748,7 @@ PrefabInstance:
     - target: {fileID: 4107720835279090421, guid: 653638cab2f1e9943acc140ce38d013b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4107720835279090421, guid: 653638cab2f1e9943acc140ce38d013b,
         type: 3}
@@ -36497,9 +36497,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changeWaterLevel: 0
-  TerrainAlpha: {fileID: 1452826190}
-  TerrainBeta: {fileID: 0}
-  Water: {fileID: 1547825790}
+  GameObjectsToBroadcast: []
   audioSources:
   - {fileID: 1677566328}
 --- !u!82 &1677566328

@@ -55,6 +55,8 @@ public class SceneManagerScript : MonoBehaviour
 
     [SerializeField] bool useSpawnPoints = false;
     [SerializeField] Transform[] spawnPoints;
+    [SerializeField] float alphaFaceAngle = 0;
+    [SerializeField] float betaFaceAngle = 180;
 
     [Header("Current Scene Online GameObjects")]
     public List<NetGameObject> netGOs;
@@ -131,11 +133,11 @@ public class SceneManagerScript : MonoBehaviour
 
                     if (playerGOAtScene.GetComponent<PlayerStats>().teamTag == "Alpha")
                     {
-                        playerGOAtScene.GetComponent<PlayerMovement>().SetFacing(0);
+                        playerGOAtScene.GetComponent<PlayerMovement>().SetFacing(alphaFaceAngle);
                     }
                     else
                     {
-                        playerGOAtScene.GetComponent<PlayerMovement>().SetFacing(180);
+                        playerGOAtScene.GetComponent<PlayerMovement>().SetFacing(betaFaceAngle);
                     }
                     break;
                 }

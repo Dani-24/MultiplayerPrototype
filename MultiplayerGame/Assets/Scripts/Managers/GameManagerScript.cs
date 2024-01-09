@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class GameManagerScript : MonoBehaviour
 {
-    [SerializeField] float timerCount;
+    public float timerCount;
 
-    [SerializeField] GameMode gameMode;
+    public GameMode gameMode;
     [SerializeField] int alphaScore;
     [SerializeField] int betaScore;
 
@@ -28,7 +28,7 @@ public class GameManagerScript : MonoBehaviour
 
     [Header("Posibles GameModes")]
     //[SerializeField] Combatcentrik;
-    [SerializeField] TowerObjective tower;
+    public TowerObjective tower;
 
     #region Instance
 
@@ -63,7 +63,7 @@ public class GameManagerScript : MonoBehaviour
         switch (matchState)
         {
             case MatchState.waiting:
-                SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().playerInputEnabled = false;
+                SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Loading;
 
                 if (!timerNetGo.connectedToServer && timerCount <= 0)
                 {
@@ -91,7 +91,7 @@ public class GameManagerScript : MonoBehaviour
 
                 break;
             case MatchState.playing:
-                SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().playerInputEnabled = true;
+                SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Gameplay;
 
                 if (timerCount <= 10)
                 {
@@ -111,7 +111,7 @@ public class GameManagerScript : MonoBehaviour
 
                 break;
             case MatchState.finish:
-                SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().playerInputEnabled = false;
+                SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Loading;
                 screenMsg.text = "FINISH";
 
                 if (!timerNetGo.connectedToServer && timerCount <= 0)
@@ -122,7 +122,7 @@ public class GameManagerScript : MonoBehaviour
 
                 break;
             case MatchState.results:
-                SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().playerInputEnabled = false;
+                SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Loading;
 
                 if (alphaScore == betaScore)
                 {

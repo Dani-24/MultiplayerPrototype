@@ -67,13 +67,18 @@ public class CameraManager : MonoBehaviour
         {
             if (currentCam == playerCamera && !brain.IsBlending && SceneManagerScript.Instance.gameState == SceneManagerScript.GameState.Gameplay)
             {
-                SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().playerInputEnabled = true;
+                SetInputsEnabled(true);
             }
             else
             {
-                SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().playerInputEnabled = false;
+                SetInputsEnabled(false);
             }
         }
+    }
+
+    public void SetInputsEnabled(bool enable)
+    {
+        SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().playerInputEnabled = enable;
     }
 
     public void SwitchCamera(CinemachineFreeLook camera)

@@ -8,6 +8,8 @@ public class Bomb : SubWeapon
 
     List<Collider> bigDmgColliders = new List<Collider>();
 
+    [SerializeField] GameObject explosionObject;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -55,8 +57,18 @@ public class Bomb : SubWeapon
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Death")) Destroy(gameObject);
+    }
+
     public void OnExplosion()
     {
+        // Visual Effect
+        GameObject explo = Instantiate(explosionObject, transform.position, transform.rotation);
+        explo.GetComponent<Explosive>().maxRadius = nonLethalRadius * 1.5f;
+        explo.GetComponent<Renderer>().material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
+
         // Lethal Radius
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, lethalRadius);

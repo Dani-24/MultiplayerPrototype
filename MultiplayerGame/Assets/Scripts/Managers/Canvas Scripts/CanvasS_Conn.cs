@@ -22,6 +22,7 @@ public class CanvasS_Conn : MonoBehaviour
     [SerializeField] List<TMP_Text> roomPlayersTexts = new List<TMP_Text>();
 
     [SerializeField] GameObject startGameButton;
+    [SerializeField] GameObject startGameButton2;
 
     [SerializeField] Button gearButton;
 
@@ -48,10 +49,12 @@ public class CanvasS_Conn : MonoBehaviour
             if (ConnectionManager.Instance.isHosting && SceneManagerScript.Instance.sceneName == ConnectionManager.Instance.lobbyScene)
             {
                 startGameButton.SetActive(true);
+                startGameButton2.SetActive(true);
             }
             else
             {
                 startGameButton.SetActive(false);
+                startGameButton2.SetActive(false);
             }
         }
 

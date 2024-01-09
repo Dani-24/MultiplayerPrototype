@@ -72,6 +72,8 @@ public class PlayerStats : MonoBehaviour
 
         if (isDead)
         {
+            transform.parent = null;
+
             controller.enabled = false;
             transform.SetPositionAndRotation(spawnPos, Quaternion.Euler(Vector3.zero));
             controller.enabled = true;
@@ -143,9 +145,14 @@ public class PlayerStats : MonoBehaviour
             HP -= other.gameObject.GetComponent<Bullet>().DMG;
         }
 
-        if (other.CompareTag("teamChanger") /*&& GetComponent<PlayerNetworking>().isOwnByThisInstance*/)
+        if (other.CompareTag("teamChanger"))
         {
             ChangeTag(SceneManagerScript.Instance.GetRivalTag(teamTag));
+        }
+
+        if (other.CompareTag("Death"))
+        {
+            isDead = true;
         }
     }
 
