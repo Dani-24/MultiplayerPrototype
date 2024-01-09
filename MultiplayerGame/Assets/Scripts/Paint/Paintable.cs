@@ -52,7 +52,7 @@ public class Paintable : MonoBehaviour {
 
     public void CleanPaint()
     {
-        OnDisable();
+        //OnDisable();
         Start();
     }
 
