@@ -23,7 +23,7 @@ public class CanvasS_Gear : MonoBehaviour
 
     void Update()
     {
-        if (!UI_Manager.Instance.openGear) CloseThisUI();
+        if (!UI_Manager.Instance.openGear) CloseThis();
 
         if (delaySelected)
         {
@@ -67,6 +67,11 @@ public class CanvasS_Gear : MonoBehaviour
     public void CloseThisUI()
     {
         UI_Manager.Instance.ToggleNetSettings();
+        Destroy(gameObject);
+    }
+
+    void CloseThis()
+    {
         Destroy(gameObject);
     }
 

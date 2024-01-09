@@ -63,8 +63,9 @@ public class GameManagerScript : MonoBehaviour
         switch (matchState)
         {
             case MatchState.waiting:
-                SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Loading;
-
+                CameraManager.Instance.pauseUpdate = true;
+                SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().playerInputEnabled = false;
+                
                 if (!timerNetGo.connectedToServer && timerCount <= 0)
                 {
                     matchState = MatchState.playing;
@@ -91,7 +92,7 @@ public class GameManagerScript : MonoBehaviour
 
                 break;
             case MatchState.playing:
-                SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Gameplay;
+                CameraManager.Instance.pauseUpdate = false;
 
                 if (timerCount <= 10)
                 {
@@ -111,7 +112,8 @@ public class GameManagerScript : MonoBehaviour
 
                 break;
             case MatchState.finish:
-                SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Loading;
+                CameraManager.Instance.pauseUpdate = true;
+                SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().playerInputEnabled = false;
                 screenMsg.text = "FINISH";
 
                 if (!timerNetGo.connectedToServer && timerCount <= 0)
@@ -122,7 +124,8 @@ public class GameManagerScript : MonoBehaviour
 
                 break;
             case MatchState.results:
-                SceneManagerScript.Instance.gameState = SceneManagerScript.GameState.Loading;
+                CameraManager.Instance.pauseUpdate = true;
+                SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().playerInputEnabled = false;
 
                 if (alphaScore == betaScore)
                 {

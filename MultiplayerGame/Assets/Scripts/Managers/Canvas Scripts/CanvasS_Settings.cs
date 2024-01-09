@@ -94,7 +94,7 @@ public class CanvasS_Settings : MonoBehaviour
             if (menu.option == option) menu.panel.SetActive(true); else menu.panel.SetActive(false);
         }
 
-        if (!UI_Manager.Instance.openSettings) CloseSettings();
+        if (!UI_Manager.Instance.openSettings) CloseThis();
     }
 
     public void CloseSettings()
@@ -102,6 +102,12 @@ public class CanvasS_Settings : MonoBehaviour
         if(changeName.text != UI_Manager.Instance.userName && changeName.text != "") UI_Manager.Instance.userName = changeName.text;
 
         UI_Manager.Instance.ToggleNetSettings();
+        Destroy(gameObject);
+    }
+
+    void CloseThis()
+    {
+        if (changeName.text != UI_Manager.Instance.userName && changeName.text != "") UI_Manager.Instance.userName = changeName.text;
         Destroy(gameObject);
     }
 

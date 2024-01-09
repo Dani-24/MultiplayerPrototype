@@ -22,6 +22,8 @@ public class CameraManager : MonoBehaviour
     [Tooltip("3rd Person Player Camera")]
     public CinemachineFreeLook playerCamera;
 
+    [HideInInspector] public bool pauseUpdate = false;
+
     #region Instance
 
     private static CameraManager _instance;
@@ -63,7 +65,7 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
-        if (currentCam != null)
+        if (currentCam != null && !pauseUpdate)
         {
             if (currentCam == playerCamera && !brain.IsBlending && SceneManagerScript.Instance.gameState == SceneManagerScript.GameState.Gameplay)
             {

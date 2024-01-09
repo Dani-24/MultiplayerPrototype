@@ -163,7 +163,17 @@ public class TowerObjective : MonoBehaviour
                     if (backCont >= timeToBack)
                     {
                         backCont = 0;
-                        if (teamOnTower == "Alpha") teamOnTower = "Beta"; else teamOnTower = "Alpha";
+
+                        if (nextCheckpointId < startCheckpointId)
+                        {
+                            if (teamOnTower == "Alpha") nextCheckpointId--;
+                            teamOnTower = "Alpha";
+                        }
+                        else
+                        {
+                            if (teamOnTower == "Beta") nextCheckpointId++;
+                            teamOnTower = "Beta";
+                        }
 
                         state = TowerState.Backing;
                         ChangeCheckpoint();

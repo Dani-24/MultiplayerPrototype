@@ -303,6 +303,16 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -18
       objectReference: {fileID: 0}
+    - target: {fileID: 3541423196990654777, guid: 20d7599dc50b34041a033c9032c2534c,
+        type: 3}
+      propertyPath: enablePopup
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3541423196990654777, guid: 20d7599dc50b34041a033c9032c2534c,
+        type: 3}
+      propertyPath: startMinimized
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3652142523397882441, guid: 20d7599dc50b34041a033c9032c2534c,
         type: 3}
       propertyPath: m_AnchorMax.y
