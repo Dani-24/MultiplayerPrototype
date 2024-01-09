@@ -175,6 +175,8 @@ public class SceneManagerScript : MonoBehaviour
         if (cleanPaint)
         {
             sceneRoot.BroadcastMessage("CleanPaint");
+            sceneRoot.BroadcastMessage("CleanPaint");
+            sceneRoot.BroadcastMessage("CleanPaint");
             cleanPaint = false;
         }
     }
