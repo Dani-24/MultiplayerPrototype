@@ -80,17 +80,17 @@ MonoBehaviour:
   teamTag: 
   weaponName: Shooter Rng
   cadence: 15
-  shootDMG: 24
+  shootDMG: 33
   bulletSpeed: 50
-  weaponRange: 12.5
-  rng: 20
-  jumpRng: 30
-  shootCost: 0.32
-  moveSpeedMultiplier: 0.75
-  pRadius: 4
+  weaponRange: 7.5
+  rng: 10
+  jumpRng: 20
+  shootCost: 0.45
+  moveSpeedMultiplier: 0.9
+  pRadius: 5
   pStrength: 1
   pHardness: 0
-  sprayDropletsNum: 4
+  sprayDropletsNum: 3
   sprayDropRadius: 0.65
   sprayPaintRadius: 2.25
   spawnBulletPosition: {fileID: 8008173628777336271}

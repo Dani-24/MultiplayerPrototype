@@ -87,7 +87,7 @@ MonoBehaviour:
   rng: 3
   jumpRng: 6
   shootCost: 0.8
-  moveSpeedMultiplier: 0.65
+  moveSpeedMultiplier: 0.75
   pRadius: 3
   pStrength: 1
   pHardness: 0

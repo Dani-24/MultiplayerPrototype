@@ -165,15 +165,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   teamTag: 
   weaponName: Shooter Express
-  cadence: 12
+  cadence: 10.3
   shootDMG: 28
   bulletSpeed: 60
   weaponRange: 15
   rng: 2.5
   jumpRng: 6
   shootCost: 0.71
-  moveSpeedMultiplier: 0.7
-  pRadius: 3.1
+  moveSpeedMultiplier: 0.8
+  pRadius: 3
   pStrength: 1
   pHardness: 0
   sprayDropletsNum: 4
