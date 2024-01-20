@@ -40,7 +40,7 @@ public class Dummy : MonoBehaviour
     {
         if (other.CompareTag("Bullet") && HP > 0)
         {
-            HP -= other.gameObject.GetComponent<Bullet>().DMG;
+            HP -= other.gameObject.GetComponent<DefaultBullet>().DMG;
             ResetCont();
         }
     }

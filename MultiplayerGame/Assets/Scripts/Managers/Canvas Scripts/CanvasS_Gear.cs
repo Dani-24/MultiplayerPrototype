@@ -6,7 +6,7 @@ public class CanvasS_Gear : MonoBehaviour
 {
     [SerializeField] ShowThis displayList = ShowThis.weapons;
 
-    [SerializeField] Button[] weaponsList;
+    [SerializeField] Button[] weaponButtonsList;
 
     [Header("Current weapon Equipped")]
     [SerializeField] TMP_Text selectedWeaponNameText;
@@ -16,8 +16,23 @@ public class CanvasS_Gear : MonoBehaviour
     bool delaySelected = false;
     float delayToShowSelected = 0;
 
+    [SerializeField] int weaponPags = 1;
+    [SerializeField] int subPags = 1;
+    [SerializeField] int spPags = 1;
+    [SerializeField] int actualPage = 1;
+
     void Start()
     {
+        weaponPags = SceneManagerScript.Instance.mainWeapons.Length / weaponButtonsList.Length;
+        subPags = SceneManagerScript.Instance.subWeapons.Length / weaponButtonsList.Length;
+        // spPags = ....
+
+        weaponPags = Mathf.CeilToInt(weaponPags);
+        subPags = Mathf.CeilToInt(subPags);
+        spPags = Mathf.CeilToInt(spPags);
+
+        actualPage = 0;
+
         ChangeDisplayList();
     }
 
@@ -38,23 +53,25 @@ public class CanvasS_Gear : MonoBehaviour
 
     void ChangeDisplayList()
     {
-        for (int i = 0; i < weaponsList.Length; i++)
+        for (int i = 0; i < weaponButtonsList.Length; i++)
         {
-            weaponsList[i].image.sprite = null;
+            weaponButtonsList[i].image.sprite = null;
         }
 
         switch (displayList)
         {
             case ShowThis.weapons:
-                for (int i = 0; i < weaponsList.Length && i < SceneManagerScript.Instance.mainWeapons.Length; i++)
+                for (int i = 0; i < weaponButtonsList.Length && i < SceneManagerScript.Instance.mainWeapons.Length; i++)
                 {
-                    weaponsList[i].image.sprite = SceneManagerScript.Instance.mainWeapons[i].GetComponent<Weapon>().weaponSprite;
+                    if (i + 9 * actualPage == SceneManagerScript.Instance.mainWeapons.Length) break;
+                    weaponButtonsList[i].image.sprite = SceneManagerScript.Instance.mainWeapons[i + 9 * actualPage].GetComponent<Weapon>().weaponSprite;
                 }
                 break;
             case ShowThis.subWeapons:
-                for (int i = 0; i < weaponsList.Length && i < SceneManagerScript.Instance.subWeapons.Length; i++)
+                for (int i = 0; i < weaponButtonsList.Length && i < SceneManagerScript.Instance.subWeapons.Length; i++)
                 {
-                    weaponsList[i].image.sprite = SceneManagerScript.Instance.subWeapons[i].GetComponent<SubWeapon>().weaponSprite;
+                    if (i + 9 * actualPage == SceneManagerScript.Instance.subWeapons.Length) break;
+                    weaponButtonsList[i].image.sprite = SceneManagerScript.Instance.subWeapons[i + 9 * actualPage].GetComponent<SubWeapon>().weaponSprite;
                 }
                 break;
             case ShowThis.specials:
@@ -62,70 +79,6 @@ public class CanvasS_Gear : MonoBehaviour
         }
 
         UpdateWeaponShowingInfo();
-    }
-
-    public void CloseThisUI()
-    {
-        UI_Manager.Instance.ToggleNetSettings();
-        Destroy(gameObject);
-    }
-
-    void CloseThis()
-    {
-        Destroy(gameObject);
-    }
-
-    public void Button_MainW()
-    {
-        if (displayList != ShowThis.weapons)
-        {
-            displayList = ShowThis.weapons;
-            ChangeDisplayList();
-        }
-    }
-
-    public void Button_SubW()
-    {
-        if (displayList != ShowThis.subWeapons)
-        {
-            displayList = ShowThis.subWeapons;
-            ChangeDisplayList();
-        }
-    }
-
-    public void Button_SpecialW()
-    {
-        if (displayList != ShowThis.specials)
-        {
-            displayList = ShowThis.specials;
-            ChangeDisplayList();
-        }
-    }
-
-    public void Button_WeaponSelected(int id)
-    {
-        switch (displayList)
-        {
-            case ShowThis.weapons:
-                if (id < SceneManagerScript.Instance.mainWeapons.Length)
-                {
-                    SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerArmament>().ChangeWeapon(id);
-                }
-                break;
-            case ShowThis.subWeapons:
-                if (id < SceneManagerScript.Instance.subWeapons.Length)
-                {
-                    SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerArmament>().ChangeSubWeapon(id);
-                }
-                break;
-            case ShowThis.specials:
-                break;
-        }
-
-        delaySelected = true;
-        delayToShowSelected = 10;
-
-        //UpdateWeaponShowingInfo();
     }
 
     void UpdateWeaponShowingInfo()
@@ -153,8 +106,98 @@ public class CanvasS_Gear : MonoBehaviour
             case ShowThis.specials:
                 break;
         }
-
     }
+
+    #region Buttons
+
+    public void CloseThisUI()
+    {
+        UI_Manager.Instance.ToggleNetSettings();
+        Destroy(gameObject);
+    }
+
+    void CloseThis()
+    {
+        Destroy(gameObject);
+    }
+
+    public void Button_MainW()
+    {
+        if (displayList != ShowThis.weapons)
+        {
+            displayList = ShowThis.weapons;
+            actualPage = 0;
+            ChangeDisplayList();
+        }
+    }
+
+    public void Button_SubW()
+    {
+        if (displayList != ShowThis.subWeapons)
+        {
+            displayList = ShowThis.subWeapons;
+            actualPage = 0;
+            ChangeDisplayList();
+        }
+    }
+
+    public void Button_SpecialW()
+    {
+        if (displayList != ShowThis.specials)
+        {
+            displayList = ShowThis.specials;
+            actualPage = 0;
+            ChangeDisplayList();
+        }
+    }
+
+    public void Button_WeaponSelected(int id)
+    {
+        id += 9 * actualPage;
+
+        switch (displayList)
+        {
+            case ShowThis.weapons:
+                if (id < SceneManagerScript.Instance.mainWeapons.Length)
+                {
+                    SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerArmament>().ChangeWeapon(id);
+                }
+                break;
+            case ShowThis.subWeapons:
+                if (id < SceneManagerScript.Instance.subWeapons.Length)
+                {
+                    SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerArmament>().ChangeSubWeapon(id);
+                }
+                break;
+            case ShowThis.specials:
+                break;
+        }
+
+        delaySelected = true;
+        delayToShowSelected = 10;
+
+        //UpdateWeaponShowingInfo();
+    }
+
+    public void Change_Page()
+    {
+        switch (displayList)
+        {
+            case ShowThis.weapons:
+                if (actualPage < weaponPags) actualPage++; else actualPage = 0;
+                break;
+            case ShowThis.subWeapons:
+                if (actualPage < subPags) actualPage++; else actualPage = 0;
+                break;
+            case ShowThis.specials:
+                if (actualPage < spPags) actualPage++; else actualPage = 0;
+                break;
+        }
+
+        ChangeDisplayList();
+    }
+
+    #endregion
 
     public enum ShowThis
     {

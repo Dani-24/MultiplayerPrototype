@@ -1,7 +1,14 @@
 using UnityEngine;
 
-public class Shooter : Weapon
+public class Blaster : Weapon
 {
+    [Header("Gunshot Special Propierties")]
+    [SerializeField] float oneShotRadius;
+    [SerializeField] float splashRadius;
+
+    [SerializeField] float splashMaxDmg;
+    [SerializeField] float splashMinDmg;
+
     private void Start()
     {
         audioS = GetComponent<AudioSource>();
@@ -67,10 +74,6 @@ public class Shooter : Weapon
     {
         if (GetComponentInParent<PlayerStats>().ink >= shootCost)
         {
-            Quaternion aimDirQ = Quaternion.LookRotation(wpAimDirection);
-
-            Vector3 aimDirVec = aimDirQ.eulerAngles;
-
             if (GetComponentInParent<PlayerNetworking>().isOwnByThisInstance)
             {
                 GetComponentInParent<PlayerArmament>().weaponRngState = Random.state;
@@ -80,29 +83,39 @@ public class Shooter : Weapon
                 Random.state = GetComponentInParent<PlayerArmament>().weaponRngState;
             }
 
-            // RNG
-            if (GetComponentInParent<PlayerMovement>().isGrounded)
-            {
-                aimDirVec.y += Random.Range(-rng, rng);
-            }
-            else
-            {
-                aimDirVec.y += Random.Range(-jumpRng, jumpRng);
-            }
+            Vector3 aimDirVec = Quaternion.LookRotation(wpAimDirection).eulerAngles;
+
+            // Horizontal RNG
+            if (GetComponentInParent<PlayerMovement>().isGrounded) aimDirVec.y += Random.Range(-rng, rng); else aimDirVec.y += Random.Range(-jumpRng, jumpRng);
 
             GameObject bullet = Instantiate(bulletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
 
-            bullet.GetComponent<DefaultBullet>().teamTag = teamTag;
-            bullet.GetComponent<DefaultBullet>().speed = bulletSpeed;
-            bullet.GetComponent<DefaultBullet>().range = weaponRange;
-            bullet.GetComponent<DefaultBullet>().DMG = shootDMG;
-            bullet.GetComponent<DefaultBullet>().pRadius = pRadius;
-            bullet.GetComponent<DefaultBullet>().pHardness = pHardness;
-            bullet.GetComponent<DefaultBullet>().pStrength = pStrength;
-            bullet.GetComponent<DefaultBullet>().meshScale = 1;
+            bullet.GetComponent<ExplosiveBullet>().teamTag = teamTag;
+            bullet.GetComponent<ExplosiveBullet>().speed = bulletSpeed;
+            bullet.GetComponent<ExplosiveBullet>().range = weaponRange;
+            bullet.GetComponent<ExplosiveBullet>().DMG = shootDMG;
+            bullet.GetComponent<ExplosiveBullet>().pRadius = pRadius;
+            bullet.GetComponent<ExplosiveBullet>().pHardness = pHardness;
+            bullet.GetComponent<ExplosiveBullet>().pStrength = pStrength;
+            bullet.GetComponent<ExplosiveBullet>().meshScale = 1;
+            bullet.GetComponent<ExplosiveBullet>().oneShotRadius = oneShotRadius;
+            bullet.GetComponent<ExplosiveBullet>().splashRadius = splashRadius;
+            bullet.GetComponent<ExplosiveBullet>().splashMaxDmg = splashMaxDmg;
+            bullet.GetComponent<ExplosiveBullet>().splashMinDmg = splashMinDmg;
+
+            GameObject mainSprayDrop = Instantiate(bulletDropletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
+
+            mainSprayDrop.GetComponent<DefaultBullet>().teamTag = teamTag;
+            mainSprayDrop.GetComponent<DefaultBullet>().speed = bulletSpeed;
+            mainSprayDrop.GetComponent<DefaultBullet>().range = weaponRange;
+            mainSprayDrop.GetComponent<DefaultBullet>().DMG = 0;
+            mainSprayDrop.GetComponent<DefaultBullet>().pRadius = pRadius;
+            mainSprayDrop.GetComponent<DefaultBullet>().pHardness = pHardness;
+            mainSprayDrop.GetComponent<DefaultBullet>().pStrength = pStrength;
+            mainSprayDrop.GetComponent<DefaultBullet>().meshScale = sprayDropRadius;
 
             // Ink droplets
-            for (int i = 0; i < sprayDropletsNum; i++)
+            for (int j = 0; j < sprayDropletsNum; j++)
             {
                 GameObject sprayDrop = Instantiate(bulletDropletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
 

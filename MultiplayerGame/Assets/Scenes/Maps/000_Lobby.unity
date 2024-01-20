@@ -17015,20 +17015,9 @@ PrefabInstance:
       objectReference: {fileID: 1828459510}
     - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
         type: 3}
-      propertyPath: mainWeapons.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
       propertyPath: spawnPoints.Array.size
       value: 8
       objectReference: {fileID: 0}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[5]
-      value: 
-      objectReference: {fileID: 9156943298703554230, guid: b8e7566ac64b0fb45b788933840b2ab2,
-        type: 3}
     - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
         type: 3}
       propertyPath: spawnPoints.Array.data[0]

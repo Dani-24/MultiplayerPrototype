@@ -184,6 +184,7 @@ MonoBehaviour:
   weaponMesh: {fileID: 1983471487978947646}
   bulletPrefab: {fileID: 4972482428676012466, guid: 75688502e096c3f4798c1d8e465b1285,
     type: 3}
+  bulletDropletPrefab: {fileID: 0}
   rend: []
   weaponSprite: {fileID: 21300000, guid: e302942d5ed1f4641ac1d6af5cc6ac23, type: 3}
 --- !u!82 &6473631592966740588

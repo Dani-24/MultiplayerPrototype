@@ -58,6 +58,7 @@ public class Weapon : MonoBehaviour
     [Header("Weapon meshes")]
     public GameObject weaponMesh;
     public GameObject bulletPrefab;
+    public GameObject bulletDropletPrefab;
 
     // Counter entre tiro y tiro
     protected float shootCooldown = 0f;

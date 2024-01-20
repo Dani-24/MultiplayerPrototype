@@ -167,7 +167,7 @@ MonoBehaviour:
   cadence: 7
   shootDMG: 42
   bulletSpeed: 75
-  weaponRange: 30
+  weaponRange: 28
   rng: 1.5
   jumpRng: 3
   shootCost: 1.25
@@ -179,7 +179,7 @@ MonoBehaviour:
   sprayDropRadius: 0.55
   sprayPaintRadius: 2
   spawnBulletPosition: {fileID: 3150462560917926386}
-  shootingVerticalOffset: 0.175
+  shootingVerticalOffset: 0.16
   weaponMesh: {fileID: 1983471487978947646}
   bulletPrefab: {fileID: 4972482428676012466, guid: 75688502e096c3f4798c1d8e465b1285,
     type: 3}

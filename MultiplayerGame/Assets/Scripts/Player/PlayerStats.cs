@@ -142,7 +142,7 @@ public class PlayerStats : MonoBehaviour
     {
         if (other.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag) + "Bullet") && GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
-            HP -= other.gameObject.GetComponent<Bullet>().DMG;
+            HP -= other.gameObject.GetComponent<DefaultBullet>().DMG;
         }
 
         if (other.CompareTag("teamChanger"))
