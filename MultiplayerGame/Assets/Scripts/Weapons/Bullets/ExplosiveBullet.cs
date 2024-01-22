@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static DefaultBullet;
 
 public class ExplosiveBullet : Bullet
 {
@@ -13,7 +12,7 @@ public class ExplosiveBullet : Bullet
 
     [SerializeField] GameObject explosionObject;
 
-    List<Collider> bigDmgColliders = new List<Collider>();
+    List<Collider> bigDmgColliders = new();
 
     void Start()
     {
@@ -60,7 +59,7 @@ public class ExplosiveBullet : Bullet
 
         foreach (Collider hit in colliders)
         {
-            if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bomb"))
+            if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bullet"))
             {
                 hit.GetComponent<PlayerStats>().HP -= DMG;
             }
@@ -84,7 +83,7 @@ public class ExplosiveBullet : Bullet
         {
             if (!bigDmgColliders.Contains(hit))
             {
-                if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bomb"))
+                if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bullet"))
                 {
                     float dist = Vector3.Distance(transform.position, hit.ClosestPointOnBounds(transform.position));
 

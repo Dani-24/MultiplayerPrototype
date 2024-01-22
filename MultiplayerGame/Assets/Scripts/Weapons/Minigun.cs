@@ -1,10 +1,12 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Shooter : Weapon
+public class Minigun : Weapon
 {
-    [Header("Shooter Additional propierties")]
-    [SerializeField][Tooltip("For Burst shooters")] int bulletsPerShot = 1;
-    [SerializeField] float burstBulletsSpeedReduction = 2.5f;
+    [Header("Minigun propierties")]
+    [SerializeField] float costIncrease;
+    [SerializeField] float costRecoverSpeed = 1.0f;
+    
 
     private void Start()
     {
@@ -30,7 +32,6 @@ public class Shooter : Weapon
         wpAimDirection.y += shootingVerticalOffset;
 
         // ====== Disparar ======
-
         if (shootCooldown >= 0.0f)
         {
             shootCooldown -= Time.deltaTime;
@@ -41,6 +42,8 @@ public class Shooter : Weapon
             shootCooldown = 1 / cadence;
         }
 
+        if(!isShooting && actualBulletCost > shootCost) actualBulletCost -= costIncrease * costRecoverSpeed * Time.deltaTime;
+       
         MaterialsFromTeamColor();
     }
 
@@ -71,7 +74,7 @@ public class Shooter : Weapon
 
     void Shoot()
     {
-        if (GetComponentInParent<PlayerStats>().ink >= shootCost)
+        if (GetComponentInParent<PlayerStats>().ink >= actualBulletCost)
         {
             Quaternion aimDirQ = Quaternion.LookRotation(wpAimDirection);
 
@@ -107,20 +110,6 @@ public class Shooter : Weapon
             bullet.GetComponent<DefaultBullet>().pStrength = pStrength;
             bullet.GetComponent<DefaultBullet>().meshScale = 1;
 
-            for(int i = 0; i < bulletsPerShot - 1; i++)
-            {
-                GameObject bulletb = Instantiate(bulletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
-
-                bulletb.GetComponent<DefaultBullet>().teamTag = teamTag;
-                bulletb.GetComponent<DefaultBullet>().speed = bulletSpeed - burstBulletsSpeedReduction * i;
-                bulletb.GetComponent<DefaultBullet>().range = weaponRange;
-                bulletb.GetComponent<DefaultBullet>().DMG = shootDMG;
-                bulletb.GetComponent<DefaultBullet>().pRadius = pRadius;
-                bulletb.GetComponent<DefaultBullet>().pHardness = pHardness;
-                bulletb.GetComponent<DefaultBullet>().pStrength = pStrength;
-                bulletb.GetComponent<DefaultBullet>().meshScale = 1;
-            }
-
             // Ink droplets
             for (int i = 0; i < sprayDropletsNum; i++)
             {
@@ -137,12 +126,14 @@ public class Shooter : Weapon
             }
 
             // Cost ink
-            GetComponentInParent<PlayerStats>().ink -= shootCost;
+            GetComponentInParent<PlayerStats>().ink -= actualBulletCost;
 
             // Sound
             audioS.volume = Random.Range(0.9f, 1.0f);
             audioS.pitch = Random.Range(0.9f, 1.1f);
             audioS.PlayOneShot(audioS.clip);
+
+            actualBulletCost += costIncrease;
         }
     }
 }

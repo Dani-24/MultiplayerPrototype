@@ -67,7 +67,7 @@ public class PlayerNetworking : MonoBehaviour
 
         if (GetComponent<PlayerArmament>().currentWeapon != null)
         {
-            if (GetComponent<PlayerStats>().ink >= GetComponent<PlayerArmament>().currentWeapon.GetComponent<Weapon>().shootCost)
+            if (GetComponent<PlayerStats>().ink >= GetComponent<PlayerArmament>().currentWeapon.GetComponent<Weapon>().actualBulletCost)
                 pPck.shooting = GetComponent<PlayerArmament>().weaponShooting;
             else
                 pPck.shooting = false;

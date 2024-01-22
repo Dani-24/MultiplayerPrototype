@@ -246,17 +246,17 @@ MonoBehaviour:
   teamTag: 
   weaponName: Blaster Express
   cadence: 2
-  shootDMG: 75
-  bulletSpeed: 60
-  weaponRange: 10
+  shootDMG: 85
+  bulletSpeed: 75
+  weaponRange: 13
   rng: 0
   jumpRng: 2
   shootCost: 5
   moveSpeedMultiplier: 0.7
-  pRadius: 4
+  pRadius: 2
   pStrength: 1
   pHardness: 0
-  sprayDropletsNum: 2
+  sprayDropletsNum: 6
   sprayDropRadius: 0.5
   sprayPaintRadius: 2
   spawnBulletPosition: {fileID: 8008173628777336271}
@@ -270,8 +270,8 @@ MonoBehaviour:
   - {fileID: 5263210421332541429}
   - {fileID: 3969247087655941251}
   weaponSprite: {fileID: 21300000, guid: 05c7216c78d4dd34ebe2bac9c1e274d7, type: 3}
-  oneShotRadius: 2
-  splashRadius: 5
+  oneShotRadius: 1
+  splashRadius: 2.5
   splashMaxDmg: 35
   splashMinDmg: 25
 --- !u!82 &2237491516721324905

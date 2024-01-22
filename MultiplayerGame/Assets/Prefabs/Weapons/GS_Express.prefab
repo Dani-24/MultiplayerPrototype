@@ -163,7 +163,7 @@ MonoBehaviour:
   teamTag: 
   weaponName: Gunshot Express
   cadence: 4
-  shootDMG: 90
+  shootDMG: 75
   bulletSpeed: 75
   weaponRange: 9
   rng: 5

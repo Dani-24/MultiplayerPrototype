@@ -20,6 +20,8 @@ public class Blaster : Weapon
         }
 
         if (bulletDropletPrefab == null) bulletDropletPrefab = bulletPrefab;
+
+        actualBulletCost = shootCost;
     }
 
     void Update()

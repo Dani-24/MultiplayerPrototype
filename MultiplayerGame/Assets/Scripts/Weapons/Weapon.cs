@@ -50,6 +50,7 @@ public class Weapon : MonoBehaviour
     public float shootingVerticalOffset = 0.5f;
 
     [Header("Debug Info")]
+    public float actualBulletCost;
     protected bool isShooting = false;
 
     [Tooltip("Direction in which is the weapon aiming to shoot")]

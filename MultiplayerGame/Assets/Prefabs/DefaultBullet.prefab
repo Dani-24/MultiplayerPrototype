@@ -134,15 +134,15 @@ MonoBehaviour:
   speed: 10
   range: 5
   DMG: 35
-  customGravity: -17.5
-  fallSpeedMultiplier: 10
   meshScale: 1
-  radius: 1
-  strength: 1
-  hardness: 1
-  bulletState: 0
+  pRadius: 1
+  pStrength: 1
+  pHardness: 1
   minYaxis: -20
   meshTransform: {fileID: 1513989519296947346}
+  customGravity: -20
+  fallSpeedMultiplier: 10
+  bulletState: 0
 --- !u!54 &4648429456704870101
 Rigidbody:
   m_ObjectHideFlags: 0
