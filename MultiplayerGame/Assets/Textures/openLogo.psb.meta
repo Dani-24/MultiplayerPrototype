@@ -94,27 +94,6 @@ ScriptedImporter:
     spritePosition: {x: 0, y: 0}
   mosaicSpriteImportData: []
   rigSpriteImportData:
-  - name: Demo Day Edition
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 808
-      width: 835
-      height: 265
-    spriteID: aa9d5928e9f29624f9cc96eb5cea2a7e
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 808}
-    spritePosition: {x: 98, y: 301}
   - name: openLogo
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -170,16 +149,6 @@ ScriptedImporter:
   resliceFromLayer: 0
   mosaicPSDLayers: []
   rigPSDLayers:
-  - name: Demo Day Edition
-    spriteName: Demo Day Edition
-    isGroup: 0
-    parentIndex: -1
-    spriteID: aa9d5928e9f29624f9cc96eb5cea2a7e
-    layerID: 5
-    mosaicPosition: {x: 4, y: 808}
-    flatten: 0
-    isImported: 1
-    isVisible: 1
   - name: openLogo
     spriteName: openLogo
     isGroup: 0

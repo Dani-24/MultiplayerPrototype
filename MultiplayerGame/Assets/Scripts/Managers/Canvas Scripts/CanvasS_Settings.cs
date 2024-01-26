@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -75,10 +74,10 @@ public class CanvasS_Settings : MonoBehaviour
         gamepadXSlider.value = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().gamepadSens.x;
         gamepadYSlider.value = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().gamepadSens.y;
 
-        mouseXText.text = mouseXSlider.value.ToString();
-        mouseYText.text = mouseYSlider.value.ToString();
-        gamepadXText.text = gamepadXSlider.value.ToString();
-        gamepadYText.text = gamepadYSlider.value.ToString();
+        mouseXText.text = mouseXSlider.value.ToString("F3");
+        mouseYText.text = (mouseYSlider.value * 100).ToString("F3");
+        gamepadXText.text = gamepadXSlider.value.ToString("F3");
+        gamepadYText.text = (gamepadYSlider.value * 100).ToString("F3");
 
         // --- Audio ---
         // Con un Save Manager guardar el volumen y aqui aplicarlo al Slider.value
@@ -161,22 +160,22 @@ public class CanvasS_Settings : MonoBehaviour
     public void SetMouseXSens(float value)
     {
         SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().ChangeSens(true, true, value);
-        mouseXText.text = mouseXSlider.value.ToString();
+        mouseXText.text = mouseXSlider.value.ToString("F3");
     }
     public void SetMouseYSens(float value)
     {
         SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().ChangeSens(true, false, value);
-        mouseYText.text = mouseYSlider.value.ToString();
+        mouseYText.text = (mouseYSlider.value * 100).ToString("F3");
     }
     public void SetGamepadXSens(float value)
     {
         SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().ChangeSens(false, true, value);
-        gamepadXText.text = gamepadXSlider.value.ToString();
+        gamepadXText.text = gamepadXSlider.value.ToString("F3");
     }
     public void SetGamepadYSens(float value)
     {
         SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().ChangeSens(false, false, value);
-        gamepadYText.text = gamepadYSlider.value.ToString();
+        gamepadYText.text = (gamepadYSlider.value * 100).ToString("F3");
     }
 
     #endregion
