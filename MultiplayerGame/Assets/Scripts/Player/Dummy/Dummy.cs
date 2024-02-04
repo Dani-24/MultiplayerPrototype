@@ -1,47 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static PlayerStats;
 
 public class Dummy : MonoBehaviour
 {
-    public float HP = 100.0f;
+    public bool dummyEnabled = true;
+
+    public float dmgReceived = 100.0f;
     float maxHP;
 
     float contMax;
     public float timeToRegen = 5;
 
+    public string teamTag;
+
+    [SerializeField] GameObject weaponPrefab;
+
+    public bool weaponShooting;
+
     void Start()
     {
         contMax = timeToRegen;
-        maxHP = HP;
+        maxHP = dmgReceived;
     }
 
     void Update()
     {
-        if (HP < 0) HP = 0;
+        if (!dummyEnabled) return;
 
-        if (timeToRegen > 0 && HP != 100)
-        {
+        gameObject.tag = teamTag = SceneManagerScript.Instance.GetRivalTag(SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().teamTag);
+        weaponPrefab.GetComponent<Weapon>().teamTag = teamTag;
+
+        weaponShooting = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerArmament>().weaponShooting;
+
+        if (timeToRegen > 0 && dmgReceived != maxHP)
             timeToRegen -= Time.deltaTime;
-        }
         else
-        {
             ResetCont(true);
-        }
     }
 
     void ResetCont(bool regen = false)
     {
         timeToRegen = contMax;
-        if(regen) HP = maxHP;
+        if (regen) dmgReceived = maxHP;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void OnDMGReceive(string playerDmgDealer, float dmg, string damagerName)
     {
-        if (other.CompareTag("Bullet") && HP > 0)
-        {
-            HP -= other.gameObject.GetComponent<DefaultBullet>().DMG;
-            ResetCont();
-        }
+        dmgReceived += dmg;
+        ResetCont();
     }
 }

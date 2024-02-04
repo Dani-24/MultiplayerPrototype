@@ -45,7 +45,7 @@ public class DefaultBullet : Bullet
                 break;
             case BulletState.Fall:
 
-                rb.velocity = new Vector3(Mathf.LerpUnclamped(rb.velocity.x, 0, fallSpeedMultiplier * Time.deltaTime), Mathf.LerpUnclamped(rb.velocity.y, customGravity, fallSpeedMultiplier/2 * Time.deltaTime), Mathf.LerpUnclamped(rb.velocity.z, 0, fallSpeedMultiplier * Time.deltaTime));
+                rb.velocity = new Vector3(Mathf.LerpUnclamped(rb.velocity.x, 0, fallSpeedMultiplier * Time.deltaTime), Mathf.LerpUnclamped(rb.velocity.y, customGravity, fallSpeedMultiplier / 2 * Time.deltaTime), Mathf.LerpUnclamped(rb.velocity.z, 0, fallSpeedMultiplier * Time.deltaTime));
 
                 break;
         }
@@ -53,6 +53,14 @@ public class DefaultBullet : Bullet
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bullet"))
+        {
+            if (other.GetComponent<PlayerStats>())
+                other.GetComponent<PlayerStats>().OnDMGReceive("", DMG, "Debug");
+            else if (other.GetComponent<Dummy>())
+                other.GetComponent<Dummy>().OnDMGReceive("", DMG, "Debug");
+        }
+
         Collider[] colliders = Physics.OverlapSphere(transform.position, pRadius);
 
         foreach (Collider collider in colliders)

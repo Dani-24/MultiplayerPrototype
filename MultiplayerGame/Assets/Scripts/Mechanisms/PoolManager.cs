@@ -13,6 +13,10 @@ public class PoolManager : MonoBehaviour
 
     NetGameObject netObject;
 
+    [Header("Change Conditions")]
+    [SerializeField][Range(0, 1)] float puntuationNeeded = 0.5f;
+    [SerializeField] float timerNeeded = 120;
+
     private void Start()
     {
         netObject = GetComponent<NetGameObject>();
@@ -39,15 +43,15 @@ public class PoolManager : MonoBehaviour
         // Match states
         if (GameManagerScript.Instance.matchState == GameManagerScript.MatchState.playing)
         {
-            if(GameManagerScript.Instance.gameMode == GameManagerScript.GameMode.towah)
+            if (GameManagerScript.Instance.gameMode == GameManagerScript.GameMode.towah)
             {
-                if(GameManagerScript.Instance.tower.alphaRecord >= 0.5f || GameManagerScript.Instance.tower.betaRecord >= 0.5f)
+                if (GameManagerScript.Instance.tower.alphaRecord >= puntuationNeeded || GameManagerScript.Instance.tower.betaRecord >= puntuationNeeded)
                 {
                     changeWaterLevel = true;
                 }
             }
 
-            if(GameManagerScript.Instance.timerCount < 120)
+            if (GameManagerScript.Instance.timerCount < timerNeeded)
             {
                 changeWaterLevel = true;
             }

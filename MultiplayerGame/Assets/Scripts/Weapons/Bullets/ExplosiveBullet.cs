@@ -61,7 +61,10 @@ public class ExplosiveBullet : Bullet
         {
             if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bullet"))
             {
-                hit.GetComponent<PlayerStats>().HP -= DMG;
+                if (hit.GetComponent<PlayerStats>())
+                    hit.GetComponent<PlayerStats>().OnDMGReceive("", DMG, "Debug");
+                else if (hit.GetComponent<Dummy>())
+                    hit.GetComponent<Dummy>().OnDMGReceive("", DMG, "Debug");
             }
 
             // Paint only objects affected by lethal dmg area???
@@ -94,7 +97,10 @@ public class ExplosiveBullet : Bullet
 
                     if(dmgToDeal < splashMinDmg) dmgToDeal = splashMinDmg;
 
-                    hit.GetComponent<PlayerStats>().HP -= dmgToDeal;
+                    if (hit.GetComponent<PlayerStats>())
+                        hit.GetComponent<PlayerStats>().OnDMGReceive("", dmgToDeal, "Debug");
+                    else if (hit.GetComponent<Dummy>())
+                        hit.GetComponent<Dummy>().OnDMGReceive("", dmgToDeal, "Debug");
                 }
             }
         }

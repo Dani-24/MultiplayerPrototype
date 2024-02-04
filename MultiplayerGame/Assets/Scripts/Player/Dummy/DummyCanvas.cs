@@ -13,7 +13,7 @@ public class DummyCanvas : MonoBehaviour
     {
         trans = GetComponent<RectTransform>();
 
-        player = GameObject.FindGameObjectWithTag("MainCamera");
+        player = SceneManagerScript.Instance.GetOwnPlayerInstance();
     }
 
     void Update()
@@ -23,6 +23,6 @@ public class DummyCanvas : MonoBehaviour
 
         trans.Rotate(Vector3.up, 180);
 
-        dmgText.text = GetComponentInParent<Dummy>().HP.ToString();
+        dmgText.text = GetComponentInParent<Dummy>().dmgReceived.ToString();
     }
 }

@@ -77,7 +77,10 @@ public class Bomb : SubWeapon
         {
             if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bomb"))
             {
-                hit.GetComponent<PlayerStats>().HP -= dmg;
+                if (hit.GetComponent<PlayerStats>())
+                    hit.GetComponent<PlayerStats>().OnDMGReceive(weaponName, dmg, "Debug");
+                else if (hit.GetComponent<Dummy>())
+                    hit.GetComponent<Dummy>().OnDMGReceive(weaponName, dmg, "Debug");
             }
 
             // Paint only objects affected by lethal dmg area???
@@ -101,7 +104,10 @@ public class Bomb : SubWeapon
             {
                 if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bomb"))
                 {
-                    hit.GetComponent<PlayerStats>().HP -= splashDmg;
+                    if (hit.GetComponent<PlayerStats>())
+                        hit.GetComponent<PlayerStats>().OnDMGReceive(weaponName, splashDmg, "Debug");
+                    else if (hit.GetComponent<Dummy>())
+                        hit.GetComponent<Dummy>().OnDMGReceive(weaponName, splashDmg, "Debug");
                 }
             }
         }

@@ -13,12 +13,18 @@ public class PlayerStats : MonoBehaviour
     public float HP = 100.0f;
     [HideInInspector] public float maxHP;
 
-    public bool isDead = false;
+    public LifeState lifeState = LifeState.alive;
+    [SerializeField] string lastDmgCause;
+    [SerializeField] string lastPlayerHitYou;
 
     [SerializeField][Tooltip("Time without taking dmg needed to start regen HP")][Range(0f, 3f)] float recoveryTime = 1.5f;
     [SerializeField][Range(1f, 5f)] float regenHPSpeed = 2f;
     float lastFrameHP;
     float regenCount;
+
+    [SerializeField]
+    [Range(1f, 10f)] float respawnTime;
+    [SerializeField] float timeUntilRespawn;
 
     [Header("Ink")]
     public float ink = 100.0f;
@@ -40,6 +46,8 @@ public class PlayerStats : MonoBehaviour
 
     [SerializeField] MeshRenderer teamColorGO;
 
+    [SerializeField] GameObject DeathInkExplosion;
+
     void Start()
     {
         lastFrameHP = maxHP = HP;
@@ -48,15 +56,14 @@ public class PlayerStats : MonoBehaviour
         controller = GetComponent<CharacterController>();
 
         teamTag = SceneManagerScript.Instance.SetTeam(gameObject, presetTeam);
+
+        timeUntilRespawn = respawnTime;
     }
 
     void Update()
     {
-        // Check Color
+        // Check Color & Team
         teamColorGO.material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
-
-        // Check Death
-        if (transform.position.y < minYaxis || HP <= 0) isDead = true;
 
         if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
@@ -70,34 +77,66 @@ public class PlayerStats : MonoBehaviour
             }
         }
 
-        if (isDead)
+        switch (lifeState)
         {
-            transform.parent = null;
+            case LifeState.alive:
 
-            controller.enabled = false;
-            transform.SetPositionAndRotation(spawnPos, Quaternion.Euler(Vector3.zero));
-            controller.enabled = true;
+                // Check Death
+                if (transform.position.y < minYaxis || HP <= 0) lifeState = LifeState.death;
 
-            isDead = false;
-            HP = maxHP;
-            ink = inkCapacity;
+                // Healing
+                if (HP != maxHP)
+                {
+                    RegenHealth();
+                }
+                if (HP > maxHP) { HP = maxHP; }
+
+                // Reloading
+                ReloadInk();
+
+                break;
+            case LifeState.death:
+
+                transform.parent = null;
+
+                controller.enabled = false;
+
+                lifeState = LifeState.respawning;
+
+                timeUntilRespawn = respawnTime;
+                GetComponent<PlayerMovement>().playerBody.SetActive(false);
+
+                GameObject deathAnimFX = Instantiate(DeathInkExplosion, transform);
+                deathAnimFX.transform.parent = null;
+                deathAnimFX.GetComponent<Explosive>().maxRadius = 5;
+                deathAnimFX.GetComponent<Renderer>().material.color = SceneManagerScript.Instance.GetTeamColor(SceneManagerScript.Instance.GetRivalTag(teamTag));
+
+                break;
+            case LifeState.respawning:
+
+                if (timeUntilRespawn > 0)
+                {
+                    timeUntilRespawn -= Time.deltaTime;
+                    playerInputEnabled = false;
+                    break;
+                }
+
+                transform.SetPositionAndRotation(spawnPos, Quaternion.Euler(Vector3.zero));
+
+                controller.enabled = true;
+                HP = maxHP;
+                ink = inkCapacity;
+
+                lifeState = LifeState.alive;
+                playerInputEnabled = true;
+                GetComponent<PlayerMovement>().playerBody.SetActive(true);
+
+                break;
         }
-
-        // Healing
-        if (HP != maxHP)
-        {
-            RegenHealth();
-        }
-
-        if (HP > maxHP) { HP = maxHP; }
-
-        // Reloading
-        ReloadInk();
 
         // Debug
         if (infiniteHP) { HP = maxHP; }
         if (infiniteInk) { ink = inkCapacity; }
-
         // Net
         if (!GetComponent<PlayerNetworking>().isOwnByThisInstance) { infiniteInk = true; }
     }
@@ -140,19 +179,19 @@ public class PlayerStats : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag) + "Bullet") && GetComponent<PlayerNetworking>().isOwnByThisInstance)
-        {
-            HP -= other.gameObject.GetComponent<DefaultBullet>().DMG;
-        }
+        //if (other.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag) + "Bullet") && GetComponent<PlayerNetworking>().isOwnByThisInstance)
+        //{
+        //    HP -= other.gameObject.GetComponent<DefaultBullet>().DMG;
+        //}
 
-        if (other.CompareTag("teamChanger"))
+        if (other.CompareTag("teamChanger"))    // This one should be disabled
         {
             ChangeTag(SceneManagerScript.Instance.GetRivalTag(teamTag));
         }
 
         if (other.CompareTag("Death"))
         {
-            isDead = true;
+            lifeState = LifeState.death;
         }
     }
 
@@ -162,5 +201,24 @@ public class PlayerStats : MonoBehaviour
         {
             teamTag = SceneManagerScript.Instance.SetTeam(gameObject, newTag);
         }
+    }
+
+    public void OnDMGReceive(string playerDmgDealer, float dmg, string damagerName)
+    {
+        // Gestionar aqui el NETCODE
+
+
+        if (lifeState != LifeState.alive) return;
+
+        HP -= dmg;
+        lastPlayerHitYou = playerDmgDealer;
+        lastDmgCause = damagerName;
+    }
+
+    public enum LifeState
+    {
+        alive,
+        death,
+        respawning
     }
 }

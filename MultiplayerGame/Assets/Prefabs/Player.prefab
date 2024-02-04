@@ -189,9 +189,13 @@ MonoBehaviour:
   presetTeam: none
   HP: 100
   maxHP: 0
-  isDead: 0
+  lifeState: 0
+  lastDmgCause: 
+  lastPlayerHitYou: 
   recoveryTime: 2.5
   regenHPSpeed: 5
+  respawnTime: 7
+  timeUntilRespawn: 0
   ink: 100
   inkReloadSpeed: 20
   inkReloadSpeedOnInk: 5
@@ -200,6 +204,8 @@ MonoBehaviour:
   spawnPos: {x: 0, y: 1, z: 0}
   minYaxis: -20
   teamColorGO: {fileID: 4483920299953492471}
+  DeathInkExplosion: {fileID: 8046681831239978808, guid: 2428890993db8eb48a044045d416ebac,
+    type: 3}
 --- !u!114 &1461030857391287611
 MonoBehaviour:
   m_ObjectHideFlags: 0
