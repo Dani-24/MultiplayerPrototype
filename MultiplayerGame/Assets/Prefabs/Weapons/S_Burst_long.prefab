@@ -103,7 +103,7 @@ MonoBehaviour:
   bulletDropletPrefab: {fileID: 0}
   rend:
   - {fileID: 1505176968016637067}
-  weaponSprite: {fileID: 21300000, guid: a14f84ab695056b46b0fab8d17c4d7e0, type: 3}
+  weaponSprite: {fileID: 21300000, guid: cbedf70d99c37f942995fd252afbc275, type: 3}
   bulletsPerShot: 4
   burstBulletsSpeedReduction: 12.5
 --- !u!82 &4956808182179389473

@@ -18,7 +18,7 @@ public class DummyCanvas : MonoBehaviour
 
     void Update()
     {
-        Vector3 dir = player.transform.position - trans.position;
+        Vector3 dir = player.GetComponent<PlayerOrbitCamera>().GetCameraTransform().position - trans.position;
         trans.rotation = Quaternion.LookRotation(dir);
 
         trans.Rotate(Vector3.up, 180);

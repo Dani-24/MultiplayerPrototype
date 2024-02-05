@@ -178,6 +178,7 @@ MonoBehaviour:
   sprayPaintRadius: 2
   spawnBulletPosition: {fileID: 8008173628777336271}
   shootingVerticalOffset: 0.25
+  actualBulletCost: 0
   weaponMesh: {fileID: 113701048986784187}
   bulletPrefab: {fileID: 4972482428676012466, guid: 72df44cd6aa7cd642be3cfc610c8ccd9,
     type: 3}
@@ -185,7 +186,7 @@ MonoBehaviour:
     type: 3}
   rend:
   - {fileID: 5263210421332541429}
-  weaponSprite: {fileID: 21300000, guid: 05c7216c78d4dd34ebe2bac9c1e274d7, type: 3}
+  weaponSprite: {fileID: 21300000, guid: 4b5060087f421924dba5586f663a2d28, type: 3}
   oneShotRadius: 2
   splashRadius: 4.25
   splashMaxDmg: 70

@@ -56,6 +56,8 @@ public class CanvasS_Gear : MonoBehaviour
         for (int i = 0; i < weaponButtonsList.Length; i++)
         {
             weaponButtonsList[i].image.sprite = null;
+            weaponButtonsList[i].image.color = new Color(255, 255, 255, 0);
+            weaponButtonsList[i].interactable = false;
         }
 
         switch (displayList)
@@ -65,6 +67,8 @@ public class CanvasS_Gear : MonoBehaviour
                 {
                     if (i + 9 * actualPage == SceneManagerScript.Instance.mainWeapons.Length) break;
                     weaponButtonsList[i].image.sprite = SceneManagerScript.Instance.mainWeapons[i + 9 * actualPage].GetComponent<Weapon>().weaponSprite;
+                    weaponButtonsList[i].image.color = new Color(255, 255, 255, 255);
+                    weaponButtonsList[i].interactable = true;
                 }
                 break;
             case ShowThis.subWeapons:
@@ -72,6 +76,8 @@ public class CanvasS_Gear : MonoBehaviour
                 {
                     if (i + 9 * actualPage == SceneManagerScript.Instance.subWeapons.Length) break;
                     weaponButtonsList[i].image.sprite = SceneManagerScript.Instance.subWeapons[i + 9 * actualPage].GetComponent<SubWeapon>().weaponSprite;
+                    weaponButtonsList[i].image.color = new Color(255, 255, 255, 255);
+                    weaponButtonsList[i].interactable = true;
                 }
                 break;
             case ShowThis.specials:

@@ -95,17 +95,16 @@ MonoBehaviour:
   sprayPaintRadius: 2
   spawnBulletPosition: {fileID: 3150462560917926386}
   shootingVerticalOffset: 0.125
+  actualBulletCost: 0
   weaponMesh: {fileID: 1983471487978947646}
   bulletPrefab: {fileID: 4972482428676012466, guid: 75688502e096c3f4798c1d8e465b1285,
     type: 3}
   bulletDropletPrefab: {fileID: 0}
   rend:
   - {fileID: 5070266830091733894}
-  weaponSprite: {fileID: 7095723698441707309, guid: 68c1df21e8efa2749becf92eebbb1a90,
-    type: 3}
+  weaponSprite: {fileID: 21300000, guid: 6a8d30774ef4c57459648b2c609e75e7, type: 3}
   costIncrease: 0.023
   costRecoverSpeed: 20
-  actualBulletCost: 0
 --- !u!82 &6473631592966740588
 AudioSource:
   m_ObjectHideFlags: 0
