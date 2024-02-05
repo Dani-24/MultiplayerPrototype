@@ -187,7 +187,7 @@ MonoBehaviour:
   rend:
   - {fileID: 5263210421332541429}
   weaponSprite: {fileID: 21300000, guid: 4b5060087f421924dba5586f663a2d28, type: 3}
-  oneShotRadius: 2
+  oneShotRadius: 1.25
   splashRadius: 4.25
   splashMaxDmg: 70
   splashMinDmg: 50

@@ -23,6 +23,6 @@ public class DummyCanvas : MonoBehaviour
 
         trans.Rotate(Vector3.up, 180);
 
-        dmgText.text = GetComponentInParent<Dummy>().dmgReceived.ToString();
+        dmgText.text = GetComponentInParent<Dummy>().dmgReceived.ToString("F1");
     }
 }

@@ -225,7 +225,14 @@ public class PlayerStats : MonoBehaviour
     public void OnDMGReceive(string playerDmgDealer, float dmg, string damagerName)
     {
         // Gestionar aqui el NETCODE
+        if (!GetComponent<PlayerNetworking>().isOwnByThisInstance)
+        {
+            // Send DMG Package (Pillar netId de a quien pegas)
 
+            // El Receive DMG Package ha de llamar esta funcion en su correspondiente cliente (asociar el daño a las netIDs)
+
+            return;
+        }
 
         if (lifeState != LifeState.alive) return;
 
