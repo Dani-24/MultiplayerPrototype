@@ -35,6 +35,7 @@ public class TowerObjective : MonoBehaviour
     [SerializeField] AudioClip betaAudio;
     [SerializeField] AudioClip backwardsAudio;
     AudioSource audioSource;
+    float audioOriginalVolume;
 
     [SerializeField] MeshRenderer flag;
 
@@ -54,6 +55,8 @@ public class TowerObjective : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+
+        audioOriginalVolume = audioSource.volume;
 
         // Start ID
         for (int i = 0; i < checkpoints.Length; i++)
@@ -116,7 +119,7 @@ public class TowerObjective : MonoBehaviour
         // Progress
         CalcProgress();
 
-        if (GameManagerScript.Instance.matchState != GameManagerScript.MatchState.playing) audioSource.volume = 0; else audioSource.volume = 1;
+        if (GameManagerScript.Instance.matchState != GameManagerScript.MatchState.playing) audioSource.volume = 0; else audioSource.volume = audioOriginalVolume;
 
         // Netcode
         if (!netNextCP.connectedToServer)
