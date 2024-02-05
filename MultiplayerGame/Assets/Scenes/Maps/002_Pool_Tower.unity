@@ -2750,7 +2750,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -9706,7 +9706,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -24878,6 +24878,16 @@ PrefabInstance:
       propertyPath: isOwnByThisInstance
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2711830483854865169, guid: b67d6d356db779849a9636062bb6b45c,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5895187515012359111, guid: b67d6d356db779849a9636062bb6b45c,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7884703038866387276, guid: b67d6d356db779849a9636062bb6b45c,
         type: 3}
       propertyPath: m_RootOrder
@@ -35265,7 +35275,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -45832,6 +45842,11 @@ PrefabInstance:
         type: 3}
       propertyPath: speed
       value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4962949308907558289, guid: e318062746cdcbe40b5d81f23c3ad2b2,
+        type: 3}
+      propertyPath: backingSpeed
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4962949308907558289, guid: e318062746cdcbe40b5d81f23c3ad2b2,
         type: 3}
@@ -64171,7 +64186,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
+  m_SelectedEditorRenderState: 2
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89

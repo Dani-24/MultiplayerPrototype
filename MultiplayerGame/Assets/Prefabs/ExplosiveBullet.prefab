@@ -146,6 +146,7 @@ MonoBehaviour:
   splashMinDmg: 0
   explosionObject: {fileID: 8046681831239978808, guid: 2428890993db8eb48a044045d416ebac,
     type: 3}
+  explosionSFX: {fileID: 8300000, guid: f2387945a7422934bbf480364337d22d, type: 3}
 --- !u!54 &1852797569348365154
 Rigidbody:
   m_ObjectHideFlags: 0

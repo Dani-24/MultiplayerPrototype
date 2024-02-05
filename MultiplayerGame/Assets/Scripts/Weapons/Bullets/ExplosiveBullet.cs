@@ -13,6 +13,7 @@ public class ExplosiveBullet : Bullet
     [SerializeField] GameObject explosionObject;
 
     List<Collider> bigDmgColliders = new();
+    [SerializeField] AudioClip explosionSFX;
 
     void Start()
     {
@@ -50,6 +51,8 @@ public class ExplosiveBullet : Bullet
     {
         // Visual Effect
         GameObject explo = Instantiate(explosionObject, transform.position, transform.rotation);
+        explo.GetComponent<AudioSource>().clip = explosionSFX; 
+        explo.GetComponent<AudioSource>().Play();
         explo.GetComponent<Explosive>().maxRadius = splashRadius * 1.5f;
         explo.GetComponent<Renderer>().material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
 

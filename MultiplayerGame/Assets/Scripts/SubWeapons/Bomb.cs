@@ -9,6 +9,7 @@ public class Bomb : SubWeapon
     List<Collider> bigDmgColliders = new List<Collider>();
 
     [SerializeField] GameObject explosionObject;
+    [SerializeField] AudioClip explosionSFX;
 
     private void Awake()
     {
@@ -66,6 +67,8 @@ public class Bomb : SubWeapon
     {
         // Visual Effect
         GameObject explo = Instantiate(explosionObject, transform.position, transform.rotation);
+        explo.GetComponent<AudioSource>().clip = explosionSFX;
+        explo.GetComponent<AudioSource>().Play();
         explo.GetComponent<Explosive>().maxRadius = nonLethalRadius * 1.5f;
         explo.GetComponent<Renderer>().material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
 

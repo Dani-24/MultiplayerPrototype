@@ -170,6 +170,7 @@ public class UI_Manager : MonoBehaviour
         Sett_Connection,
         Sett_Gear,
         Msg_Log,
+        Respawn,
         None
     }
 

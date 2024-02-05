@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -46,7 +48,13 @@ public class PlayerStats : MonoBehaviour
 
     [SerializeField] MeshRenderer teamColorGO;
 
+    [Header("Death Related Things")]
     [SerializeField] GameObject DeathInkExplosion;
+    [SerializeField] AudioClip deathSFX;
+
+    [SerializeField] GameObject respawnCanvas;
+    [SerializeField] TMP_Text respawnText;
+    [SerializeField] Slider respawnSlider;
 
     void Start()
     {
@@ -58,6 +66,7 @@ public class PlayerStats : MonoBehaviour
         teamTag = SceneManagerScript.Instance.SetTeam(gameObject, presetTeam);
 
         timeUntilRespawn = respawnTime;
+        respawnCanvas.SetActive(false);
     }
 
     void Update()
@@ -107,6 +116,8 @@ public class PlayerStats : MonoBehaviour
                 GetComponent<PlayerMovement>().playerBody.SetActive(false);
 
                 GameObject deathAnimFX = Instantiate(DeathInkExplosion, transform);
+                deathAnimFX.GetComponent<AudioSource>().clip = deathSFX;
+                deathAnimFX.GetComponent<AudioSource>().Play();
                 deathAnimFX.transform.parent = null;
                 deathAnimFX.GetComponent<Explosive>().maxRadius = 5;
                 deathAnimFX.GetComponent<Renderer>().material.color = SceneManagerScript.Instance.GetTeamColor(SceneManagerScript.Instance.GetRivalTag(teamTag));
@@ -118,6 +129,13 @@ public class PlayerStats : MonoBehaviour
                 {
                     timeUntilRespawn -= Time.deltaTime;
                     playerInputEnabled = false;
+                    respawnCanvas.SetActive(true);
+                    respawnText.text = timeUntilRespawn.ToString("F0");
+                    respawnSlider.minValue = 0;
+                    respawnSlider.maxValue = respawnTime;
+
+                    float value = respawnTime - timeUntilRespawn;
+                    respawnSlider.value = value;
                     break;
                 }
 
@@ -130,6 +148,7 @@ public class PlayerStats : MonoBehaviour
                 lifeState = LifeState.alive;
                 playerInputEnabled = true;
                 GetComponent<PlayerMovement>().playerBody.SetActive(true);
+                respawnCanvas.SetActive(false);
 
                 break;
         }

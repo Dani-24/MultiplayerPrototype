@@ -2781,6 +2781,7 @@ MonoBehaviour:
   state: 1
   teamOnTower: 
   speed: 5
+  backingSpeed: 6
   timeToBack: 3
   alphaRecord: 0
   betaRecord: 0

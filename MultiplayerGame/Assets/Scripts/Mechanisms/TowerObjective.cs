@@ -16,6 +16,7 @@ public class TowerObjective : MonoBehaviour
     [SerializeField] string teamOnTower;
 
     [SerializeField] float speed = 1.0f;
+    [SerializeField] float backingSpeed = 2.0f;
     Vector3 dir = Vector3.zero;
 
     [SerializeField] float timeToBack = 5.0f;
@@ -276,14 +277,14 @@ public class TowerObjective : MonoBehaviour
         // Move Tower
         if (state != TowerState.Resting)
         {
-            transform.Translate(dir * speed * Time.deltaTime);
+            if (state != TowerState.Backing)
+                transform.Translate(dir * speed * Time.deltaTime);
+            else
+                transform.Translate(dir * backingSpeed * Time.deltaTime);
         }
 
         if (netNextCP.connectedToServer)
-        {
             transform.position = Vector3.LerpUnclamped(transform.position, new Vector3(netPosX.netValue, netPosY.netValue, netPosZ.netValue), interpolationSpeed * Time.deltaTime);
-
-        }
     }
 
     private void OnTriggerEnter(Collider other)
