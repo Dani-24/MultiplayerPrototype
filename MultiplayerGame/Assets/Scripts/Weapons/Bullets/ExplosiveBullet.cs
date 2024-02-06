@@ -51,23 +51,25 @@ public class ExplosiveBullet : Bullet
     {
         // Visual Effect
         GameObject explo = Instantiate(explosionObject, transform.position, transform.rotation);
-        explo.GetComponent<AudioSource>().clip = explosionSFX; 
+        explo.GetComponent<AudioSource>().clip = explosionSFX;
         explo.GetComponent<AudioSource>().Play();
         explo.GetComponent<Explosive>().maxRadius = splashRadius * 1.5f;
         explo.GetComponent<Renderer>().material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
 
         // Lethal Radius
-
         Collider[] colliders = Physics.OverlapSphere(transform.position, oneShotRadius);
 
         foreach (Collider hit in colliders)
         {
-            if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bullet"))
+            if (isShotByOwnPlayer)
             {
-                if (hit.GetComponent<PlayerStats>())
-                    hit.GetComponent<PlayerStats>().OnDMGReceive("", DMG, "Debug");
-                else if (hit.GetComponent<Dummy>())
-                    hit.GetComponent<Dummy>().OnDMGReceive("", DMG, "Debug");
+                if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bullet"))
+                {
+                    if (hit.GetComponent<PlayerStats>())
+                        hit.GetComponent<PlayerStats>().OnDMGReceive(weaponShootingThis, DMG, ConnectionManager.Instance.userName);
+                    else if (hit.GetComponent<Dummy>())
+                        hit.GetComponent<Dummy>().OnDMGReceive(weaponShootingThis, DMG, ConnectionManager.Instance.userName);
+                }
             }
 
             // Paint only objects affected by lethal dmg area???
@@ -82,32 +84,33 @@ public class ExplosiveBullet : Bullet
         }
 
         // Splash Radius
-
-        colliders = Physics.OverlapSphere(transform.position, splashRadius);
-
-        foreach (Collider hit in colliders)
+        if (isShotByOwnPlayer)
         {
-            if (!bigDmgColliders.Contains(hit))
+            colliders = Physics.OverlapSphere(transform.position, splashRadius);
+
+            foreach (Collider hit in colliders)
             {
-                if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bullet"))
+                if (!bigDmgColliders.Contains(hit))
                 {
-                    float dist = Vector3.Distance(transform.position, hit.ClosestPointOnBounds(transform.position));
+                    if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bullet"))
+                    {
+                        float dist = Vector3.Distance(transform.position, hit.ClosestPointOnBounds(transform.position));
 
-                    float dmgpercent = 1f - (dist / splashRadius);
-                    dmgpercent = Mathf.Clamp01(dmgpercent);
+                        float dmgpercent = 1f - (dist / splashRadius);
+                        dmgpercent = Mathf.Clamp01(dmgpercent);
 
-                    float dmgToDeal = dmgpercent * splashMaxDmg;
+                        float dmgToDeal = dmgpercent * splashMaxDmg;
 
-                    if(dmgToDeal < splashMinDmg) dmgToDeal = splashMinDmg;
+                        if (dmgToDeal < splashMinDmg) dmgToDeal = splashMinDmg;
 
-                    if (hit.GetComponent<PlayerStats>())
-                        hit.GetComponent<PlayerStats>().OnDMGReceive("", dmgToDeal, "Debug");
-                    else if (hit.GetComponent<Dummy>())
-                        hit.GetComponent<Dummy>().OnDMGReceive("", dmgToDeal, "Debug");
+                        if (hit.GetComponent<PlayerStats>())
+                            hit.GetComponent<PlayerStats>().OnDMGReceive(weaponShootingThis, dmgToDeal, ConnectionManager.Instance.userName);
+                        else if (hit.GetComponent<Dummy>())
+                            hit.GetComponent<Dummy>().OnDMGReceive(weaponShootingThis, dmgToDeal, ConnectionManager.Instance.userName);
+                    }
                 }
             }
         }
-
         bigDmgColliders.Clear();
 
         Destroy(gameObject);

@@ -53,15 +53,26 @@ public class DefaultBullet : Bullet
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bullet"))
+        audioSource.clip = null;
+        if (isShotByOwnPlayer)
         {
-            if (other.GetComponent<PlayerStats>())
-                other.GetComponent<PlayerStats>().OnDMGReceive("", DMG, "Debug");
-            else if (other.GetComponent<Dummy>())
-                other.GetComponent<Dummy>().OnDMGReceive("", DMG, "Debug");
+            if (other.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bullet"))
+            {
+                audioSource.volume = 1;
+                audioSource.clip = hitPlayerSFX;
+                audioSource.spatialBlend = 0;
+                audioSource.pitch = 1;
+
+                if (other.GetComponent<PlayerStats>())
+                    other.GetComponent<PlayerStats>().OnDMGReceive(weaponShootingThis, DMG, ConnectionManager.Instance.userName);
+                else if (other.GetComponent<Dummy>())
+                    other.GetComponent<Dummy>().OnDMGReceive(weaponShootingThis, DMG, ConnectionManager.Instance.userName);
+            }
         }
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, pRadius);
+
+        bool isPaintable = false;
 
         foreach (Collider collider in colliders)
         {
@@ -70,8 +81,22 @@ public class DefaultBullet : Bullet
             {
                 Vector3 pos = other.ClosestPointOnBounds(transform.position);
                 PaintManager.instance.Paint(p, pos, pRadius, pHardness, pStrength, rend.material.color);
+                isPaintable = true;
             }
         }
+
+        if (audioSource.clip == null)
+        {
+            if (isPaintable) audioSource.clip = hitPaintableSurfaceSFX; else audioSource.clip = hitUnpaintableSurfaceSFX;
+
+            audioSource.volume = 0.15f;
+            audioSource.spatialBlend = 1;
+            audioSource.pitch = Random.Range(0.9f, 1.1f);
+        }
+
+        audioSource.Play();
+        audioSource.transform.parent = null;
+        audioSource.GetComponent<BulletAudioAutomorision>().pendingToDelete = true;
         Destroy(gameObject);
     }
 

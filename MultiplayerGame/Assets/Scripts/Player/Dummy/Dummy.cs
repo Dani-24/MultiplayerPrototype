@@ -27,17 +27,19 @@ public class Dummy : MonoBehaviour
 
     void Update()
     {
+        dummyEnabled = !ConnectionManager.Instance.IsConnected();   // Dummy Disabled when Online
+
+        if (timeToRegen > 0 && dmgReceived != maxHP)
+            timeToRegen -= Time.deltaTime;
+        else
+            ResetCont(true);
+
         if (!dummyEnabled) return;
 
         gameObject.tag = teamTag = SceneManagerScript.Instance.GetRivalTag(SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().teamTag);
         weaponPrefab.GetComponent<Weapon>().teamTag = teamTag;
 
         weaponShooting = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerArmament>().weaponShooting;
-
-        if (timeToRegen > 0 && dmgReceived != maxHP)
-            timeToRegen -= Time.deltaTime;
-        else
-            ResetCont(true);
     }
 
     void ResetCont(bool regen = false)

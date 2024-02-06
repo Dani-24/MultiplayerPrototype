@@ -89,17 +89,21 @@ MonoBehaviour:
   moveSpeedMultiplier: 0.5
   pRadius: 3.5
   pStrength: 1
-  pHardness: 0
+  pHardness: 0.5
   sprayDropletsNum: 2
   sprayDropRadius: 0.6
   sprayPaintRadius: 2.25
   spawnBulletPosition: {fileID: 3150462560917926386}
   shootingVerticalOffset: 0.225
+  actualBulletCost: 0
   weaponMesh: {fileID: 1983471487978947646}
   bulletPrefab: {fileID: 4972482428676012466, guid: 75688502e096c3f4798c1d8e465b1285,
     type: 3}
+  bulletDropletPrefab: {fileID: 0}
   rend: []
   weaponSprite: {fileID: 21300000, guid: c2220e9a1a6ee0343ac83981b915f32f, type: 3}
+  bulletsPerShot: 1
+  burstBulletsSpeedReduction: 2.5
 --- !u!82 &-4519959487617565935
 AudioSource:
   m_ObjectHideFlags: 0

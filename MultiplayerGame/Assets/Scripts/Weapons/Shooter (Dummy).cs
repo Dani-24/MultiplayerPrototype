@@ -49,7 +49,8 @@ public class ShooterDummy : Weapon
         aimDirVec.y += Random.Range(-rng, rng);
 
         GameObject bullet = Instantiate(bulletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
-
+        bullet.GetComponent<DefaultBullet>().isShotByOwnPlayer = true;
+        bullet.GetComponent<DefaultBullet>().weaponShootingThis = weaponName;
         bullet.GetComponent<DefaultBullet>().teamTag = teamTag;
         bullet.GetComponent<DefaultBullet>().speed = bulletSpeed;
         bullet.GetComponent<DefaultBullet>().range = weaponRange;

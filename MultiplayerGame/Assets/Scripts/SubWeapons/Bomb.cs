@@ -73,17 +73,19 @@ public class Bomb : SubWeapon
         explo.GetComponent<Renderer>().material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
 
         // Lethal Radius
-
         Collider[] colliders = Physics.OverlapSphere(transform.position, lethalRadius);
 
         foreach (Collider hit in colliders)
         {
-            if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bomb"))
+            if (isShotByOwnPlayer)
             {
-                if (hit.GetComponent<PlayerStats>())
-                    hit.GetComponent<PlayerStats>().OnDMGReceive(weaponName, dmg, "Debug");
-                else if (hit.GetComponent<Dummy>())
-                    hit.GetComponent<Dummy>().OnDMGReceive(weaponName, dmg, "Debug");
+                if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bomb"))
+                {
+                    if (hit.GetComponent<PlayerStats>())
+                        hit.GetComponent<PlayerStats>().OnDMGReceive(weaponName, dmg, ConnectionManager.Instance.userName);
+                    else if (hit.GetComponent<Dummy>())
+                        hit.GetComponent<Dummy>().OnDMGReceive(weaponName, dmg, ConnectionManager.Instance.userName);
+                }
             }
 
             // Paint only objects affected by lethal dmg area???
@@ -98,19 +100,21 @@ public class Bomb : SubWeapon
         }
 
         // Splash Radius
-
-        colliders = Physics.OverlapSphere(transform.position, nonLethalRadius);
-
-        foreach (Collider hit in colliders)
+        if (isShotByOwnPlayer)
         {
-            if (!bigDmgColliders.Contains(hit))
+            colliders = Physics.OverlapSphere(transform.position, nonLethalRadius);
+
+            foreach (Collider hit in colliders)
             {
-                if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bomb"))
+                if (!bigDmgColliders.Contains(hit))
                 {
-                    if (hit.GetComponent<PlayerStats>())
-                        hit.GetComponent<PlayerStats>().OnDMGReceive(weaponName, splashDmg, "Debug");
-                    else if (hit.GetComponent<Dummy>())
-                        hit.GetComponent<Dummy>().OnDMGReceive(weaponName, splashDmg, "Debug");
+                    if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bomb"))
+                    {
+                        if (hit.GetComponent<PlayerStats>())
+                            hit.GetComponent<PlayerStats>().OnDMGReceive(weaponName, splashDmg, "Debug");
+                        else if (hit.GetComponent<Dummy>())
+                            hit.GetComponent<Dummy>().OnDMGReceive(weaponName, splashDmg, "Debug");
+                    }
                 }
             }
         }

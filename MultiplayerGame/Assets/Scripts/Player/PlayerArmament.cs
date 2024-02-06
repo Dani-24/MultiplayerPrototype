@@ -104,7 +104,7 @@ public class PlayerArmament : MonoBehaviour
 
             // Select Bomb
             GameObject bombToThrow = Instantiate(subWeapon, pos, Quaternion.Euler(aimTo));
-
+            bombToThrow.GetComponent<SubWeapon>().isShotByOwnPlayer = GetComponent<PlayerNetworking>().isOwnByThisInstance;
             bombToThrow.GetComponent<SubWeapon>().teamTag = GetComponent<PlayerStats>().teamTag;
 
             gameObject.GetComponent<PlayerStats>().ink -= subWeapon.GetComponent<SubWeapon>().throwCost;

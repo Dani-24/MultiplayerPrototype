@@ -8,6 +8,9 @@ public class Bullet : MonoBehaviour
 
     protected Renderer rend;
 
+    public string weaponShootingThis;
+    public bool isShotByOwnPlayer;
+
     #region Propierties
 
     [Header("Propierties")]
@@ -34,6 +37,13 @@ public class Bullet : MonoBehaviour
     [Header("Transforms")]
     [Tooltip("Y pos where bullet gets destroyed")][SerializeField] protected float minYaxis = -20;
     [SerializeField] protected Transform meshTransform;
+
+    [Header("Audio")]
+    public AudioClip hitPlayerSFX;
+    public AudioClip hitPaintableSurfaceSFX;
+    public AudioClip hitUnpaintableSurfaceSFX;
+
+    public AudioSource audioSource;
 
     private void Awake()
     {

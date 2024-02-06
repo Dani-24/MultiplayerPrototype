@@ -15,13 +15,13 @@ public class Blaster : Weapon
         Random.InitState(0);
 
         if (GetComponentInParent<PlayerNetworking>().isOwnByThisInstance)
-        {
             audioS.spatialBlend = 0;
-        }
 
         if (bulletDropletPrefab == null) bulletDropletPrefab = bulletPrefab;
 
         actualBulletCost = shootCost;
+
+        isShotByOwnPlayer = GetComponentInParent<PlayerNetworking>().isOwnByThisInstance;
     }
 
     void Update()
@@ -91,7 +91,8 @@ public class Blaster : Weapon
             if (GetComponentInParent<PlayerMovement>().isGrounded) aimDirVec.y += Random.Range(-rng, rng); else aimDirVec.y += Random.Range(-jumpRng, jumpRng);
 
             GameObject bullet = Instantiate(bulletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
-
+            bullet.GetComponent<ExplosiveBullet>().isShotByOwnPlayer = isShotByOwnPlayer;
+            bullet.GetComponent<ExplosiveBullet>().weaponShootingThis = weaponName;
             bullet.GetComponent<ExplosiveBullet>().teamTag = teamTag;
             bullet.GetComponent<ExplosiveBullet>().speed = bulletSpeed;
             bullet.GetComponent<ExplosiveBullet>().range = weaponRange;

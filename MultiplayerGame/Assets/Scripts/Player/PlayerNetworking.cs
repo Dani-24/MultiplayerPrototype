@@ -53,6 +53,7 @@ public class PlayerNetworking : MonoBehaviour
         PlayerPackage pPck = new PlayerPackage
         {
             teamTag = GetComponent<PlayerStats>().teamTag,
+            lifeState = GetComponent<PlayerStats>().lifeState,
             running = GetComponent<PlayerMovement>().GetRunInput(),
             jumping = GetComponent<PlayerMovement>().GetJumpInput(),
             camRot = GetComponent<PlayerOrbitCamera>().GetCamRot(),
@@ -93,9 +94,9 @@ public class PlayerNetworking : MonoBehaviour
         GetComponent<PlayerMovement>().SetPosition(pck.position);
         GetComponent<PlayerMovement>().SetRotation(pck.rotation);
         GetComponent<PlayerArmament>().weaponRngState = pck.wpRNG;
-
         GetComponent<PlayerArmament>().ChangeWeapon(pck.mainWeapon);
         GetComponent<PlayerArmament>().ChangeSubWeapon(pck.subWeapon);
+        GetComponent<PlayerStats>().lifeState = pck.lifeState;
 
         if (!pck.inputEnabled) nameTagText.color = Color.grey; else nameTagText.color = Color.white;
 

@@ -6,7 +6,6 @@ public class Minigun : Weapon
     [Header("Minigun propierties")]
     [SerializeField] float costIncrease;
     [SerializeField] float costRecoverSpeed = 1.0f;
-    
 
     private void Start()
     {
@@ -14,13 +13,13 @@ public class Minigun : Weapon
         Random.InitState(0);
 
         if (GetComponentInParent<PlayerNetworking>().isOwnByThisInstance)
-        {
             audioS.spatialBlend = 0;
-        }
 
         if (bulletDropletPrefab == null) bulletDropletPrefab = bulletPrefab;
 
         actualBulletCost = shootCost;
+
+        isShotByOwnPlayer = GetComponentInParent<PlayerNetworking>().isOwnByThisInstance;
     }
 
     void Update()
@@ -42,8 +41,8 @@ public class Minigun : Weapon
             shootCooldown = 1 / cadence;
         }
 
-        if(!isShooting && actualBulletCost > shootCost) actualBulletCost -= costIncrease * costRecoverSpeed * Time.deltaTime;
-       
+        if (!isShooting && actualBulletCost > shootCost) actualBulletCost -= costIncrease * costRecoverSpeed * Time.deltaTime;
+
         MaterialsFromTeamColor();
     }
 
@@ -100,7 +99,8 @@ public class Minigun : Weapon
             }
 
             GameObject bullet = Instantiate(bulletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
-
+            bullet.GetComponent<DefaultBullet>().isShotByOwnPlayer = isShotByOwnPlayer;
+            bullet.GetComponent<DefaultBullet>().weaponShootingThis = weaponName;
             bullet.GetComponent<DefaultBullet>().teamTag = teamTag;
             bullet.GetComponent<DefaultBullet>().speed = bulletSpeed;
             bullet.GetComponent<DefaultBullet>().range = weaponRange;

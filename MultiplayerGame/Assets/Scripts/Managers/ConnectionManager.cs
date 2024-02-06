@@ -7,6 +7,7 @@ using System.IO;
 using System;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using static PlayerStats;
 
 public class ConnectionManager : MonoBehaviour
 {
@@ -93,6 +94,7 @@ public class ConnectionManager : MonoBehaviour
     int cont = 0;
 
     Package randomPackageToSend = null;
+    List<DMGPackage> dmgReceivedPCKG = new();
 
     #endregion
 
@@ -184,6 +186,11 @@ public class ConnectionManager : MonoBehaviour
                 pck.connPck = new ConnectionPackage();
 
                 break;
+            case Pck_type.DMG:
+
+                pck.dmGPackage = new DMGPackage();
+
+                break;
         }
 
         return pck;
@@ -253,6 +260,12 @@ public class ConnectionManager : MonoBehaviour
                     _NEWalphaTcolor = pck.connPck.alphaColor;
                     _NEWbetaTcolor = pck.connPck.betaColor;
                 }
+
+                break;
+            case Pck_type.DMG:
+
+                if (pck.dmGPackage.receiverID == ownPlayerNetID)
+                    dmgReceivedPCKG.Add(pck.dmGPackage);
 
                 break;
         }
@@ -612,6 +625,16 @@ public class ConnectionManager : MonoBehaviour
 
                     socket.SendTo(sendPStream.ToArray(), (int)sendPStream.Length, SocketFlags.None, ipep);
                     delay = 0;
+
+                    if (randomPackageToSend != null)
+                    {
+                        MemoryStream sendPStreamB = new MemoryStream();
+                        sendPStreamB = SerializeJson(randomPackageToSend);
+
+                        socket.SendTo(sendPStreamB.ToArray(), (int)sendPStreamB.Length, SocketFlags.None, remote);
+
+                        randomPackageToSend = null;
+                    }
                 }
 
                 #endregion
@@ -722,6 +745,13 @@ public class ConnectionManager : MonoBehaviour
         }
 
         if (activeSceneName != lobbyScene) connGameplayState = ConnectionGameplayState.Playing; else connGameplayState = ConnectionGameplayState.Lobby;
+
+        // DMG
+        for (int i = 0; i < dmgReceivedPCKG.Count; i++)
+        {
+            SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().OnDMGReceive(dmgReceivedPCKG[i].cause, dmgReceivedPCKG[i].dmg, dmgReceivedPCKG[i].dealer);
+            dmgReceivedPCKG.Remove(dmgReceivedPCKG[i]);
+        }
 
         #region Get Server Colors
 
@@ -880,7 +910,8 @@ public enum Pck_type
 {
     Player,
     PlayerList,
-    Connection
+    Connection,
+    DMG
 }
 
 public enum Network_User
@@ -906,6 +937,8 @@ public class Package
     public List<PlayerPackage> playersListPck = new List<PlayerPackage>();  // Esto lo devuelve el Server
 
     public ConnectionPackage connPck = null;
+
+    public DMGPackage dmGPackage = null;
 }
 
 [System.Serializable]
@@ -914,6 +947,8 @@ public class PlayerPackage
     public string userName;
     public string teamTag;
     public int netID;
+
+    public LifeState lifeState;
 
     public Vector3 position;
     public Quaternion rotation;
@@ -951,6 +986,15 @@ public class ConnectionPackage
 
     // Ask server if the client can connect to the server
     public bool canConnect = true;
+}
+
+[System.Serializable]
+public class DMGPackage
+{
+    public float dmg;
+    public string cause;
+    public string dealer;
+    public int receiverID;
 }
 
 [System.Serializable]

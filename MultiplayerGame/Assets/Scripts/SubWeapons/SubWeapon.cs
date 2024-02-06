@@ -5,6 +5,8 @@ public class SubWeapon : MonoBehaviour
 {
     [HideInInspector] public string teamTag;
 
+    public bool isShotByOwnPlayer;
+
     #region Propierties
 
     public string weaponName;

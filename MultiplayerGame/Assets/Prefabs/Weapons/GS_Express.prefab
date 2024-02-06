@@ -172,7 +172,7 @@ MonoBehaviour:
   moveSpeedMultiplier: 0.95
   pRadius: 2.5
   pStrength: 1
-  pHardness: 0
+  pHardness: 0.5
   sprayDropletsNum: 1
   sprayDropRadius: 0.6
   sprayPaintRadius: 2.5

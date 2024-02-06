@@ -12,13 +12,13 @@ public class Shooter : Weapon
         Random.InitState(0);
 
         if (GetComponentInParent<PlayerNetworking>().isOwnByThisInstance)
-        {
             audioS.spatialBlend = 0;
-        }
 
         if (bulletDropletPrefab == null) bulletDropletPrefab = bulletPrefab;
 
         actualBulletCost = shootCost;
+
+        isShotByOwnPlayer = GetComponentInParent<PlayerNetworking>().isOwnByThisInstance;
     }
 
     void Update()
@@ -32,9 +32,7 @@ public class Shooter : Weapon
         // ====== Disparar ======
 
         if (shootCooldown >= 0.0f)
-        {
             shootCooldown -= Time.deltaTime;
-        }
         else if (isShooting)
         {
             Shoot();
@@ -47,15 +45,10 @@ public class Shooter : Weapon
     private void FixedUpdate()
     {
         // =========== ROTACIÓN DEL ARMA ===========
-
         if (isShooting)
-        {
             weaponMesh.transform.rotation = Quaternion.LookRotation(wpAimDirection);
-        }
         else
-        {
             weaponMesh.transform.rotation = Quaternion.LookRotation(transform.forward);
-        }
     }
 
     void MaterialsFromTeamColor()
@@ -78,26 +71,19 @@ public class Shooter : Weapon
             Vector3 aimDirVec = aimDirQ.eulerAngles;
 
             if (GetComponentInParent<PlayerNetworking>().isOwnByThisInstance)
-            {
                 GetComponentInParent<PlayerArmament>().weaponRngState = Random.state;
-            }
             else
-            {
                 Random.state = GetComponentInParent<PlayerArmament>().weaponRngState;
-            }
 
             // RNG
             if (GetComponentInParent<PlayerMovement>().isGrounded)
-            {
                 aimDirVec.y += Random.Range(-rng, rng);
-            }
             else
-            {
                 aimDirVec.y += Random.Range(-jumpRng, jumpRng);
-            }
 
             GameObject bullet = Instantiate(bulletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
-
+            bullet.GetComponent<DefaultBullet>().isShotByOwnPlayer = isShotByOwnPlayer;
+            bullet.GetComponent<DefaultBullet>().weaponShootingThis = weaponName;
             bullet.GetComponent<DefaultBullet>().teamTag = teamTag;
             bullet.GetComponent<DefaultBullet>().speed = bulletSpeed;
             bullet.GetComponent<DefaultBullet>().range = weaponRange;
@@ -107,10 +93,11 @@ public class Shooter : Weapon
             bullet.GetComponent<DefaultBullet>().pStrength = pStrength;
             bullet.GetComponent<DefaultBullet>().meshScale = 1;
 
-            for(int i = 0; i < bulletsPerShot - 1; i++)
+            for (int i = 0; i < bulletsPerShot - 1; i++)
             {
                 GameObject bulletb = Instantiate(bulletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
-
+                bulletb.GetComponent<DefaultBullet>().isShotByOwnPlayer = isShotByOwnPlayer;
+                bulletb.GetComponent<DefaultBullet>().weaponShootingThis = weaponName;
                 bulletb.GetComponent<DefaultBullet>().teamTag = teamTag;
                 bulletb.GetComponent<DefaultBullet>().speed = bulletSpeed - burstBulletsSpeedReduction * i;
                 bulletb.GetComponent<DefaultBullet>().range = weaponRange;

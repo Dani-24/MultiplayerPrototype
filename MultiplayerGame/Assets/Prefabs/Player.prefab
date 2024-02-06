@@ -494,7 +494,7 @@ MonoBehaviour:
   lifeState: 0
   lastDmgCause: 
   lastPlayerHitYou: 
-  recoveryTime: 2.5
+  recoveryTime: 1
   regenHPSpeed: 5
   respawnTime: 7
   timeUntilRespawn: 0

@@ -89,6 +89,7 @@ public class PlayerStats : MonoBehaviour
         switch (lifeState)
         {
             case LifeState.alive:
+                if (!GetComponent<PlayerNetworking>().isOwnByThisInstance) return;
 
                 // Check Death
                 if (transform.position.y < minYaxis || HP <= 0) lifeState = LifeState.death;
@@ -106,13 +107,17 @@ public class PlayerStats : MonoBehaviour
                 break;
             case LifeState.death:
 
-                transform.parent = null;
+                if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+                {
+                    transform.parent = null;
 
-                controller.enabled = false;
+                    controller.enabled = false;
 
-                lifeState = LifeState.respawning;
+                    lifeState = LifeState.respawning;
 
-                timeUntilRespawn = respawnTime;
+                    timeUntilRespawn = respawnTime;
+                }
+
                 GetComponent<PlayerMovement>().playerBody.SetActive(false);
 
                 GameObject deathAnimFX = Instantiate(DeathInkExplosion, transform);
@@ -124,31 +129,33 @@ public class PlayerStats : MonoBehaviour
 
                 break;
             case LifeState.respawning:
-
-                if (timeUntilRespawn > 0)
+                if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
                 {
-                    timeUntilRespawn -= Time.deltaTime;
-                    playerInputEnabled = false;
-                    respawnCanvas.SetActive(true);
-                    respawnText.text = timeUntilRespawn.ToString("F0");
-                    respawnSlider.minValue = 0;
-                    respawnSlider.maxValue = respawnTime;
+                    if (timeUntilRespawn > 0)
+                    {
+                        timeUntilRespawn -= Time.deltaTime;
+                        playerInputEnabled = false;
+                        respawnCanvas.SetActive(true);
+                        respawnText.text = timeUntilRespawn.ToString("F0");
+                        respawnSlider.minValue = 0;
+                        respawnSlider.maxValue = respawnTime;
 
-                    float value = respawnTime - timeUntilRespawn;
-                    respawnSlider.value = value;
-                    break;
+                        float value = respawnTime - timeUntilRespawn;
+                        respawnSlider.value = value;
+                        break;
+                    }
+
+                    transform.SetPositionAndRotation(spawnPos, Quaternion.Euler(Vector3.zero));
+
+                    controller.enabled = true;
+                    HP = maxHP;
+                    ink = inkCapacity;
+
+                    lifeState = LifeState.alive;
+                    playerInputEnabled = true;
+                    GetComponent<PlayerMovement>().playerBody.SetActive(true);
+                    respawnCanvas.SetActive(false);
                 }
-
-                transform.SetPositionAndRotation(spawnPos, Quaternion.Euler(Vector3.zero));
-
-                controller.enabled = true;
-                HP = maxHP;
-                ink = inkCapacity;
-
-                lifeState = LifeState.alive;
-                playerInputEnabled = true;
-                GetComponent<PlayerMovement>().playerBody.SetActive(true);
-                respawnCanvas.SetActive(false);
 
                 break;
         }
@@ -198,11 +205,6 @@ public class PlayerStats : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //if (other.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag) + "Bullet") && GetComponent<PlayerNetworking>().isOwnByThisInstance)
-        //{
-        //    HP -= other.gameObject.GetComponent<DefaultBullet>().DMG;
-        //}
-
         if (other.CompareTag("teamChanger"))    // This one should be disabled
         {
             ChangeTag(SceneManagerScript.Instance.GetRivalTag(teamTag));
@@ -222,23 +224,29 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    public void OnDMGReceive(string playerDmgDealer, float dmg, string damagerName)
+    public void OnDMGReceive(string whatDealsTheDMG, float DMG, string whoDealsTheDMG)
     {
-        // Gestionar aqui el NETCODE
+        // NETCODE
         if (!GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
-            // Send DMG Package (Pillar netId de a quien pegas)
+            Package dmgPckg = ConnectionManager.Instance.WritePackage(Pck_type.DMG);
+            dmgPckg.dmGPackage = new DMGPackage
+            {
+                dmg = DMG,
+                cause = whatDealsTheDMG,
+                dealer = whoDealsTheDMG,
+                receiverID = GetComponent<PlayerNetworking>().networkID
+            };
 
-            // El Receive DMG Package ha de llamar esta funcion en su correspondiente cliente (asociar el daño a las netIDs)
-
+            ConnectionManager.Instance.SendPackage(dmgPckg);
             return;
         }
 
         if (lifeState != LifeState.alive) return;
 
-        HP -= dmg;
-        lastPlayerHitYou = playerDmgDealer;
-        lastDmgCause = damagerName;
+        HP -= DMG;
+        lastPlayerHitYou = whatDealsTheDMG;
+        lastDmgCause = whoDealsTheDMG;
     }
 
     public enum LifeState
