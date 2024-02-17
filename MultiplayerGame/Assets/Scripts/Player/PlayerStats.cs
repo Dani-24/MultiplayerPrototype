@@ -89,6 +89,14 @@ public class PlayerStats : MonoBehaviour
         switch (lifeState)
         {
             case LifeState.alive:
+
+                if (controller.enabled == false)
+                {
+                    controller.enabled = true;
+                    HP = maxHP;
+                    GetComponent<PlayerMovement>().playerBody.SetActive(true);
+                }
+
                 if (!GetComponent<PlayerNetworking>().isOwnByThisInstance) return;
 
                 // Check Death
@@ -109,14 +117,12 @@ public class PlayerStats : MonoBehaviour
 
                 if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
                 {
-                    transform.parent = null;
-
-                    controller.enabled = false;
-
                     lifeState = LifeState.respawning;
-
                     timeUntilRespawn = respawnTime;
                 }
+
+                transform.parent = null;
+                controller.enabled = false;
 
                 GetComponent<PlayerMovement>().playerBody.SetActive(false);
 
@@ -145,16 +151,12 @@ public class PlayerStats : MonoBehaviour
                         break;
                     }
 
-                    transform.SetPositionAndRotation(spawnPos, Quaternion.Euler(Vector3.zero));
-
-                    controller.enabled = true;
-                    HP = maxHP;
-                    ink = inkCapacity;
-
                     lifeState = LifeState.alive;
-                    playerInputEnabled = true;
-                    GetComponent<PlayerMovement>().playerBody.SetActive(true);
+
+                    transform.SetPositionAndRotation(spawnPos, Quaternion.Euler(Vector3.zero));
                     respawnCanvas.SetActive(false);
+                    playerInputEnabled = true;
+                    ink = inkCapacity;
                 }
 
                 break;
