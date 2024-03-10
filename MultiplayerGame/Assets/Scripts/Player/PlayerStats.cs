@@ -104,9 +104,8 @@ public class PlayerStats : MonoBehaviour
 
                 // Healing
                 if (HP != maxHP)
-                {
                     RegenHealth();
-                }
+
                 if (HP > maxHP) { HP = maxHP; }
 
                 // Reloading
