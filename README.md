@@ -1,4 +1,11 @@
 # Unity_MultiplayerGame
 
-Agradecimientos
-Mix and Jam & TNTCProject https://youtu.be/FR618z5xEiM?si=nxxS8oTNJ9H7kg3o
+> Añadir foto del proyecto
+
+> Describir que se ha realizado y que se quiere realizar
+
+> Guia de uso
+
+> Controles
+
+> Referencias y agradecimientos / sistemas de otras personas
