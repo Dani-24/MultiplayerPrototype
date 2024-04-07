@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1806432362168622188}
   - component: {fileID: 3954656461564115680}
   - component: {fileID: 550294745458254023}
+  - component: {fileID: 1403861099859347357}
   - component: {fileID: -1306307108692437246}
   m_Layer: 6
   m_Name: Elevator
@@ -349,10 +350,32 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 5.5, y: 10, z: 5.5}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!64 &1403861099859347357
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3514974935100675355}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!114 &-1306307108692437246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,6 +389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
+  maskTextureID: 747
   clean: 0
 --- !u!1 &6097006411322481009
 GameObject:
@@ -451,6 +475,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a42e4f903198d2543a923b2ef4f00918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gOId: 0
+  GOid: -1
   netValue: 0
   connectedToServer: 0

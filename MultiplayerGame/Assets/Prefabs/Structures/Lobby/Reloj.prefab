@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 15
+  useNet: 1
 --- !u!114 &2115885999240378145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,7 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a42e4f903198d2543a923b2ef4f00918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gOId: 0
+  GOid: -1
   netValue: 0
   connectedToServer: 0
 --- !u!1 &2163254138429573780
@@ -77,6 +78,7 @@ GameObject:
   - component: {fileID: 2021135246248303853}
   - component: {fileID: 7385020057372353060}
   - component: {fileID: 8385793117985687403}
+  - component: {fileID: 295860393571606271}
   - component: {fileID: 7049528765965872962}
   m_Layer: 6
   m_Name: Plataforma
@@ -422,10 +424,32 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 12.5, y: 0.5, z: 2}
   m_Center: {x: -0.25, y: 0.17090988, z: 0}
+--- !u!64 &295860393571606271
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2163254138429573780}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!114 &7049528765965872962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -439,6 +463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
+  maskTextureID: 747
   clean: 0
 --- !u!1 &5088086210743609027
 GameObject:
@@ -895,6 +920,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
+  maskTextureID: 747
   clean: 0
 --- !u!1 &6056241620787709259
 GameObject:

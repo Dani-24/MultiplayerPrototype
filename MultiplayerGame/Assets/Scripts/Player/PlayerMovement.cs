@@ -6,10 +6,15 @@ public class PlayerMovement : MonoBehaviour
 {
     CharacterController controller;
     PlayerInput input;
-
     public GameObject playerBody;
 
     public bool isUsingGamepad;
+
+    [Header("Ground Paint")]
+    [SerializeField] Color groundColor;
+    [SerializeField] GroundInk groundInk;
+    RenderTexture maskT;
+    [SerializeField] Texture2D texture;
 
     #region Horizontal Movement Propierties
 
@@ -21,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField][Range(0.1f, 25f)] private float moveSpeed = 10.0f;
     [SerializeField][Range(0.1f, 25f)] private float runSpeed = 20.0f;
-    //[SerializeField] private float slowSpeed = 5.0f;
+    [SerializeField][Range(0.1f, 25f)] private float slowSpeed = 5.0f;
     [Range(1f, 10f)] public float weaponSpeedMultiplier = 1.0f;
 
     public bool isRunning = false;
@@ -56,9 +61,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Network")]
     [SerializeField] int interpolationSpeed = 20;
 
-    [Header("Ground Paint")]
-    [SerializeField] Texture maskT;
-    [SerializeField] Texture2D texture;
+    #region App
 
     void Start()
     {
@@ -73,8 +76,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         UIInputs();
-
-        //CheckGroundPaint();
+        CheckGroundPaint();
     }
 
     private void FixedUpdate()
@@ -97,6 +99,8 @@ public class PlayerMovement : MonoBehaviour
         }
         controller.Move(moveDir * Time.deltaTime);
     }
+
+    #endregion
 
     #region Player Movement
 
@@ -121,17 +125,31 @@ public class PlayerMovement : MonoBehaviour
     {
         if (moveInput != Vector2.zero)
         {
-            if (GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
+            switch (groundInk)
             {
-                moveDir *= moveSpeed * weaponSpeedMultiplier;
-            }
-            else if (!isRunning)
-            {
-                moveDir *= moveSpeed;
-            }
-            else
-            {
-                moveDir *= runSpeed;
+                case GroundInk.NoInk:
+
+                    if (GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
+                        moveDir *= moveSpeed * weaponSpeedMultiplier;
+                    else
+                        moveDir *= moveSpeed;
+
+                    break;
+                case GroundInk.AllyInk:
+
+                    if (GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
+                        moveDir *= moveSpeed * weaponSpeedMultiplier;
+                    else if (isRunning)
+                        moveDir *= runSpeed;
+                    else
+                        moveDir *= moveSpeed;
+
+                    break;
+                case GroundInk.EnemyInk:
+
+                    moveDir *= slowSpeed;
+
+                    break;
             }
         }
     }
@@ -202,7 +220,6 @@ public class PlayerMovement : MonoBehaviour
 
     void CheckGroundPaint()
     {
-        // Lanzar un raycast hacía abajo y mirar si es suelo pintable
         RaycastHit hit;
 
         for (int i = 0; i < groundLayers.Count; i++)
@@ -213,44 +230,40 @@ public class PlayerMovement : MonoBehaviour
                 {
                     Paintable hitPaintable = hit.collider.GetComponent<Paintable>();
 
-                    //Debug.Log(texture.GetPixel((int)pos.x, (int)pos.y));
+                    maskT = (RenderTexture)hitPaintable.getRenderer().material.GetTexture(hitPaintable.maskTextureID);
 
-                    /*Color colorGround = */
+                    RenderTexture.active = maskT;
+                    texture.ReadPixels(new Rect(0, 0, texture.width, texture.height), 0, 0);
+                    texture.Apply();
 
-                    maskT = hitPaintable.getRenderer().material.GetTexture("_MaskTexture"); //PaintManager.instance.GetPaintColor(hitPaintable, hit.point);
+                    Vector3 coord = hit.textureCoord;   // Solo funka con meshCollider
 
-                    Graphics.CopyTexture(maskT, texture);
+                    groundColor = texture.GetPixelBilinear(coord.x, coord.y);
 
-                    float xNormalized = hit.point.x / texture.width;
-                    float yNormalized = hit.point.y / texture.height;
+                    // Comparar colores con alphaTeam y BetaTeam
+                    string inkTeam = SceneManagerScript.Instance.GetTeamFromColor(groundColor);
 
-                    int x = Mathf.FloorToInt(xNormalized);
-                    int y = Mathf.FloorToInt(yNormalized);
-
-                    Debug.Log(texture.GetPixel(x, y) + " at: " + x + " " + y);
-
-                    //if (hitPaintable != null)
-                    //{
-                    //    if (colorGround == SceneManagerScript.Instance.GetTeamColor("Alpha"))
-                    //    {
-                    //        Debug.Log("Alpha team Ink:" + colorGround);
-                    //    }
-                    //    else if (colorGround == SceneManagerScript.Instance.GetTeamColor("Beta"))
-                    //    {
-                    //        Debug.Log("Beta team Ink:" + colorGround);
-                    //    }
-                    //    else
-                    //    {
-                    //        Debug.Log("No Ink?");
-                    //    }
-                    //}
+                    if (GetComponent<PlayerStats>().teamTag == inkTeam)
+                        groundInk = GroundInk.AllyInk;
+                    else if (SceneManagerScript.Instance.GetRivalTag(GetComponent<PlayerStats>().teamTag) == inkTeam)
+                        groundInk = GroundInk.EnemyInk;
+                    else
+                        groundInk = GroundInk.NoInk;
                 }
                 catch
                 {
                     // No Paintable Component
+                    Debug.Log("That Ground is not <color=red>Pain</color>table");
                 }
             }
         }
+    }
+
+    public enum GroundInk
+    {
+        AllyInk,
+        EnemyInk,
+        NoInk
     }
 
     #endregion
@@ -291,11 +304,6 @@ public class PlayerMovement : MonoBehaviour
 
     // For Network
 
-    //public Vector2 GetMoveInput()
-    //{
-    //    return moveInput;
-    //}
-
     public bool GetRunInput()
     {
         return isRunning;
@@ -305,11 +313,6 @@ public class PlayerMovement : MonoBehaviour
     {
         return isJumping;
     }
-
-    //public void SetMoveInput(Vector2 _input)
-    //{
-    //    moveInput = _input;
-    //}
 
     public void SetRunInput(bool _run)
     {

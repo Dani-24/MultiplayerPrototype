@@ -54,7 +54,6 @@ public class PaintManager : Singleton<PaintManager>
 
     public void Paint(Paintable paintable, Vector3 pos, float radius = 1f, float hardness = .5f, float strength = .5f, Color? color = null)
     {
-
         RenderTexture mask = paintable.getMask();
         RenderTexture uvIslands = paintable.getUVIslands();
         RenderTexture extend = paintable.getExtend();
@@ -83,21 +82,4 @@ public class PaintManager : Singleton<PaintManager>
         Graphics.ExecuteCommandBuffer(command);
         command.Clear();
     }
-
-    //public Texture GetPaintColor(Paintable paintable, Vector3 pos)
-    //{
-    //    return paintable.getRenderer().material.GetTexture("_MaskTexture");
-    //        //paintMaterial.GetColor(colorID);
-
-    //    // Esto está pillando el color de lo ultimo q ha pasado por Paint()
-    //    // Como hago q pille de algo en especifico
-
-    //    //RenderTexture mask = paintable.getMask();
-
-    //    //command.SetRenderTarget(mask);
-
-    //    //paintMaterial.SetVector(positionID, pos);
-
-    //    //return paintMaterial.GetColor(colorID);
-    //}
 }

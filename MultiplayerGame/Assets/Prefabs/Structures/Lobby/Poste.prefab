@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2929524053233504396}
   - component: {fileID: 6151993395501477977}
   - component: {fileID: 1541193381296799224}
+  - component: {fileID: 5755833342645750225}
   - component: {fileID: 6506180266120326884}
   m_Layer: 6
   m_Name: Plataforma
@@ -363,10 +364,32 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 5.6, y: 0.54600394, z: 5.6}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!64 &5755833342645750225
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249319151279631201}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!114 &6506180266120326884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,6 +403,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
+  maskTextureID: 747
+  clean: 0
 --- !u!1 &5270628675438479699
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,7 +436,7 @@ Transform:
   - {fileID: 8035443056654585645}
   - {fileID: 3387022595282910939}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6335162102173110599
 GameObject:
@@ -868,3 +893,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extendsIslandOffset: 1
+  maskTextureID: 747
+  clean: 0

@@ -17,6 +17,7 @@ public class SceneManagerScript : MonoBehaviour
     [SerializeField] GameObject debugConsole;
 
     [SerializeField] bool deleteAllNotOwnPlayers = false;
+    [SerializeField] float InkColorThreshold = 5;
 
     #region Colors Propierties
 
@@ -231,17 +232,34 @@ public class SceneManagerScript : MonoBehaviour
     public Color GetTeamColor(string tag)
     {
         if (tag == teamTags[0])
-        {
             return alphaTeamColor;
-        }
         else if (tag == teamTags[1])
-        {
             return betaTeamColor;
-        }
         else
-        {
             return gammaTeamColor;
-        }
+    }
+
+    public string GetTeamFromColor(Color color)
+    {
+        if (ColorComparer(color,alphaTeamColor) <= InkColorThreshold)
+            return teamTags[0];
+        else if (ColorComparer(color, betaTeamColor) <= InkColorThreshold)
+            return teamTags[1];
+        else
+            return teamTags[2];
+    }
+
+    float ColorComparer(Color a, Color b)
+    {
+        float deltaR = Mathf.Abs(a.r - b.r);
+        float deltaG = Mathf.Abs(a.g - b.g);
+        float deltaB = Mathf.Abs(a.b - b.b);
+
+        float totalDifference = (deltaR + deltaG + deltaB) / 3f;
+
+        Debug.Log("<color=green>Colorin colorado</color> " + totalDifference * 100f);
+
+        return totalDifference * 100f;
     }
 
     public void SetColors(Color _alphaTeam, Color _betaTeam)
@@ -253,17 +271,11 @@ public class SceneManagerScript : MonoBehaviour
     public string GetRivalTag(string tag)
     {
         if (tag == teamTags[0])
-        {
             return teamTags[1];
-        }
         else if (tag == teamTags[1])
-        {
             return teamTags[0];
-        }
         else
-        {
             return teamTags[2];
-        }
     }
 
     [Tooltip("Randomly assigns a team if preference != teamtags")]
@@ -344,13 +356,9 @@ public class SceneManagerScript : MonoBehaviour
     public void DeleteFromTeam(GameObject go)
     {
         if (go.tag == teamTags[0])
-        {
             alphaTeamMembers.Remove(go);
-        }
         else if (go.tag == teamTags[1])
-        {
             betaTeamMembers.Remove(go);
-        }
     }
 
     public void TeamsForBattle()
