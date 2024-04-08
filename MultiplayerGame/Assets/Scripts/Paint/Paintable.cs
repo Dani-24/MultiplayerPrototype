@@ -12,7 +12,7 @@ public class Paintable : MonoBehaviour {
     
     Renderer rend;
 
-    public int maskTextureID = Shader.PropertyToID("_MaskTexture");
+    public int maskTextureID;
 
     public bool clean = false;
 

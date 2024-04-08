@@ -257,7 +257,7 @@ public class SceneManagerScript : MonoBehaviour
 
         float totalDifference = (deltaR + deltaG + deltaB) / 3f;
 
-        Debug.Log("<color=green>Colorin colorado</color> " + totalDifference * 100f);
+        //Debug.Log("<color=green>Colorin colorado</color> " + totalDifference * 100f);
 
         return totalDifference * 100f;
     }
