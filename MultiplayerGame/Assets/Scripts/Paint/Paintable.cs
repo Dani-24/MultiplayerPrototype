@@ -22,6 +22,11 @@ public class Paintable : MonoBehaviour {
     public RenderTexture getSupport() => supportTexture;
     public Renderer getRenderer() => rend;
 
+    private void Awake()
+    {
+        maskTextureID = Shader.PropertyToID("_MaskTexture");
+    }
+
     void Start() {
         maskRenderTexture = new RenderTexture(TEXTURE_SIZE, TEXTURE_SIZE, 0);
         maskRenderTexture.filterMode = FilterMode.Bilinear;
