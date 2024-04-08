@@ -499,9 +499,8 @@ MonoBehaviour:
   respawnTime: 7
   timeUntilRespawn: 0
   ink: 100
-  inkReloadSpeed: 20
-  inkReloadSpeedOnInk: 5
-  onInk: 0
+  inkReloadSpeed: 4
+  inkReloadSpeedOnInk: 20
   playerInputEnabled: 0
   spawnPos: {x: 0, y: 1, z: 0}
   minYaxis: -20
@@ -526,9 +525,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerBody: {fileID: 3691067429168480238}
   isUsingGamepad: 0
+  groundColor: {r: 0, g: 0, b: 0, a: 0}
+  groundInk: 0
+  texture: {fileID: 0}
   moveInput: {x: 0, y: 0}
   moveSpeed: 7
   runSpeed: 15
+  slowSpeed: 5
   weaponSpeedMultiplier: 1
   isRunning: 0
   rotationSpeed: 10
@@ -548,8 +551,6 @@ MonoBehaviour:
   - serializedVersion: 2
     m_Bits: 2048
   interpolationSpeed: 20
-  maskT: {fileID: 0}
-  texture: {fileID: 0}
 --- !u!114 &2627168621151155890
 MonoBehaviour:
   m_ObjectHideFlags: 0

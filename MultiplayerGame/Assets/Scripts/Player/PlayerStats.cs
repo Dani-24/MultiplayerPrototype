@@ -32,9 +32,8 @@ public class PlayerStats : MonoBehaviour
     public float ink = 100.0f;
     float inkCapacity;
 
-    [SerializeField][Range(1f, 20f)] float inkReloadSpeed = 1f;
-    [SerializeField][Range(1f, 20f)] float inkReloadSpeedOnInk = 5f;
-    public bool onInk = false;
+    [SerializeField][Range(0.1f, 20f)] float inkReloadSpeed = 1f;
+    [SerializeField][Range(1f, 30f)] float inkReloadSpeedOnInk = 5f;
 
     [Header("Other")]
 
@@ -172,7 +171,7 @@ public class PlayerStats : MonoBehaviour
     {
         if (ink < inkCapacity && !GetComponent<PlayerArmament>().weaponShooting /*&& !GetComponent<PlayerMovement>().subWeaponShooting*/)
         {
-            if (onInk)
+            if (GetComponent<PlayerMovement>().groundInk == PlayerMovement.GroundInk.AllyInk && GetComponent<PlayerMovement>().isRunning)
             {
                 ink += inkReloadSpeedOnInk * Time.deltaTime;
             }

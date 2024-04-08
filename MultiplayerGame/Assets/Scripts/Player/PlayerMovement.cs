@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Ground Paint")]
     [SerializeField] Color groundColor;
-    [SerializeField] GroundInk groundInk;
+    public GroundInk groundInk;
     RenderTexture maskT;
     [SerializeField] Texture2D texture;
 

@@ -18237,6 +18237,16 @@ PrefabInstance:
       propertyPath: minYaxis
       value: -0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 702488119523010262, guid: b67d6d356db779849a9636062bb6b45c,
+        type: 3}
+      propertyPath: inkReloadSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 702488119523010262, guid: b67d6d356db779849a9636062bb6b45c,
+        type: 3}
+      propertyPath: inkReloadSpeedOnInk
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 1461030857391287611, guid: b67d6d356db779849a9636062bb6b45c,
         type: 3}
       propertyPath: slowSpeed
@@ -34284,9 +34294,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 443b1e043c60fab45aee809e90004ca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetRenderer: {fileID: 272617564}
-  worldPosition: {x: 0, y: 0, z: 0}
-  trabajaCodigoPutero: 0
 --- !u!1001 &2962432724005886042
 PrefabInstance:
   m_ObjectHideFlags: 0
