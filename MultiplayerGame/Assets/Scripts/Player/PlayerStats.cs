@@ -163,6 +163,7 @@ public class PlayerStats : MonoBehaviour
         // Debug
         if (infiniteHP) { HP = maxHP; }
         if (infiniteInk) { ink = inkCapacity; }
+
         // Net
         if (!GetComponent<PlayerNetworking>().isOwnByThisInstance) { infiniteInk = true; }
     }

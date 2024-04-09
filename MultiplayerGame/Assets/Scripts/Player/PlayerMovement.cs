@@ -23,11 +23,19 @@ public class PlayerMovement : MonoBehaviour
 
     Vector3 forward;
     Vector3 moveDir;
+    Vector3 lastDir;
 
     [SerializeField][Range(0.1f, 25f)] private float moveSpeed = 10.0f;
     [SerializeField][Range(0.1f, 25f)] private float runSpeed = 20.0f;
     [SerializeField][Range(0.1f, 25f)] private float slowSpeed = 5.0f;
     [Range(1f, 10f)] public float weaponSpeedMultiplier = 1.0f;
+
+    [SerializeField][Range(0.1f, 20f)] float acceleration = 1.0f;
+    [SerializeField][Range(0.1f, 10f)] float accelerationMultiplier = 1.0f;
+
+    [Header("Final Speed")]
+    [SerializeField] float actualSpeed;
+    [SerializeField] float targetSpeed;
 
     public bool isRunning = false;
 
@@ -123,35 +131,52 @@ public class PlayerMovement : MonoBehaviour
 
     void Movement()
     {
+        targetSpeed = 0;
+
         if (moveInput != Vector2.zero)
         {
+            lastDir = moveDir;
             switch (groundInk)
             {
                 case GroundInk.NoInk:
 
                     if (GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
-                        moveDir *= moveSpeed * weaponSpeedMultiplier;
+                        targetSpeed += moveSpeed * weaponSpeedMultiplier;
                     else
-                        moveDir *= moveSpeed;
+                        targetSpeed += moveSpeed;
 
                     break;
                 case GroundInk.AllyInk:
 
                     if (GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
-                        moveDir *= moveSpeed * weaponSpeedMultiplier;
+                        targetSpeed += moveSpeed * weaponSpeedMultiplier;
                     else if (isRunning)
-                        moveDir *= runSpeed;
+                        targetSpeed += runSpeed;
                     else
-                        moveDir *= moveSpeed;
+                        targetSpeed += moveSpeed;
 
                     break;
                 case GroundInk.EnemyInk:
 
-                    moveDir *= slowSpeed;
+                    targetSpeed += slowSpeed;
 
                     break;
             }
         }
+        else
+        {
+            moveDir = lastDir;
+        }
+
+        if (actualSpeed != targetSpeed && isGrounded)
+        {
+            if (actualSpeed < targetSpeed)
+                actualSpeed += acceleration * accelerationMultiplier;
+            else
+                actualSpeed -= acceleration * accelerationMultiplier;
+        }
+
+        moveDir *= actualSpeed;
     }
 
     void BodyRotation()
@@ -220,6 +245,9 @@ public class PlayerMovement : MonoBehaviour
 
     void CheckGroundPaint()
     {
+        if (!GetComponent<PlayerNetworking>().isOwnByThisInstance)
+            return;
+
         RaycastHit hit;
 
         for (int i = 0; i < groundLayers.Count; i++)
