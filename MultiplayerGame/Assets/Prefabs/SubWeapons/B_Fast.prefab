@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamTag: 
+  isShotByOwnPlayer: 0
   weaponName: InstaBomb
   dmg: 60
   splashDmg: 30
@@ -61,7 +62,7 @@ MonoBehaviour:
   paintRadius: 5.5
   strength: 1
   hardness: 0.5
-  throwCost: 50
+  throwCost: 45
   rend:
   - {fileID: 6193764339262719274}
   minYaxis: -20

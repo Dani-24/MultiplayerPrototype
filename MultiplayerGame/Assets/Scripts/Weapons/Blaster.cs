@@ -9,6 +9,9 @@ public class Blaster : Weapon
     [SerializeField] float splashMaxDmg;
     [SerializeField] float splashMinDmg;
 
+    [SerializeField] AnimationCurve dmgCurve;
+    // El valor X de la curva se envia con un Evaluate y entonces pilla el valor en Y
+
     private void Start()
     {
         audioS = GetComponent<AudioSource>();
@@ -52,13 +55,9 @@ public class Blaster : Weapon
         // =========== ROTACIÓN DEL ARMA ===========
 
         if (isShooting)
-        {
             weaponMesh.transform.rotation = Quaternion.LookRotation(wpAimDirection);
-        }
         else
-        {
             weaponMesh.transform.rotation = Quaternion.LookRotation(transform.forward);
-        }
     }
 
     void MaterialsFromTeamColor()

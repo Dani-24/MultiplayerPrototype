@@ -161,6 +161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamTag: 
+  isShotByOwnPlayer: 0
   weaponName: Blaster Short
   cadence: 1.5
   shootDMG: 140
@@ -191,6 +192,48 @@ MonoBehaviour:
   splashRadius: 4.25
   splashMaxDmg: 70
   splashMinDmg: 50
+  dmgCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.018808229
+      value: 0.92560977
+      inSlope: -0.0000048933853
+      outSlope: -0.0000048933853
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.20044358
+      value: 0.9256087
+      inSlope: -0.025848713
+      outSlope: -0.025848713
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.52041316
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.53404564
+      value: 0.27667153
+      inSlope: -1.3517615
+      outSlope: -1.3517615
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.19474752
+      outWeight: 0.12896354
+    - serializedVersion: 3
+      time: 0.9777832
+      value: -0.012172699
+      inSlope: -0.050826766
+      outSlope: -0.050826766
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.24308267
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!82 &2237491516721324905
 AudioSource:
   m_ObjectHideFlags: 0
