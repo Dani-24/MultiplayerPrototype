@@ -81,12 +81,13 @@ MonoBehaviour:
   teamTag: 
   isShotByOwnPlayer: 0
   weaponName: Shooter Burst Long
-  cadence: 1.5
+  cadence: 1.7
   shootDMG: 30
   bulletSpeed: 60
-  weaponRange: 22
+  weaponRange: 16.5
   rng: 0
   jumpRng: 0
+  firstShootCooldown: 8
   shootCost: 2.25
   moveSpeedMultiplier: 0.6
   pRadius: 3

@@ -131,6 +131,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamTag: 
+  weaponShootingThis: 
+  isShotByOwnPlayer: 0
   speed: 10
   range: 5
   DMG: 35
@@ -138,12 +140,25 @@ MonoBehaviour:
   pRadius: 1
   pStrength: 1
   pHardness: 1
+  linearPainting: 0
+  dropletsTimeDistance: 0
+  dropletPaintRadius: 0
+  dropletMeshScale: 0
+  bulletDroplet: {fileID: 4972482428676012466, guid: 75688502e096c3f4798c1d8e465b1285,
+    type: 3}
   minYaxis: -20
   meshTransform: {fileID: 1513989519296947346}
-  oneShotRadius: 0
-  splashRadius: 0
-  splashMaxDmg: 0
-  splashMinDmg: 0
+  hitPlayerSFX: {fileID: 0}
+  hitPaintableSurfaceSFX: {fileID: 0}
+  hitUnpaintableSurfaceSFX: {fileID: 0}
+  audioSource: {fileID: 0}
+  explosionRadius: 0
+  dmgCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   explosionObject: {fileID: 8046681831239978808, guid: 2428890993db8eb48a044045d416ebac,
     type: 3}
   explosionSFX: {fileID: 8300000, guid: f2387945a7422934bbf480364337d22d, type: 3}

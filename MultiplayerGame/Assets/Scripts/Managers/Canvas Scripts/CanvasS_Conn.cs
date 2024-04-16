@@ -129,7 +129,7 @@ public class CanvasS_Conn : MonoBehaviour
 
                 if (host)
                 {
-                    ConnectionManager.Instance.SetIP(ConnectionManager.Instance.GetLocalIPv4());
+                    ConnectionManager.Instance.SetIP(ConnectionManager.Instance.GetLocalIPAddress());
                     ConnectionManager.Instance.reconnect = true;
                     currentPanel = PanelOptions.Room;
                 }

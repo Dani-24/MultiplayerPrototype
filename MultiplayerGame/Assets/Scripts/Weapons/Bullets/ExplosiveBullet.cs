@@ -4,15 +4,10 @@ using UnityEngine;
 public class ExplosiveBullet : Bullet
 {
     [Header("Explosive Propierties")]
-    public float oneShotRadius;
-    public float splashRadius;
-
-    public float splashMaxDmg;
-    public float splashMinDmg;
+    public float explosionRadius;
+    public AnimationCurve dmgCurve;
 
     [SerializeField] GameObject explosionObject;
-
-    List<Collider> bigDmgColliders = new();
     [SerializeField] AudioClip explosionSFX;
 
     void Start()
@@ -37,9 +32,7 @@ public class ExplosiveBullet : Bullet
     private void FixedUpdate()
     {
         if (Vector3.Distance(transform.position, initPos) > range)
-        {
             OnExplosion();
-        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -49,70 +42,39 @@ public class ExplosiveBullet : Bullet
 
     public void OnExplosion()
     {
-        // Visual Effect
+        // Vfx
         GameObject explo = Instantiate(explosionObject, transform.position, transform.rotation);
         explo.GetComponent<AudioSource>().clip = explosionSFX;
         explo.GetComponent<AudioSource>().Play();
-        explo.GetComponent<Explosive>().maxRadius = splashRadius * 1.5f;
+        explo.GetComponent<Explosive>().maxRadius = explosionRadius * 1.5f;
         explo.GetComponent<Renderer>().material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
 
-        // Lethal Radius
-        Collider[] colliders = Physics.OverlapSphere(transform.position, oneShotRadius);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
 
         foreach (Collider hit in colliders)
         {
-            if (isShotByOwnPlayer)
+            // Hit
+            if (isShotByOwnPlayer && hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bullet"))
             {
-                if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bullet"))
-                {
-                    if (hit.GetComponent<PlayerStats>())
-                        hit.GetComponent<PlayerStats>().OnDMGReceive(weaponShootingThis, DMG, ConnectionManager.Instance.userName);
-                    else if (hit.GetComponent<Dummy>())
-                        hit.GetComponent<Dummy>().OnDMGReceive(weaponShootingThis, DMG, ConnectionManager.Instance.userName);
-                }
+                float dist = Vector3.Distance(transform.position, hit.ClosestPointOnBounds(transform.position)) / explosionRadius;
+                float dmgDealt = dmgCurve.Evaluate(dist) * DMG;
+
+                if (hit.GetComponent<PlayerStats>())
+                    hit.GetComponent<PlayerStats>().OnDMGReceive(weaponShootingThis, dmgDealt, ConnectionManager.Instance.userName);
+                else if (hit.GetComponent<Dummy>())
+                    hit.GetComponent<Dummy>().OnDMGReceive(weaponShootingThis, dmgDealt, ConnectionManager.Instance.userName);
             }
 
-            // Paint only objects affected by lethal dmg area???
+            // Main Bullet Paint
             Paintable p = hit.GetComponent<Paintable>();
             if (p != null)
             {
                 Vector3 pos = hit.ClosestPointOnBounds(transform.position);
                 PaintManager.instance.Paint(p, pos, pRadius, pHardness, pStrength, rend.material.color);
             }
-
-            bigDmgColliders.Add(hit);
         }
 
-        // Splash Radius
-        if (isShotByOwnPlayer)
-        {
-            colliders = Physics.OverlapSphere(transform.position, splashRadius);
-
-            foreach (Collider hit in colliders)
-            {
-                if (!bigDmgColliders.Contains(hit))
-                {
-                    if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bullet"))
-                    {
-                        float dist = Vector3.Distance(transform.position, hit.ClosestPointOnBounds(transform.position));
-
-                        float dmgpercent = 1f - (dist / splashRadius);
-                        dmgpercent = Mathf.Clamp01(dmgpercent);
-
-                        float dmgToDeal = dmgpercent * splashMaxDmg;
-
-                        if (dmgToDeal < splashMinDmg) dmgToDeal = splashMinDmg;
-
-                        if (hit.GetComponent<PlayerStats>())
-                            hit.GetComponent<PlayerStats>().OnDMGReceive(weaponShootingThis, dmgToDeal, ConnectionManager.Instance.userName);
-                        else if (hit.GetComponent<Dummy>())
-                            hit.GetComponent<Dummy>().OnDMGReceive(weaponShootingThis, dmgToDeal, ConnectionManager.Instance.userName);
-                    }
-                }
-            }
-        }
-        bigDmgColliders.Clear();
-
+        // End
         Destroy(gameObject);
     }
 }

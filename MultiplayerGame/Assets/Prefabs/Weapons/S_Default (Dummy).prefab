@@ -79,19 +79,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamTag: 
-  weaponName: 
+  isShotByOwnPlayer: 0
+  weaponName: Dummy Shooter
   cadence: 8
   shootDMG: 36
   bulletSpeed: 50
   weaponRange: 15
   rng: 3
   jumpRng: 6
+  firstShootCooldown: 3
   shootCost: 0.8
   moveSpeedMultiplier: 0.75
   pRadius: 3
   pStrength: 1
   pHardness: 0.5
-  sprayDropletsNum: 3
+  sprayDropletsNum: 1
   sprayDropRadius: 0.6
   sprayPaintRadius: 2
   spawnBulletPosition: {fileID: 3150462560917926386}

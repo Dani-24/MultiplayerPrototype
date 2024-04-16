@@ -51,6 +51,8 @@ public class SceneManagerScript : MonoBehaviour
     #endregion
 
     [Header("For net")]
+    [SerializeField] int targetFPS = 60;
+
     public bool cleanPaint = false;
     [SerializeField] GameObject sceneRoot;
 
@@ -87,6 +89,8 @@ public class SceneManagerScript : MonoBehaviour
 
     void Start()
     {
+        Application.targetFrameRate = targetFPS;
+
         if (loadScene) return;
 
         if (colorPairs.Count > 0 && !useTheseDebugColors)

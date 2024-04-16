@@ -19,6 +19,10 @@ public class Weapon : MonoBehaviour
     public float rng = 0f;
     public float jumpRng = 0f;
 
+    [Tooltip("Frames until first shot when not shooting")]
+    public float firstShootCooldown;
+    protected float actualShootFrame = 0;
+
     [Tooltip("% from the total ink that shooting once costs")]
     public float shootCost;
 
@@ -37,9 +41,12 @@ public class Weapon : MonoBehaviour
     [Tooltip("Painting bullets (no dmg just paint)")]
     [SerializeField] protected int sprayDropletsNum = 0;
     [Tooltip("Radius from that bullet (mesh)")]
-    [SerializeField] protected float sprayDropRadius = 1.0f;
+    [SerializeField] protected float sprayDropMeshRadius = 1.0f;
     [Tooltip("Paint radius from that spray")]
     [SerializeField] protected float sprayPaintRadius = 1.0f;
+
+    [SerializeField] protected bool linearPaint = false;
+    [SerializeField] protected float dropletsDistance = 1;
 
     #endregion
 

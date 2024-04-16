@@ -285,6 +285,11 @@ MonoBehaviour:
   pRadius: 1
   pStrength: 1
   pHardness: 1
+  linearPainting: 0
+  dropletsTimeDistance: 0
+  dropletPaintRadius: 0
+  dropletMeshScale: 0
+  bulletDroplet: {fileID: 4972482428676012466}
   minYaxis: -20
   meshTransform: {fileID: 1513989519296947346}
   hitPlayerSFX: {fileID: 8300000, guid: c065d6e9d2108bd43878b5296b0bc0ad, type: 3}

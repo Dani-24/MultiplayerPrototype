@@ -161,21 +161,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamTag: 
+  isShotByOwnPlayer: 0
   weaponName: Blaster Long
   cadence: 1
   shootDMG: 140
   bulletSpeed: 90
-  weaponRange: 20
+  weaponRange: 16
   rng: 0
   jumpRng: 2
+  firstShootCooldown: 4
   shootCost: 8.5
   moveSpeedMultiplier: 0.4
-  pRadius: 5
+  pRadius: 4
   pStrength: 1
   pHardness: 0.5
   sprayDropletsNum: 10
-  sprayDropRadius: 0.5
+  sprayDropMeshRadius: 1
   sprayPaintRadius: 1.75
+  linearPaint: 1
+  dropletsDistance: 1.75
   spawnBulletPosition: {fileID: 8008173628777336271}
   shootingVerticalOffset: 0.175
   actualBulletCost: 0
@@ -187,10 +191,49 @@ MonoBehaviour:
   rend:
   - {fileID: 5263210421332541429}
   weaponSprite: {fileID: 21300000, guid: 945d3e7c6af152b4baef0cece862711d, type: 3}
-  oneShotRadius: 1.25
-  splashRadius: 4
-  splashMaxDmg: 70
-  splashMinDmg: 35
+  blastRadius: 4
+  dmgCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.99999285
+      inSlope: 0.0033903306
+      outSlope: 0.0033903306
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.25
+      value: 1.000003
+      inSlope: 0.0062821135
+      outSlope: 0.0062821135
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.52041316
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.2500366
+      value: 0.49996048
+      inSlope: -0.64701563
+      outSlope: -0.64701563
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.19474752
+      outWeight: 0.15275791
+    - serializedVersion: 3
+      time: 1
+      value: 0.36000443
+      inSlope: -0.003999093
+      outSlope: -0.003999093
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.14827281
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!82 &2237491516721324905
 AudioSource:
   m_ObjectHideFlags: 0

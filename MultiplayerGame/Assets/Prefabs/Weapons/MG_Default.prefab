@@ -78,19 +78,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamTag: 
+  isShotByOwnPlayer: 0
   weaponName: Minigun Default
   cadence: 13
   shootDMG: 32
   bulletSpeed: 50
-  weaponRange: 24
-  rng: 7
+  weaponRange: 17
+  rng: 4
   jumpRng: 14
+  firstShootCooldown: 60
   shootCost: 0.1
   moveSpeedMultiplier: 0.3
   pRadius: 3
   pStrength: 1
   pHardness: 0.5
-  sprayDropletsNum: 2
+  sprayDropletsNum: 1
   sprayDropRadius: 0.55
   sprayPaintRadius: 2
   spawnBulletPosition: {fileID: 3150462560917926386}

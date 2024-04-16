@@ -2,15 +2,10 @@ using UnityEngine;
 
 public class Blaster : Weapon
 {
-    [Header("Gunshot Special Propierties")]
-    [SerializeField] float oneShotRadius;
-    [SerializeField] float splashRadius;
-
-    [SerializeField] float splashMaxDmg;
-    [SerializeField] float splashMinDmg;
+    [Header("Blaster Special Propierties")]
+    [SerializeField] float blastRadius;
 
     [SerializeField] AnimationCurve dmgCurve;
-    // El valor X de la curva se envia con un Evaluate y entonces pilla el valor en Y
 
     private void Start()
     {
@@ -36,16 +31,20 @@ public class Blaster : Weapon
         wpAimDirection.y += shootingVerticalOffset;
 
         // ====== Disparar ======
-
         if (shootCooldown >= 0.0f)
-        {
             shootCooldown -= Time.deltaTime;
-        }
         else if (isShooting)
         {
-            Shoot();
-            shootCooldown = 1 / cadence;
+            if (actualShootFrame >= firstShootCooldown)
+            {
+                Shoot();
+                shootCooldown = 1 / cadence;
+            }
+            else
+                actualShootFrame++;
         }
+        else
+            actualShootFrame = 0;
 
         MaterialsFromTeamColor();
     }
@@ -53,7 +52,6 @@ public class Blaster : Weapon
     private void FixedUpdate()
     {
         // =========== ROTACIÓN DEL ARMA ===========
-
         if (isShooting)
             weaponMesh.transform.rotation = Quaternion.LookRotation(wpAimDirection);
         else
@@ -76,13 +74,9 @@ public class Blaster : Weapon
         if (GetComponentInParent<PlayerStats>().ink >= shootCost)
         {
             if (GetComponentInParent<PlayerNetworking>().isOwnByThisInstance)
-            {
                 GetComponentInParent<PlayerArmament>().weaponRngState = Random.state;
-            }
             else
-            {
                 Random.state = GetComponentInParent<PlayerArmament>().weaponRngState;
-            }
 
             Vector3 aimDirVec = Quaternion.LookRotation(wpAimDirection).eulerAngles;
 
@@ -100,10 +94,8 @@ public class Blaster : Weapon
             bullet.GetComponent<ExplosiveBullet>().pHardness = pHardness;
             bullet.GetComponent<ExplosiveBullet>().pStrength = pStrength;
             bullet.GetComponent<ExplosiveBullet>().meshScale = 1;
-            bullet.GetComponent<ExplosiveBullet>().oneShotRadius = oneShotRadius;
-            bullet.GetComponent<ExplosiveBullet>().splashRadius = splashRadius;
-            bullet.GetComponent<ExplosiveBullet>().splashMaxDmg = splashMaxDmg;
-            bullet.GetComponent<ExplosiveBullet>().splashMinDmg = splashMinDmg;
+            bullet.GetComponent<ExplosiveBullet>().explosionRadius = blastRadius;
+            bullet.GetComponent<ExplosiveBullet>().dmgCurve = dmgCurve;
 
             GameObject mainSprayDrop = Instantiate(bulletDropletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
 
@@ -114,21 +106,31 @@ public class Blaster : Weapon
             mainSprayDrop.GetComponent<DefaultBullet>().pRadius = pRadius;
             mainSprayDrop.GetComponent<DefaultBullet>().pHardness = pHardness;
             mainSprayDrop.GetComponent<DefaultBullet>().pStrength = pStrength;
-            mainSprayDrop.GetComponent<DefaultBullet>().meshScale = sprayDropRadius;
+            mainSprayDrop.GetComponent<DefaultBullet>().meshScale = sprayDropMeshRadius;
 
             // Ink droplets
-            for (int j = 0; j < sprayDropletsNum; j++)
+            if (!linearPaint)
             {
-                GameObject sprayDrop = Instantiate(bulletDropletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
+                for (int j = 0; j < sprayDropletsNum; j++)
+                {
+                    GameObject sprayDrop = Instantiate(bulletDropletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
 
-                sprayDrop.GetComponent<DefaultBullet>().teamTag = teamTag;
-                sprayDrop.GetComponent<DefaultBullet>().speed = bulletSpeed;
-                sprayDrop.GetComponent<DefaultBullet>().range = Random.Range(0, weaponRange);
-                sprayDrop.GetComponent<DefaultBullet>().DMG = 0;
-                sprayDrop.GetComponent<DefaultBullet>().pRadius = sprayPaintRadius;
-                sprayDrop.GetComponent<DefaultBullet>().pHardness = pHardness;
-                sprayDrop.GetComponent<DefaultBullet>().pStrength = pStrength;
-                sprayDrop.GetComponent<DefaultBullet>().meshScale = sprayDropRadius;
+                    sprayDrop.GetComponent<DefaultBullet>().teamTag = teamTag;
+                    sprayDrop.GetComponent<DefaultBullet>().speed = bulletSpeed;
+                    sprayDrop.GetComponent<DefaultBullet>().range = Random.Range(0, weaponRange);
+                    sprayDrop.GetComponent<DefaultBullet>().DMG = 0;
+                    sprayDrop.GetComponent<DefaultBullet>().pRadius = sprayPaintRadius;
+                    sprayDrop.GetComponent<DefaultBullet>().pHardness = pHardness;
+                    sprayDrop.GetComponent<DefaultBullet>().pStrength = pStrength;
+                    sprayDrop.GetComponent<DefaultBullet>().meshScale = sprayDropMeshRadius;
+                }
+            }
+            else
+            {
+                bullet.GetComponent<ExplosiveBullet>().linearPainting = true;
+                bullet.GetComponent<ExplosiveBullet>().dropletsDistance = dropletsDistance;
+                bullet.GetComponent<ExplosiveBullet>().dropletPaintRadius = sprayPaintRadius;
+                bullet.GetComponent<ExplosiveBullet>().dropletMeshScale = sprayDropMeshRadius;
             }
 
             // Cost ink

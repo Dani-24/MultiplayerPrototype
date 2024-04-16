@@ -5,7 +5,6 @@ public class Bullet : MonoBehaviour
     public string teamTag;
 
     protected Rigidbody rb;
-
     protected Renderer rend;
 
     public string weaponShootingThis;
@@ -32,6 +31,14 @@ public class Bullet : MonoBehaviour
     public float pStrength = 1;
     public float pHardness = 1;
 
+    [Header("Linear Painting")]
+    public bool linearPainting = false;
+    public float dropletsDistance;
+    public float dropletPaintRadius;
+    public float dropletMeshScale;
+    public GameObject bulletDroplet;
+    Vector3 lastDropletPos = Vector3.zero;
+
     #endregion
 
     [Header("Transforms")]
@@ -49,12 +56,32 @@ public class Bullet : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
     }
+
     void Update()
     {
         // Delete if fall from the map
         if (transform.position.y < minYaxis)
-        {
             Destroy(gameObject);
+
+        if (linearPainting)
+        {
+            if (lastDropletPos == Vector3.zero) lastDropletPos = initPos;
+
+            if (Vector3.Distance(lastDropletPos, transform.position) >= dropletsDistance)
+            {
+                GameObject mainSprayDrop = Instantiate(bulletDroplet, transform.position, Quaternion.identity);
+
+                mainSprayDrop.GetComponent<DefaultBullet>().teamTag = teamTag;
+                mainSprayDrop.GetComponent<DefaultBullet>().speed = 1;
+                mainSprayDrop.GetComponent<DefaultBullet>().range = 0;
+                mainSprayDrop.GetComponent<DefaultBullet>().DMG = 0;
+                mainSprayDrop.GetComponent<DefaultBullet>().pRadius = dropletPaintRadius;
+                mainSprayDrop.GetComponent<DefaultBullet>().pHardness = pHardness;
+                mainSprayDrop.GetComponent<DefaultBullet>().pStrength = pStrength;
+                mainSprayDrop.GetComponent<DefaultBullet>().meshScale = dropletMeshScale;
+
+                lastDropletPos = transform.position;
+            }
         }
     }
 }

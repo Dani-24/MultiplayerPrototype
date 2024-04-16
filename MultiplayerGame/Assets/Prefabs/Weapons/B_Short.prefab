@@ -169,14 +169,17 @@ MonoBehaviour:
   weaponRange: 8
   rng: 0
   jumpRng: 2
+  firstShootCooldown: 4
   shootCost: 6
   moveSpeedMultiplier: 0.75
-  pRadius: 4.5
+  pRadius: 4.25
   pStrength: 1
   pHardness: 0.5
   sprayDropletsNum: 2
-  sprayDropRadius: 0.5
+  sprayDropMeshRadius: 1
   sprayPaintRadius: 2
+  linearPaint: 1
+  dropletsDistance: 2
   spawnBulletPosition: {fileID: 8008173628777336271}
   shootingVerticalOffset: 0.25
   actualBulletCost: 0
@@ -188,48 +191,45 @@ MonoBehaviour:
   rend:
   - {fileID: 5263210421332541429}
   weaponSprite: {fileID: 21300000, guid: 4b5060087f421924dba5586f663a2d28, type: 3}
-  oneShotRadius: 1.25
-  splashRadius: 4.25
-  splashMaxDmg: 70
-  splashMinDmg: 50
+  blastRadius: 4.25
   dmgCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: -0.018808229
-      value: 0.92560977
-      inSlope: -0.0000048933853
-      outSlope: -0.0000048933853
-      tangentMode: 34
+      time: 0
+      value: 0.99999285
+      inSlope: 0.0033903306
+      outSlope: 0.0033903306
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.33333334
+      outWeight: 1
     - serializedVersion: 3
-      time: 0.20044358
-      value: 0.9256087
-      inSlope: -0.025848713
-      outSlope: -0.025848713
+      time: 0.25
+      value: 1.000003
+      inSlope: 0.0062821135
+      outSlope: 0.0062821135
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.52041316
-      outWeight: 0.33333334
+      outWeight: 1
     - serializedVersion: 3
-      time: 0.53404564
-      value: 0.27667153
-      inSlope: -1.3517615
-      outSlope: -1.3517615
+      time: 0.2500366
+      value: 0.49996048
+      inSlope: -0.64701563
+      outSlope: -0.64701563
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.19474752
-      outWeight: 0.12896354
+      outWeight: 0.15275791
     - serializedVersion: 3
-      time: 0.9777832
-      value: -0.012172699
-      inSlope: -0.050826766
-      outSlope: -0.050826766
+      time: 1
+      value: 0.36000443
+      inSlope: -0.003999093
+      outSlope: -0.003999093
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.24308267
+      inWeight: 0.14827281
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

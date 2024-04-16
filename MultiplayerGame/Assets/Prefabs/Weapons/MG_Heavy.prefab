@@ -78,13 +78,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamTag: 
+  isShotByOwnPlayer: 0
   weaponName: Minigun Heavy
   cadence: 25
   shootDMG: 41
   bulletSpeed: 75
-  weaponRange: 30
+  weaponRange: 20
   rng: 6
   jumpRng: 12
+  firstShootCooldown: 120
   shootCost: 0.1
   moveSpeedMultiplier: 0.2
   pRadius: 3

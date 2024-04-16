@@ -161,13 +161,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamTag: 
+  isShotByOwnPlayer: 0
   weaponName: Gunshot Heavy
   cadence: 1
   shootDMG: 210
   bulletSpeed: 75
-  weaponRange: 21
+  weaponRange: 17
   rng: 2
   jumpRng: 2
+  firstShootCooldown: 10
   shootCost: 9.1
   moveSpeedMultiplier: 0.4
   pRadius: 3.4

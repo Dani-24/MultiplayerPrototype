@@ -78,19 +78,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamTag: 
+  isShotByOwnPlayer: 0
   weaponName: Shooter Rng
-  cadence: 15
-  shootDMG: 33
+  cadence: 12
+  shootDMG: 38
   bulletSpeed: 50
-  weaponRange: 7.5
+  weaponRange: 7
   rng: 10
   jumpRng: 20
+  firstShootCooldown: 2
   shootCost: 0.45
-  moveSpeedMultiplier: 0.95
-  pRadius: 5
+  moveSpeedMultiplier: 1.1
+  pRadius: 4
   pStrength: 1
   pHardness: 0.5
-  sprayDropletsNum: 3
+  sprayDropletsNum: 1
   sprayDropRadius: 0.65
   sprayPaintRadius: 2.25
   spawnBulletPosition: {fileID: 8008173628777336271}

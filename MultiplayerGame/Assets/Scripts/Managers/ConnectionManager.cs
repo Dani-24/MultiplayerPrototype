@@ -2,7 +2,6 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using UnityEngine;
-using System.Linq;
 using System.IO;
 using System;
 using System.Collections.Generic;
@@ -12,6 +11,9 @@ using static PlayerStats;
 public class ConnectionManager : MonoBehaviour
 {
     #region Propierties
+
+    [Header("Instance Version")]
+    public string version;
 
     [Header("Instance Name")]
     public string userName;
@@ -404,11 +406,6 @@ public class ConnectionManager : MonoBehaviour
         return isConnected;
     }
 
-    // Both get local IP actually seems to do the same . . .
-    public string GetLocalIPv4()
-    {
-        return Dns.GetHostEntry(Dns.GetHostName()).AddressList.First(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
-    }
     public string GetLocalIPAddress()
     {
         var host = Dns.GetHostEntry(Dns.GetHostName());
@@ -558,9 +555,10 @@ public class ConnectionManager : MonoBehaviour
                     answerPck.user = Network_User.Server;
                     answerPck.connPck.isAnswer = true;
 
-                    if (playerPackages.Count >= maxPlayers || connGameplayState != ConnectionGameplayState.Lobby)
+                    if (playerPackages.Count >= maxPlayers || connGameplayState != ConnectionGameplayState.Lobby || receivedPck.connPck.version != version)
                     {
                         answerPck.connPck.canConnect = false;
+                        answerPck.connPck.message += "\n Cannot connect to the room. Check if the room is full / playing a match or running on a different version";
                     }
                     else
                     {
@@ -603,6 +601,7 @@ public class ConnectionManager : MonoBehaviour
             MemoryStream sendStream = new MemoryStream();
             Package pck = WritePackage(Pck_type.Connection);
             pck.connPck.message = "Connection Stablished";
+            pck.connPck.version = version;
             pck.user = Network_User.Client;
             sendStream = SerializeJson(pck);
 
@@ -686,13 +685,12 @@ public class ConnectionManager : MonoBehaviour
 
     void Start()
     {
-        //myIP = GetLocalIPv4();
+        version = Application.version;
+
         myIP = GetLocalIPAddress();
 
         if (connectAtStart)
-        {
             StartConnection();
-        }
 
         audioSource = GetComponent<AudioSource>();
     }
@@ -977,6 +975,7 @@ public class PlayerPackage
 public class ConnectionPackage
 {
     public string message;
+    public string version;
     public bool isAnswer = false;
 
     // Team Colors

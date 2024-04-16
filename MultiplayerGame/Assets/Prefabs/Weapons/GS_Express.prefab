@@ -80,12 +80,13 @@ MonoBehaviour:
   teamTag: 
   isShotByOwnPlayer: 0
   weaponName: Gunshot Express
-  cadence: 4
+  cadence: 3
   shootDMG: 75
   bulletSpeed: 75
-  weaponRange: 9
+  weaponRange: 7.5
   rng: 5
   jumpRng: 5
+  firstShootCooldown: 4
   shootCost: 2.5
   moveSpeedMultiplier: 0.95
   pRadius: 2.5

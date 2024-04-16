@@ -30,14 +30,20 @@ public class Shooter : Weapon
         wpAimDirection.y += shootingVerticalOffset;
 
         // ====== Disparar ======
-
         if (shootCooldown >= 0.0f)
             shootCooldown -= Time.deltaTime;
         else if (isShooting)
         {
-            Shoot();
-            shootCooldown = 1 / cadence;
+            if (actualShootFrame >= firstShootCooldown)
+            {
+                Shoot();
+                shootCooldown = 1 / cadence;
+            }
+            else
+                actualShootFrame++;
         }
+        else
+            actualShootFrame = 0;
 
         MaterialsFromTeamColor();
     }
@@ -120,7 +126,7 @@ public class Shooter : Weapon
                 sprayDrop.GetComponent<DefaultBullet>().pRadius = sprayPaintRadius;
                 sprayDrop.GetComponent<DefaultBullet>().pHardness = pHardness;
                 sprayDrop.GetComponent<DefaultBullet>().pStrength = pStrength;
-                sprayDrop.GetComponent<DefaultBullet>().meshScale = sprayDropRadius;
+                sprayDrop.GetComponent<DefaultBullet>().meshScale = sprayDropMeshRadius;
             }
 
             // Cost ink

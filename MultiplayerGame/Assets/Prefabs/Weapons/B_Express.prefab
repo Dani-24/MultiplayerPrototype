@@ -244,21 +244,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamTag: 
+  isShotByOwnPlayer: 0
   weaponName: Blaster Express
   cadence: 2
   shootDMG: 85
   bulletSpeed: 75
-  weaponRange: 13
+  weaponRange: 16
   rng: 0
   jumpRng: 2
+  firstShootCooldown: 4
   shootCost: 5
   moveSpeedMultiplier: 0.7
-  pRadius: 2
+  pRadius: 2.5
   pStrength: 1
   pHardness: 0.5
   sprayDropletsNum: 6
-  sprayDropRadius: 0.5
-  sprayPaintRadius: 2
+  sprayDropMeshRadius: 1
+  sprayPaintRadius: 1.5
+  linearPaint: 1
+  dropletsDistance: 1
   spawnBulletPosition: {fileID: 8008173628777336271}
   shootingVerticalOffset: 0.225
   actualBulletCost: 0
@@ -271,10 +275,58 @@ MonoBehaviour:
   - {fileID: 5263210421332541429}
   - {fileID: 3969247087655941251}
   weaponSprite: {fileID: 21300000, guid: 64a17a0d53ee327429e723ee4ec66163, type: 3}
-  oneShotRadius: 1
-  splashRadius: 2.5
-  splashMaxDmg: 35
-  splashMinDmg: 25
+  blastRadius: 2
+  dmgCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.99999285
+      inSlope: 0.0033903306
+      outSlope: 0.0033903306
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.25
+      value: 1.000003
+      inSlope: 0.0062821135
+      outSlope: 0.0062821135
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.52041316
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.25024742
+      value: 0.70002663
+      inSlope: -1.3092941
+      outSlope: -1.3092941
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.19474752
+      outWeight: 0.10526041
+    - serializedVersion: 3
+      time: 0.25028223
+      value: 0.3999637
+      inSlope: -0.021497943
+      outSlope: -0.021497943
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.32142854
+    - serializedVersion: 3
+      time: 1
+      value: 0.40001297
+      inSlope: -0.003999093
+      outSlope: -0.003999093
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.14827281
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!82 &2237491516721324905
 AudioSource:
   m_ObjectHideFlags: 0

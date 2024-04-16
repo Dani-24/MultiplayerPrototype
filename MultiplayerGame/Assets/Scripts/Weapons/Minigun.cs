@@ -32,14 +32,19 @@ public class Minigun : Weapon
 
         // ====== Disparar ======
         if (shootCooldown >= 0.0f)
-        {
             shootCooldown -= Time.deltaTime;
-        }
         else if (isShooting)
         {
-            Shoot();
-            shootCooldown = 1 / cadence;
+            if (actualShootFrame >= firstShootCooldown)
+            {
+                Shoot();
+                shootCooldown = 1 / cadence;
+            }
+            else
+                actualShootFrame++;
         }
+        else
+            actualShootFrame = 0;
 
         if (!isShooting && actualBulletCost > shootCost) actualBulletCost -= costIncrease * costRecoverSpeed * Time.deltaTime;
 
@@ -122,7 +127,7 @@ public class Minigun : Weapon
                 sprayDrop.GetComponent<DefaultBullet>().pRadius = sprayPaintRadius;
                 sprayDrop.GetComponent<DefaultBullet>().pHardness = pHardness;
                 sprayDrop.GetComponent<DefaultBullet>().pStrength = pStrength;
-                sprayDrop.GetComponent<DefaultBullet>().meshScale = sprayDropRadius;
+                sprayDrop.GetComponent<DefaultBullet>().meshScale = sprayDropMeshRadius;
             }
 
             // Cost ink

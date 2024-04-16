@@ -79,13 +79,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamTag: 
+  isShotByOwnPlayer: 0
   weaponName: Shooter Burst Short
-  cadence: 3
+  cadence: 3.75
   shootDMG: 30
   bulletSpeed: 60
-  weaponRange: 15
+  weaponRange: 13.5
   rng: 0
   jumpRng: 0
+  firstShootCooldown: 4
   shootCost: 1.95
   moveSpeedMultiplier: 0.7
   pRadius: 3
