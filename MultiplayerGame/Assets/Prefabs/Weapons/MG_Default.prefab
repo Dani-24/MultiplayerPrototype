@@ -88,13 +88,15 @@ MonoBehaviour:
   jumpRng: 14
   firstShootCooldown: 60
   shootCost: 0.1
-  moveSpeedMultiplier: 0.3
+  moveSpeedMultiplier: 0.5
   pRadius: 3
   pStrength: 1
   pHardness: 0.5
   sprayDropletsNum: 1
-  sprayDropRadius: 0.55
+  sprayDropMeshRadius: 1
   sprayPaintRadius: 2
+  linearPaint: 0
+  dropletsDistance: 1
   spawnBulletPosition: {fileID: 3150462560917926386}
   shootingVerticalOffset: 0.15
   actualBulletCost: 0
@@ -105,7 +107,7 @@ MonoBehaviour:
   rend:
   - {fileID: 5070266830091733894}
   weaponSprite: {fileID: 21300000, guid: 8546e859ce5f0a543bffb74a7c29943f, type: 3}
-  costIncrease: 0.02
+  costIncrease: 0.05
   costRecoverSpeed: 15
 --- !u!82 &6473631592966740588
 AudioSource:
