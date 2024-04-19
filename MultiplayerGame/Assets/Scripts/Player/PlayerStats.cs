@@ -20,7 +20,8 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] string lastPlayerHitYou;
 
     [SerializeField][Tooltip("Time without taking dmg needed to start regen HP")][Range(0f, 3f)] float recoveryTime = 1.5f;
-    [SerializeField][Range(1f, 5f)] float regenHPSpeed = 2f;
+    [SerializeField][Range(1f, 10f)] float regenHPSpeed = 2f;
+    [SerializeField][Range(1f, 20f)] float regenHPSpeedOnInk = 2f;
     float lastFrameHP;
     float regenCount;
 
@@ -173,13 +174,9 @@ public class PlayerStats : MonoBehaviour
         if (ink < inkCapacity && !GetComponent<PlayerArmament>().weaponShooting /*&& !GetComponent<PlayerMovement>().subWeaponShooting*/)
         {
             if (GetComponent<PlayerMovement>().groundInk == PlayerMovement.GroundInk.AllyInk && GetComponent<PlayerMovement>().isRunning)
-            {
                 ink += inkReloadSpeedOnInk * Time.deltaTime;
-            }
             else
-            {
                 ink += inkReloadSpeed * Time.deltaTime;
-            }
         }
 
         if (ink > inkCapacity) { ink = inkCapacity; }
@@ -193,13 +190,14 @@ public class PlayerStats : MonoBehaviour
 
             if (regenCount <= 0)
             {
-                HP += regenHPSpeed * Time.deltaTime;
+                if (GetComponent<PlayerMovement>().groundInk == PlayerMovement.GroundInk.AllyInk && GetComponent<PlayerMovement>().isRunning)
+                    HP += regenHPSpeedOnInk * Time.deltaTime;
+                else
+                    HP += regenHPSpeed * Time.deltaTime;
             }
         }
         else
-        {
             regenCount = recoveryTime;
-        }
 
         lastFrameHP = HP;
     }

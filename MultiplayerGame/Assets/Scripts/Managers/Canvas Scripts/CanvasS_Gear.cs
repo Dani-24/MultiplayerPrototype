@@ -165,15 +165,11 @@ public class CanvasS_Gear : MonoBehaviour
         {
             case ShowThis.weapons:
                 if (id < SceneManagerScript.Instance.mainWeapons.Length)
-                {
                     SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerArmament>().ChangeWeapon(id);
-                }
                 break;
             case ShowThis.subWeapons:
                 if (id < SceneManagerScript.Instance.subWeapons.Length)
-                {
                     SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerArmament>().ChangeSubWeapon(id);
-                }
                 break;
             case ShowThis.specials:
                 break;

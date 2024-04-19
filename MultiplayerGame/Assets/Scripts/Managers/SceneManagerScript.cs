@@ -76,13 +76,9 @@ public class SceneManagerScript : MonoBehaviour
     private void Awake()
     {
         if (_instance != null && Instance != null)
-        {
             Destroy(this.gameObject);
-        }
         else
-        {
             _instance = this;
-        }
     }
 
     #endregion
@@ -245,7 +241,7 @@ public class SceneManagerScript : MonoBehaviour
 
     public string GetTeamFromColor(Color color)
     {
-        if (ColorComparer(color,alphaTeamColor) <= InkColorThreshold)
+        if (ColorComparer(color, alphaTeamColor) <= InkColorThreshold)
             return teamTags[0];
         else if (ColorComparer(color, betaTeamColor) <= InkColorThreshold)
             return teamTags[1];

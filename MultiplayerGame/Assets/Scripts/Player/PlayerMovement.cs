@@ -264,7 +264,7 @@ public class PlayerMovement : MonoBehaviour
                     texture.ReadPixels(new Rect(0, 0, texture.width, texture.height), 0, 0);
                     texture.Apply();
 
-                    Vector3 coord = hit.textureCoord;   // Solo funka con meshCollider
+                    Vector2 coord = hit.textureCoord;   // Solo funka con meshCollider
 
                     groundColor = texture.GetPixelBilinear(coord.x, coord.y);
 
@@ -285,6 +285,9 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+
+        if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hit, Mathf.Infinity, groundLayers[1]))
+            groundInk = GroundInk.NoInk;
     }
 
     public enum GroundInk
