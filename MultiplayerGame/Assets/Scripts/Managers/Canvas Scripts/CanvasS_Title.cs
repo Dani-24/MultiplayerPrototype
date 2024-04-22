@@ -10,6 +10,8 @@ public class CanvasS_Title : MonoBehaviour
 
     void Start()
     {
+        SceneManagerScript.Instance.LoadData();
+
         SelectDefaultTitleButton();
         versionText.text = "v." + Application.version;
     }

@@ -404,6 +404,38 @@ public class SceneManagerScript : MonoBehaviour
 
     #endregion
 
+    #region Saving
+
+    public void SaveData()
+    {
+        SaveData data = new();
+
+        // Asignar cosas a data
+        data.name = ConnectionManager.Instance.userName;
+
+        SaveManagerScript.SaveGame(data);
+    }
+
+    public void LoadData()
+    {
+        SaveData data = new();
+
+        if (!SaveManagerScript.LoadGame(data))  // AQUI FALLA ALGO Y DATA ES NULL
+            return;
+
+        // Cambiar cosas en funcion de data
+        UI_Manager.Instance.userName = data.name;
+
+        Debug.Log(data.name);
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveData();
+    }
+
+    #endregion
+
     [System.Serializable]
     public struct ColorPair
     {

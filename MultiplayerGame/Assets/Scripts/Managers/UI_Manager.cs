@@ -34,13 +34,9 @@ public class UI_Manager : MonoBehaviour
     private void Awake()
     {
         if (_instance != null && Instance != null)
-        {
             Destroy(this.gameObject);
-        }
         else
-        {
             _instance = this;
-        }
     }
 
     #endregion
@@ -49,6 +45,7 @@ public class UI_Manager : MonoBehaviour
     {
         GameObject canv = Instantiate(connectionStateCanvas);
         canv.transform.SetParent(transform);
+
         userName = defaultName;
     }
 
@@ -68,9 +65,9 @@ public class UI_Manager : MonoBehaviour
         {
             currentCanvasMenu = GameUIs.Sett_Connection;
         }
-        else if(openGear && currentCanvasMenu != GameUIs.Sett_Gear)
+        else if (openGear && currentCanvasMenu != GameUIs.Sett_Gear)
         {
-            currentCanvasMenu= GameUIs.Sett_Gear;
+            currentCanvasMenu = GameUIs.Sett_Gear;
         }
 
         for (int i = 0; i < canvasMenus.Count; i++)

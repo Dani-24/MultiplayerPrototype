@@ -726,7 +726,8 @@ public class ConnectionManager : MonoBehaviour
 
         #endregion
 
-        userName = UI_Manager.Instance.userName;
+        userName = UI_Manager.Instance.userName;    // this should only update when the username is updated instead of every frame
+
         activeSceneName = SceneManager.GetActiveScene().name;
 
         // Delay between sending Packages
@@ -887,9 +888,7 @@ public class ConnectionManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         if (isConnected)
-        {
             EndConnection();
-        }
     }
 
     #endregion
