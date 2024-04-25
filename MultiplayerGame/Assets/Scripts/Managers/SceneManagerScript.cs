@@ -418,13 +418,19 @@ public class SceneManagerScript : MonoBehaviour
 
     public void LoadData()
     {
-        SaveData data = new();
+        SaveData data = SaveManagerScript.LoadGame();
 
-        if (!SaveManagerScript.LoadGame(data))  // AQUI FALLA ALGO Y DATA ES NULL
+        if (data == null)  // AQUI FALLA ALGO Y DATA ES NULL
             return;
 
+        if (gameState == GameState.Title)
+        {
+            UI_Manager.Instance.SetTitleName(data.name);
+            Debug.Log("A");
+        }
+
         // Cambiar cosas en funcion de data
-        UI_Manager.Instance.userName = data.name;
+        //UI_Manager.Instance.userName = data.name;
 
         Debug.Log(data.name);
     }

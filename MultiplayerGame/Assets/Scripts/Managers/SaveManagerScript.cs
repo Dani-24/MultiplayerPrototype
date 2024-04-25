@@ -13,10 +13,10 @@ public static class SaveManagerScript
         formatter.Serialize(stream, data);
         stream.Close();
 
-        Debug.Log("Save Data has been saved");
+        Debug.Log("Game Data has been saved");
     }
 
-    public static bool LoadGame(SaveData data)
+    public static SaveData LoadGame()
     {
         string path = Application.persistentDataPath + "/save.sus";
 
@@ -25,19 +25,19 @@ public static class SaveManagerScript
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
 
-            data = formatter.Deserialize(stream) as SaveData;
+            SaveData data = formatter.Deserialize(stream) as SaveData;
 
             stream.Close();
 
             Debug.Log("Save Data has been loaded succesfully");
 
-            return true;
+            return data;
         }
         else
         {
             Debug.Log("Save Data File not found in " + path);
 
-            return false;
+            return null;
         }
     }
 }

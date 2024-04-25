@@ -58,17 +58,11 @@ public class UI_Manager : MonoBehaviour
         #region Manage UIs
 
         if (openSettings && currentCanvasMenu != GameUIs.Settings)
-        {
             currentCanvasMenu = GameUIs.Settings;
-        }
         else if (openNetSettings && currentCanvasMenu != GameUIs.Sett_Connection && currentCanvasMenu != GameUIs.Title)
-        {
             currentCanvasMenu = GameUIs.Sett_Connection;
-        }
         else if (openGear && currentCanvasMenu != GameUIs.Sett_Gear)
-        {
             currentCanvasMenu = GameUIs.Sett_Gear;
-        }
 
         for (int i = 0; i < canvasMenus.Count; i++)
         {
@@ -84,9 +78,7 @@ public class UI_Manager : MonoBehaviour
                 }
             }
             else
-            {
                 canvasMenus[i].activated = false;
-            }
         }
 
         #endregion
@@ -151,6 +143,18 @@ public class UI_Manager : MonoBehaviour
             visible = _visible,
             goToThisScene = _goToThisScene
         };
+    }
+
+    public void SetTitleName(string name)
+    {
+        foreach (CanvasMenu menu in canvasMenus)
+        {
+            if (menu.menu == GameUIs.Title)
+            {
+                menu.canvas.GetComponent<CanvasS_Title>().SetTitleName(name);
+                return;
+            }
+        }
     }
 
     public void CloseAll()

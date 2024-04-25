@@ -32,4 +32,9 @@ public class CanvasS_Title : MonoBehaviour
 
         Destroy(gameObject);
     }
+
+    public void SetTitleName(string name)
+    {
+        nameInputField.text = name;
+    }
 }
