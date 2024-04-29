@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class SceneManagerScript : MonoBehaviour
@@ -67,6 +69,8 @@ public class SceneManagerScript : MonoBehaviour
     [Header("Weapons Available")]
     public GameObject[] mainWeapons;
     public GameObject[] subWeapons;
+
+    [SerializeField] AudioMixer audioMixer;
 
     #region Instance
 
@@ -413,26 +417,49 @@ public class SceneManagerScript : MonoBehaviour
         // Asignar cosas a data
         data.name = ConnectionManager.Instance.userName;
 
+        // Equipment
+        data.mainW = GetOwnPlayerInstance().GetComponent<PlayerArmament>().currentWeaponId;
+        data.mainBomb = GetOwnPlayerInstance().GetComponent<PlayerArmament>().currentSubWeaponId;
+
+        // Sens
+        data.mouseSensX = GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().mouseSens.x; 
+        data.mouseSensY = GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().mouseSens.y;
+
+        data.padSensX = GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().gamepadSens.x; 
+        data.padSensY = GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().gamepadSens.y;
+
+        // Graphics
+        data.quality = QualitySettings.GetQualityLevel();
+        //data.windowMode;
+        //data.resolution;
+
+        // Audio
+        audioMixer.GetFloat("masterV", out float vol);
+        data.masterV = vol;
+
+        audioMixer.GetFloat("musicV", out vol);
+        data.musicV = vol;
+
+        audioMixer.GetFloat("sfxV", out vol);
+        data.sfxV = vol;
+
+        // Save
         SaveManagerScript.SaveGame(data);
     }
 
     public void LoadData()
     {
+        // Load
         SaveData data = SaveManagerScript.LoadGame();
 
-        if (data == null)  // AQUI FALLA ALGO Y DATA ES NULL
+        if (data == null)
             return;
 
+        // Process Data
         if (gameState == GameState.Title)
-        {
-            UI_Manager.Instance.SetTitleName(data.name);
-            Debug.Log("A");
-        }
+            UI_Manager.Instance.userName = data.name;
 
-        // Cambiar cosas en funcion de data
-        //UI_Manager.Instance.userName = data.name;
-
-        Debug.Log(data.name);
+        // Aquí lo de Save pero Al reves
     }
 
     private void OnApplicationQuit()

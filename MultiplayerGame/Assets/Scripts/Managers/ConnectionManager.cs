@@ -111,6 +111,8 @@ public class ConnectionManager : MonoBehaviour
         BinaryWriter writer = new BinaryWriter(stream);
         writer.Write(json);
 
+        Debug.Log(stream.Length + " bytes");
+
         return stream;
     }
 

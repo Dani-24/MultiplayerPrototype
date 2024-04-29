@@ -45,16 +45,26 @@ public static class SaveManagerScript
 [System.Serializable]
 public class SaveData
 {
+    // User
     public string name;
 
-    // selected weapon
-    // selected bomb
+    // Equipment
+    public int mainW;
+    public int mainBomb;
 
-    // sensivity for mouse / gamepad
+    // Sens
+    public float mouseSensX; 
+    public float mouseSensY;
+    public float padSensX; 
+    public float padSensY;
 
-    // Graphic Quality
+    // Graphics
+    public int quality;
+    public int windowMode;
+    public int resolution;
 
-    // Screen Resolution
-
-    // Audio Volume
+    // Audio
+    public float masterV;
+    public float musicV;
+    public float sfxV;
 }

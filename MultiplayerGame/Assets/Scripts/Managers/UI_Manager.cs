@@ -145,18 +145,6 @@ public class UI_Manager : MonoBehaviour
         };
     }
 
-    public void SetTitleName(string name)
-    {
-        foreach (CanvasMenu menu in canvasMenus)
-        {
-            if (menu.menu == GameUIs.Title)
-            {
-                menu.canvas.GetComponent<CanvasS_Title>().SetTitleName(name);
-                return;
-            }
-        }
-    }
-
     public void CloseAll()
     {
         openNetSettings = openSettings = openGear = false;

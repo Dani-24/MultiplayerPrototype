@@ -12,6 +12,8 @@ public class CanvasS_Title : MonoBehaviour
     {
         SceneManagerScript.Instance.LoadData();
 
+        nameInputField.text = UI_Manager.Instance.userName;
+
         SelectDefaultTitleButton();
         versionText.text = "v." + Application.version;
     }
@@ -31,10 +33,5 @@ public class CanvasS_Title : MonoBehaviour
         UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Gameplay;
 
         Destroy(gameObject);
-    }
-
-    public void SetTitleName(string name)
-    {
-        nameInputField.text = name;
     }
 }

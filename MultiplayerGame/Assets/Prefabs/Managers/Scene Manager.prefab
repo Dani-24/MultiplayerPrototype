@@ -53,6 +53,7 @@ MonoBehaviour:
   debugConsole: {fileID: 7963841811532817948, guid: 20d7599dc50b34041a033c9032c2534c,
     type: 3}
   deleteAllNotOwnPlayers: 0
+  InkColorThreshold: 5
   colorPairs:
   - color1: {r: 0.8773585, g: 0.41320142, b: 0.19450872, a: 1}
     color2: {r: 0.11124954, g: 0.37433642, b: 0.9433962, a: 1}
@@ -80,6 +81,7 @@ MonoBehaviour:
   betaTeamMembers: []
   gammaTeamMembers: []
   maxPlayersPerTeam: 4
+  targetFPS: 60
   cleanPaint: 0
   sceneRoot: {fileID: 0}
   useSpawnPoints: 0
@@ -107,3 +109,4 @@ MonoBehaviour:
   subWeapons:
   - {fileID: 3241901033288120645, guid: c298e5f021ab0d54d9b89b8975adf95b, type: 3}
   - {fileID: 4612145116355683483, guid: 55f923aac6892384b88b6229c05fd927, type: 3}
+  audioMixer: {fileID: 24100000, guid: 34aa2bab0715c3041bd3d4138ab9cba2, type: 2}
