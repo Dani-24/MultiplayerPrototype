@@ -6,8 +6,9 @@ public static class SaveManagerScript
 {
     public static void SaveGame(SaveData data)
     {
-        BinaryFormatter formatter = new BinaryFormatter();
         string path = Application.persistentDataPath + "/save.sus";
+
+        BinaryFormatter formatter = new BinaryFormatter();
         FileStream stream = new FileStream(path, FileMode.Create);
 
         formatter.Serialize(stream, data);
@@ -35,10 +36,23 @@ public static class SaveManagerScript
         }
         else
         {
-            Debug.Log("Save Data File not found in " + path);
+            Debug.Log("No Save Data found in " + path);
 
             return null;
         }
+    }
+
+    public static void DeleteSavedGame()
+    {
+        string path = Application.persistentDataPath + "/save.sus";
+
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+            Debug.Log(path + " save data has been deleted");
+        }
+        else
+            Debug.Log(path + " can't be deleted");
     }
 }
 
@@ -50,13 +64,11 @@ public class SaveData
 
     // Equipment
     public int mainW;
-    public int mainBomb;
+    public int secW;
 
     // Sens
-    public float mouseSensX; 
-    public float mouseSensY;
-    public float padSensX; 
-    public float padSensY;
+    public float[] mouseSens = new float[2];
+    public float[] padSens = new float[2];
 
     // Graphics
     public int quality;

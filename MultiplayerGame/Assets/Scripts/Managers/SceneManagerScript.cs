@@ -21,6 +21,9 @@ public class SceneManagerScript : MonoBehaviour
     [SerializeField] bool deleteAllNotOwnPlayers = false;
     [SerializeField] float InkColorThreshold = 5;
 
+    [SerializeField] bool deleteSavedDataOnStart = false;
+    [SerializeField] bool saveOnExit = false;
+
     #region Colors Propierties
 
     [Header("Color combinations")]
@@ -181,6 +184,12 @@ public class SceneManagerScript : MonoBehaviour
         {
             sceneRoot.BroadcastMessage("CleanPaint");
             cleanPaint = false;
+        }
+
+        if (deleteSavedDataOnStart)
+        {
+            deleteSavedDataOnStart = false;
+            DeleteSavedData();
         }
     }
 
@@ -419,14 +428,14 @@ public class SceneManagerScript : MonoBehaviour
 
         // Equipment
         data.mainW = GetOwnPlayerInstance().GetComponent<PlayerArmament>().currentWeaponId;
-        data.mainBomb = GetOwnPlayerInstance().GetComponent<PlayerArmament>().currentSubWeaponId;
+        data.secW = GetOwnPlayerInstance().GetComponent<PlayerArmament>().currentSubWeaponId;
 
         // Sens
-        data.mouseSensX = GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().mouseSens.x; 
-        data.mouseSensY = GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().mouseSens.y;
+        data.mouseSens[0] = GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().mouseSens.x;
+        data.mouseSens[1] = GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().mouseSens.y;
 
-        data.padSensX = GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().gamepadSens.x; 
-        data.padSensY = GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().gamepadSens.y;
+        data.padSens[0] = GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().gamepadSens.x;
+        data.padSens[1] = GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().gamepadSens.y;
 
         // Graphics
         data.quality = QualitySettings.GetQualityLevel();
@@ -459,12 +468,42 @@ public class SceneManagerScript : MonoBehaviour
         if (gameState == GameState.Title)
             UI_Manager.Instance.userName = data.name;
 
-        // Aquí lo de Save pero Al reves
+        // Aquí lo de Save pero al reves
+
+        GetOwnPlayerInstance().GetComponent<PlayerArmament>().ChangeWeapon(data.mainW);
+        GetOwnPlayerInstance().GetComponent<PlayerArmament>().ChangeSubWeapon(data.secW);
+
+        // Sens
+        GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().mouseSens.x = data.mouseSens[0];
+        GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().mouseSens.y = data.mouseSens[1];
+
+        GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().gamepadSens.x = data.padSens[0];
+        GetOwnPlayerInstance().GetComponent<PlayerOrbitCamera>().gamepadSens.y = data.padSens[1];
+
+        // Graphics
+        QualitySettings.SetQualityLevel(data.quality);
+        //data.windowMode;
+        //data.resolution;
+
+        float vol = data.masterV;
+        audioMixer.SetFloat("masterV", vol);
+
+        vol = data.musicV;
+        audioMixer.SetFloat("musicV", vol);
+
+        vol = data.sfxV;
+        audioMixer.SetFloat("sfxV", vol);
+    }
+
+    public void DeleteSavedData()
+    {
+        SaveManagerScript.DeleteSavedGame();
     }
 
     private void OnApplicationQuit()
     {
-        SaveData();
+        if (saveOnExit)
+            SaveData();
     }
 
     #endregion
