@@ -96,7 +96,7 @@ public class PlayerNetworking : MonoBehaviour
         GetComponent<PlayerArmament>().weaponRngState = pck.wpRNG;
         GetComponent<PlayerArmament>().ChangeWeapon(pck.mainWeapon);
         GetComponent<PlayerArmament>().ChangeSubWeapon(pck.subWeapon);
-        GetComponent<PlayerStats>().lifeState = pck.lifeState;
+        GetComponent<PlayerStats>().netLifeState = pck.lifeState;
 
         if (!pck.inputEnabled) nameTagText.color = Color.grey; else nameTagText.color = Color.white;
 

@@ -286,7 +286,7 @@ MonoBehaviour:
   pStrength: 1
   pHardness: 1
   linearPainting: 0
-  dropletsTimeDistance: 0
+  dropletsDistance: 0
   dropletPaintRadius: 0
   dropletMeshScale: 0
   bulletDroplet: {fileID: 4972482428676012466}
@@ -299,7 +299,7 @@ MonoBehaviour:
     type: 3}
   audioSource: {fileID: 4310155217009265803}
   customGravity: -20
-  fallSpeedMultiplier: 10
+  fallSpeedMultiplier: 20
   bulletState: 0
 --- !u!54 &4648429456704870101
 Rigidbody:

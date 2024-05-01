@@ -201,13 +201,9 @@ public class PlayerMovement : MonoBehaviour
     void Falling()
     {
         if (fallSpeed > maxFallSpeed)
-        {
             fallSpeed += gravity * gravityMultiplier * Time.deltaTime;
-        }
         else
-        {
             fallSpeed = maxFallSpeed;
-        }
     }
 
     void JumpingAndFalling()

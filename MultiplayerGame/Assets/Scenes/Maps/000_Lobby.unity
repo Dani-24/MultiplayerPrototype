@@ -13025,11 +13025,6 @@ PrefabInstance:
       propertyPath: inkReloadSpeedOnInk
       value: 20
       objectReference: {fileID: 0}
-    - target: {fileID: 1461030857391287611, guid: b67d6d356db779849a9636062bb6b45c,
-        type: 3}
-      propertyPath: slowSpeed
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1747472560784089855, guid: b67d6d356db779849a9636062bb6b45c,
         type: 3}
       propertyPath: m_Name
@@ -19568,6 +19563,11 @@ PrefabInstance:
       objectReference: {fileID: 1667144601}
     - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
         type: 3}
+      propertyPath: saveOnExit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
+        type: 3}
       propertyPath: showConsole
       value: 0
       objectReference: {fileID: 0}
@@ -19614,73 +19614,13 @@ PrefabInstance:
     - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
         type: 3}
       propertyPath: deleteSavedDataOnStart
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
         type: 3}
       propertyPath: spawnPoints.Array.size
       value: 8
       objectReference: {fileID: 0}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[0]
-      value: 
-      objectReference: {fileID: 9156943298703554230, guid: 907314e2baa82564cacf82c8c250a93c,
-        type: 3}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[1]
-      value: 
-      objectReference: {fileID: 3597637874272683826, guid: 234fa55f3924b684fa2079555201eb96,
-        type: 3}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[2]
-      value: 
-      objectReference: {fileID: 3597637874272683826, guid: b4547da01ac11514a81fc64d429289f0,
-        type: 3}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[3]
-      value: 
-      objectReference: {fileID: 3597637874272683826, guid: fe5c66b36c08728478d68bf000c81a4d,
-        type: 3}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[4]
-      value: 
-      objectReference: {fileID: 3597637874272683826, guid: 3a90c2bfa639f794986351efc452c80b,
-        type: 3}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[5]
-      value: 
-      objectReference: {fileID: 3597637874272683826, guid: 83c406569fde87e4c99ebb8ec1b1f69c,
-        type: 3}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[6]
-      value: 
-      objectReference: {fileID: 3597637874272683826, guid: f2808a30ce850944c8a9d5c10575821b,
-        type: 3}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[7]
-      value: 
-      objectReference: {fileID: 9156943298703554230, guid: 86d14585a2b30514991f3d0e9eafde47,
-        type: 3}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[8]
-      value: 
-      objectReference: {fileID: 9156943298703554230, guid: b8e7566ac64b0fb45b788933840b2ab2,
-        type: 3}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[9]
-      value: 
-      objectReference: {fileID: 9156943298703554230, guid: 394bbee94ce11724189fbee95762024c,
-        type: 3}
     - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
         type: 3}
       propertyPath: spawnPoints.Array.data[0]
@@ -19721,42 +19661,6 @@ PrefabInstance:
       propertyPath: spawnPoints.Array.data[7]
       value: 
       objectReference: {fileID: 552932482}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[10]
-      value: 
-      objectReference: {fileID: 9156943298703554230, guid: 5b58a2b3bf5f95d418cc5dc9bdec4a84,
-        type: 3}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[11]
-      value: 
-      objectReference: {fileID: 9156943298703554230, guid: d6d04aaafab23a74983b6dff7dacfa38,
-        type: 3}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[12]
-      value: 
-      objectReference: {fileID: 9156943298703554230, guid: 748b8cc66d05e8043bdc087dbfe13571,
-        type: 3}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[13]
-      value: 
-      objectReference: {fileID: 3597637874272683826, guid: ba344837057a54a40ba3354ab9d855fc,
-        type: 3}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[14]
-      value: 
-      objectReference: {fileID: 3597637874272683826, guid: d47c6a5f1f2fd7b478adf8608bc2383c,
-        type: 3}
-    - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
-        type: 3}
-      propertyPath: mainWeapons.Array.data[15]
-      value: 
-      objectReference: {fileID: 3597637874272683826, guid: 51513a78d192c914dae060d392cce146,
-        type: 3}
     - target: {fileID: 3996387237497895542, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
         type: 3}
       propertyPath: m_Name

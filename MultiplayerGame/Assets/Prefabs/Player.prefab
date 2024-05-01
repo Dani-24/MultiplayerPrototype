@@ -491,6 +491,7 @@ MonoBehaviour:
   HP: 100
   maxHP: 0
   lifeState: 0
+  netLifeState: 0
   lastDmgCause: 
   lastPlayerHitYou: 
   recoveryTime: 1
@@ -531,7 +532,7 @@ MonoBehaviour:
   moveInput: {x: 0, y: 0}
   moveSpeed: 7
   runSpeed: 15
-  slowSpeed: 5
+  slowSpeed: 1
   weaponSpeedMultiplier: 1
   acceleration: 1
   accelerationMultiplier: 1

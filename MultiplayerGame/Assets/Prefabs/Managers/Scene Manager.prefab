@@ -54,6 +54,8 @@ MonoBehaviour:
     type: 3}
   deleteAllNotOwnPlayers: 0
   InkColorThreshold: 5
+  deleteSavedDataOnStart: 0
+  saveOnExit: 0
   colorPairs:
   - color1: {r: 0.8773585, g: 0.41320142, b: 0.19450872, a: 1}
     color2: {r: 0.11124954, g: 0.37433642, b: 0.9433962, a: 1}
@@ -91,21 +93,21 @@ MonoBehaviour:
   netGOs: []
   mainWeapons:
   - {fileID: 3597637874272683826, guid: 234fa55f3924b684fa2079555201eb96, type: 3}
+  - {fileID: 9156943298703554230, guid: 907314e2baa82564cacf82c8c250a93c, type: 3}
   - {fileID: 3597637874272683826, guid: b4547da01ac11514a81fc64d429289f0, type: 3}
   - {fileID: 3597637874272683826, guid: fe5c66b36c08728478d68bf000c81a4d, type: 3}
   - {fileID: 3597637874272683826, guid: 3a90c2bfa639f794986351efc452c80b, type: 3}
-  - {fileID: 9156943298703554230, guid: 907314e2baa82564cacf82c8c250a93c, type: 3}
-  - {fileID: 9156943298703554230, guid: b8e7566ac64b0fb45b788933840b2ab2, type: 3}
-  - {fileID: 9156943298703554230, guid: 86d14585a2b30514991f3d0e9eafde47, type: 3}
-  - {fileID: 9156943298703554230, guid: 394bbee94ce11724189fbee95762024c, type: 3}
-  - {fileID: 9156943298703554230, guid: d6d04aaafab23a74983b6dff7dacfa38, type: 3}
-  - {fileID: 9156943298703554230, guid: 748b8cc66d05e8043bdc087dbfe13571, type: 3}
-  - {fileID: 9156943298703554230, guid: 5b58a2b3bf5f95d418cc5dc9bdec4a84, type: 3}
-  - {fileID: 3597637874272683826, guid: d47c6a5f1f2fd7b478adf8608bc2383c, type: 3}
-  - {fileID: 3597637874272683826, guid: ba344837057a54a40ba3354ab9d855fc, type: 3}
-  - {fileID: 3597637874272683826, guid: 51513a78d192c914dae060d392cce146, type: 3}
   - {fileID: 3597637874272683826, guid: 83c406569fde87e4c99ebb8ec1b1f69c, type: 3}
   - {fileID: 3597637874272683826, guid: f2808a30ce850944c8a9d5c10575821b, type: 3}
+  - {fileID: 9156943298703554230, guid: 86d14585a2b30514991f3d0e9eafde47, type: 3}
+  - {fileID: 9156943298703554230, guid: b8e7566ac64b0fb45b788933840b2ab2, type: 3}
+  - {fileID: 9156943298703554230, guid: 394bbee94ce11724189fbee95762024c, type: 3}
+  - {fileID: 9156943298703554230, guid: 5b58a2b3bf5f95d418cc5dc9bdec4a84, type: 3}
+  - {fileID: 9156943298703554230, guid: d6d04aaafab23a74983b6dff7dacfa38, type: 3}
+  - {fileID: 9156943298703554230, guid: 748b8cc66d05e8043bdc087dbfe13571, type: 3}
+  - {fileID: 3597637874272683826, guid: ba344837057a54a40ba3354ab9d855fc, type: 3}
+  - {fileID: 3597637874272683826, guid: d47c6a5f1f2fd7b478adf8608bc2383c, type: 3}
+  - {fileID: 3597637874272683826, guid: 51513a78d192c914dae060d392cce146, type: 3}
   subWeapons:
   - {fileID: 3241901033288120645, guid: c298e5f021ab0d54d9b89b8975adf95b, type: 3}
   - {fileID: 4612145116355683483, guid: 55f923aac6892384b88b6229c05fd927, type: 3}

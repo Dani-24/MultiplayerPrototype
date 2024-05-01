@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,7 @@ public class PlayerStats : MonoBehaviour
     [HideInInspector] public float maxHP;
 
     public LifeState lifeState = LifeState.alive;
+    public LifeState netLifeState = LifeState.alive;
     [SerializeField] string lastDmgCause;
     [SerializeField] string lastPlayerHitYou;
 
@@ -76,6 +78,7 @@ public class PlayerStats : MonoBehaviour
 
         if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
+            // Autoset teams on lobby
             for (int i = 0; i < ConnectionManager.Instance.playerPackages.Count; i++)
             {
                 if (ConnectionManager.Instance.playerPackages[i].netID == GetComponent<PlayerNetworking>().networkID)
@@ -84,7 +87,18 @@ public class PlayerStats : MonoBehaviour
                     break;
                 }
             }
+
+            // Avoid Own Player Bugs
+            netLifeState = lifeState;
         }
+
+        /*
+          
+        Toca Ajustar todo el switch este para que desde RED se actualice el lifestate siguiendo el orden. 
+        Si el paquete recibe que RESPAWNING y este está ALIVE, este tendrá que pasar por DEATH y luego ir a RESPAWNING
+        Vease, que sea ciclico todo y no pueda saltarse pasos
+         
+         */
 
         switch (lifeState)
         {
@@ -96,6 +110,9 @@ public class PlayerStats : MonoBehaviour
                     HP = maxHP;
                     GetComponent<PlayerMovement>().playerBody.SetActive(true);
                 }
+
+                if (netLifeState != lifeState)
+                    lifeState = LifeState.death;
 
                 if (!GetComponent<PlayerNetworking>().isOwnByThisInstance) return;
 
@@ -114,11 +131,8 @@ public class PlayerStats : MonoBehaviour
                 break;
             case LifeState.death:
 
-                if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
-                {
-                    lifeState = LifeState.respawning;
-                    timeUntilRespawn = respawnTime;
-                }
+                lifeState = LifeState.respawning;
+                timeUntilRespawn = respawnTime;
 
                 transform.parent = null;
                 controller.enabled = false;
@@ -134,12 +148,15 @@ public class PlayerStats : MonoBehaviour
 
                 break;
             case LifeState.respawning:
-                if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
+
+                if (timeUntilRespawn > 0)
                 {
-                    if (timeUntilRespawn > 0)
+                    timeUntilRespawn -= Time.deltaTime;
+
+                    playerInputEnabled = false;
+
+                    if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
                     {
-                        timeUntilRespawn -= Time.deltaTime;
-                        playerInputEnabled = false;
                         respawnCanvas.SetActive(true);
                         respawnText.text = timeUntilRespawn.ToString("F0");
                         respawnSlider.minValue = 0;
@@ -147,16 +164,16 @@ public class PlayerStats : MonoBehaviour
 
                         float value = respawnTime - timeUntilRespawn;
                         respawnSlider.value = value;
-                        break;
                     }
 
-                    lifeState = LifeState.alive;
+                    // Sync Netcode
+                    if (netLifeState != lifeState)
+                        Respawn();
 
-                    transform.SetPositionAndRotation(spawnPos, Quaternion.Euler(Vector3.zero));
-                    respawnCanvas.SetActive(false);
-                    playerInputEnabled = true;
-                    ink = inkCapacity;
+                    break;
                 }
+
+                Respawn();
 
                 break;
         }
@@ -167,6 +184,16 @@ public class PlayerStats : MonoBehaviour
 
         // Net
         if (!GetComponent<PlayerNetworking>().isOwnByThisInstance) { infiniteInk = true; }
+    }
+
+    void Respawn()
+    {
+        lifeState = LifeState.alive;
+
+        transform.SetPositionAndRotation(spawnPos, Quaternion.Euler(Vector3.zero));
+        respawnCanvas.SetActive(false);
+        playerInputEnabled = true;
+        ink = inkCapacity;
     }
 
     void ReloadInk()
