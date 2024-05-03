@@ -168,7 +168,7 @@ public class PlayerMovement : MonoBehaviour
             moveDir = lastDir;
         }
 
-        if (actualSpeed != targetSpeed && isGrounded)
+        if (actualSpeed != targetSpeed/* && isGrounded*/)
         {
             if (actualSpeed < targetSpeed)
                 actualSpeed += acceleration * accelerationMultiplier;
@@ -241,7 +241,7 @@ public class PlayerMovement : MonoBehaviour
 
     void CheckGroundPaint()
     {
-        if (!GetComponent<PlayerNetworking>().isOwnByThisInstance)
+        if (!GetComponent<PlayerNetworking>().isOwnByThisInstance || !isGrounded)
             return;
 
         RaycastHit hit;

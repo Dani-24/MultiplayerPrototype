@@ -534,7 +534,7 @@ MonoBehaviour:
   runSpeed: 15
   slowSpeed: 1
   weaponSpeedMultiplier: 1
-  acceleration: 1
+  acceleration: 0.5
   accelerationMultiplier: 1
   actualSpeed: 0
   targetSpeed: 0
