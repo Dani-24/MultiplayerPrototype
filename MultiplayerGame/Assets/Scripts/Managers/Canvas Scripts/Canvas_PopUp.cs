@@ -21,20 +21,13 @@ public class Canvas_PopUp : MonoBehaviour
         UI_Manager.Instance.currentCanvasMenu = GameUIs.Msg_Log;
 
         if (cont > 0)
-        {
             cont -= Time.deltaTime;
-        }
         else
         {
             UI_Manager.Instance.CloseAll();
 
             if (UI_Manager.Instance.popUpMsgLog.goToThisScene != "" && UI_Manager.Instance.popUpMsgLog.goToThisScene != SceneManagerScript.Instance.sceneName)
-            {
-                if (ConnectionManager.Instance.isHosting)
-                    SceneManagerScript.Instance.ChangeSceneConnected(UI_Manager.Instance.popUpMsgLog.goToThisScene);
-                else
-                    SceneManagerScript.Instance.ChangeScene(UI_Manager.Instance.popUpMsgLog.goToThisScene);
-            }
+                SceneManagerScript.Instance.ChangeScene(UI_Manager.Instance.popUpMsgLog.goToThisScene, ConnectionManager.Instance.isHosting);
 
             Destroy(gameObject);
         }

@@ -60,6 +60,11 @@ public class GameManagerScript : MonoBehaviour
 
     void Update()
     {
+
+        // HACER AQUI QUE EN EL WAITING SEA PANTALLA DE CARGA O ANIMACION DE ALGO Y ESPERE A QUE TODOS LA HAGAN
+
+        // SE DEBERIA ASEGURAR Q SE ESPERE A TODOS LOS CLIENTS ANTES DE EMPEZAR
+
         switch (matchState)
         {
             case MatchState.waiting:
@@ -162,7 +167,7 @@ public class GameManagerScript : MonoBehaviour
                     }
                 }
 
-                if (!timerNetGo.connectedToServer && timerCount <= 0) SceneManagerScript.Instance.ChangeSceneConnected("000_Lobby");
+                if (!timerNetGo.connectedToServer && timerCount <= 0) SceneManagerScript.Instance.ChangeScene("000_Lobby", true);
 
                 break;
         }

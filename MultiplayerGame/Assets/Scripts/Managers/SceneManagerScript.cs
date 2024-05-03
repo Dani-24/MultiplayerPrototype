@@ -1,8 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SceneManagerScript : MonoBehaviour
 {
@@ -13,6 +14,13 @@ public class SceneManagerScript : MonoBehaviour
     [SerializeField] string sceneToLoad;
     [SerializeField] bool loadScene = false;
     [SerializeField] float timeToLoad = 5.0f;
+
+    [SerializeField] Animator transitionAnimator;
+    [SerializeField] float transitionTime;
+    [SerializeField] Image[] transitionsRects;
+
+    [SerializeField] Color loadedRuntimeColor = Color.white;
+    [SerializeField] bool smtgLoaded = false;
 
     [Header("Debug")]
     public bool showConsole = false;
@@ -94,6 +102,8 @@ public class SceneManagerScript : MonoBehaviour
     {
         Application.targetFrameRate = targetFPS;
 
+        LoadRuntimeData();
+
         if (loadScene) return;
 
         if (colorPairs.Count > 0 && !useTheseDebugColors)
@@ -102,6 +112,14 @@ public class SceneManagerScript : MonoBehaviour
 
             alphaTeamColor = colorPairs[rand].color1;
             betaTeamColor = colorPairs[rand].color2;
+
+            transitionsRects[0].color = alphaTeamColor;
+            transitionsRects[2].color = gammaTeamColor;
+
+            if (smtgLoaded)
+                transitionsRects[1].color = loadedRuntimeColor;
+            else
+                transitionsRects[1].color = betaTeamColor;
         }
 
         // Add Base Player to players List
@@ -140,13 +158,9 @@ public class SceneManagerScript : MonoBehaviour
                     playerGOAtScene.GetComponent<PlayerMovement>().TeleportToSpawnPos();
 
                     if (playerGOAtScene.GetComponent<PlayerStats>().teamTag == "Alpha")
-                    {
                         playerGOAtScene.GetComponent<PlayerMovement>().SetFacing(alphaFaceAngle);
-                    }
                     else
-                    {
                         playerGOAtScene.GetComponent<PlayerMovement>().SetFacing(betaFaceAngle);
-                    }
                     break;
                 }
             }
@@ -155,9 +169,7 @@ public class SceneManagerScript : MonoBehaviour
         if (loadScene)
         {
             if (timeToLoad > 0)
-            {
                 timeToLoad -= Time.deltaTime;
-            }
             else
             {
                 loadScene = false;
@@ -167,9 +179,7 @@ public class SceneManagerScript : MonoBehaviour
         }
 
         if (debugConsole != null)
-        {
             debugConsole.SetActive(showConsole);
-        }
 
         // DEBUG
         if (deleteAllNotOwnPlayers)
@@ -397,22 +407,36 @@ public class SceneManagerScript : MonoBehaviour
 
     #region Scene Manager
 
-    public void ChangeScene(string sceneToChange)
-    {
-        UI_Manager.Instance.CloseAll();
-        SceneManager.LoadScene(sceneToChange);
-    }
-
     public void ChangeSceneAsync(string sceneToChange)
     {
         SceneManager.LoadSceneAsync(sceneToChange);
     }
 
-    public void ChangeSceneConnected(string sceneToChange)
+    public void ChangeScene(string sceneToChange, bool preserveTag = false)
     {
         UI_Manager.Instance.CloseAll();
-        ConnectionManager.Instance.ownTeamTagOnSceneChange = ConnectionManager.Instance.ownPlayerPck.teamTag;
+
+        if (preserveTag) ConnectionManager.Instance.ownTeamTagOnSceneChange = ConnectionManager.Instance.ownPlayerPck.teamTag;
+
+        SaveData();
+        SaveRuntimeData();
+
+        transitionsRects[0].color = alphaTeamColor;
+        transitionsRects[1].color = betaTeamColor;
+        transitionsRects[2].color = gammaTeamColor;
+
+        StartCoroutine(LoadScene(sceneToChange));
+    }
+
+    IEnumerator LoadScene(string sceneToChange)
+    {
+        transitionAnimator.SetTrigger("start");
+
+        yield return new WaitForSeconds(transitionTime);
+
         SceneManager.LoadScene(sceneToChange);
+
+        LoadData();
     }
 
     #endregion
@@ -500,10 +524,38 @@ public class SceneManagerScript : MonoBehaviour
         SaveManagerScript.DeleteSavedGame();
     }
 
+    public void SaveRuntimeData()
+    {
+        RuntimeData data = new();
+        data.savedColor[0] = betaTeamColor.r;
+        data.savedColor[1] = betaTeamColor.g;
+        data.savedColor[2] = betaTeamColor.b;
+
+        SaveManagerScript.SaveRuntimeData(data);
+    }
+
+    public void LoadRuntimeData()
+    {
+        RuntimeData data = SaveManagerScript.LoadRuntimeData();
+
+        if (data != null)
+        {
+            loadedRuntimeColor.r = data.savedColor[0];
+            loadedRuntimeColor.g = data.savedColor[1];
+            loadedRuntimeColor.b = data.savedColor[2];
+
+            smtgLoaded = true;
+        }
+        else
+            smtgLoaded = false;
+    }
+
     private void OnApplicationQuit()
     {
         if (saveOnExit)
             SaveData();
+
+        SaveManagerScript.DeleteRuntimeData();
     }
 
     #endregion

@@ -703,22 +703,12 @@ public class ConnectionManager : MonoBehaviour
 
         if (reconnect)
         {
-            if (!isConnected)
-            {
-                StartConnection();
-            }
+            if (!isConnected) StartConnection();
             reconnect = false;
         }
 
-        if (disconnect)
-        {
-            EndConnection();
-        }
-
-        if (pendingToClean)
-        {
-            CleanPlayers();
-        }
+        if (disconnect) EndConnection();
+        if (pendingToClean) CleanPlayers();
 
         if (showCommError)
         {
