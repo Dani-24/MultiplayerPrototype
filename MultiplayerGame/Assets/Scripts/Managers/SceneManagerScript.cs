@@ -104,7 +104,11 @@ public class SceneManagerScript : MonoBehaviour
 
         LoadRuntimeData();
 
-        if (loadScene) return;
+        if (loadScene)
+        {
+            transitionsRects[0].color = transitionsRects[1].color = transitionsRects[2].color = Color.black;
+            return;
+        }
 
         if (colorPairs.Count > 0 && !useTheseDebugColors)
         {

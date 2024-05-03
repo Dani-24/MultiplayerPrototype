@@ -38,7 +38,7 @@ public class ConnectionManager : MonoBehaviour
     public bool localHost = false;
 
     [SerializeField] string hostIP = "127.0.0.1"; string defaultIP = "127.0.0.1";
-    [SerializeField] int port = 9050; int defaultPort = 9050;
+    [SerializeField] int port = 9050; int defaultPort = 13420;
     [SerializeField] string myIP;
 
     [Header("Packages")]
@@ -309,9 +309,7 @@ public class ConnectionManager : MonoBehaviour
     public void StartConnection()
     {
         if (isConnected)
-        {
             EndConnection();
-        }
 
         try
         {
@@ -333,6 +331,8 @@ public class ConnectionManager : MonoBehaviour
             }
             else
             {
+                port = FindAvailablePort(); //
+
                 ipep = new IPEndPoint(IPAddress.Parse(hostIP), port);       // As client set the server IP
 
                 clientReceiveThread = new Thread(ClientReceiveThreadUpdate);
@@ -433,6 +433,8 @@ public class ConnectionManager : MonoBehaviour
 
     int FindAvailablePort()
     {
+        return defaultPort; // Define always the same port
+
         if (localHost) return defaultPort;
 
         for (int i = 1; i <= 9050; i++)

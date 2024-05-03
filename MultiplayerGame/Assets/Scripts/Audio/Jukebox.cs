@@ -12,12 +12,12 @@ public class Jukebox : MonoBehaviour
     {
         aSource = GetComponent<AudioSource>();
         song = Random.Range(0, audioClips.Count);
-        PlaySong(song);
+        //PlaySong(song);
     }
 
     private void Update()
     {
-        if(song >= audioClips.Count) song = 0;
+        if (song >= audioClips.Count) song = 0;
     }
 
     void PlaySong(int num)
@@ -29,6 +29,8 @@ public class Jukebox : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        PlaySong(song);
+        //PlaySong(song);
+
+        if (!aSource.isPlaying) PlaySong(song); else aSource.Stop();
     }
 }

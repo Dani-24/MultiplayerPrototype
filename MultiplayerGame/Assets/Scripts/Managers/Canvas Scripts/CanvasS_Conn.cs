@@ -44,7 +44,9 @@ public class CanvasS_Conn : MonoBehaviour
 
         if (currentPanel == PanelOptions.Room)
         {
-            roomID.text = "Room ID: " + ConnectionManager.Instance.GetHostIP() + ":" + ConnectionManager.Instance.GetCurrentPort();
+            roomID.text = "Room ID: " + ConnectionManager.Instance.GetHostIP(); // + ":" + ConnectionManager.Instance.GetCurrentPort();
+
+            // AÑADIR AQUI UN BOTON DE COPY ROOM ID
 
             if (ConnectionManager.Instance.isHosting && SceneManagerScript.Instance.sceneName == ConnectionManager.Instance.lobbyScene)
             {
@@ -159,7 +161,7 @@ public class CanvasS_Conn : MonoBehaviour
         string[] inputField = ipInputF.text.Split(':');
 
         ConnectionManager.Instance.SetIP(inputField[0]);
-        ConnectionManager.Instance.SetPort(int.Parse(inputField[1]));
+        //ConnectionManager.Instance.SetPort(int.Parse(inputField[1]));
         ConnectionManager.Instance.reconnect = true;
 
         currentPanel = PanelOptions.Room;
@@ -189,6 +191,16 @@ public class CanvasS_Conn : MonoBehaviour
 #endif
 
         Application.Quit();
+    }
+
+    public void Button_CopyCode()
+    {
+        GUIUtility.systemCopyBuffer = ConnectionManager.Instance.GetHostIP();
+    }
+
+    public void Button_PasteCode()
+    {
+        ipInputF.text = GUIUtility.systemCopyBuffer;
     }
 
     // UI
