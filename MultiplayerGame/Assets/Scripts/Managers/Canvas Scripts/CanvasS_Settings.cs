@@ -178,6 +178,21 @@ public class CanvasS_Settings : MonoBehaviour
         gamepadYText.text = (gamepadYSlider.value * 100).ToString("F3");
     }
 
+    public void SaveButton()
+    {
+        SceneManagerScript.Instance.SaveData();
+    }
+
+    public void LoadButton()
+    {
+        SceneManagerScript.Instance.LoadData();
+    }
+
+    public void DeleteDataButton()
+    {
+        SceneManagerScript.Instance.DeleteSavedData();
+    }
+
     #endregion
 
     public enum SettingsOption
