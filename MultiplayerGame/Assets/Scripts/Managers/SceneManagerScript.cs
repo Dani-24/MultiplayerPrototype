@@ -29,6 +29,7 @@ public class SceneManagerScript : MonoBehaviour
     [SerializeField] bool deleteAllNotOwnPlayers = false;
     [SerializeField] float InkColorThreshold = 5;
 
+    [Header("Save Data")]
     [SerializeField] bool deleteSavedDataOnStart = false;
     [SerializeField] bool saveOnExit = false;
 
