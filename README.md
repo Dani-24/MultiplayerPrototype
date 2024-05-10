@@ -8,4 +8,4 @@
 
 > Controles
 
-> Referencias y agradecimientos / sistemas de otras personas
+> Referencias y agradecimientos / sistemas de terceros
