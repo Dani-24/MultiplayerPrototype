@@ -1,0 +1,408 @@
+{
+	"connections": [
+		{
+			"from": "bricks",
+			"from_port": 0,
+			"to": "tones_step",
+			"to_port": 0
+		},
+		{
+			"from": "tones_step",
+			"from_port": 0,
+			"to": "colorize_2",
+			"to_port": 0
+		},
+		{
+			"from": "tones_step",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 2
+		},
+		{
+			"from": "colorize_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 2
+		},
+		{
+			"from": "uniform",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 0
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 1
+		},
+		{
+			"from": "bricks",
+			"from_port": 1,
+			"to": "fill_to_random_color",
+			"to_port": 0
+		},
+		{
+			"from": "fill_to_random_color",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "bricks",
+			"from_port": 0,
+			"to": "tonality",
+			"to_port": 0
+		},
+		{
+			"from": "tonality",
+			"from_port": 0,
+			"to": "blend2_2",
+			"to_port": 0
+		},
+		{
+			"from": "fbm2",
+			"from_port": 0,
+			"to": "blend2_2",
+			"to_port": 1
+		},
+		{
+			"from": "blend2_2",
+			"from_port": 0,
+			"to": "normal_map2",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "blend2_2",
+			"from_port": 0,
+			"to": "occlusion2",
+			"to_port": 0
+		},
+		{
+			"from": "blend2_2",
+			"from_port": 0,
+			"to": "invert",
+			"to_port": 0
+		},
+		{
+			"from": "occlusion2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 5
+		},
+		{
+			"from": "invert",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 6
+		},
+		{
+			"from": "blend2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		}
+	],
+	"label": "Graph",
+	"longdesc": "",
+	"name": "580",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"export_last_target": "Unity/3D",
+			"export_paths": {
+				"Blender": "C:/Users/danit/Desktop/Github/Unity_MultiplayerGame/Other/Brick Block Material",
+				"Unity/3D": "C:/Users/danit/Desktop/Github/Unity_MultiplayerGame/MultiplayerGame/Assets/Materials/Lobby/Brick Material B",
+				"Unity/HDRP": "C:/Users/danit/Desktop/Github/Unity_MultiplayerGame/MultiplayerGame/Assets/Materials/Lobby/Brick Material FINAL"
+			},
+			"name": "Material",
+			"node_position": {
+				"x": 409.240021,
+				"y": -50
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				},
+				"ao": 1,
+				"depth_scale": 0.2,
+				"emission_energy": 1,
+				"flags_transparent": false,
+				"metallic": 0,
+				"normal": 10,
+				"roughness": 1,
+				"size": 11,
+				"sss": 0
+			},
+			"seed_int": 0,
+			"type": "material"
+		},
+		{
+			"name": "bricks",
+			"node_position": {
+				"x": -895.5,
+				"y": -1.5
+			},
+			"parameters": {
+				"bevel": 0.1,
+				"columns": 4,
+				"corner": 0.3,
+				"mortar": 0.1,
+				"pattern": 0,
+				"repeat": 1,
+				"round": 0,
+				"row_offset": 0.5,
+				"rows": 11
+			},
+			"seed_int": 0,
+			"type": "bricks3"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -386.5,
+				"y": -147.5
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 0.080566,
+							"g": 0.301495,
+							"pos": 0,
+							"r": 0.9375
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 1,
+							"r": 0.589844
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"generic_size": 1,
+			"name": "blend2",
+			"node_position": {
+				"x": -165.5,
+				"y": -142.5
+			},
+			"parameters": {
+				"amount1": 1,
+				"blend_type1": 0
+			},
+			"seed_int": 0,
+			"type": "blend2"
+		},
+		{
+			"name": "uniform",
+			"node_position": {
+				"x": -333.5,
+				"y": -230.5
+			},
+			"parameters": {
+				"color": {
+					"a": 1,
+					"b": 0.911987,
+					"g": 0.911987,
+					"r": 0.941406,
+					"type": "Color"
+				}
+			},
+			"seed_int": 0,
+			"type": "uniform"
+		},
+		{
+			"name": "tones_step",
+			"node_position": {
+				"x": -479.5,
+				"y": 52.5
+			},
+			"parameters": {
+				"invert": false,
+				"value": 0.05,
+				"width": 0
+			},
+			"seed_int": 0,
+			"type": "tones_step"
+		},
+		{
+			"name": "colorize_2",
+			"node_position": {
+				"x": -194.5,
+				"y": 56.5
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 0.875,
+							"g": 0.875,
+							"pos": 0,
+							"r": 0.875
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"name": "fill_to_random_color",
+			"node_position": {
+				"x": -673.5,
+				"y": -143.5
+			},
+			"parameters": {
+				"edgecolor": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				}
+			},
+			"seed_int": 4027399168,
+			"type": "fill_to_random_color2"
+		},
+		{
+			"generic_size": 1,
+			"name": "blend2_2",
+			"node_position": {
+				"x": -404.5,
+				"y": 209.5
+			},
+			"parameters": {
+				"amount1": 0.09,
+				"blend_type1": 0
+			},
+			"seed_int": 0,
+			"type": "blend2"
+		},
+		{
+			"name": "tonality",
+			"node_position": {
+				"x": -581.5,
+				"y": 209.5
+			},
+			"parameters": {
+				"curve": {
+					"points": [
+						{
+							"ls": 0,
+							"rs": 1,
+							"x": 0,
+							"y": 0
+						},
+						{
+							"ls": 0.067459,
+							"rs": -0,
+							"x": 1,
+							"y": 0.499215
+						}
+					],
+					"type": "Curve"
+				}
+			},
+			"seed_int": 0,
+			"type": "tonality"
+		},
+		{
+			"name": "fbm2",
+			"node_position": {
+				"x": -788.5,
+				"y": 301.5
+			},
+			"parameters": {
+				"folds": 0,
+				"iterations": 5,
+				"noise": 0,
+				"offset": 0,
+				"persistence": 0.38,
+				"scale_x": 8,
+				"scale_y": 8
+			},
+			"seed_int": 0,
+			"type": "fbm2"
+		},
+		{
+			"name": "normal_map2",
+			"node_position": {
+				"x": -124.5,
+				"y": 189.5
+			},
+			"parameters": {
+				"buffer": 1,
+				"param2": 0,
+				"size": 10,
+				"strength": 1
+			},
+			"seed_int": 0,
+			"type": "normal_map2"
+		},
+		{
+			"name": "occlusion2",
+			"node_position": {
+				"x": -146.5,
+				"y": 393.5
+			},
+			"parameters": {
+				"param0": 10,
+				"param1": 20,
+				"param2": 1.5,
+				"param3": 1
+			},
+			"seed_int": 0,
+			"type": "occlusion2"
+		},
+		{
+			"name": "invert",
+			"node_position": {
+				"x": -103.699989,
+				"y": 578.580017
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "invert"
+		}
+	],
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}

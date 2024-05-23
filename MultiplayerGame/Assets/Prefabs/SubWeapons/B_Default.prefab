@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamTag: 
+  isShotByOwnPlayer: 0
   weaponName: Delay Bomb
   dmg: 180
   splashDmg: 30

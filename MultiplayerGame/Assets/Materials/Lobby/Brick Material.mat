@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Brick Material
-  m_Shader: {fileID: -6465566751694194690, guid: ed9eb73801f0aa94c91c48be1da691e5,
+  m_Shader: {fileID: -6465566751694194690, guid: 9b0b89b8cd78a79459b511892c2bdf3f,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -38,11 +38,15 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - Texture2D_3c9e15eb8c374e0495f36ea3d57473ab:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 36c752bac09d4f0092f48da464622eeb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_41271c3c5f484ca2a435c65087a81705:
-        m_Texture: {fileID: 2800000, guid: 026f71034bdbba14dbeb0b8eefd56bf4, type: 3}
+        m_Texture: {fileID: 2800000, guid: edf2b1d38a5b47f1a583c62dee398668, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ambient_Occlusion:
+        m_Texture: {fileID: 2800000, guid: 1bfe3d0aa27348ff8639267943f93a2b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -109,7 +113,7 @@ Material:
     m_Floats:
     - Vector1_0de750b9c41b4a5daef844a1599f5ac7: 0
     - Vector1_2871f666316541908d110962eef07f02: 40
-    - Vector1_2c6f3ce4bba145b09c0a22fced0d7f85: 0
+    - Vector1_2c6f3ce4bba145b09c0a22fced0d7f85: 0.25
     - Vector1_7bf270fe91494824b4209d2dc1faae23: 0
     - Vector1_8e760635099b4147956bb9600d13cac2: 0.1
     - Vector1_b160a6374fb04a77b114bb611b8c55e4: 0
@@ -133,6 +137,7 @@ Material:
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
+    - _NormalStrength: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _QueueControl: 0
