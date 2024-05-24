@@ -91,8 +91,8 @@ MonoBehaviour:
   shootCost: 0.8
   moveSpeedMultiplier: 0.75
   pRadius: 3
-  pStrength: 0.25
-  pHardness: 0.5
+  pStrength: 1
+  pHardness: 0.1
   sprayDropletsNum: 1
   sprayDropMeshRadius: 1
   sprayPaintRadius: 2.5

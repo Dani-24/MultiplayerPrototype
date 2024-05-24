@@ -91,10 +91,12 @@ MonoBehaviour:
   moveSpeedMultiplier: 1.1
   pRadius: 4
   pStrength: 1
-  pHardness: 0.5
+  pHardness: 0.1
   sprayDropletsNum: 1
-  sprayDropRadius: 0.65
+  sprayDropMeshRadius: 1
   sprayPaintRadius: 2.25
+  linearPaint: 0
+  dropletsDistance: 1
   spawnBulletPosition: {fileID: 8008173628777336271}
   shootingVerticalOffset: 0.35
   actualBulletCost: 0
