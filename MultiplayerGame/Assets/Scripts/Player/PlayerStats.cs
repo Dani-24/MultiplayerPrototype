@@ -1,5 +1,5 @@
+using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -48,7 +48,9 @@ public class PlayerStats : MonoBehaviour
 
     [SerializeField][Range(-25f, 0f)] float minYaxis = -20;
 
-    [SerializeField] MeshRenderer teamColorGO;
+    [Header("Team Colores Meshes")]
+    [SerializeField] List<SkinnedMeshRenderer> teamColorSkinnedMeshes;
+    [SerializeField] List<MeshRenderer> teamColorBaseMeshes;
 
     [Header("Death Related Things")]
     [SerializeField] GameObject DeathInkExplosion;
@@ -74,7 +76,11 @@ public class PlayerStats : MonoBehaviour
     void Update()
     {
         // Check Color & Team
-        teamColorGO.material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
+        for (int i = 0; i < teamColorBaseMeshes.Count; ++i)
+            teamColorBaseMeshes[i].material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
+
+        for (int i = 0; i < teamColorSkinnedMeshes.Count; ++i)
+            teamColorSkinnedMeshes[i].material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
 
         if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
@@ -91,14 +97,6 @@ public class PlayerStats : MonoBehaviour
             // Avoid Own Player Bugs
             netLifeState = lifeState;
         }
-
-        /*
-          
-        Toca Ajustar todo el switch este para que desde RED se actualice el lifestate siguiendo el orden. 
-        Si el paquete recibe que RESPAWNING y este está ALIVE, este tendrá que pasar por DEATH y luego ir a RESPAWNING
-        Vease, que sea ciclico todo y no pueda saltarse pasos
-         
-         */
 
         switch (lifeState)
         {

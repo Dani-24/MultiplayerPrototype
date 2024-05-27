@@ -32,30 +32,26 @@ public class PlayerArmament : MonoBehaviour
 
     void Update()
     {
+        if (GetComponent<PlayerStats>().lifeState != PlayerStats.LifeState.alive)
+            weaponShooting = subWeaponShooting = chargingSub = false;
+
         // WEAPON
         if (!createdWeapon || currentWeapon.GetComponent<Weapon>().weaponName != weaponToUse.GetComponent<Weapon>().weaponName)
-        {
             SetWeapon();
-        }
 
         // AIMING
         aimDirection = GetComponentInParent<PlayerOrbitCamera>().GetCameraTransform().forward;
 
         // SUB WEAPON
         if (subWeaponShooting)
-        {
             ChargeSub();
-        }
         else if (chargingSub)
-        {
             ThrowSub();
-        }
 
         // Update weapon tag
         if (currentWeapon != null)
-        {
             currentWeapon.GetComponent<Weapon>().teamTag = GetComponent<PlayerStats>().teamTag;
-        }
+
     }
 
     #region Main Weapon

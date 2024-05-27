@@ -7,6 +7,9 @@ public class PlayerMovement : MonoBehaviour
     CharacterController controller;
     PlayerInput input;
     public GameObject playerBody;
+    public GameObject playerRunBody;
+
+    [SerializeField] Animator playerAnimator;
 
     public bool isUsingGamepad;
 
@@ -42,6 +45,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Rotation")]
     [SerializeField] private float rotationSpeed = 10.0f;
     [SerializeField] private float rotationSpeedWhileShooting = 100.0f;
+    [SerializeField][Range(0.1f, 200f)] float ballModeRotationSpeed = 10.0f;
+    float ballRotationAngle = 0;
 
     #endregion
 
@@ -83,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        UIInputs();
+        AdditionalInputs();
         CheckGroundPaint();
     }
 
@@ -195,6 +200,14 @@ public class PlayerMovement : MonoBehaviour
                 rotDes = Quaternion.LookRotation(forward, Vector3.up);
                 playerBody.transform.rotation = Quaternion.Slerp(playerBody.transform.rotation, rotDes, rotationSpeedWhileShooting * Time.deltaTime);
             }
+
+            if (isRunning)  // Player Sphere Rotation
+            {
+                float v = ballModeRotationSpeed * Time.deltaTime;
+                Vector3 rotationAxis = Vector3.Cross(Vector3.up, moveDir);
+                float rotationAngle = v / (Mathf.PI * transform.localScale.x) * 360;
+                playerRunBody.transform.Rotate(rotationAxis, rotationAngle, Space.World);
+            }
         }
     }
 
@@ -225,6 +238,7 @@ public class PlayerMovement : MonoBehaviour
             if (isJumping)
             {
                 fallSpeed = jumpForce;
+                playerAnimator.SetTrigger("Jump");
             }
         }
         else
@@ -297,7 +311,7 @@ public class PlayerMovement : MonoBehaviour
 
     #region Player Input Actions
 
-    void UIInputs()
+    void AdditionalInputs()
     {
         if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
@@ -307,6 +321,25 @@ public class PlayerMovement : MonoBehaviour
 
             // Check if using Gamepad or not
             if (input.currentControlScheme == "Gamepad") isUsingGamepad = true; else isUsingGamepad = false;
+        }
+
+        // ANIMATOR //
+
+        playerAnimator.SetBool("isMoving", actualSpeed != 0);
+        playerAnimator.SetBool("isRunning", isRunning);
+        // Jump is on JumpingAndFalling();
+        playerAnimator.SetFloat("MoveX", moveInput.x);
+        playerAnimator.SetFloat("MoveY", moveInput.y);
+
+        if (isRunning)
+        {
+            playerBody.SetActive(false);
+            playerRunBody.SetActive(true);
+        }
+        else
+        {
+            playerBody.SetActive(true);
+            playerRunBody.SetActive(false);
         }
     }
 
@@ -362,6 +395,7 @@ public class PlayerMovement : MonoBehaviour
     public void SetRotation(Quaternion _rot)
     {
         playerBody.transform.rotation = Quaternion.LerpUnclamped(playerBody.transform.rotation, _rot, interpolationSpeed * Time.deltaTime);
+        playerRunBody.transform.rotation = Quaternion.LerpUnclamped(playerRunBody.transform.rotation, _rot, interpolationSpeed * Time.deltaTime);
     }
 
     public void SetFacing(float angle)

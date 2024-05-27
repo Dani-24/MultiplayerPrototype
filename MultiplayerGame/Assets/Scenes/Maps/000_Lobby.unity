@@ -12847,6 +12847,11 @@ PrefabInstance:
       propertyPath: inkReloadSpeedOnInk
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 1461030857391287611, guid: b67d6d356db779849a9636062bb6b45c,
+        type: 3}
+      propertyPath: playerBody
+      value: 
+      objectReference: {fileID: 1733187918}
     - target: {fileID: 1747472560784089855, guid: b67d6d356db779849a9636062bb6b45c,
         type: 3}
       propertyPath: m_Name
@@ -17282,6 +17287,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 513818333228168630, guid: dcfeecd9aa1d29b468db92c47c0ea829,
     type: 3}
   m_PrefabInstance: {fileID: 1719646010}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1733187918 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7986574257420289160, guid: b67d6d356db779849a9636062bb6b45c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1230722713}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1734249829
 PrefabInstance:
