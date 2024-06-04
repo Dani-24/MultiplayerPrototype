@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using static PlayerStats;
+using System.Collections;
+using UnityEngine.Networking;
 
 public class ConnectionManager : MonoBehaviour
 {
@@ -51,6 +53,10 @@ public class ConnectionManager : MonoBehaviour
 
     [SerializeField] bool serverIsConnected;
     [SerializeField] bool clientIsConnected;
+
+    [SerializeField] bool OnlinePlay = false;
+    [SerializeField] string PHP_Url = "https://citmalumnes.upc.es/~danieltr1/OnlinePlay.php";
+    [SerializeField] int PHP_roomId = 0;
 
     DateTime lastPckgDateTime;
 
@@ -883,6 +889,77 @@ public class ConnectionManager : MonoBehaviour
     {
         if (isConnected)
             EndConnection();
+    }
+
+    #endregion
+
+    #region PHP - SQL
+
+    public IEnumerator HostRoom(bool closeRoom = false)
+    {
+        Debug.Log("Hosting a Room on Online Mode");
+
+        WWWForm form = new();
+
+        form.AddField("methodToCall", "Host Room");
+
+        form.AddField("host", userName);
+        form.AddField("timeStamp", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
+        form.AddField("close", closeRoom.ToString());
+        form.AddField("roomId", PHP_roomId);
+
+        UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
+
+        yield return www.SendWebRequest();
+
+        PHP_roomId = int.Parse(www.downloadHandler.text);
+
+        Debug.Log("Room Id asigned: " + PHP_roomId);
+    }
+
+    public IEnumerator SearchRoom()
+    {
+        WWWForm form = new();
+        form.AddField("methodToCall", "Search Room");
+
+        UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
+
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.Success)
+        {
+            string jsonData = www.downloadHandler.text;
+            string[] rows = jsonData.Split('\n');
+
+            foreach (string row in rows)
+            {
+                if (!string.IsNullOrEmpty(row))
+                {
+                    Debug.Log(row);
+                }
+            }
+        }
+        else Debug.Log("Error: " + www.error);
+    }
+
+    public IEnumerator SendHostData()
+    {
+        yield return null;
+    }
+
+    public IEnumerator ReceiveHostData()
+    {
+        yield return null;
+    }
+
+    public IEnumerator SendClientData()
+    {
+        yield return null;
+    }
+
+    public IEnumerator ReceiveClientData()
+    {
+        yield return null;
     }
 
     #endregion
