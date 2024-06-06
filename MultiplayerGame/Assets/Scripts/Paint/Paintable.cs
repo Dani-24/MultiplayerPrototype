@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class Paintable : MonoBehaviour {
+public class Paintable : MonoBehaviour 
+{
     const int TEXTURE_SIZE = 1024;
 
     public float extendsIslandOffset = 1;
@@ -57,14 +58,6 @@ public class Paintable : MonoBehaviour {
 
     public void CleanPaint()
     {
-        //OnDisable();
         Start();
     }
-
-    //void OnDisable(){
-    //    maskRenderTexture.Release();
-    //    uvIslandsRenderTexture.Release();
-    //    extendIslandsRenderTexture.Release();
-    //    supportTexture.Release();
-    //}
 }

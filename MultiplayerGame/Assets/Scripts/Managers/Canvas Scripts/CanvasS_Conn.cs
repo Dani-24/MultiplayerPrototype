@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -26,6 +27,9 @@ public class CanvasS_Conn : MonoBehaviour
 
     [SerializeField] Button gearButton;
 
+    [Header("Room Search")]
+    [SerializeField] List<RoomCell> roomCells = new List<RoomCell>();
+
     void Start()
     {
         SelectDefaultButton();
@@ -35,18 +39,13 @@ public class CanvasS_Conn : MonoBehaviour
 
     void Update()
     {
-        foreach (var panel in panels)
-        {
-            if (panel.option == currentPanel) panel.panel.SetActive(true); else panel.panel.SetActive(false);
-        }
+        foreach (var panel in panels) if (panel.option == currentPanel) panel.panel.SetActive(true); else panel.panel.SetActive(false);
 
         if (!UI_Manager.Instance.openNetSettings) Button_OnClose();
 
         if (currentPanel == PanelOptions.Room)
         {
-            roomID.text = "Room ID: " + ConnectionManager.Instance.GetHostIP(); // + ":" + ConnectionManager.Instance.GetCurrentPort();
-
-            // AÑADIR AQUI UN BOTON DE COPY ROOM ID
+            roomID.text = "Room ID: " + ConnectionManager.Instance.GetHostIP();
 
             if (ConnectionManager.Instance.isHosting && SceneManagerScript.Instance.sceneName == ConnectionManager.Instance.lobbyScene)
             {
@@ -73,10 +72,8 @@ public class CanvasS_Conn : MonoBehaviour
             roomPlayersTexts[i].gameObject.GetComponentInChildren<Image>().color = new Vector4(1, 1, 1, 0.2f);
         }
 
-        if (SceneManagerScript.Instance.sceneName != ConnectionManager.Instance.lobbyScene)
-            gearButton.interactable = false;
-        else
-            gearButton.interactable = true;
+        if (SceneManagerScript.Instance.sceneName != ConnectionManager.Instance.lobbyScene) gearButton.interactable = false;
+        else gearButton.interactable = true;
     }
 
     void SelectDefaultButton()
@@ -98,9 +95,10 @@ public class CanvasS_Conn : MonoBehaviour
     public void Button_Online()
     {
         playMode = PlayMode.Online;
+        currentPanel = PanelOptions.RoomSearching;
 
         ConnectionManager.Instance.localHost = false;
-        // WIP
+        ConnectionManager.Instance.searchRooms = true;
     }
 
     public void Button_Local()
@@ -136,9 +134,7 @@ public class CanvasS_Conn : MonoBehaviour
                     currentPanel = PanelOptions.Room;
                 }
                 else
-                {
                     currentPanel = PanelOptions.Joining;
-                }
 
                 break;
         }
@@ -176,6 +172,40 @@ public class CanvasS_Conn : MonoBehaviour
         currentPanel = PanelOptions.Gamemodes;
     }
 
+    public void Button_CreateRoom()
+    {
+        ConnectionManager.Instance.createRoom = true;
+        currentPanel = PanelOptions.Room;
+    }
+
+    public void Button_JoinRoom(int id)
+    {
+        ConnectionManager.Instance.JoinRoom(int.Parse(roomCells[id].roomId.text));
+    }
+
+    public void Button_RefreshRooms()
+    {
+        ConnectionManager.Instance.searchRooms = true;
+    }
+
+    public void RefreshRoomList()
+    {
+        for (int i = 0; i < roomCells.Count(); i++)
+        {
+            if (i < ConnectionManager.Instance.availableRooms.Count())
+            {
+                roomCells[i].gameObject.SetActive(true);
+                roomCells[i].SetRoomId(0);
+                roomCells[i].SetRoomHost(ConnectionManager.Instance.availableRooms[i]);
+                roomCells[i].SetRoomPlayers(0);
+            }
+            else
+            {
+                roomCells[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
     // Close
     public void Button_OnClose()
     {
@@ -186,6 +216,7 @@ public class CanvasS_Conn : MonoBehaviour
 
     public void Button_OnExit() // Close Software
     {
+
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
 #endif
@@ -235,7 +266,8 @@ public class CanvasS_Conn : MonoBehaviour
         Gamemodes,
         ChooseHosting,
         Joining,
-        Room
+        Room,
+        RoomSearching
     }
 
     [System.Serializable]

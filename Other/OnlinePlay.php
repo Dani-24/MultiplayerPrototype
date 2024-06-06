@@ -1,9 +1,9 @@
 <?php
 
 $servername = "localhost";
-$username = "danieltr1";
-$password = "aLZsQgYa6q9q";
-$dbname = "danieltr1";
+$username   = "danieltr1";
+$password   = "aLZsQgYa6q9q";
+$dbname     = "danieltr1";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -15,6 +15,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     {
         case "Host Room":
             HostRoom();
+            break;
+        case "Close Room":
+            CloseRoom();
             break;
         case "Search Room":
             SearchRoom();
@@ -43,15 +46,23 @@ else
 function HostRoom(){
     $timeStamp  = $_POST["timeStamp"];
     $host       = $_POST["host"];
-    $close      = $_POST["close"];
-    $id         = $_POST["roomId"];
 
     global $conn;
 
-    if(!$close) $sql    = "INSERT INTO Rooms (Host, Date) VALUES ('$host', '$timeStamp')";
-    else $sql           = "DELETE FROM Rooms WHERE Id = $id";
+    $sql = "INSERT INTO Rooms (Host, Date) VALUES ('$host', '$timeStamp')";
 
     if ($conn->query($sql) === TRUE)    echo $conn->insert_id;
+    else                                echo "PHP: Room creation/deletion Error " . mysqli_error($conn);
+}
+
+function CloseRoom(){
+    $id = $_POST["roomId"];
+
+    global $conn;
+
+    $sql = "DELETE FROM Rooms WHERE Room_Id = $id";
+
+    if ($conn->query($sql) === TRUE)    echo "PHP: Room Deleted";
     else                                echo "PHP: Room creation/deletion Error " . mysqli_error($conn);
 }
 
@@ -68,7 +79,7 @@ function SearchRoom(){
             echo json_encode($row) . "\n";
     }
     else 
-        echo "No Rooms Available";
+        echo "-1 No Rooms Available";
 }
 
 function SendHostData(){
@@ -95,7 +106,7 @@ function ConnectToServer()
    $conn = new mysqli($servername, $username, $password, $dbname);
 
    if ($conn->connect_error) {
-       die("PHP: Conexión fallida: " . $conn->connect_error);
+       die("PHP: Connection Error: " . $conn->connect_error);
    }
 
    return true;

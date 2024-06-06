@@ -151,6 +151,12 @@ public class UI_Manager : MonoBehaviour
         currentCanvasMenu = GameUIs.Gameplay;
     }
 
+    public void CastFunctionOnChildren(string function)
+    {
+        Debug.Log("UI_Manager: Broadcasting " + function);
+        BroadcastMessage(function);
+    }
+
     public enum GameUIs
     {
         Title,

@@ -14,14 +14,11 @@ public class ConnectionManager : MonoBehaviour
 {
     #region Propierties
 
-    [Header("Instance Version")]
-    public string version;
+    [Header("Instance Version")] public string version;
 
-    [Header("Instance Name")]
-    public string userName;
+    [Header("Instance Name")] public string userName;
 
-    [Tooltip("Is Server or Client")]
-    public bool isHosting = false;
+    [Tooltip("Is Server or Client")] public bool isHosting = false;
 
     [Header("Room Specs")]
     public int maxPlayers = 8;
@@ -32,43 +29,50 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] bool isConnected = false;
 
     Socket socket;
+    Thread serverReceiveThread,
+        clientReceiveThread,
+        serverSendThread,
+        clientSendThread;
 
-    Thread serverReceiveThread, clientReceiveThread, serverSendThread, clientSendThread;
+    IPEndPoint ipep;
+    EndPoint remote;
 
     byte[] data = new byte[1024];
 
     public bool localHost = false;
 
-    [SerializeField] string hostIP = "127.0.0.1"; string defaultIP = "127.0.0.1";
-    [SerializeField] int port = 9050; int defaultPort = 13420;
+    [SerializeField] string hostIP = "127.0.0.1";
+    string defaultIP = "127.0.0.1";
+    [SerializeField] int port = 9050;
+    int defaultPort = 13420;
     [SerializeField] string myIP;
-
-    [Header("Packages")]
-    [SerializeField] int packageDataSize = 10240;
-    [SerializeField] float delayBetweenPckgs = 0.1f;
-    float delay;
-    [SerializeField] bool enablePckLogs = true;
-
-    [SerializeField][Tooltip("In sec.")] float disconnectionTime = 5;
 
     [SerializeField] bool serverIsConnected;
     [SerializeField] bool clientIsConnected;
 
-    [SerializeField] bool OnlinePlay = false;
-    [SerializeField] string PHP_Url = "https://citmalumnes.upc.es/~danieltr1/OnlinePlay.php";
-    [SerializeField] int PHP_roomId = 0;
-
+    [Header("Packages")]
+    [SerializeField] int packageDataSize = 10240;
+    [SerializeField][Tooltip("Delay between Packages")] float connectionTickRate = 0.1f;
+    float delay;
     DateTime lastPckgDateTime;
 
-    IPEndPoint ipep;
-    EndPoint remote;
-
-    [SerializeField] AudioClip startClip;
-    [SerializeField] AudioClip endClip;
-    AudioSource audioSource;
-    bool playJoin, playEnd;
+    [SerializeField][Tooltip("In sec.")] float disconnectionTime = 5;
 
     [SerializeField] List<netGO> newNetGOs;
+
+    [Header("Online (PHP)")]
+    [SerializeField] bool onlinePlay = false;
+    [SerializeField] string PHP_Url = "https://citmalumnes.upc.es/~danieltr1/OnlinePlay.php";
+    [SerializeField] int PHP_roomId = -1;
+
+    public List<string> availableRooms = new();
+
+    public bool searchRooms = false;
+    public bool createRoom = false;
+
+    [Header("LOGS")]
+    [SerializeField] bool enablePckLogs = true;
+    [SerializeField] bool showCommError = false;
 
     [Header("Debug")]
     [SerializeField] bool connectAtStart = true;
@@ -80,7 +84,7 @@ public class ConnectionManager : MonoBehaviour
 
     #region NET Data
 
-    [Header("DEBUG NET DATA (Don't Edit)")]
+    [Header("NET Data Display")]
     [SerializeField] bool connectionStablished = false;
     string activeSceneName;
 
@@ -96,8 +100,7 @@ public class ConnectionManager : MonoBehaviour
     Color _NEWbetaTcolor;
     bool changeColor;
 
-    bool pendingToClean = false;
-    [SerializeField] bool showCommError = false;
+    bool pendingToCleanPlayers = false;
 
     int cont = 0;
 
@@ -105,6 +108,12 @@ public class ConnectionManager : MonoBehaviour
     List<DMGPackage> dmgReceivedPCKG = new();
 
     #endregion
+
+    [Header("Audio SFX")]
+    [SerializeField] AudioClip startClip;
+    [SerializeField] AudioClip endClip;
+    AudioSource audioSource;
+    bool playJoin, playEnd;
 
     #endregion
 
@@ -174,7 +183,7 @@ public class ConnectionManager : MonoBehaviour
             case Pck_type.PlayerList:   // SERVER
 
                 // Update own player
-                if (delay > delayBetweenPckgs)  // Eliminar este if mas adelante haciendo un buen delay enviando paquetes desde el server
+                if (delay > connectionTickRate)  // Eliminar este if mas adelante haciendo un buen delay enviando paquetes desde el server
                 {
                     delay = 0;
 
@@ -366,44 +375,49 @@ public class ConnectionManager : MonoBehaviour
         {
             Debug.Log(debugLog);
 
+            if (isHosting && onlinePlay) StartCoroutine(CloseRoom());
+
+            PHP_roomId = -1;
+
+            if (!onlinePlay)
+            {
+                if (isHosting)
+                {
+                    serverSendThread.Abort();
+                    serverReceiveThread.Abort();
+                }
+                else
+                {
+                    clientSendThread.Abort();
+                    clientReceiveThread.Abort();
+                }
+
+                if (socket.Connected) socket.Shutdown(SocketShutdown.Both);
+
+                socket.Close();
+            }
+
+            foreach (NetGameObject n in SceneManagerScript.Instance.netGOs)
+                n.connectedToServer = false;
+
+            playerPackages.Clear();
+
+            onlinePlay = false;
+            isHosting = false;
             isConnected = false;
             disconnect = false;
             connectionStablished = false;
-            pendingToClean = true;
+            pendingToCleanPlayers = true;
             serverIsConnected = false;
             clientIsConnected = false;
 
             SceneManagerScript.Instance.cleanPaint = true;
 
-            foreach (NetGameObject n in SceneManagerScript.Instance.netGOs)
-            {
-                n.connectedToServer = false;
-            }
-
-            playerPackages.Clear();
-
-            if (isHosting)
-            {
-                serverSendThread.Abort();
-                serverReceiveThread.Abort();
-            }
-            else
-            {
-                clientSendThread.Abort();
-                clientReceiveThread.Abort();
-            }
-
-            if (socket.Connected)
-            {
-                socket.Shutdown(SocketShutdown.Both);
-            }
-
-            socket.Close();
-
             if (activeSceneName != lobbyScene)
             {
-                activeSceneName = lobbyScene;
                 Debug.Log("Connection Lost: Returning to Lobby");
+
+                activeSceneName = lobbyScene;
                 SceneManagerScript.Instance.ChangeScene(lobbyScene);
             }
         }
@@ -417,14 +431,11 @@ public class ConnectionManager : MonoBehaviour
     public string GetLocalIPAddress()
     {
         var host = Dns.GetHostEntry(Dns.GetHostName());
+
         foreach (var ip in host.AddressList)
-        {
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
-            {
-                return ip.ToString();
-            }
-        }
-        throw new System.Exception("No network adapters with an IPv4 address in the system!");
+            if (ip.AddressFamily == AddressFamily.InterNetwork) return ip.ToString();
+
+        throw new Exception("No network adapters with an IPv4 address in the system!");
     }
 
     public string GetHostIP()
@@ -625,7 +636,7 @@ public class ConnectionManager : MonoBehaviour
             {
                 #region Update/Send Player Input
 
-                if (connectionStablished && delay > delayBetweenPckgs && serverIsConnected)
+                if (connectionStablished && delay > connectionTickRate && serverIsConnected)
                 {
                     MemoryStream sendPStream = new MemoryStream();
                     Package pPck = WritePackage(Pck_type.Player);
@@ -716,7 +727,7 @@ public class ConnectionManager : MonoBehaviour
         }
 
         if (disconnect) EndConnection();
-        if (pendingToClean) CleanPlayers();
+        if (pendingToCleanPlayers) CleanPlayers();
 
         if (showCommError)
         {
@@ -730,7 +741,6 @@ public class ConnectionManager : MonoBehaviour
 
         activeSceneName = SceneManager.GetActiveScene().name;
 
-        // Delay between sending Packages
         delay += Time.deltaTime;
 
         UpdateGameObjects();
@@ -787,6 +797,18 @@ public class ConnectionManager : MonoBehaviour
         }
 
         #endregion
+
+        if (searchRooms)
+        {
+            searchRooms = false;
+            StartCoroutine(SearchRoom());
+        }
+
+        if (createRoom)
+        {
+            createRoom = false;
+            if (PHP_roomId == -1) StartCoroutine(HostRoom());
+        }
     }
 
     void UpdateGameObjects()
@@ -882,22 +904,33 @@ public class ConnectionManager : MonoBehaviour
     void CleanPlayers()
     {
         SceneManagerScript.Instance.DeleteAllNotOwnedPlayers();
-        pendingToClean = false;
+        pendingToCleanPlayers = false;
     }
 
     private void OnApplicationQuit()
     {
-        if (isConnected)
-            EndConnection();
+        if (isConnected) EndConnection();
     }
 
     #endregion
 
+    public void JoinRoom(int id)
+    {
+        PHP_roomId = id;
+        isHosting = false;
+        onlinePlay = true;
+    }
+
+
     #region PHP - SQL
 
-    public IEnumerator HostRoom(bool closeRoom = false)
+    // ROOM
+
+    public IEnumerator HostRoom()
     {
         Debug.Log("Hosting a Room on Online Mode");
+
+        isHosting = isConnected = onlinePlay = true;
 
         WWWForm form = new();
 
@@ -905,16 +938,37 @@ public class ConnectionManager : MonoBehaviour
 
         form.AddField("host", userName);
         form.AddField("timeStamp", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
-        form.AddField("close", closeRoom.ToString());
+
+        UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
+
+        yield return www.SendWebRequest();
+
+        try
+        {
+            PHP_roomId = int.Parse(www.downloadHandler.text);
+            Debug.Log("Room Id asigned: " + PHP_roomId);
+        }
+        catch
+        {
+            Debug.Log(www.downloadHandler.text);
+        }
+    }
+
+    public IEnumerator CloseRoom()
+    {
+        Debug.Log("A");
+
+        WWWForm form = new();
+
+        form.AddField("methodToCall", "Close Room");
+
         form.AddField("roomId", PHP_roomId);
 
         UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
 
         yield return www.SendWebRequest();
 
-        PHP_roomId = int.Parse(www.downloadHandler.text);
-
-        Debug.Log("Room Id asigned: " + PHP_roomId);
+        Debug.Log("Room Closed " + www.downloadHandler.text);
     }
 
     public IEnumerator SearchRoom()
@@ -931,16 +985,33 @@ public class ConnectionManager : MonoBehaviour
             string jsonData = www.downloadHandler.text;
             string[] rows = jsonData.Split('\n');
 
+            availableRooms.Clear();
+
             foreach (string row in rows)
             {
                 if (!string.IsNullOrEmpty(row))
                 {
+                    try
+                    {
+                        if (int.Parse(row.Substring(0, 2)) == -1)
+                            Debug.Log(row.Substring(2));
+                        break;
+                    }
+                    catch
+                    {
+                        // No error "-1". Code can continue
+                    }
+
+                    availableRooms.Add(row);
                     Debug.Log(row);
                 }
             }
+            UI_Manager.Instance.CastFunctionOnChildren("RefreshRoomList");
         }
         else Debug.Log("Error: " + www.error);
     }
+
+    // HOST
 
     public IEnumerator SendHostData()
     {
@@ -951,6 +1022,8 @@ public class ConnectionManager : MonoBehaviour
     {
         yield return null;
     }
+
+    // CLIENT
 
     public IEnumerator SendClientData()
     {
