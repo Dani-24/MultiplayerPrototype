@@ -955,7 +955,7 @@ public class ConnectionManager : MonoBehaviour
     {
         PHP_roomId = id;
         isHosting = false;
-        onlinePlay = true;
+        onlinePlay = isConnected = true;
     }
 
     public IEnumerator LogIn()
@@ -1114,8 +1114,15 @@ public class ConnectionManager : MonoBehaviour
 
         Debug.Log("Receiving Host Data: " + www.downloadHandler.text);
 
-        Package receivedPck = FromJson(www.downloadHandler.text);
-        ReadPackage(receivedPck);
+        try
+        {
+            Package receivedPck = FromJson(www.downloadHandler.text);
+            ReadPackage(receivedPck);
+        }
+        catch
+        {
+            // No data
+        }
     }
 
     // CLIENT
@@ -1156,8 +1163,15 @@ public class ConnectionManager : MonoBehaviour
 
         Debug.Log("Receiving Client Data: " + www.downloadHandler.text);
 
-        Package receivedPck = FromJson(www.downloadHandler.text);
-        ReadPackage(receivedPck);
+        try
+        {
+            Package receivedPck = FromJson(www.downloadHandler.text);
+            ReadPackage(receivedPck);
+        }
+        catch
+        {
+            // No data
+        }
     }
 
     #endregion
