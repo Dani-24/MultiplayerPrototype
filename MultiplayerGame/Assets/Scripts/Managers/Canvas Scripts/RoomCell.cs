@@ -5,11 +5,11 @@ public class RoomCell : MonoBehaviour
 {
     public TMP_Text roomId;
     public TMP_Text roomHost;
-    public TMP_Text roomPlayers;
+    public TMP_Text roomDate;
 
-    public void SetRoomId(int id)
+    public void SetRoomId(string id)
     {
-        roomId.text = id.ToString();
+        roomId.text = id;
     }
 
     public void SetRoomHost(string name)
@@ -17,8 +17,13 @@ public class RoomCell : MonoBehaviour
         roomHost.text = name + "'s Room";
     }
 
-    public void SetRoomPlayers(int num)
+    public void SetRoomDate(string num)
     {
-        roomHost.text = num + "/8";
+        roomDate.text = num;
+    }
+
+    public void JoinRoom()
+    {
+        ConnectionManager.Instance.JoinRoom(int.Parse(roomId.text));
     }
 }

@@ -13,6 +13,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     switch((string)$methodToCall)
     {
+        case "Log In":
+            LogIn();
+            break;
         case "Host Room":
             HostRoom();
             break;
@@ -34,13 +37,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "Receive Client Data":
             ReceiveClientData();
             break;
+        case "Disconnect Client":
+            DisconnectClient();
+            break;
     }
 
     CloseConnection();
 } 
 else 
 {
-   echo "PHP: Método no permitido \n";
+   echo "PHP: Method Error \n";
+}
+
+// SQL Data
+
+function LogIn(){
+    $userName      = $_POST["userName"];
+
+    global $conn;
+    $sql = "INSERT INTO Users (UserName) VALUES ('$userName')";
+
+    if ($conn->query($sql) === TRUE)    echo $conn->insert_id;
+    else                                echo "PHP: Logging Error " . mysqli_error($conn);
 }
 
 function HostRoom(){
@@ -52,18 +70,29 @@ function HostRoom(){
     $sql = "INSERT INTO Rooms (Host, Date) VALUES ('$host', '$timeStamp')";
 
     if ($conn->query($sql) === TRUE)    echo $conn->insert_id;
-    else                                echo "PHP: Room creation/deletion Error " . mysqli_error($conn);
+    else                                echo "PHP: Room Creation Error " . mysqli_error($conn);
 }
 
 function CloseRoom(){
     $id = $_POST["roomId"];
+    $user_id = $_POST["userId"];
 
     global $conn;
 
     $sql = "DELETE FROM Rooms WHERE Room_Id = $id";
 
     if ($conn->query($sql) === TRUE)    echo "PHP: Room Deleted";
-    else                                echo "PHP: Room creation/deletion Error " . mysqli_error($conn);
+    else                                echo "PHP: Room Deletion Error " . mysqli_error($conn);
+
+    $sql = "DELETE FROM HostData WHERE Room_Id = $id";
+
+    if ($conn->query($sql) === TRUE)    echo "PHP: Room Data Deleted";
+    else                                echo "PHP: Room Data Deletion Error " . mysqli_error($conn);
+
+    $sql = "DELETE FROM Users WHERE User_Id = $user_id";
+
+    if ($conn->query($sql) === TRUE)    echo "PHP: Client Unlogged";
+    else                                echo "PHP: Client Unlogging Error " . mysqli_error($conn);
 }
 
 function SearchRoom(){
@@ -83,20 +112,91 @@ function SearchRoom(){
 }
 
 function SendHostData(){
+    $timeStamp  = $_POST["timeStamp"];
+    $roomId     = $_POST["roomId"];
+    $data       = $_POST["data"];
 
+    global $conn;
+
+    $sql = "SELECT * FROM HostData WHERE Room_Id = $roomId";
+
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0)  $sql = "UPDATE HostData SET Data = '$data', Date = '$timeStamp' WHERE Room_Id = $roomId";
+    else                        $sql = "INSERT INTO HostData (Room_Id, Data, Date) VALUES ('$roomId', '$data' , '$timeStamp')";                  
+
+    if ($conn->query($sql) === TRUE)    echo "PHP: Host Data Updated";
+    else                                echo "PHP: Error Sending Host Data " . mysqli_error($conn);
 }
 
 function ReceiveHostData(){
+    $roomId = $_POST["roomId"];
 
+    global $conn;
+
+    $sql = "SELECT Data FROM HostData WHERE Room_Id = $roomId";
+
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0)  echo $result->fetch_assoc()['Data'];
+    else                        echo "PHP: No Host Data Available";
 }
 
 function SendClientData(){
+    $timeStamp  = $_POST["timeStamp"];
+    $roomId     = $_POST["roomId"];
+    $clientId   = $_POST["clientId"];
+    $data       = $_POST["data"];
 
-}   
+    global $conn;
+
+    $sql = "SELECT * FROM ClientData WHERE Room_Id = $roomId AND Client_Id = $clientId";
+
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0)  $sql = "UPDATE ClientData SET Data = '$data', Date = '$timeStamp' WHERE Room_Id = $roomId AND Client_Id = $clientId";
+    else                        $sql = "INSERT INTO ClientData (Room_Id, Client_Id, Data, Date) VALUES ('$roomId', '$clientId', '$data', '$timeStamp')";
+
+    if ($conn->query($sql) === TRUE)    echo "PHP: Client Data Sent";
+    else                                echo "PHP: Error Sending Client Data " . mysqli_error($conn);
+}
 
 function ReceiveClientData(){
+    $roomId = $_POST["roomId"];
 
+    global $conn;
+
+    $sql = "SELECT * FROM ClientData WHERE Room_Id = $roomId";
+
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) 
+    {
+        while ($row = $result->fetch_assoc()) 
+            echo json_encode($row) . "\n";
+    }
+    else 
+        echo "No Client Data Available";
 }
+
+function DisconnectClient(){
+    $id = $_POST["roomId"];
+    $user_id = $_POST["userId"];
+
+    global $conn;
+
+    $sql = "DELETE FROM ClientData WHERE Room_Id = $id";
+
+    if ($conn->query($sql) === TRUE)    echo "PHP: Client Data Deleted";
+    else                                echo "PHP: Client Data Deletion Error " . mysqli_error($conn);
+
+    $sql = "DELETE FROM Users WHERE User_Id = $user_id";
+
+    if ($conn->query($sql) === TRUE)    echo "PHP: Client Unlogged";
+    else                                echo "PHP: Client Unlogging Error " . mysqli_error($conn);
+}
+
+//// Connection
 
 function ConnectToServer() 
 {

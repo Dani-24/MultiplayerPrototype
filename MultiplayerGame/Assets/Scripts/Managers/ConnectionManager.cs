@@ -62,8 +62,10 @@ public class ConnectionManager : MonoBehaviour
 
     [Header("Online (PHP)")]
     [SerializeField] bool onlinePlay = false;
+    [SerializeField] bool logged = false;
     [SerializeField] string PHP_Url = "https://citmalumnes.upc.es/~danieltr1/OnlinePlay.php";
     [SerializeField] int PHP_roomId = -1;
+    [SerializeField] int PHP_userId = -1;
 
     public List<string> availableRooms = new();
 
@@ -145,6 +147,16 @@ public class ConnectionManager : MonoBehaviour
         return pck;
     }
 
+    string ToJson(Package pck)
+    {
+        return JsonUtility.ToJson(pck);
+    }
+
+    Package FromJson(string json)
+    {
+        return JsonUtility.FromJson<Package>(json);
+    }
+
     public Package WritePackage(Pck_type type)
     {
         Package pck = new Package();
@@ -183,7 +195,7 @@ public class ConnectionManager : MonoBehaviour
             case Pck_type.PlayerList:   // SERVER
 
                 // Update own player
-                if (delay > connectionTickRate)  // Eliminar este if mas adelante haciendo un buen delay enviando paquetes desde el server
+                if (delay > connectionTickRate)
                 {
                     delay = 0;
 
@@ -375,10 +387,6 @@ public class ConnectionManager : MonoBehaviour
         {
             Debug.Log(debugLog);
 
-            if (isHosting && onlinePlay) StartCoroutine(CloseRoom());
-
-            PHP_roomId = -1;
-
             if (!onlinePlay)
             {
                 if (isHosting)
@@ -395,6 +403,11 @@ public class ConnectionManager : MonoBehaviour
                 if (socket.Connected) socket.Shutdown(SocketShutdown.Both);
 
                 socket.Close();
+            }
+            else
+            {
+                StartCoroutine(DisconnectPHP());
+                PHP_roomId = -1;
             }
 
             foreach (NetGameObject n in SceneManagerScript.Instance.netGOs)
@@ -513,6 +526,7 @@ public class ConnectionManager : MonoBehaviour
                 {
                     try
                     {
+                        //delay = 0;
                         MemoryStream sendPStream = new MemoryStream();
                         Package pPck = WritePackage(Pck_type.PlayerList);
                         pPck.user = Network_User.Server;
@@ -520,7 +534,6 @@ public class ConnectionManager : MonoBehaviour
                         sendPStream = SerializeJson(pPck);
 
                         socket.SendTo(sendPStream.ToArray(), (int)sendPStream.Length, SocketFlags.None, remote);
-                        //delay = 0;
 
                         if (randomPackageToSend != null)
                         {
@@ -798,6 +811,7 @@ public class ConnectionManager : MonoBehaviour
 
         #endregion
 
+        // PHP
         if (searchRooms)
         {
             searchRooms = false;
@@ -808,6 +822,27 @@ public class ConnectionManager : MonoBehaviour
         {
             createRoom = false;
             if (PHP_roomId == -1) StartCoroutine(HostRoom());
+        }
+
+        if (onlinePlay && delay > connectionTickRate && PHP_roomId != -1 && PHP_userId != -1)
+        {
+            delay = 0;
+
+            if (isHosting)
+            {
+                StartCoroutine(SendHostData());
+                StartCoroutine(ReceiveClientData());
+            }
+            else
+            {
+                StartCoroutine(SendClientData());
+                StartCoroutine(ReceiveHostData());
+            }
+        }
+
+        if (onlinePlay && !logged)
+        {
+            StartCoroutine(LogIn());
         }
     }
 
@@ -914,6 +949,8 @@ public class ConnectionManager : MonoBehaviour
 
     #endregion
 
+    #region PHP - SQL
+
     public void JoinRoom(int id)
     {
         PHP_roomId = id;
@@ -921,8 +958,23 @@ public class ConnectionManager : MonoBehaviour
         onlinePlay = true;
     }
 
+    public IEnumerator LogIn()
+    {
+        logged = true;
+        WWWForm form = new();
 
-    #region PHP - SQL
+        form.AddField("methodToCall", "Log In");
+
+        form.AddField("userName", userName);
+
+        UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
+
+        yield return www.SendWebRequest();
+
+        PHP_userId = int.Parse(www.downloadHandler.text);
+
+        if (PHP_userId == -1) logged = false;
+    }
 
     // ROOM
 
@@ -954,21 +1006,34 @@ public class ConnectionManager : MonoBehaviour
         }
     }
 
-    public IEnumerator CloseRoom()
+    public IEnumerator DisconnectPHP()
     {
-        Debug.Log("A");
-
         WWWForm form = new();
 
-        form.AddField("methodToCall", "Close Room");
+        if (isHosting)
+        {
+            form.AddField("methodToCall", "Close Room");
+            form.AddField("userId", PHP_userId);
+            form.AddField("roomId", PHP_roomId);
 
-        form.AddField("roomId", PHP_roomId);
+            UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
 
-        UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
+            yield return www.SendWebRequest();
 
-        yield return www.SendWebRequest();
+            Debug.Log("Room Closed " + www.downloadHandler.text);
+        }
+        else // Client
+        {
+            form.AddField("methodToCall", "Disconnect Client");
+            form.AddField("userId", PHP_userId);
+            form.AddField("roomId", PHP_roomId);
 
-        Debug.Log("Room Closed " + www.downloadHandler.text);
+            UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
+
+            yield return www.SendWebRequest();
+
+            Debug.Log("Client disconnected from Online Play " + www.downloadHandler.text);
+        }
     }
 
     public IEnumerator SearchRoom()
@@ -1015,24 +1080,84 @@ public class ConnectionManager : MonoBehaviour
 
     public IEnumerator SendHostData()
     {
-        yield return null;
+        WWWForm form = new();
+
+        form.AddField("methodToCall", "Send Host Data");
+
+        form.AddField("roomId", PHP_roomId);
+
+        form.AddField("timeStamp", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
+
+        Package pPck = WritePackage(Pck_type.PlayerList);
+        pPck.user = Network_User.Server;
+
+        form.AddField("data", ToJson(pPck));
+
+        UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
+
+        yield return www.SendWebRequest();
+
+        Debug.Log(www.downloadHandler.text);
     }
 
     public IEnumerator ReceiveHostData()
     {
-        yield return null;
+        WWWForm form = new();
+
+        form.AddField("methodToCall", "Receive Host Data");
+
+        form.AddField("roomId", PHP_roomId);
+
+        UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
+
+        yield return www.SendWebRequest();
+
+        Debug.Log("Receiving Host Data: " + www.downloadHandler.text);
+
+        Package receivedPck = FromJson(www.downloadHandler.text);
+        ReadPackage(receivedPck);
     }
 
     // CLIENT
 
     public IEnumerator SendClientData()
     {
-        yield return null;
+        WWWForm form = new();
+
+        form.AddField("methodToCall", "Send Client Data");
+        form.AddField("roomId", PHP_roomId);
+        form.AddField("timeStamp", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
+        form.AddField("clientId", PHP_userId);
+
+        MemoryStream sendPStream = new MemoryStream();
+        Package pPck = WritePackage(Pck_type.Player);
+        pPck.user = Network_User.Client;
+
+        form.AddField("data", ToJson(pPck));
+
+        UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
+
+        yield return www.SendWebRequest();
+
+        Debug.Log(www.downloadHandler.text);
     }
 
     public IEnumerator ReceiveClientData()
     {
-        yield return null;
+        WWWForm form = new();
+
+        form.AddField("methodToCall", "Receive Client Data");
+
+        form.AddField("roomId", PHP_roomId);
+
+        UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
+
+        yield return www.SendWebRequest();
+
+        Debug.Log("Receiving Client Data: " + www.downloadHandler.text);
+
+        Package receivedPck = FromJson(www.downloadHandler.text);
+        ReadPackage(receivedPck);
     }
 
     #endregion

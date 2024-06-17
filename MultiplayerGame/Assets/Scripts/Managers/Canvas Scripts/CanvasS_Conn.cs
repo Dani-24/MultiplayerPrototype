@@ -178,14 +178,16 @@ public class CanvasS_Conn : MonoBehaviour
         currentPanel = PanelOptions.Room;
     }
 
-    public void Button_JoinRoom(int id)
-    {
-        ConnectionManager.Instance.JoinRoom(int.Parse(roomCells[id].roomId.text));
-    }
-
     public void Button_RefreshRooms()
     {
         ConnectionManager.Instance.searchRooms = true;
+    }
+
+    public class RoomData
+    {
+        public string Room_Id;
+        public string Host;
+        public string Date;
     }
 
     public void RefreshRoomList()
@@ -194,10 +196,14 @@ public class CanvasS_Conn : MonoBehaviour
         {
             if (i < ConnectionManager.Instance.availableRooms.Count())
             {
+                string roomInfo = ConnectionManager.Instance.availableRooms[i];
+
+                RoomData roomData = JsonUtility.FromJson<RoomData>(roomInfo);
+
                 roomCells[i].gameObject.SetActive(true);
-                roomCells[i].SetRoomId(0);
-                roomCells[i].SetRoomHost(ConnectionManager.Instance.availableRooms[i]);
-                roomCells[i].SetRoomPlayers(0);
+                roomCells[i].SetRoomId(roomData.Room_Id);
+                roomCells[i].SetRoomHost(roomData.Host);
+                roomCells[i].SetRoomDate(roomData.Date);
             }
             else
             {
