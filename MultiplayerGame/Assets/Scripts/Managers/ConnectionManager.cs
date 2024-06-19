@@ -147,12 +147,12 @@ public class ConnectionManager : MonoBehaviour
         return pck;
     }
 
-    string ToJson(Package pck)
+    string PkgToJson(Package pck)
     {
         return JsonUtility.ToJson(pck);
     }
 
-    Package FromJson(string json)
+    Package PkgFromJson(string json)
     {
         return JsonUtility.FromJson<Package>(json);
     }
@@ -261,10 +261,9 @@ public class ConnectionManager : MonoBehaviour
                     }
                 }
 
-                if (!alreadyExists)
-                {
-                    playerPackages.Add(pck.playerPck);
-                }
+                Debug.Log(pck.playerPck.netID);
+
+                if (!alreadyExists) playerPackages.Add(pck.playerPck);
 
                 break;
             case Pck_type.PlayerList:   // CLIENT
@@ -875,10 +874,7 @@ public class ConnectionManager : MonoBehaviour
                 }
             }
 
-            if (isHosting && playerPackages.Count == 0)
-            {
-                playerPackages.Add(ownPlayerPck);
-            }
+            if (isHosting && playerPackages.Count == 0) playerPackages.Add(ownPlayerPck);
 
             // Manage Player Packages
             for (int i = 0; i < playerPackages.Count; i++)
@@ -928,10 +924,7 @@ public class ConnectionManager : MonoBehaviour
             }
 
             // Disconnect yourself (Client)
-            if (!isHosting && serverIsConnected && (DateTime.UtcNow - lastPckgDateTime).Seconds > disconnectionTime)
-            {
-                disconnect = true;
-            }
+            if (!isHosting && serverIsConnected && (DateTime.UtcNow - lastPckgDateTime).Seconds > disconnectionTime) disconnect = true;
         }
 
     }
@@ -1091,7 +1084,7 @@ public class ConnectionManager : MonoBehaviour
         Package pPck = WritePackage(Pck_type.PlayerList);
         pPck.user = Network_User.Server;
 
-        form.AddField("data", ToJson(pPck));
+        form.AddField("data", PkgToJson(pPck));
 
         UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
 
@@ -1112,16 +1105,16 @@ public class ConnectionManager : MonoBehaviour
 
         yield return www.SendWebRequest();
 
-        Debug.Log("Receiving Host Data: " + www.downloadHandler.text);
-
         try
         {
-            Package receivedPck = FromJson(www.downloadHandler.text);
-            ReadPackage(receivedPck);
+            HostData rowData = JsonUtility.FromJson<HostData>(www.downloadHandler.text);
+            ReadPackage(PkgFromJson(rowData.Data));
+
+            Debug.Log("Receiving Host Data: " + rowData.Data);
         }
         catch
         {
-            // No data
+            Debug.Log("Cannot Receiving Host Data: " + www.downloadHandler.error);
         }
     }
 
@@ -1140,7 +1133,7 @@ public class ConnectionManager : MonoBehaviour
         Package pPck = WritePackage(Pck_type.Player);
         pPck.user = Network_User.Client;
 
-        form.AddField("data", ToJson(pPck));
+        form.AddField("data", PkgToJson(pPck));
 
         UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
 
@@ -1161,17 +1154,48 @@ public class ConnectionManager : MonoBehaviour
 
         yield return www.SendWebRequest();
 
-        Debug.Log("Receiving Client Data: " + www.downloadHandler.text);
+        if (www.result == UnityWebRequest.Result.Success)
+        {
+            string jsonData = www.downloadHandler.text;
+            string[] rows = jsonData.Split('\n');
 
-        try
-        {
-            Package receivedPck = FromJson(www.downloadHandler.text);
-            ReadPackage(receivedPck);
+            availableRooms.Clear();
+
+            foreach (string row in rows)
+            {
+                if (!string.IsNullOrEmpty(row))
+                {
+                    try
+                    {
+                        ClientData rowData = JsonUtility.FromJson<ClientData>(row);
+                        ReadPackage(PkgFromJson(rowData.Data));
+                        Debug.Log("Receiving Client Data: " + rowData.Data);
+                    }
+                    catch
+                    {
+                        Debug.Log("Receiving Client Data: " + www.downloadHandler.text);
+                    }
+                }
+            }
         }
-        catch
-        {
-            // No data
-        }
+        else Debug.Log("PHP Error: " + www.error);
+    }
+
+    public class HostData
+    {
+        public string Id;
+        public string Room_Id;
+        public string Data;
+        public string Date;
+    }
+
+    public class ClientData
+    {
+        public string Id;
+        public string Room_Id;
+        public string Client_Id;
+        public string Data;
+        public string Date;
     }
 
     #endregion
