@@ -195,9 +195,9 @@ public class ConnectionManager : MonoBehaviour
             case Pck_type.PlayerList:   // SERVER
 
                 // Update own player
-                if (delay > connectionTickRate)
-                {
-                    delay = 0;
+                //if (delay > connectionTickRate)
+                //{
+                //    delay = 0;
 
                     for (int i = 0; i < playerPackages.Count; i++)
                     {
@@ -207,7 +207,7 @@ public class ConnectionManager : MonoBehaviour
                             break;
                         }
                     }
-                }
+                //}
 
                 pck.playersListPck = playerPackages;
 
@@ -848,7 +848,7 @@ public class ConnectionManager : MonoBehaviour
     void UpdateGameObjects()
     {
         // Update Own Player Info
-        if (SceneManagerScript.Instance.GetOwnPlayerInstance() != null/* && SceneManagerScript.Instance.gameState == SceneManagerScript.GameState.Gameplay*/)
+        if (SceneManagerScript.Instance.GetOwnPlayerInstance() != null)
         {
             ownPlayerNetID = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().networkID;
             ownPlayerPck = SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerNetworking>().GetPlayerPck();
@@ -1107,10 +1107,8 @@ public class ConnectionManager : MonoBehaviour
 
         try
         {
-            HostData rowData = JsonUtility.FromJson<HostData>(www.downloadHandler.text);
-            ReadPackage(PkgFromJson(rowData.Data));
-
-            Debug.Log("Receiving Host Data: " + rowData.Data);
+            ReadPackage(PkgFromJson(www.downloadHandler.text));
+            Debug.Log("Receiving Host Data: " + www.downloadHandler.text);
         }
         catch
         {
@@ -1179,14 +1177,6 @@ public class ConnectionManager : MonoBehaviour
             }
         }
         else Debug.Log("PHP Error: " + www.error);
-    }
-
-    public class HostData
-    {
-        public string Id;
-        public string Room_Id;
-        public string Data;
-        public string Date;
     }
 
     public class ClientData

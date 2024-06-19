@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ public class RoomCell : MonoBehaviour
 {
     public TMP_Text roomId;
     public TMP_Text roomHost;
-    public TMP_Text roomDate;
+    public TMP_Text roomDateText;
 
     public void SetRoomId(string id)
     {
@@ -17,9 +18,10 @@ public class RoomCell : MonoBehaviour
         roomHost.text = name + "'s Room";
     }
 
-    public void SetRoomDate(string num)
+    public void SetRoomDate(string date)
     {
-        roomDate.text = num;
+        DateTime roomDate = DateTime.Parse(date);
+        roomDateText.text = roomDate.ToLocalTime().ToShortTimeString() + " " + roomDate.ToLocalTime().ToShortDateString();
     }
 
     public void JoinRoom()
