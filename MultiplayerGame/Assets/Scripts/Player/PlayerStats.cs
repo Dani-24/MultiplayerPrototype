@@ -255,7 +255,7 @@ public class PlayerStats : MonoBehaviour
         // NETCODE
         if (!GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
-            Package dmgPckg = ConnectionManager.Instance.WritePackage(Pck_type.DMG);
+            Package dmgPckg = ConnectionManager.Instance.WritePackage();
             dmgPckg.dmGPackage = new DMGPackage
             {
                 dmg = DMG,
