@@ -81,8 +81,7 @@ public class GameManagerScript : MonoBehaviour
                 {
                     if (hostSetColorCont < 0)
                     {
-                        Package cPck = ConnectionManager.Instance.WritePackage();
-                        cPck.connPck = new();
+                        Package cPck = ConnectionManager.Instance.WritePackage(Pck_type.Connection);
                         cPck.connPck.setColor = true;
                         cPck.connPck.alphaColor = SceneManagerScript.Instance.GetTeamColor("Alpha");
                         cPck.connPck.betaColor = SceneManagerScript.Instance.GetTeamColor("Beta");
