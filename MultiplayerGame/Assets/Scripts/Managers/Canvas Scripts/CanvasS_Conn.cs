@@ -134,7 +134,10 @@ public class CanvasS_Conn : MonoBehaviour
                     currentPanel = PanelOptions.Room;
                 }
                 else
+                {
                     currentPanel = PanelOptions.Joining;
+                    ConnectionManager.Instance.SetPort(0);
+                }
 
                 break;
         }
@@ -205,10 +208,7 @@ public class CanvasS_Conn : MonoBehaviour
                 roomCells[i].SetRoomHost(roomData.Host);
                 roomCells[i].SetRoomDate(roomData.Date);
             }
-            else
-            {
-                roomCells[i].gameObject.SetActive(false);
-            }
+            else roomCells[i].gameObject.SetActive(false);
         }
     }
 

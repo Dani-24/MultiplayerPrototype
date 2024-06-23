@@ -36,6 +36,7 @@ public class ConnectionManager : MonoBehaviour
 
     IPEndPoint ipep;
     EndPoint remote;
+    List<EndPoint> remoteClients = new();
 
     byte[] data = new byte[1024];
 
@@ -75,6 +76,7 @@ public class ConnectionManager : MonoBehaviour
     [Header("LOGS")]
     [SerializeField] bool enablePckLogs = true;
     [SerializeField] bool showCommError = false;
+    [SerializeField] bool logPckSize = false;
 
     [Header("Debug")]
     [SerializeField] bool connectAtStart = true;
@@ -128,7 +130,7 @@ public class ConnectionManager : MonoBehaviour
         BinaryWriter writer = new BinaryWriter(stream);
         writer.Write(json);
 
-        Debug.Log(stream.Length + " bytes");
+        if (enablePckLogs && logPckSize) Debug.Log(stream.Length + " bytes");
 
         return stream;
     }
@@ -141,8 +143,6 @@ public class ConnectionManager : MonoBehaviour
 
         string json = reader.ReadString();
         pck = JsonUtility.FromJson<Package>(json);
-
-        if (enablePckLogs) Debug.Log("Received Pck: " + pck.type);
 
         return pck;
     }
@@ -199,14 +199,14 @@ public class ConnectionManager : MonoBehaviour
                 //{
                 //    delay = 0;
 
-                    for (int i = 0; i < playerPackages.Count; i++)
+                for (int i = 0; i < playerPackages.Count; i++)
+                {
+                    if (playerPackages[i].netID == ownPlayerPck.netID)
                     {
-                        if (playerPackages[i].netID == ownPlayerPck.netID)
-                        {
-                            playerPackages[i] = ownPlayerPck;
-                            break;
-                        }
+                        playerPackages[i] = ownPlayerPck;
+                        break;
                     }
+                }
                 //}
 
                 pck.playersListPck = playerPackages;
@@ -233,17 +233,16 @@ public class ConnectionManager : MonoBehaviour
         int pckDelay = (DateTime.UtcNow - lastPckgDateTime).Milliseconds;
         string pckLog = "Package from: " + pck.user + " (" + pck.IP + ") ms: " + pckDelay;
 
+        if (enablePckLogs) Debug.Log("Received Pck: " + pck.type);
+
+        // CHANGE SCENE
         if (!isHosting && pck.currentScene != activeSceneName)
         {
-            // CHANGE SCENE
             sceneToChange = pck.currentScene;
             changeScene = true;
         }
 
-        if (!isHosting && isConnected)
-        {
-            newNetGOs = pck.sceneNetGO;
-        }
+        if (!isHosting && isConnected) newNetGOs = pck.sceneNetGO;
 
         switch (pck.type)
         {
@@ -261,8 +260,6 @@ public class ConnectionManager : MonoBehaviour
                     }
                 }
 
-                Debug.Log(pck.playerPck.netID);
-
                 if (!alreadyExists) playerPackages.Add(pck.playerPck);
 
                 break;
@@ -270,12 +267,23 @@ public class ConnectionManager : MonoBehaviour
 
                 playerPackages = pck.playersListPck;
 
+                foreach (DMGPackage dmgPck in pck.dMGPackages)
+                {
+                    Debug.Log(dmgPck.receiverID);
+
+                    if (dmgPck.receiverID == ownPlayerNetID)
+                    {
+                        Debug.Log("DMG Package Received From: " + dmgPck.dealer);
+                        dmgReceivedPCKG.Add(dmgPck);
+                    }
+                }
+
                 break;
             case Pck_type.Connection:   // Mensajes de conexión
 
+                // Limit players
                 if (!pck.connPck.canConnect && pck.IP == myIP)
                 {
-                    // Limit players
                     EndConnection();
                     break;
                 }
@@ -294,8 +302,9 @@ public class ConnectionManager : MonoBehaviour
                 break;
             case Pck_type.DMG:
 
-                if (pck.dmGPackage.receiverID == ownPlayerNetID)
-                    dmgReceivedPCKG.Add(pck.dmGPackage);
+                Debug.Log("DMG Package Received From: " + pck.dmGPackage.dealer);
+
+                if (pck.dmGPackage.receiverID == ownPlayerNetID) dmgReceivedPCKG.Add(pck.dmGPackage);
 
                 break;
         }
@@ -369,7 +378,7 @@ public class ConnectionManager : MonoBehaviour
             }
 
             IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-            remote = (EndPoint)(sender);
+            remote = (EndPoint)sender;
 
             isConnected = true;
         }
@@ -512,8 +521,8 @@ public class ConnectionManager : MonoBehaviour
 
     void ServerSendThreadUpdate()
     {
-        IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-        remote = (EndPoint)(sender);
+        //IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
+        //remote = (EndPoint)sender;
 
         while (true)
         {
@@ -532,28 +541,31 @@ public class ConnectionManager : MonoBehaviour
 
                         sendPStream = SerializeJson(pPck);
 
-                        socket.SendTo(sendPStream.ToArray(), (int)sendPStream.Length, SocketFlags.None, remote);
+                        foreach (EndPoint endP in remoteClients)
+                        {
+                            socket.SendTo(sendPStream.ToArray(), (int)sendPStream.Length, SocketFlags.None, endP);
+                        }
 
                         if (randomPackageToSend != null)
                         {
-                            MemoryStream sendPStreamB = new MemoryStream();
-                            sendPStreamB = SerializeJson(randomPackageToSend);
+                            for(int i = 0; i < remoteClients.Count; i++)
+                            {
+                                MemoryStream sendPStreamB = new MemoryStream();
+                                sendPStreamB = SerializeJson(randomPackageToSend);
 
-                            socket.SendTo(sendPStreamB.ToArray(), (int)sendPStreamB.Length, SocketFlags.None, remote);
+                                socket.SendTo(sendPStreamB.ToArray(), (int)sendPStreamB.Length, SocketFlags.None, remoteClients[i]);
 
-                            randomPackageToSend = null;
+                                randomPackageToSend = null;
+                            }
                         }
                     }
-                    catch
+                    catch(SystemException e)
                     {
-                        Debug.Log("Client has disconnected (Send)");
+                        Debug.Log("Client has disconnected (Send)" + e.ToString());
 
                         showCommError = true;
 
-                        if (clientIsConnected)
-                        {
-                            EndConnection();
-                        }
+                        if (clientIsConnected) EndConnection();
                     }
                 }
 
@@ -569,42 +581,69 @@ public class ConnectionManager : MonoBehaviour
         {
             while (true)
             {
+                IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
+                EndPoint remoteClient = (EndPoint)sender;
+
                 // Receive data
                 data = new byte[packageDataSize];
-                socket.ReceiveFrom(data, ref remote);
+                socket.ReceiveFrom(data, ref remoteClient);
+
+                // Store All Clients for broadcasting
+                if (!remoteClients.Contains(remoteClient))
+                {
+                    remoteClients.Add(remoteClient);
+                    if (enablePckLogs) Debug.Log("Added new client: " + remoteClient);
+                }
 
                 // Manage Package
                 MemoryStream receiveStream = new MemoryStream(data);
                 Package receivedPck = DeserializeJson(receiveStream);
                 ReadPackage(receivedPck);
 
-                if (receivedPck.type == Pck_type.Connection)
+                // Answering
+                switch (receivedPck.type)
                 {
-                    MemoryStream sendStream = new MemoryStream();
+                    case Pck_type.Connection:
+                        {
+                            MemoryStream sendStream = new MemoryStream();
 
-                    Package answerPck = WritePackage(Pck_type.Connection);
-                    answerPck.IP = receivedPck.IP; // Return same IP
-                    answerPck.connPck.message = receivedPck.connPck.message;
-                    answerPck.user = Network_User.Server;
-                    answerPck.connPck.isAnswer = true;
+                            Package answerPck = WritePackage(Pck_type.Connection);
+                            answerPck.IP = receivedPck.IP; // Return same IP
+                            answerPck.connPck.message = receivedPck.connPck.message;
+                            answerPck.user = Network_User.Server;
+                            answerPck.connPck.isAnswer = true;
 
-                    if (playerPackages.Count >= maxPlayers || connGameplayState != ConnectionGameplayState.Lobby || receivedPck.connPck.version != version)
-                    {
-                        answerPck.connPck.canConnect = false;
-                        answerPck.connPck.message += "\n Cannot connect to the room. Check if the room is full / playing a match or running on a different version";
-                    }
-                    else
-                    {
-                        // Set Team Colors
-                        answerPck.connPck.setColor = true;
-                        answerPck.connPck.alphaColor = _alphaTcolor;
-                        answerPck.connPck.betaColor = _betaTcolor;
-                    }
+                            if (playerPackages.Count >= maxPlayers || connGameplayState != ConnectionGameplayState.Lobby || receivedPck.connPck.version != version)
+                            {
+                                answerPck.connPck.canConnect = false;
+                                answerPck.connPck.message += "\n Cannot connect to the room. Check if the room is full / playing a match or running on a different version";
+                            }
+                            else
+                            {
+                                // Set Team Colors
+                                answerPck.connPck.setColor = true;
+                                answerPck.connPck.alphaColor = _alphaTcolor;
+                                answerPck.connPck.betaColor = _betaTcolor;
+                            }
 
-                    sendStream = SerializeJson(answerPck);
-                    socket.SendTo(sendStream.ToArray(), (int)sendStream.Length, SocketFlags.None, remote);
+                            sendStream = SerializeJson(answerPck);
+                            socket.SendTo(sendStream.ToArray(), (int)sendStream.Length, SocketFlags.None, remoteClient);
 
-                    connectionStablished = true;
+                            connectionStablished = true;
+                        }
+                        break;
+                    case Pck_type.DMG:
+
+                        // Resend DMG to all Clients
+                        foreach(EndPoint endP in remoteClients)
+                        {
+                            if(!endP.Equals(remoteClient))
+                                socket.SendTo(receiveStream.ToArray(), (int)receiveStream.Length, SocketFlags.None, endP);
+                        }
+
+                        break;
+                    default:
+                        break;
                 }
 
                 if (!clientIsConnected)
@@ -618,10 +657,8 @@ public class ConnectionManager : MonoBehaviour
         {
             Debug.Log("Client has disconnected (Receive)" + e.ToString());
             showCommError = true;
-            if (clientIsConnected)
-            {
-                EndConnection();
-            }
+
+            if (clientIsConnected) EndConnection();
         }
     }
 
@@ -657,16 +694,16 @@ public class ConnectionManager : MonoBehaviour
 
                     socket.SendTo(sendPStream.ToArray(), (int)sendPStream.Length, SocketFlags.None, ipep);
                     delay = 0;
+                }
 
-                    if (randomPackageToSend != null)
-                    {
-                        MemoryStream sendPStreamB = new MemoryStream();
-                        sendPStreamB = SerializeJson(randomPackageToSend);
+                if (randomPackageToSend != null)
+                {
+                    MemoryStream sendPStreamB = new MemoryStream();
+                    sendPStreamB = SerializeJson(randomPackageToSend);
 
-                        socket.SendTo(sendPStreamB.ToArray(), (int)sendPStreamB.Length, SocketFlags.None, remote);
+                    socket.SendTo(sendPStreamB.ToArray(), (int)sendPStreamB.Length, SocketFlags.None, ipep);
 
-                        randomPackageToSend = null;
-                    }
+                    randomPackageToSend = null;
                 }
 
                 #endregion
@@ -823,25 +860,29 @@ public class ConnectionManager : MonoBehaviour
             if (PHP_roomId == -1) StartCoroutine(HostRoom());
         }
 
-        if (onlinePlay && delay > connectionTickRate && PHP_roomId != -1 && PHP_userId != -1)
+        if (onlinePlay && PHP_roomId != -1 && PHP_userId != -1)
         {
-            delay = 0;
-
             if (isHosting)
             {
-                StartCoroutine(SendHostData());
+                StartDelayCoroutine(SendHostData());
                 StartCoroutine(ReceiveClientData());
             }
             else
             {
-                StartCoroutine(SendClientData());
+                StartDelayCoroutine(SendClientData());
                 StartCoroutine(ReceiveHostData());
             }
         }
 
-        if (onlinePlay && !logged)
+        if (onlinePlay && !logged) StartCoroutine(LogIn());
+    }
+
+    void StartDelayCoroutine(IEnumerator corroutine)
+    {
+        if (delay > connectionTickRate)
         {
-            StartCoroutine(LogIn());
+            delay = 0;
+            StartCoroutine(corroutine);
         }
     }
 
@@ -1031,6 +1072,8 @@ public class ConnectionManager : MonoBehaviour
 
     public IEnumerator SearchRoom()
     {
+        onlinePlay = true;
+
         WWWForm form = new();
         form.AddField("methodToCall", "Search Room");
 
@@ -1233,6 +1276,7 @@ public class Package
     public ConnectionPackage connPck = null;
 
     public DMGPackage dmGPackage = null;
+    public List<DMGPackage> dMGPackages = new List<DMGPackage>();
 }
 
 [System.Serializable]
