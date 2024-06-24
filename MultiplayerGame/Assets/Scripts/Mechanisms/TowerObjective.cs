@@ -37,7 +37,7 @@ public class TowerObjective : MonoBehaviour
     AudioSource audioSource;
     float audioOriginalVolume;
 
-    [SerializeField] MeshRenderer flag;
+    [SerializeField] List<MeshRenderer> meshesWithTeamColor = new();
 
     [Header("Debug")]
     [SerializeField] float towerToTargetDist = 0.1f;
@@ -152,7 +152,8 @@ public class TowerObjective : MonoBehaviour
         {
             case TowerState.Resting:
 
-                flag.material.color = Color.white;
+                foreach (MeshRenderer mr in meshesWithTeamColor)
+                    mr.material.color = Color.white;
 
                 audioSource.Stop();
 
@@ -194,7 +195,9 @@ public class TowerObjective : MonoBehaviour
                 if (!audioSource.isPlaying)
                 {
                     audioSource.Play();
-                    flag.material.color = SceneManagerScript.Instance.GetTeamColor(teamOnTower);
+
+                    foreach (MeshRenderer mr in meshesWithTeamColor)
+                        mr.material.color = SceneManagerScript.Instance.GetTeamColor(teamOnTower);
                 }
                 backCont = 0;
 

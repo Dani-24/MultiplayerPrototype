@@ -52,7 +52,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_41271c3c5f484ca2a435c65087a81705:
-        m_Texture: {fileID: 2800000, guid: 1d273a25e95b5e74394fe47d7b4ea5a7, type: 3}
+        m_Texture: {fileID: 2800000, guid: dd29f35641da38647a1eeb1028211f1a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AnisotropyMap:
@@ -370,7 +370,8 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - Color_1bf9c5e6f5c34360a490da1c94e6a7c1: {r: 1, g: 1, b: 1, a: 0}
-    - Color_863351f5ceea4c998ef51baab6dd758b: {r: 1, g: 1, b: 1, a: 1}
+    - Color_863351f5ceea4c998ef51baab6dd758b: {r: 0.1981132, g: 0.1981132, b: 0.1981132,
+        a: 1}
     - Vector2_55edcb19ba1d459dbb3c027e66abbc1e: {r: 1, g: 1, b: 0, a: 0}
     - Vector2_e97cb9b7b5564bc9857e7669e2d0b82f: {r: 2, g: 2, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 0}
