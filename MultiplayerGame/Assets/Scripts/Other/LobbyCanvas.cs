@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class LobbyCanvas : MonoBehaviour
 {
+    [SerializeField] GameObject titlePanel;
     [SerializeField] GameObject roomPanel;
 
     [SerializeField] TMP_Text roomTitle;
@@ -19,6 +20,7 @@ public class LobbyCanvas : MonoBehaviour
     void Update()
     {
         roomPanel.SetActive(ConnectionManager.Instance.IsConnected());
+        titlePanel.SetActive(SceneManagerScript.Instance.gameState == SceneManagerScript.GameState.Title);
 
         for (int i = 0; i < roomPlayersTexts.Count; i++)
         {

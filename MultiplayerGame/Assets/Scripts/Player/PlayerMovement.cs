@@ -22,10 +22,10 @@ public class PlayerMovement : MonoBehaviour
     #region Horizontal Movement Propierties
 
     [Header("Movement")]
-    [SerializeField] private Vector2 moveInput;
+    public Vector2 moveInput;
 
     Vector3 forward;
-    Vector3 moveDir;
+    [SerializeField] Vector3 moveDir;
     Vector3 lastDir;
 
     [SerializeField][Range(0.1f, 25f)] private float moveSpeed = 10.0f;
@@ -94,6 +94,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // ONLY OWN PLAYER
         if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
             if (GetComponent<PlayerStats>().playerInputEnabled)
@@ -110,6 +111,7 @@ public class PlayerMovement : MonoBehaviour
                 moveDir.Set(0, fallSpeed, 0);
             }
         }
+
         controller.Move(moveDir * Time.deltaTime);
     }
 
@@ -343,6 +345,12 @@ public class PlayerMovement : MonoBehaviour
             playerBody.SetActive(true);
             playerRunBody.SetActive(false);
         }
+
+        if (GetComponent<PlayerStats>().lifeState != PlayerStats.LifeState.alive)
+        {
+            playerBody.SetActive(false);
+            playerRunBody.SetActive(false);
+        }
     }
 
     // Movement
@@ -388,16 +396,16 @@ public class PlayerMovement : MonoBehaviour
 
     public void SetPosition(Vector3 _position)
     {
+        if (controller.transform.position != _position) actualSpeed = moveSpeed; else actualSpeed = 0;
+
         if (controller != null)
-        {
             controller.Move(Vector3.LerpUnclamped(controller.transform.position, _position, interpolationSpeed * Time.deltaTime) - controller.transform.position);
-        }
     }
 
     public void SetRotation(Quaternion _rot)
     {
         playerBody.transform.rotation = Quaternion.LerpUnclamped(playerBody.transform.rotation, _rot, interpolationSpeed * Time.deltaTime);
-        playerRunBody.transform.rotation = Quaternion.LerpUnclamped(playerRunBody.transform.rotation, _rot, interpolationSpeed * Time.deltaTime);
+        //playerRunBody.transform.rotation = Quaternion.LerpUnclamped(playerRunBody.transform.rotation, _rot, interpolationSpeed * Time.deltaTime);
     }
 
     public void SetFacing(float angle)

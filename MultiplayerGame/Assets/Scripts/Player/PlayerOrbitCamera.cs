@@ -51,13 +51,9 @@ public class PlayerOrbitCamera : MonoBehaviour
 
         // Inputs Enabled/Disabled
         if(GetComponent<PlayerNetworking>().isOwnByThisInstance && GetComponent<PlayerStats>().playerInputEnabled)
-        {
             inputProviderCM.enabled = true;
-        }
         else
-        {
             inputProviderCM.enabled = false;
-        }
     }
 
     public Transform GetCameraTransform()

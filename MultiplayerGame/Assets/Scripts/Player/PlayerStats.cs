@@ -106,7 +106,6 @@ public class PlayerStats : MonoBehaviour
                 {
                     controller.enabled = true;
                     HP = maxHP;
-                    GetComponent<PlayerMovement>().playerBody.SetActive(true);
                 }
 
                 if (netLifeState != lifeState)
@@ -134,8 +133,6 @@ public class PlayerStats : MonoBehaviour
 
                 transform.parent = null;
                 controller.enabled = false;
-
-                GetComponent<PlayerMovement>().playerBody.SetActive(false);
 
                 GameObject deathAnimFX = Instantiate(DeathInkExplosion, transform);
                 deathAnimFX.GetComponent<AudioSource>().clip = deathSFX;

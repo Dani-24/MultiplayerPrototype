@@ -1,0 +1,5 @@
+TRUNCATE ClientData;
+TRUNCATE ExtraData;
+TRUNCATE HostData;
+TRUNCATE Rooms;
+TRUNCATE Users;

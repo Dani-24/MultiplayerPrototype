@@ -1,0 +1,299 @@
+{
+	"connections": [
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 0
+		},
+		{
+			"from": "bricks",
+			"from_port": 0,
+			"to": "tones_step",
+			"to_port": 0
+		},
+		{
+			"from": "blend2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "uniform",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 1
+		},
+		{
+			"from": "tones_step",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 2
+		},
+		{
+			"from": "bricks",
+			"from_port": 1,
+			"to": "fill_to_random_color",
+			"to_port": 0
+		},
+		{
+			"from": "fill_to_random_color",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "blend2",
+			"from_port": 0,
+			"to": "normal_map2",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "export",
+			"to_port": 0
+		},
+		{
+			"from": "blend2",
+			"from_port": 0,
+			"to": "occlusion2",
+			"to_port": 0
+		},
+		{
+			"from": "occlusion2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 5
+		},
+		{
+			"from": "occlusion2",
+			"from_port": 0,
+			"to": "export_2",
+			"to_port": 0
+		}
+	],
+	"label": "Graph",
+	"longdesc": "",
+	"name": "322",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"export_last_target": "Blender",
+			"export_paths": {
+				"Blender": "C:/Users/danit/Desktop/Github/Unity_MultiplayerGame/Other/brickMatB"
+			},
+			"name": "Material",
+			"node_position": {
+				"x": 905.723389,
+				"y": -224.163208
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				},
+				"ao": 1,
+				"depth_scale": 0.5,
+				"emission_energy": 1,
+				"flags_transparent": true,
+				"metallic": 0,
+				"normal": 1,
+				"roughness": 1,
+				"size": 11,
+				"sss": 1
+			},
+			"seed_int": 0,
+			"type": "material"
+		},
+		{
+			"name": "bricks",
+			"node_position": {
+				"x": -289.602509,
+				"y": -148.184799
+			},
+			"parameters": {
+				"bevel": 0.5,
+				"columns": 2,
+				"corner": 0,
+				"mortar": 0.01,
+				"pattern": 0,
+				"repeat": 1,
+				"round": 0,
+				"row_offset": 0.5,
+				"rows": 5
+			},
+			"seed_int": 0,
+			"type": "bricks3"
+		},
+		{
+			"name": "tones_step",
+			"node_position": {
+				"x": 194.320023,
+				"y": -39.560005
+			},
+			"parameters": {
+				"invert": true,
+				"value": 0.01,
+				"width": 0.01
+			},
+			"seed_int": 0,
+			"type": "tones_step"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": 262.436493,
+				"y": -198.373764
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 0.980469,
+							"g": 0.925532,
+							"pos": 0,
+							"r": 0.720032
+						},
+						{
+							"a": 1,
+							"b": 0.488281,
+							"g": 0.488281,
+							"pos": 1,
+							"r": 0.488281
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"name": "uniform",
+			"node_position": {
+				"x": 225.945755,
+				"y": -113.977547
+			},
+			"parameters": {
+				"color": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				}
+			},
+			"seed_int": 0,
+			"type": "uniform"
+		},
+		{
+			"generic_size": 1,
+			"name": "blend2",
+			"node_position": {
+				"x": 500,
+				"y": -140
+			},
+			"parameters": {
+				"amount1": 1,
+				"blend_type1": 0
+			},
+			"seed_int": 0,
+			"type": "blend2"
+		},
+		{
+			"name": "fill_to_random_color",
+			"node_position": {
+				"x": -22.270765,
+				"y": -195.108582
+			},
+			"parameters": {
+				"edgecolor": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				}
+			},
+			"seed_int": 153043072,
+			"type": "fill_to_random_color2"
+		},
+		{
+			"name": "normal_map2",
+			"node_position": {
+				"x": 638.721802,
+				"y": 155.227417
+			},
+			"parameters": {
+				"buffer": 1,
+				"param2": 0,
+				"size": 10,
+				"strength": 1
+			},
+			"seed_int": 0,
+			"type": "normal_map2"
+		},
+		{
+			"name": "export",
+			"node_position": {
+				"x": 909.983459,
+				"y": 160.684814
+			},
+			"parameters": {
+				"size": 10,
+				"suffix": "normal"
+			},
+			"seed_int": 0,
+			"type": "export"
+		},
+		{
+			"name": "occlusion2",
+			"node_position": {
+				"x": 556.260193,
+				"y": 356.039215
+			},
+			"parameters": {
+				"param0": 10,
+				"param1": 20,
+				"param2": 1.5,
+				"param3": 1
+			},
+			"seed_int": 0,
+			"type": "occlusion2"
+		},
+		{
+			"name": "export_2",
+			"node_position": {
+				"x": 916.260254,
+				"y": 343.039215
+			},
+			"parameters": {
+				"size": 10,
+				"suffix": "occlusion"
+			},
+			"seed_int": 0,
+			"type": "export"
+		}
+	],
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}

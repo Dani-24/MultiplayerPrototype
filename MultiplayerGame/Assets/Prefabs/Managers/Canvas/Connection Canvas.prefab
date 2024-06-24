@@ -3448,6 +3448,7 @@ MonoBehaviour:
   roomId: {fileID: 7938825323344296611}
   roomHost: {fileID: 6369114106035944479}
   roomDateText: {fileID: 5476829706802311223}
+  canvas: {fileID: 5920571718938864144}
 --- !u!1 &3026488082022876345
 GameObject:
   m_ObjectHideFlags: 0
@@ -4990,6 +4991,7 @@ MonoBehaviour:
   roomId: {fileID: 6655752596799630592}
   roomHost: {fileID: 4808877594031303877}
   roomDateText: {fileID: 5498151972439979434}
+  canvas: {fileID: 5920571718938864144}
 --- !u!1 &3785998811689084903
 GameObject:
   m_ObjectHideFlags: 0
@@ -6616,6 +6618,7 @@ MonoBehaviour:
   roomId: {fileID: 7636470061444516657}
   roomHost: {fileID: 6705756912454302447}
   roomDateText: {fileID: 9127964154771333103}
+  canvas: {fileID: 5920571718938864144}
 --- !u!1 &4937710312244276957
 GameObject:
   m_ObjectHideFlags: 0
@@ -7429,6 +7432,7 @@ MonoBehaviour:
   roomId: {fileID: 6099028957549631981}
   roomHost: {fileID: 2440368211083191142}
   roomDateText: {fileID: 2693756662220589208}
+  canvas: {fileID: 5920571718938864144}
 --- !u!1 &5463560677043711537
 GameObject:
   m_ObjectHideFlags: 0
@@ -8369,6 +8373,7 @@ MonoBehaviour:
   roomId: {fileID: 2119799103426285451}
   roomHost: {fileID: 6575704935269025021}
   roomDateText: {fileID: 6395067097191852085}
+  canvas: {fileID: 5920571718938864144}
 --- !u!1 &5869789699778878256
 GameObject:
   m_ObjectHideFlags: 0

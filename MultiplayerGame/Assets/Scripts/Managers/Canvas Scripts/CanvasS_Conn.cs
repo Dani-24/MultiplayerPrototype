@@ -11,7 +11,7 @@ public class CanvasS_Conn : MonoBehaviour
 
     [SerializeField] PlayMode playMode = PlayMode.None;
 
-    [SerializeField] PanelOptions currentPanel;
+    public PanelOptions currentPanel;
 
     [SerializeField] List<ConnectionPanel> panels = new List<ConnectionPanel>();
 
@@ -213,10 +213,7 @@ public class CanvasS_Conn : MonoBehaviour
     public void Button_OnClose()
     {
         if (currentPanel == PanelOptions.RoomSearching)
-        {
-            Debug.Log("A");
             StartCoroutine(ConnectionManager.Instance.LogOut());
-        }
 
         UI_Manager.Instance.openNetSettings = false;
         UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Gameplay;

@@ -538,6 +538,7 @@ MonoBehaviour:
   groundInk: 0
   texture: {fileID: 0}
   moveInput: {x: 0, y: 0}
+  moveDir: {x: 0, y: 0, z: 0}
   moveSpeed: 9
   runSpeed: 18
   slowSpeed: 1

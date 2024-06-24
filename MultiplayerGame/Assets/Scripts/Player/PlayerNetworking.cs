@@ -63,7 +63,8 @@ public class PlayerNetworking : MonoBehaviour
             netID = networkID,
             inputEnabled = GetComponent<PlayerStats>().playerInputEnabled,
             mainWeapon = GetComponent<PlayerArmament>().currentWeaponId,
-            subWeapon = GetComponent<PlayerArmament>().currentSubWeaponId
+            subWeapon = GetComponent<PlayerArmament>().currentSubWeaponId,
+            moveInput = GetComponent<PlayerMovement>().moveInput
         };
 
         if (GetComponent<PlayerArmament>().currentWeapon != null)
@@ -97,6 +98,7 @@ public class PlayerNetworking : MonoBehaviour
         GetComponent<PlayerArmament>().ChangeWeapon(pck.mainWeapon);
         GetComponent<PlayerArmament>().ChangeSubWeapon(pck.subWeapon);
         GetComponent<PlayerStats>().netLifeState = pck.lifeState;
+        GetComponent<PlayerMovement>().moveInput = pck.moveInput;
 
         if (!pck.inputEnabled) nameTagText.color = Color.grey; else nameTagText.color = Color.white;
 

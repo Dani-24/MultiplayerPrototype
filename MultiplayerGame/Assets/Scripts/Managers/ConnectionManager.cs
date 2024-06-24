@@ -1394,6 +1394,8 @@ public class PlayerPackage
     public Vector3 position;
     public Quaternion rotation;
 
+    public Vector2 moveInput;
+
     public Vector3 camRot;
 
     public bool running = false;

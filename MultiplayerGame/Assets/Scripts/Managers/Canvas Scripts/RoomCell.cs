@@ -1,12 +1,15 @@
 using System;
 using TMPro;
 using UnityEngine;
+using static CanvasS_Conn;
 
 public class RoomCell : MonoBehaviour
 {
     public TMP_Text roomId;
     public TMP_Text roomHost;
     public TMP_Text roomDateText;
+
+    [SerializeField] CanvasS_Conn canvas;
 
     public void SetRoomId(string id)
     {
@@ -27,5 +30,6 @@ public class RoomCell : MonoBehaviour
     public void JoinRoom()
     {
         ConnectionManager.Instance.JoinRoom(int.Parse(roomId.text));
+        canvas.currentPanel = PanelOptions.Room;
     }
 }
