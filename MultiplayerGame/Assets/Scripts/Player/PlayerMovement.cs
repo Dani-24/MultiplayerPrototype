@@ -331,6 +331,8 @@ public class PlayerMovement : MonoBehaviour
         playerAnimator.SetFloat("MoveX", moveInput.x);
         playerAnimator.SetFloat("MoveY", moveInput.y);
 
+        playerAnimator.SetBool("isShooting", GetComponent<PlayerArmament>().weaponShooting);
+
         if (isRunning)
         {
             playerBody.SetActive(false);
