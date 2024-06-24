@@ -16,6 +16,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "Log In":
             LogIn();
             break;
+        case "Log Out":
+            LogOut();
+            break;
         case "Host Room":
             HostRoom();
             break;
@@ -40,6 +43,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "Disconnect Client":
             DisconnectClient();
             break;
+        case "Manage Extra Data":
+            ManageExtraData();
+            break;
+        case "Check Extra Data":
+            CheckExtraData();
+            break;
     }
 
     CloseConnection();
@@ -49,8 +58,7 @@ else
    echo "PHP: Method Error \n";
 }
 
-// SQL Data
-
+// LOG IN
 function LogIn(){
     $userName      = $_POST["userName"];
 
@@ -61,6 +69,23 @@ function LogIn(){
     else                                echo "PHP: Logging Error " . mysqli_error($conn);
 }
 
+function LogOut(){
+    $user_id = $_POST["userId"];
+
+    global $conn;
+    $sql = "DELETE FROM Users WHERE User_Id = $user_id";
+
+    if ($conn->query($sql) === TRUE)    echo "PHP: User Unlogged";
+    else                                echo "PHP: User Unlogging Error " . mysqli_error($conn);
+
+    // Check
+    $sql = "DELETE FROM ExtraData WHERE User_Id = $user_id";
+
+    if ($conn->query($sql) === TRUE)    echo "PHP: Deleted extra data while Unlogging";
+    else                                echo "PHP: No extra data to delete" . mysqli_error($conn);
+}
+
+// ROOMS
 function HostRoom(){
     $timeStamp  = $_POST["timeStamp"];
     $host       = $_POST["host"];
@@ -75,7 +100,6 @@ function HostRoom(){
 
 function CloseRoom(){
     $id = $_POST["roomId"];
-    $user_id = $_POST["userId"];
 
     global $conn;
 
@@ -89,10 +113,7 @@ function CloseRoom(){
     if ($conn->query($sql) === TRUE)    echo "PHP: Room Data Deleted";
     else                                echo "PHP: Room Data Deletion Error " . mysqli_error($conn);
 
-    $sql = "DELETE FROM Users WHERE User_Id = $user_id";
-
-    if ($conn->query($sql) === TRUE)    echo "PHP: Client Unlogged";
-    else                                echo "PHP: Client Unlogging Error " . mysqli_error($conn);
+    LogOut();
 }
 
 function SearchRoom(){
@@ -111,6 +132,7 @@ function SearchRoom(){
         echo "-1 No Rooms Available";
 }
 
+// HOST
 function SendHostData(){
     $timeStamp  = $_POST["timeStamp"];
     $roomId     = $_POST["roomId"];
@@ -142,6 +164,7 @@ function ReceiveHostData(){
     else                        echo "PHP: No Host Data Available";
 }
 
+// CLIENT
 function SendClientData(){
     $timeStamp  = $_POST["timeStamp"];
     $roomId     = $_POST["roomId"];
@@ -181,7 +204,6 @@ function ReceiveClientData(){
 
 function DisconnectClient(){
     $id = $_POST["roomId"];
-    $user_id = $_POST["userId"];
 
     global $conn;
 
@@ -190,14 +212,43 @@ function DisconnectClient(){
     if ($conn->query($sql) === TRUE)    echo "PHP: Client Data Deleted";
     else                                echo "PHP: Client Data Deletion Error " . mysqli_error($conn);
 
-    $sql = "DELETE FROM Users WHERE User_Id = $user_id";
-
-    if ($conn->query($sql) === TRUE)    echo "PHP: Client Unlogged";
-    else                                echo "PHP: Client Unlogging Error " . mysqli_error($conn);
+    LogOut();
 }
 
-//// Connection
+// Additional Packages
+function ManageExtraData(){
+    $timeStamp  = $_POST["timeStamp"];
+    $roomId     = $_POST["roomId"];
+    $userId     = $_POST["User_Id"];
+    $data       = $_POST["data"];
 
+    global $conn;
+
+    $sql = "INSERT INTO ExtraData (User_Id, Room_Id, Data, Date) VALUES ('$userId', '$roomId', '$data', '$timeStamp')";
+
+    if ($conn->query($sql) === TRUE)    echo "PHP: Extra Data Uploaded";
+    else                                echo "PHP: Error Sending Extra Data " . mysqli_error($conn);
+}
+
+function CheckExtraData(){
+    $roomId = $_POST["Room_Id"];
+    $askId = $_POST["Ask_Id"];
+
+    global $conn;
+
+    $sql = "SELECT * FROM ExtraData WHERE Room_Id = $roomId AND Id > $askId";
+
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) 
+    {
+        while ($row = $result->fetch_assoc())
+            echo json_encode($row) . "\n";
+    }
+    else    echo "PHP: No Extra Data Available";
+}
+
+// Connection
 function ConnectToServer() 
 {
    global $servername, $username, $password, $dbname;

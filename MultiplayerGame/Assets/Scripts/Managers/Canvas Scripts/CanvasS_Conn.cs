@@ -160,12 +160,9 @@ public class CanvasS_Conn : MonoBehaviour
         string[] inputField = ipInputF.text.Split(':');
 
         ConnectionManager.Instance.SetIP(inputField[0]);
-        //ConnectionManager.Instance.SetPort(int.Parse(inputField[1]));
         ConnectionManager.Instance.reconnect = true;
 
         currentPanel = PanelOptions.Room;
-
-        // Aqui se deberia hacer un check para ver si la IP introducida conecta a algo / es el formato que se pide
     }
 
     // Room
@@ -215,6 +212,12 @@ public class CanvasS_Conn : MonoBehaviour
     // Close
     public void Button_OnClose()
     {
+        if (currentPanel == PanelOptions.RoomSearching)
+        {
+            Debug.Log("A");
+            StartCoroutine(ConnectionManager.Instance.LogOut());
+        }
+
         UI_Manager.Instance.openNetSettings = false;
         UI_Manager.Instance.currentCanvasMenu = UI_Manager.GameUIs.Gameplay;
         Destroy(gameObject);

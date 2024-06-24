@@ -67,6 +67,8 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] string PHP_Url = "https://citmalumnes.upc.es/~danieltr1/OnlinePlay.php";
     [SerializeField] int PHP_roomId = -1;
     [SerializeField] int PHP_userId = -1;
+    [SerializeField] int PHP_askId = 0;
+    [SerializeField] bool allowExtraDataExchange = true;
 
     public List<string> availableRooms = new();
 
@@ -385,7 +387,7 @@ public class ConnectionManager : MonoBehaviour
         catch
         {
             Debug.Log("Incorrect IP/Port format | Can't start a Connection");
-            UI_Manager.Instance.PopUp_LogMessage("Can't start a Connection", 3);
+            UI_Manager.Instance.PopUp_LogMessage("Can't start a Connection", 2);
         }
     }
 
@@ -415,7 +417,8 @@ public class ConnectionManager : MonoBehaviour
             else
             {
                 StartCoroutine(DisconnectPHP());
-                PHP_roomId = -1;
+                PHP_roomId = PHP_userId = -1;
+                PHP_askId = 0;
             }
 
             foreach (NetGameObject n in SceneManagerScript.Instance.netGOs)
@@ -423,7 +426,8 @@ public class ConnectionManager : MonoBehaviour
 
             playerPackages.Clear();
 
-            onlinePlay = false;
+            onlinePlay = false; 
+            logged = false;
             isHosting = false;
             isConnected = false;
             disconnect = false;
@@ -521,20 +525,16 @@ public class ConnectionManager : MonoBehaviour
 
     void ServerSendThreadUpdate()
     {
-        //IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-        //remote = (EndPoint)sender;
-
         while (true)
         {
             if (clientIsConnected)
             {
-                #region Send Own Player Data
+                #region Send Data to all Clients
 
-                if (connectionStablished /*&& delay > delayBetweenPckgs*/)
+                if (connectionStablished)
                 {
                     try
                     {
-                        //delay = 0;
                         MemoryStream sendPStream = new MemoryStream();
                         Package pPck = WritePackage(Pck_type.PlayerList);
                         pPck.user = Network_User.Server;
@@ -548,7 +548,7 @@ public class ConnectionManager : MonoBehaviour
 
                         if (randomPackageToSend != null)
                         {
-                            for(int i = 0; i < remoteClients.Count; i++)
+                            for (int i = 0; i < remoteClients.Count; i++)
                             {
                                 MemoryStream sendPStreamB = new MemoryStream();
                                 sendPStreamB = SerializeJson(randomPackageToSend);
@@ -559,7 +559,7 @@ public class ConnectionManager : MonoBehaviour
                             }
                         }
                     }
-                    catch(SystemException e)
+                    catch (SystemException e)
                     {
                         Debug.Log("Client has disconnected (Send)" + e.ToString());
 
@@ -627,7 +627,7 @@ public class ConnectionManager : MonoBehaviour
                             }
 
                             sendStream = SerializeJson(answerPck);
-                            socket.SendTo(sendStream.ToArray(), (int)sendStream.Length, SocketFlags.None, remoteClient);
+                            socket.SendTo(sendStream.ToArray(), (int)sendStream.Length, SocketFlags.None, remoteClient);    // Answer only that player
 
                             connectionStablished = true;
                         }
@@ -635,9 +635,9 @@ public class ConnectionManager : MonoBehaviour
                     case Pck_type.DMG:
 
                         // Resend DMG to all Clients
-                        foreach(EndPoint endP in remoteClients)
+                        foreach (EndPoint endP in remoteClients)
                         {
-                            if(!endP.Equals(remoteClient))
+                            if (!endP.Equals(remoteClient))
                                 socket.SendTo(receiveStream.ToArray(), (int)receiveStream.Length, SocketFlags.None, endP);
                         }
 
@@ -666,7 +666,7 @@ public class ConnectionManager : MonoBehaviour
     {
         try
         {
-            #region Send player start position
+            #region Check & Start Connection
 
             MemoryStream sendStream = new MemoryStream();
             Package pck = WritePackage(Pck_type.Connection);
@@ -683,7 +683,7 @@ public class ConnectionManager : MonoBehaviour
 
             while (true)
             {
-                #region Update/Send Player Input
+                #region Update Client Data
 
                 if (connectionStablished && delay > connectionTickRate && serverIsConnected)
                 {
@@ -728,10 +728,8 @@ public class ConnectionManager : MonoBehaviour
                 // Receive Data
                 data = new byte[packageDataSize];
                 socket.ReceiveFrom(data, ref remote);
-
                 MemoryStream receiveStream = new MemoryStream(data);
 
-                // Manage Package
                 ReadPackage(DeserializeJson(receiveStream));
 
                 if (!serverIsConnected)
@@ -781,7 +779,7 @@ public class ConnectionManager : MonoBehaviour
         if (showCommError)
         {
             showCommError = false;
-            UI_Manager.Instance.PopUp_LogMessage("A connection error has ocurred", 3.5f, true, lobbyScene);
+            UI_Manager.Instance.PopUp_LogMessage("A connection error has ocurred", 2.5f, true, lobbyScene);
         }
 
         #endregion
@@ -860,21 +858,32 @@ public class ConnectionManager : MonoBehaviour
             if (PHP_roomId == -1) StartCoroutine(HostRoom());
         }
 
-        if (onlinePlay && PHP_roomId != -1 && PHP_userId != -1)
+        if (onlinePlay)
         {
-            if (isHosting)
+            // Online Log
+            if (!logged) StartCoroutine(LogIn());
+
+            // Data exchange
+            if (PHP_roomId != -1 && PHP_userId != -1)
             {
-                StartDelayCoroutine(SendHostData());
-                StartCoroutine(ReceiveClientData());
-            }
-            else
-            {
-                StartDelayCoroutine(SendClientData());
-                StartCoroutine(ReceiveHostData());
+                if (isHosting)
+                {
+                    StartDelayCoroutine(SendHostData());
+                    StartCoroutine(ReceiveClientData());
+                }
+                else
+                {
+                    StartDelayCoroutine(SendClientData());
+                    StartCoroutine(ReceiveHostData());
+                }
+
+                if (allowExtraDataExchange)
+                {
+                    if (randomPackageToSend != null) StartCoroutine(ManageExtraData());
+                    StartCoroutine(CheckExtraData());
+                }
             }
         }
-
-        if (onlinePlay && !logged) StartCoroutine(LogIn());
     }
 
     void StartDelayCoroutine(IEnumerator corroutine)
@@ -1011,7 +1020,6 @@ public class ConnectionManager : MonoBehaviour
     }
 
     // ROOM
-
     public IEnumerator HostRoom()
     {
         Debug.Log("Hosting a Room on Online Mode");
@@ -1070,6 +1078,23 @@ public class ConnectionManager : MonoBehaviour
         }
     }
 
+    public IEnumerator LogOut()
+    {
+        logged = onlinePlay = false;
+
+        WWWForm form = new();
+
+        form.AddField("methodToCall", "Log Out");
+
+        form.AddField("userId", PHP_userId);
+
+        UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
+
+        yield return www.SendWebRequest();
+
+        Debug.Log(www.downloadHandler.text);
+    }
+
     public IEnumerator SearchRoom()
     {
         onlinePlay = true;
@@ -1113,7 +1138,6 @@ public class ConnectionManager : MonoBehaviour
     }
 
     // HOST
-
     public IEnumerator SendHostData()
     {
         WWWForm form = new();
@@ -1160,7 +1184,6 @@ public class ConnectionManager : MonoBehaviour
     }
 
     // CLIENT
-
     public IEnumerator SendClientData()
     {
         WWWForm form = new();
@@ -1222,11 +1245,91 @@ public class ConnectionManager : MonoBehaviour
         else Debug.Log("PHP Error: " + www.error);
     }
 
+    // Extra Data
+    public IEnumerator ManageExtraData()
+    {
+        WWWForm form = new();
+
+        form.AddField("methodToCall", "Manage Extra Data");
+
+        form.AddField("User_Id", PHP_userId);
+
+        form.AddField("roomId", PHP_roomId);
+
+        form.AddField("timeStamp", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
+
+        form.AddField("data", PkgToJson(randomPackageToSend));
+
+        randomPackageToSend = null;
+
+        UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
+
+        yield return www.SendWebRequest();
+
+        Debug.Log(www.downloadHandler.text);
+    }
+
+    public IEnumerator CheckExtraData()
+    {
+        WWWForm form = new();
+
+        form.AddField("methodToCall", "Check Extra Data");
+
+        form.AddField("Room_Id", PHP_roomId);
+
+        form.AddField("Ask_Id", PHP_askId);
+
+        UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
+
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.Success)
+        {
+            string jsonData = www.downloadHandler.text;
+            string[] rows = jsonData.Split('\n');
+
+            foreach (string row in rows)
+            {
+                if (!string.IsNullOrEmpty(row))
+                {
+                    try
+                    {
+                        ExtraData rowData = JsonUtility.FromJson<ExtraData>(row);
+
+                        if (int.Parse(rowData.User_Id) != PHP_userId)
+                        {
+                            ReadPackage(PkgFromJson(rowData.Data));
+
+                            Debug.Log("Receiving Extra Data: " + rowData.Data);
+                        }
+
+                        PHP_askId = int.Parse(rowData.Id);
+                    }
+                    catch
+                    {
+                        Debug.Log("Receiving Extra Data: " + www.downloadHandler.text);
+                    }
+                }
+            }
+        }
+        else Debug.Log("PHP Error: " + www.error);
+    }
+
+    // SQL Classes
     public class ClientData
     {
         public string Id;
         public string Room_Id;
         public string Client_Id;
+        public string Data;
+        public string Date;
+    }
+
+    public class ExtraData
+    {
+        public string Id;
+        public string User_Id;
+        public string Room_Id;
         public string Data;
         public string Date;
     }
