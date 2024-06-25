@@ -1,0 +1,475 @@
+{
+	"connections": [
+		{
+			"from": "perlin",
+			"from_port": 0,
+			"to": "math_3",
+			"to_port": 0
+		},
+		{
+			"from": "math_3",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "bricks",
+			"from_port": 0,
+			"to": "math",
+			"to_port": 1
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "math",
+			"to_port": 0
+		},
+		{
+			"from": "bricks",
+			"from_port": 1,
+			"to": "fill_to_random_grey",
+			"to_port": 0
+		},
+		{
+			"from": "math",
+			"from_port": 0,
+			"to": "math_2",
+			"to_port": 0
+		},
+		{
+			"from": "fill_to_random_grey",
+			"from_port": 0,
+			"to": "colorize_2",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_2",
+			"from_port": 0,
+			"to": "math_2",
+			"to_port": 1
+		},
+		{
+			"from": "math_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "normal2height",
+			"to_port": 0
+		},
+		{
+			"from": "normal2height",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 6
+		},
+		{
+			"from": "bricks",
+			"from_port": 1,
+			"to": "fill_to_random_grey_2",
+			"to_port": 0
+		},
+		{
+			"from": "fill_to_random_grey_2",
+			"from_port": 0,
+			"to": "colorize_3",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_3",
+			"from_port": 0,
+			"to": "normal_map2",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "occlusion2",
+			"to_port": 0
+		},
+		{
+			"from": "occlusion2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 5
+		},
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "export",
+			"to_port": 0
+		},
+		{
+			"from": "occlusion2",
+			"from_port": 0,
+			"to": "export_2",
+			"to_port": 0
+		},
+		{
+			"from": "normal2height",
+			"from_port": 0,
+			"to": "export_3",
+			"to_port": 0
+		}
+	],
+	"label": "Graph",
+	"longdesc": "",
+	"name": "322",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"export_last_target": "Blender",
+			"export_paths": {
+				"Blender": "C:/Users/danit/Desktop/Github/Unity_MultiplayerGame/Other/Materials/Bricks/greyBricks"
+			},
+			"name": "Material",
+			"node_position": {
+				"x": 155,
+				"y": -61
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				},
+				"ao": 1,
+				"depth_scale": 0.5,
+				"emission_energy": 1,
+				"flags_transparent": true,
+				"metallic": 0,
+				"normal": 1,
+				"roughness": 1,
+				"size": 10,
+				"sss": 1
+			},
+			"seed_int": 0,
+			"type": "material"
+		},
+		{
+			"name": "bricks",
+			"node_position": {
+				"x": -1620,
+				"y": 0
+			},
+			"parameters": {
+				"bevel": 0.01,
+				"columns": 3,
+				"corner": 0.3,
+				"mortar": 0,
+				"pattern": 0,
+				"repeat": 2,
+				"round": 0,
+				"row_offset": 0.5,
+				"rows": 6
+			},
+			"seed_int": 0,
+			"type": "bricks3"
+		},
+		{
+			"name": "perlin",
+			"node_position": {
+				"x": -1600,
+				"y": -260
+			},
+			"parameters": {
+				"iterations": 3,
+				"persistence": 1,
+				"scale_x": 10,
+				"scale_y": 10
+			},
+			"seed_int": 0,
+			"type": "perlin"
+		},
+		{
+			"name": "math_3",
+			"node_position": {
+				"x": -1340,
+				"y": -260
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0.38,
+				"op": 2
+			},
+			"seed_int": 0,
+			"type": "math"
+		},
+		{
+			"color": {
+				"a": 1,
+				"b": 0,
+				"g": 0,
+				"r": 0,
+				"type": "Color"
+			},
+			"name": "comment",
+			"node_position": {
+				"x": -1620,
+				"y": -300
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"size": {
+				"x": 500,
+				"y": 200
+			},
+			"text": "",
+			"title": "Stone-ish Noise",
+			"type": "comment"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -1020,
+				"y": -280
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 3,
+					"points": [
+						{
+							"a": 1,
+							"b": 0.281525,
+							"g": 0.320312,
+							"pos": 0,
+							"r": 0.305464
+						},
+						{
+							"a": 1,
+							"b": 0.621094,
+							"g": 0.621094,
+							"pos": 1,
+							"r": 0.621094
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"name": "math",
+			"node_position": {
+				"x": -800,
+				"y": -180
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 2
+			},
+			"seed_int": 0,
+			"type": "math"
+		},
+		{
+			"name": "fill_to_random_grey",
+			"node_position": {
+				"x": -1140,
+				"y": 20
+			},
+			"parameters": {
+				"edgecolor": 1
+			},
+			"seed_int": 0,
+			"type": "fill_to_random_grey2"
+		},
+		{
+			"name": "math_2",
+			"node_position": {
+				"x": -480,
+				"y": -60
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 2
+			},
+			"seed_int": 0,
+			"type": "math"
+		},
+		{
+			"name": "colorize_2",
+			"node_position": {
+				"x": -880,
+				"y": 60
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 0.808594,
+							"g": 0.808594,
+							"pos": 0.139373,
+							"r": 0.808594
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 0.384828,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"name": "normal_map2",
+			"node_position": {
+				"x": -640,
+				"y": 240
+			},
+			"parameters": {
+				"buffer": 1,
+				"param2": 0,
+				"size": 10,
+				"strength": 1
+			},
+			"seed_int": 0,
+			"type": "normal_map2"
+		},
+		{
+			"name": "normal2height",
+			"node_position": {
+				"x": -360,
+				"y": 513.177612
+			},
+			"parameters": {
+				"param0": 50,
+				"param1": 0.5,
+				"param2": 10
+			},
+			"seed_int": 0,
+			"type": "normal2height"
+		},
+		{
+			"name": "fill_to_random_grey_2",
+			"node_position": {
+				"x": -1160,
+				"y": 220
+			},
+			"parameters": {
+				"edgecolor": 1
+			},
+			"seed_int": 1880752768,
+			"type": "fill_to_random_grey2"
+		},
+		{
+			"name": "colorize_3",
+			"node_position": {
+				"x": -900,
+				"y": 280
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 0.808594,
+							"g": 0.808594,
+							"pos": 0.139373,
+							"r": 0.808594
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 0.384828,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"name": "occlusion2",
+			"node_position": {
+				"x": -380,
+				"y": 313.177582
+			},
+			"parameters": {
+				"param0": 11,
+				"param1": 20,
+				"param2": 1.5,
+				"param3": 1
+			},
+			"seed_int": 0,
+			"type": "occlusion2"
+		},
+		{
+			"name": "export",
+			"node_position": {
+				"x": 194.829773,
+				"y": 261.243835
+			},
+			"parameters": {
+				"size": 10,
+				"suffix": "normal"
+			},
+			"seed_int": 0,
+			"type": "export"
+		},
+		{
+			"name": "export_2",
+			"node_position": {
+				"x": 193.829773,
+				"y": 439.243835
+			},
+			"parameters": {
+				"size": 10,
+				"suffix": "ao"
+			},
+			"seed_int": 0,
+			"type": "export"
+		},
+		{
+			"name": "export_3",
+			"node_position": {
+				"x": 195.829773,
+				"y": 553.243835
+			},
+			"parameters": {
+				"size": 10,
+				"suffix": "height"
+			},
+			"seed_int": 0,
+			"type": "export"
+		}
+	],
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}
