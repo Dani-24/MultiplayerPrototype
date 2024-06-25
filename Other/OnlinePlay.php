@@ -43,8 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "Disconnect Client":
             DisconnectClient();
             break;
-        case "Manage Extra Data":
-            ManageExtraData();
+        case "Send Extra Data":
+            SendExtraData();
             break;
         case "Check Extra Data":
             CheckExtraData();
@@ -216,7 +216,7 @@ function DisconnectClient(){
 }
 
 // Additional Packages
-function ManageExtraData(){
+function SendExtraData(){
     $timeStamp  = $_POST["timeStamp"];
     $roomId     = $_POST["roomId"];
     $userId     = $_POST["User_Id"];
@@ -233,10 +233,11 @@ function ManageExtraData(){
 function CheckExtraData(){
     $roomId = $_POST["Room_Id"];
     $askId = $_POST["Ask_Id"];
+    $userId = $_POST["User_Id"];
 
     global $conn;
 
-    $sql = "SELECT * FROM ExtraData WHERE Room_Id = $roomId AND Id > $askId";
+    $sql = "SELECT * FROM ExtraData WHERE Id > $askId AND User_Id != $userId AND Room_Id = $roomId ORDER BY Date LIMIT 20";
 
     $result = $conn->query($sql);
 

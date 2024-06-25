@@ -68,7 +68,6 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] int PHP_roomId = -1;
     [SerializeField] int PHP_userId = -1;
     [SerializeField] int PHP_askId = 0;
-    [SerializeField] bool allowExtraDataExchange = true;
 
     public List<string> availableRooms = new();
 
@@ -426,7 +425,7 @@ public class ConnectionManager : MonoBehaviour
 
             playerPackages.Clear();
 
-            onlinePlay = false; 
+            onlinePlay = false;
             logged = false;
             isHosting = false;
             isConnected = false;
@@ -757,8 +756,7 @@ public class ConnectionManager : MonoBehaviour
 
         myIP = GetLocalIPAddress();
 
-        if (connectAtStart)
-            StartConnection();
+        if (connectAtStart) StartConnection();
 
         audioSource = GetComponent<AudioSource>();
     }
@@ -866,32 +864,31 @@ public class ConnectionManager : MonoBehaviour
             // Data exchange
             if (PHP_roomId != -1 && PHP_userId != -1)
             {
+
                 if (isHosting)
                 {
-                    StartDelayCoroutine(SendHostData());
+                    StartDelayCoroutine(SendHostData(), CheckExtraData());
                     StartCoroutine(ReceiveClientData());
                 }
                 else
                 {
-                    StartDelayCoroutine(SendClientData());
+                    StartDelayCoroutine(SendClientData(), CheckExtraData());
                     StartCoroutine(ReceiveHostData());
                 }
 
-                if (allowExtraDataExchange)
-                {
-                    if (randomPackageToSend != null) StartCoroutine(ManageExtraData());
-                    StartCoroutine(CheckExtraData());
-                }
+                if (randomPackageToSend != null) StartCoroutine(SendExtraData());
             }
         }
     }
 
-    void StartDelayCoroutine(IEnumerator corroutine)
+    void StartDelayCoroutine(params IEnumerator[] corroutine)
     {
         if (delay > connectionTickRate)
         {
             delay = 0;
-            StartCoroutine(corroutine);
+
+            foreach (IEnumerator e in corroutine)
+                StartCoroutine(e);
         }
     }
 
@@ -1246,11 +1243,11 @@ public class ConnectionManager : MonoBehaviour
     }
 
     // Extra Data
-    public IEnumerator ManageExtraData()
+    public IEnumerator SendExtraData()
     {
         WWWForm form = new();
 
-        form.AddField("methodToCall", "Manage Extra Data");
+        form.AddField("methodToCall", "Send Extra Data");
 
         form.AddField("User_Id", PHP_userId);
 
@@ -1279,6 +1276,8 @@ public class ConnectionManager : MonoBehaviour
 
         form.AddField("Ask_Id", PHP_askId);
 
+        form.AddField("User_Id", PHP_userId);
+
         UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
 
         yield return www.SendWebRequest();
@@ -1296,12 +1295,9 @@ public class ConnectionManager : MonoBehaviour
                     {
                         ExtraData rowData = JsonUtility.FromJson<ExtraData>(row);
 
-                        if (int.Parse(rowData.User_Id) != PHP_userId)
-                        {
-                            ReadPackage(PkgFromJson(rowData.Data));
+                        ReadPackage(PkgFromJson(rowData.Data));
 
-                            Debug.Log("Receiving Extra Data: " + rowData.Data);
-                        }
+                        Debug.Log("Receiving Extra Data: " + rowData.Data);
 
                         PHP_askId = int.Parse(rowData.Id);
                     }
@@ -1312,7 +1308,7 @@ public class ConnectionManager : MonoBehaviour
                 }
             }
         }
-        else Debug.Log("PHP Error: " + www.error);
+        else Debug.Log("Could not receive Extra data: " + www.error);
     }
 
     // SQL Classes
