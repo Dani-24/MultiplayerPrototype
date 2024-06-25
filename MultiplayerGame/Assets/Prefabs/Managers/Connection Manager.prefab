@@ -45,26 +45,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19480f1393a85f4f932187df6d430c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  version: 
   userName: 
   isHosting: 0
+  maxPlayers: 8
+  connGameplayState: 0
+  lobbyScene: 
   isConnected: 0
+  localHost: 0
   hostIP: 127.0.0.1
   port: 9050
   myIP: 
-  packageDataSize: 10240
-  delayBetweenPckgs: 0.05
-  pingCounter: 5
   serverIsConnected: 0
   clientIsConnected: 0
-  startClip: {fileID: 8300000, guid: 4004fa011becf6b4dba1ee2af01aedbe, type: 3}
-  endClip: {fileID: 8300000, guid: 73bd7e8b242154044a156aefe0fa019a, type: 3}
+  packageDataSize: 10240
+  connectionTickRate: 0.1
+  disconnectionTime: 5
+  newNetGOs: []
+  onlinePlay: 0
+  logged: 0
+  PHP_Url: https://citmalumnes.upc.es/~danieltr1/OnlinePlay.php
+  PHP_roomId: -1
+  PHP_userId: -1
+  PHP_askId: 0
+  availableRooms: []
+  searchRooms: 0
+  createRoom: 0
+  enablePckLogs: 1
+  showCommError: 0
+  logPckSize: 0
   connectAtStart: 0
   reconnect: 0
   disconnect: 0
+  connectionStablished: 0
   ownPlayerNetID: -1
   ownPlayerPck:
     userName: 
     teamTag: 
+    netID: 0
+    lifeState: 0
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
     moveInput: {x: 0, y: 0}
@@ -73,31 +92,20 @@ MonoBehaviour:
     jumping: 0
     shooting: 0
     shootingSub: 0
+    mainWeapon: 0
+    subWeapon: 0
     wpRNG:
       s0: 0
       s1: 0
       s2: 0
       s3: 0
-  notOwnPlayerNetID: 0
-  notOwnPlayerPck:
-    userName: 
-    teamTag: 
-    position: {x: 0, y: 0, z: 0}
-    rotation: {x: 0, y: 0, z: 0, w: 0}
-    moveInput: {x: 0, y: 0}
-    camRot: {x: 0, y: 0, z: 0}
-    running: 0
-    jumping: 0
-    shooting: 0
-    shootingSub: 0
-    wpRNG:
-      s0: 0
-      s1: 0
-      s2: 0
-      s3: 0
-  ownPlayerSend: 0
-  notOwnPlayerReceived: 0
-  sceneRoot: {fileID: 0}
+    inputEnabled: 0
+    setDisconnected: 0
+  ownTeamTagOnSceneChange: 
+  playerPackages: []
+  startClip: {fileID: 8300000, guid: 4004fa011becf6b4dba1ee2af01aedbe, type: 3}
+  endClip: {fileID: 8300000, guid: 73bd7e8b242154044a156aefe0fa019a, type: 3}
+  commErrorClip: {fileID: 8300000, guid: 0f4c0d90284f8a9498c1e68620ae00ef, type: 3}
 --- !u!82 &8561263313555369219
 AudioSource:
   m_ObjectHideFlags: 0

@@ -76,8 +76,8 @@ public class ConnectionManager : MonoBehaviour
 
     [Header("LOGS")]
     [SerializeField] bool enablePckLogs = true;
-    [SerializeField] bool showCommError = false;
     [SerializeField] bool logPckSize = false;
+    bool showCommError = false;
 
     [Header("Debug")]
     [SerializeField] bool connectAtStart = true;
@@ -117,6 +117,7 @@ public class ConnectionManager : MonoBehaviour
     [Header("Audio SFX")]
     [SerializeField] AudioClip startClip;
     [SerializeField] AudioClip endClip;
+    [SerializeField] AudioClip commErrorClip;
     AudioSource audioSource;
     bool playJoin, playEnd;
 
@@ -778,6 +779,9 @@ public class ConnectionManager : MonoBehaviour
         {
             showCommError = false;
             UI_Manager.Instance.PopUp_LogMessage("A connection error has ocurred", 2.5f, true, lobbyScene);
+
+            audioSource.clip = commErrorClip;
+            audioSource.Play();
         }
 
         #endregion
@@ -843,7 +847,8 @@ public class ConnectionManager : MonoBehaviour
 
         #endregion
 
-        // PHP
+        #region PHP
+
         if (searchRooms)
         {
             searchRooms = false;
@@ -879,6 +884,8 @@ public class ConnectionManager : MonoBehaviour
                 if (randomPackageToSend != null) StartCoroutine(SendExtraData());
             }
         }
+
+        #endregion
     }
 
     void StartDelayCoroutine(params IEnumerator[] corroutine)

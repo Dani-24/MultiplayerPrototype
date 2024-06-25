@@ -30227,6 +30227,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5394203701332355235, guid: f975b4175d3a89b42b96b63c4b3a768f,
         type: 3}
+      propertyPath: showCommError
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5394203701332355235, guid: f975b4175d3a89b42b96b63c4b3a768f,
+        type: 3}
       propertyPath: disconnectionTime
       value: 8
       objectReference: {fileID: 0}
@@ -30234,6 +30239,11 @@ PrefabInstance:
         type: 3}
       propertyPath: netGOs.Array.size
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5394203701332355235, guid: f975b4175d3a89b42b96b63c4b3a768f,
+        type: 3}
+      propertyPath: connectionTickRate
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 5394203701332355235, guid: f975b4175d3a89b42b96b63c4b3a768f,
         type: 3}
