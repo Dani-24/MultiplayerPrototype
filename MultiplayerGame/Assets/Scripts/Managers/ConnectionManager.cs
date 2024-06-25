@@ -961,6 +961,7 @@ public class ConnectionManager : MonoBehaviour
                     }
                 }
 
+                // ADD PLAYER
                 if (!alreadyExists && !playerPackages[i].setDisconnected)
                 {
                     GameObject newP = SceneManagerScript.Instance.CreateNewPlayer(false, new Vector3(0, 2, 0));
@@ -1176,7 +1177,11 @@ public class ConnectionManager : MonoBehaviour
         }
         catch
         {
-            Debug.Log("Cannot Receiving Host Data: " + www.downloadHandler.error);
+            Debug.Log("Cannot Receive Host Data: " + www.downloadHandler.error);
+            
+            // Avoid Client in disconnected Room
+            disconnect = true;
+            showCommError = true;
         }
     }
 
