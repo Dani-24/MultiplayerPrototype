@@ -57556,6 +57556,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1313317799}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1313317801 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2856658039719431961, guid: 4b59d13ce21820d4d8fe343199a08048,
+    type: 3}
+  m_PrefabInstance: {fileID: 1313317799}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a42e4f903198d2543a923b2ef4f00918, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1321948215
 Mesh:
   m_ObjectHideFlags: 0
@@ -68118,7 +68130,7 @@ PrefabInstance:
         type: 3}
       propertyPath: netGOs.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1313317801}
     - target: {fileID: 1247713517416342436, guid: 6c2f041e3405ed1458e1dcdaf61c0cb9,
         type: 3}
       propertyPath: netGOs.Array.data[1]
