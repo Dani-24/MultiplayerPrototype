@@ -27,7 +27,6 @@ public class GameManagerScript : MonoBehaviour
     float hostSetColorCont = 0;
 
     [Header("Posibles GameModes")]
-    //[SerializeField] Combatcentrik;
     public TowerObjective tower;
 
     #region Instance
@@ -52,7 +51,7 @@ public class GameManagerScript : MonoBehaviour
     void Start()
     {
         alphaScoreText.text = ":D";
-        screenMsg.text = "Waiting to start ...";
+        screenMsg.text = "Starting Game ...";
         betaScoreText.text = "):";
 
         timerCount = matchTimes[0].time;
@@ -60,11 +59,6 @@ public class GameManagerScript : MonoBehaviour
 
     void Update()
     {
-
-        // HACER AQUI QUE EN EL WAITING SEA PANTALLA DE CARGA O ANIMACION DE ALGO Y ESPERE A QUE TODOS LA HAGAN
-
-        // SE DEBERIA ASEGURAR Q SE ESPERE A TODOS LOS CLIENTS ANTES DE EMPEZAR
-
         switch (matchState)
         {
             case MatchState.waiting:

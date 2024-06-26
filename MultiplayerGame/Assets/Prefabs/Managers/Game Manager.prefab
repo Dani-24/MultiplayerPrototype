@@ -420,13 +420,13 @@ MonoBehaviour:
   matchState: 0
   matchTimes:
   - state: 0
-    time: 10
+    time: 15
   - state: 1
-    time: 240
+    time: 300
   - state: 2
     time: 4
   - state: 3
-    time: 10
+    time: 8
   timerNetGo: {fileID: 4639072306875834641}
   matchStateNetGo: {fileID: 4309355518400223698}
   tower: {fileID: 0}
@@ -829,7 +829,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Waiting to start . . .
+  m_text: Starting Game . . .
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
