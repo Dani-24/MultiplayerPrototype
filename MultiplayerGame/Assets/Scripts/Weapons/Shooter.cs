@@ -48,15 +48,6 @@ public class Shooter : Weapon
         MaterialsFromTeamColor();
     }
 
-    private void FixedUpdate()
-    {
-        // =========== ROTACIÓN DEL ARMA ===========
-        if (isShooting)
-            weaponMesh.transform.rotation = Quaternion.LookRotation(wpAimDirection);
-        else
-            weaponMesh.transform.rotation = Quaternion.LookRotation(transform.forward);
-    }
-
     void MaterialsFromTeamColor()
     {
         if (rend.Count > 0)

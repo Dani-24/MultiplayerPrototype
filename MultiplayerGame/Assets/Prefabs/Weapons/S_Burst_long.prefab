@@ -23,12 +23,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2703812716523884050}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.103, z: 0.5859}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.7071069, y: -0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 0, y: -0.16466881, z: 0.05523955}
+  m_LocalScale: {x: 0.11905088, y: 0.11905088, z: 0.11905088}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7267782849039474330}
+  m_Father: {fileID: 4676607572546454508}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3597637874272683826
@@ -61,7 +61,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3150462560917926386}
   - {fileID: 4676607572546454508}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -82,7 +81,7 @@ MonoBehaviour:
   isShotByOwnPlayer: 0
   weaponName: Shooter Burst Long
   cadence: 1.7
-  shootDMG: 30
+  shootDMG: 40
   bulletSpeed: 60
   weaponRange: 16.5
   rng: 0
@@ -90,24 +89,23 @@ MonoBehaviour:
   firstShootCooldown: 8
   shootCost: 2.25
   moveSpeedMultiplier: 0.6
-  pRadius: 3
+  pRadius: 4
   pStrength: 1
   pHardness: 0.1
   sprayDropletsNum: 4
   sprayDropMeshRadius: 1
-  sprayPaintRadius: 2
+  sprayPaintRadius: 3
   linearPaint: 0
   dropletsDistance: 1
   spawnBulletPosition: {fileID: 3150462560917926386}
   shootingVerticalOffset: 0.225
   actualBulletCost: 0
-  weaponMesh: {fileID: 5453143794582608214}
   bulletPrefab: {fileID: 4972482428676012466, guid: 75688502e096c3f4798c1d8e465b1285,
     type: 3}
   bulletDropletPrefab: {fileID: 0}
   rend: []
   weaponSprite: {fileID: 21300000, guid: cbedf70d99c37f942995fd252afbc275, type: 3}
-  bulletsPerShot: 4
+  bulletsPerShot: 3
   burstBulletsSpeedReduction: 12.5
 --- !u!82 &4956808182179389473
 AudioSource:
@@ -336,12 +334,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: ebe453d9539858c42995f90baccef49b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.361
+      value: -0.061
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ebe453d9539858c42995f90baccef49b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.79728
+      value: 0.029
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ebe453d9539858c42995f90baccef49b,
         type: 3}
@@ -390,17 +388,15 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1013875083351289852}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ebe453d9539858c42995f90baccef49b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3150462560917926386}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ebe453d9539858c42995f90baccef49b, type: 3}
 --- !u!4 &4676607572546454508 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ebe453d9539858c42995f90baccef49b,
-    type: 3}
-  m_PrefabInstance: {fileID: 5146520026168550407}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5453143794582608214 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ebe453d9539858c42995f90baccef49b,
     type: 3}
   m_PrefabInstance: {fileID: 5146520026168550407}
   m_PrefabAsset: {fileID: 0}

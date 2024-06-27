@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ShooterDummy : Weapon
@@ -10,6 +8,8 @@ public class ShooterDummy : Weapon
 
     private void Start()
     {
+        wpAimDirection = transform.forward;
+
         audioS = GetComponent<AudioSource>();
 
         if (bulletDropletPrefab == null) bulletDropletPrefab = bulletPrefab;

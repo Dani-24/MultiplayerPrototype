@@ -83,7 +83,7 @@ MonoBehaviour:
   cadence: 3
   shootDMG: 75
   bulletSpeed: 75
-  weaponRange: 7.5
+  weaponRange: 8
   rng: 5
   jumpRng: 5
   firstShootCooldown: 4
@@ -100,7 +100,6 @@ MonoBehaviour:
   spawnBulletPosition: {fileID: 8008173628777336271}
   shootingVerticalOffset: 0.3
   actualBulletCost: 0
-  weaponMesh: {fileID: 113701048986784187}
   bulletPrefab: {fileID: 4972482428676012466, guid: 75688502e096c3f4798c1d8e465b1285,
     type: 3}
   bulletDropletPrefab: {fileID: 0}
@@ -242,12 +241,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c4696c03664f00b4eafbaf20b3efc947,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c4696c03664f00b4eafbaf20b3efc947,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c4696c03664f00b4eafbaf20b3efc947,
         type: 3}
@@ -312,12 +311,6 @@ PrefabInstance:
       addedObject: {fileID: 5229175226202607853}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4696c03664f00b4eafbaf20b3efc947, type: 3}
---- !u!1 &113701048986784187 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c4696c03664f00b4eafbaf20b3efc947,
-    type: 3}
-  m_PrefabInstance: {fileID: 960000445185486058}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &781412111778712321 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c4696c03664f00b4eafbaf20b3efc947,

@@ -65,8 +65,7 @@ public class Weapon : MonoBehaviour
     [Tooltip("Direction in which is the weapon aiming to shoot")]
     protected Vector3 wpAimDirection;
 
-    [Header("Weapon meshes")]
-    public GameObject weaponMesh;
+    [Header("Prefabs")]
     public GameObject bulletPrefab;
     public GameObject bulletDropletPrefab;
 
@@ -80,4 +79,11 @@ public class Weapon : MonoBehaviour
     [SerializeField] protected List<Renderer> rend = new List<Renderer>();
 
     public Sprite weaponSprite;
+
+    private void FixedUpdate()
+    {
+        // =========== ROTACIÓN DEL ARMA ===========
+        if (isShooting) transform.rotation = Quaternion.LookRotation(wpAimDirection);
+        else transform.rotation = Quaternion.LookRotation(transform.forward);
+    }
 }

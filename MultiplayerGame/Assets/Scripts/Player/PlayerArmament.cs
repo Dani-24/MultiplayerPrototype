@@ -7,6 +7,7 @@ public class PlayerArmament : MonoBehaviour
 
     [Tooltip("Point from where the weapon / sub weapon / special is used")]
     [SerializeField] GameObject weaponSpawnPoint;
+    [SerializeField] GameObject parentScale;
 
     [Header("Weapon")]
     public GameObject weaponToUse;
@@ -36,21 +37,17 @@ public class PlayerArmament : MonoBehaviour
             weaponShooting = subWeaponShooting = chargingSub = false;
 
         // WEAPON
-        if (!createdWeapon || currentWeapon.GetComponent<Weapon>().weaponName != weaponToUse.GetComponent<Weapon>().weaponName)
-            SetWeapon();
+        if (!createdWeapon || currentWeapon.GetComponent<Weapon>().weaponName != weaponToUse.GetComponent<Weapon>().weaponName) SetWeapon();
 
         // AIMING
         aimDirection = GetComponentInParent<PlayerOrbitCamera>().GetCameraTransform().forward;
 
         // SUB WEAPON
-        if (subWeaponShooting)
-            ChargeSub();
-        else if (chargingSub)
-            ThrowSub();
+        if (subWeaponShooting) ChargeSub();
+        else if (chargingSub) ThrowSub();
 
         // Update weapon tag
-        if (currentWeapon != null)
-            currentWeapon.GetComponent<Weapon>().teamTag = GetComponent<PlayerStats>().teamTag;
+        if (currentWeapon != null) currentWeapon.GetComponent<Weapon>().teamTag = GetComponent<PlayerStats>().teamTag;
 
     }
 
@@ -65,6 +62,10 @@ public class PlayerArmament : MonoBehaviour
         }
 
         currentWeapon = Instantiate(weaponToUse, weaponSpawnPoint.transform);
+
+        float scl = 1 / (parentScale.transform.localScale.x / 2);
+        currentWeapon.transform.localScale = new Vector3(scl, scl, scl);
+
         currentWeapon.GetComponent<Weapon>().teamTag = GetComponent<PlayerStats>().teamTag;
         GetComponent<PlayerMovement>().weaponSpeedMultiplier = currentWeapon.GetComponent<Weapon>().moveSpeedMultiplier;
         createdWeapon = true;

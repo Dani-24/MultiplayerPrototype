@@ -172,18 +172,17 @@ MonoBehaviour:
   firstShootCooldown: 10
   shootCost: 9.1
   moveSpeedMultiplier: 0.4
-  pRadius: 3.4
+  pRadius: 4
   pStrength: 1
   pHardness: 0.1
   sprayDropletsNum: 1
   sprayDropMeshRadius: 1
-  sprayPaintRadius: 1.75
+  sprayPaintRadius: 2.25
   linearPaint: 0
   dropletsDistance: 1
   spawnBulletPosition: {fileID: 8008173628777336271}
   shootingVerticalOffset: 0.175
   actualBulletCost: 0
-  weaponMesh: {fileID: 113701048986784187}
   bulletPrefab: {fileID: 4972482428676012466, guid: 75688502e096c3f4798c1d8e465b1285,
     type: 3}
   bulletDropletPrefab: {fileID: 0}
@@ -324,12 +323,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c4696c03664f00b4eafbaf20b3efc947,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c4696c03664f00b4eafbaf20b3efc947,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c4696c03664f00b4eafbaf20b3efc947,
         type: 3}
@@ -394,12 +393,6 @@ PrefabInstance:
       addedObject: {fileID: 3167254000288037804}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4696c03664f00b4eafbaf20b3efc947, type: 3}
---- !u!1 &113701048986784187 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c4696c03664f00b4eafbaf20b3efc947,
-    type: 3}
-  m_PrefabInstance: {fileID: 960000445185486058}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &781412111778712321 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c4696c03664f00b4eafbaf20b3efc947,

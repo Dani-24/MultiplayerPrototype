@@ -100,7 +100,6 @@ MonoBehaviour:
   spawnBulletPosition: {fileID: 3150462560917926386}
   shootingVerticalOffset: 0.15
   actualBulletCost: 0
-  weaponMesh: {fileID: 1983471487978947646}
   bulletPrefab: {fileID: 4972482428676012466, guid: 75688502e096c3f4798c1d8e465b1285,
     type: 3}
   bulletDropletPrefab: {fileID: 0}
@@ -325,12 +324,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c4696c03664f00b4eafbaf20b3efc947,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c4696c03664f00b4eafbaf20b3efc947,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c4696c03664f00b4eafbaf20b3efc947,
         type: 3}
@@ -398,12 +397,6 @@ PrefabInstance:
 --- !u!4 &1210734254110645892 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c4696c03664f00b4eafbaf20b3efc947,
-    type: 3}
-  m_PrefabInstance: {fileID: 1677552510678923631}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1983471487978947646 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c4696c03664f00b4eafbaf20b3efc947,
     type: 3}
   m_PrefabInstance: {fileID: 1677552510678923631}
   m_PrefabAsset: {fileID: 0}
