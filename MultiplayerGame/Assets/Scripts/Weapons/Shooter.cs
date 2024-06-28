@@ -88,7 +88,9 @@ public class Shooter : Weapon
             bullet.GetComponent<DefaultBullet>().pHardness = pHardness;
             bullet.GetComponent<DefaultBullet>().pStrength = pStrength;
             bullet.GetComponent<DefaultBullet>().meshScale = 1;
+            bullet.GetComponent<DefaultBullet>().whoShotThis = GetComponentInParent<CharacterController>();
 
+            // Multishoot
             for (int i = 0; i < bulletsPerShot - 1; i++)
             {
                 GameObject bulletb = Instantiate(bulletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
@@ -102,6 +104,7 @@ public class Shooter : Weapon
                 bulletb.GetComponent<DefaultBullet>().pHardness = pHardness;
                 bulletb.GetComponent<DefaultBullet>().pStrength = pStrength;
                 bulletb.GetComponent<DefaultBullet>().meshScale = 1;
+                bulletb.GetComponent<DefaultBullet>().whoShotThis = GetComponentInParent<CharacterController>();
             }
 
             // Ink droplets
@@ -117,6 +120,7 @@ public class Shooter : Weapon
                 sprayDrop.GetComponent<DefaultBullet>().pHardness = pHardness;
                 sprayDrop.GetComponent<DefaultBullet>().pStrength = pStrength;
                 sprayDrop.GetComponent<DefaultBullet>().meshScale = sprayDropMeshRadius;
+                sprayDrop.GetComponent<DefaultBullet>().whoShotThis = GetComponentInParent<CharacterController>();
             }
 
             // Cost ink

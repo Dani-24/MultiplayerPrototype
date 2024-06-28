@@ -2,10 +2,6 @@ using UnityEngine;
 
 public class ShooterDummy : Weapon
 {
-    [Header("Shooter Additional propierties")]
-    [SerializeField][Tooltip("For Burst shooters")] int bulletsPerShot = 1;
-    [SerializeField] float burstBulletsSpeedReduction = 2.5f;
-
     private void Start()
     {
         wpAimDirection = transform.forward;
@@ -66,20 +62,6 @@ public class ShooterDummy : Weapon
         bullet.GetComponent<DefaultBullet>().pHardness = pHardness;
         bullet.GetComponent<DefaultBullet>().pStrength = pStrength;
         bullet.GetComponent<DefaultBullet>().meshScale = 1;
-
-        for (int i = 0; i < bulletsPerShot - 1; i++)
-        {
-            GameObject bulletb = Instantiate(bulletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
-
-            bulletb.GetComponent<DefaultBullet>().teamTag = teamTag;
-            bulletb.GetComponent<DefaultBullet>().speed = bulletSpeed - burstBulletsSpeedReduction * i;
-            bulletb.GetComponent<DefaultBullet>().range = weaponRange;
-            bulletb.GetComponent<DefaultBullet>().DMG = shootDMG;
-            bulletb.GetComponent<DefaultBullet>().pRadius = pRadius;
-            bulletb.GetComponent<DefaultBullet>().pHardness = pHardness;
-            bulletb.GetComponent<DefaultBullet>().pStrength = pStrength;
-            bulletb.GetComponent<DefaultBullet>().meshScale = 1;
-        }
 
         // Ink droplets
         for (int i = 0; i < sprayDropletsNum; i++)

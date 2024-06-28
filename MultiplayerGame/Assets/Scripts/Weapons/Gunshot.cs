@@ -94,6 +94,7 @@ public class Gunshot : Weapon
                 bullet.GetComponent<DefaultBullet>().pHardness = pHardness;
                 bullet.GetComponent<DefaultBullet>().pStrength = pStrength;
                 bullet.GetComponent<DefaultBullet>().meshScale = 1;
+                bullet.GetComponent<DefaultBullet>().whoShotThis = GetComponentInParent<CharacterController>();
 
                 // Ink droplets (Per pellet)
                 for (int j = 0; j < sprayDropletsNum; j++)
@@ -108,6 +109,7 @@ public class Gunshot : Weapon
                     sprayDrop.GetComponent<DefaultBullet>().pHardness = pHardness;
                     sprayDrop.GetComponent<DefaultBullet>().pStrength = pStrength;
                     sprayDrop.GetComponent<DefaultBullet>().meshScale = sprayDropMeshRadius;
+                    sprayDrop.GetComponent<DefaultBullet>().whoShotThis = GetComponentInParent<CharacterController>();
                 }
             }
 

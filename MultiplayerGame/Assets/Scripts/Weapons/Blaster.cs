@@ -89,6 +89,7 @@ public class Blaster : Weapon
             bullet.GetComponent<ExplosiveBullet>().meshScale = 1;
             bullet.GetComponent<ExplosiveBullet>().explosionRadius = blastRadius;
             bullet.GetComponent<ExplosiveBullet>().dmgCurve = dmgCurve;
+            bullet.GetComponent<ExplosiveBullet>().whoShotThis = GetComponentInParent<CharacterController>();
 
             GameObject mainSprayDrop = Instantiate(bulletDropletPrefab, spawnBulletPosition.transform.position, Quaternion.Euler(aimDirVec));
 
@@ -100,6 +101,7 @@ public class Blaster : Weapon
             mainSprayDrop.GetComponent<DefaultBullet>().pHardness = pHardness;
             mainSprayDrop.GetComponent<DefaultBullet>().pStrength = pStrength;
             mainSprayDrop.GetComponent<DefaultBullet>().meshScale = sprayDropMeshRadius;
+            mainSprayDrop.GetComponent<DefaultBullet>().whoShotThis = GetComponentInParent<CharacterController>();
 
             // Ink droplets
             if (!linearPaint)
@@ -116,6 +118,7 @@ public class Blaster : Weapon
                     sprayDrop.GetComponent<DefaultBullet>().pHardness = pHardness;
                     sprayDrop.GetComponent<DefaultBullet>().pStrength = pStrength;
                     sprayDrop.GetComponent<DefaultBullet>().meshScale = sprayDropMeshRadius;
+                    sprayDrop.GetComponent<DefaultBullet>().whoShotThis = GetComponentInParent<CharacterController>();
                 }
             }
             else
@@ -124,6 +127,7 @@ public class Blaster : Weapon
                 bullet.GetComponent<ExplosiveBullet>().dropletsDistance = dropletsDistance;
                 bullet.GetComponent<ExplosiveBullet>().dropletPaintRadius = sprayPaintRadius;
                 bullet.GetComponent<ExplosiveBullet>().dropletMeshScale = sprayDropMeshRadius;
+                bullet.GetComponent<ExplosiveBullet>().whoShotThis = GetComponentInParent<CharacterController>();
             }
 
             // Cost ink

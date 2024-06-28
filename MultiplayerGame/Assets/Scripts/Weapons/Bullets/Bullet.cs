@@ -52,6 +52,9 @@ public class Bullet : MonoBehaviour
 
     public AudioSource audioSource;
 
+    [Header("Owner")]
+    public CharacterController whoShotThis;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();

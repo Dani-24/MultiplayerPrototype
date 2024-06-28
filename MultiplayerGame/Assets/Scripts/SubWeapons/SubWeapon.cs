@@ -14,8 +14,10 @@ public class SubWeapon : MonoBehaviour
     [Header("Sub Weapon Propierties")]
     [Tooltip("DMG dealt in lethal Radius")]
     public float dmg;
-    [Tooltip("DMG dealt in non-lethal Radius")]
+
+    [Tooltip("Supposed DMG dealt in non lethal Radius (INFO uses)")]
     public float splashDmg;
+
     [Tooltip("Projectile speed")]
     public float speed;
     [Tooltip("Throw range")]
@@ -26,11 +28,9 @@ public class SubWeapon : MonoBehaviour
     [Tooltip("If False an animator is required")]
     public bool instantExplosion = false;
 
-    [Tooltip("Radius affected by this subWeapon where can kill a player")]
-    public float lethalRadius = 1f;
-
-    [Tooltip("Radius affected by this subWeapon where deals splash dmg to a player")]
-    public float nonLethalRadius = 1.25f;
+    [Header("Area Propierties")]
+    public float affectedRadius;
+    public AnimationCurve dmgCurve;
 
     [Header("Aim offsets")]
     public float aimYOffset;

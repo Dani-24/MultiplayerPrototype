@@ -6,8 +6,6 @@ public class Bomb : SubWeapon
     Animator anim;
     Rigidbody rb;
 
-    List<Collider> bigDmgColliders = new List<Collider>();
-
     [SerializeField] GameObject explosionObject;
     [SerializeField] AudioClip explosionSFX;
 
@@ -28,9 +26,7 @@ public class Bomb : SubWeapon
         if (rend.Count > 0)
         {
             foreach (Renderer r in rend)
-            {
                 r.material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
-            }
         }
 
         gameObject.tag = teamTag + "Bomb";
@@ -41,21 +37,13 @@ public class Bomb : SubWeapon
         rb.velocity += new Vector3(0, customGravity, 0);
 
         if (transform.position.y < minYaxis)
-        {
             Destroy(gameObject);
-        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (instantExplosion)
-        {
-            OnExplosion();
-        }
-        else
-        {
-            anim.SetTrigger("megumin");
-        }
+        if (instantExplosion) OnExplosion();
+        else anim.SetTrigger("megumin");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -69,23 +57,41 @@ public class Bomb : SubWeapon
         GameObject explo = Instantiate(explosionObject, transform.position, transform.rotation);
         explo.GetComponent<AudioSource>().clip = explosionSFX;
         explo.GetComponent<AudioSource>().Play();
-        explo.GetComponent<Explosive>().maxRadius = nonLethalRadius * 1.5f;
+        explo.GetComponent<Explosive>().maxRadius = affectedRadius * 1.5f;
         explo.GetComponent<Renderer>().material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
 
         // Lethal Radius
-        Collider[] colliders = Physics.OverlapSphere(transform.position, lethalRadius);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, affectedRadius);
+
+        List<DMGPackage> affectedPlayers = new();
 
         foreach (Collider hit in colliders)
         {
-            if (isShotByOwnPlayer)
+            if (isShotByOwnPlayer && hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bomb"))
             {
-                if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bomb"))
+                float dist = Vector3.Distance(transform.position, hit.ClosestPointOnBounds(transform.position)) / affectedRadius;
+                float dmgDealt = dmgCurve.Evaluate(dist) * dmg;
+
+                if (hit.GetComponent<PlayerStats>())
                 {
-                    if (hit.GetComponent<PlayerStats>())
-                        hit.GetComponent<PlayerStats>().OnDMGReceive(weaponName, dmg, ConnectionManager.Instance.userName);
-                    else if (hit.GetComponent<Dummy>())
-                        hit.GetComponent<Dummy>().OnDMGReceive(weaponName, dmg, ConnectionManager.Instance.userName);
+                    DMGPackage dmg = new DMGPackage
+                    {
+                        dmg = dmgDealt,
+                        cause = weaponName,
+                        dealer = ConnectionManager.Instance.userName,
+                        receiverID = hit.GetComponent<PlayerNetworking>().networkID
+                    };
+                    affectedPlayers.Add(dmg);
                 }
+                else if (hit.GetComponent<Dummy>())
+                    hit.GetComponent<Dummy>().OnDMGReceive(weaponName, dmgDealt, ConnectionManager.Instance.userName);
+            }
+
+            if (affectedPlayers.Count > 0)
+            {
+                Package dmgPckg = ConnectionManager.Instance.WritePackage(Pck_type.DMG);
+                dmgPckg.dMGPackages = affectedPlayers;
+                ConnectionManager.Instance.SendPackage(dmgPckg);
             }
 
             // Paint only objects affected by lethal dmg area???
@@ -95,31 +101,7 @@ public class Bomb : SubWeapon
                 Vector3 pos = hit.ClosestPointOnBounds(transform.position);
                 PaintManager.instance.Paint(p, pos, paintRadius, hardness, strength, rend[0].material.color);
             }
-
-            bigDmgColliders.Add(hit);
         }
-
-        // Splash Radius
-        if (isShotByOwnPlayer)
-        {
-            colliders = Physics.OverlapSphere(transform.position, nonLethalRadius);
-
-            foreach (Collider hit in colliders)
-            {
-                if (!bigDmgColliders.Contains(hit))
-                {
-                    if (hit.CompareTag(SceneManagerScript.Instance.GetRivalTag(teamTag)) && this.CompareTag(teamTag + "Bomb"))
-                    {
-                        if (hit.GetComponent<PlayerStats>())
-                            hit.GetComponent<PlayerStats>().OnDMGReceive(weaponName, splashDmg, "Debug");
-                        else if (hit.GetComponent<Dummy>())
-                            hit.GetComponent<Dummy>().OnDMGReceive(weaponName, splashDmg, "Debug");
-                    }
-                }
-            }
-        }
-
-        bigDmgColliders.Clear();
 
         Destroy(gameObject);
     }

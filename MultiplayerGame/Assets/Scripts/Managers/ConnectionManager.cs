@@ -269,6 +269,7 @@ public class ConnectionManager : MonoBehaviour
 
                 playerPackages = pck.playersListPck;
 
+                // Is really Needed?
                 foreach (DMGPackage dmgPck in pck.dMGPackages)
                 {
                     Debug.Log(dmgPck.receiverID);
@@ -281,7 +282,7 @@ public class ConnectionManager : MonoBehaviour
                 }
 
                 break;
-            case Pck_type.Connection:   // Mensajes de conexión
+            case Pck_type.Connection:   // Messages
 
                 // Limit players
                 if (!pck.connPck.canConnect && pck.IP == myIP)
@@ -307,6 +308,18 @@ public class ConnectionManager : MonoBehaviour
                 Debug.Log("DMG Package Received From: " + pck.dmGPackage.dealer);
 
                 if (pck.dmGPackage.receiverID == ownPlayerNetID) dmgReceivedPCKG.Add(pck.dmGPackage);
+
+                // Also check DMG list
+                foreach (DMGPackage dmgPck in pck.dMGPackages)
+                {
+                    Debug.Log(dmgPck.receiverID);
+
+                    if (dmgPck.receiverID == ownPlayerNetID)
+                    {
+                        Debug.Log("DMG Package Received From: " + dmgPck.dealer);
+                        dmgReceivedPCKG.Add(dmgPck);
+                    }
+                }
 
                 break;
         }
@@ -435,7 +448,7 @@ public class ConnectionManager : MonoBehaviour
 
             onlinePlay = false;
             logged = false;
-            isHosting = false; 
+            isHosting = false;
             isConnected = false;
             disconnect = false;
             connectionStablished = false;
@@ -1192,7 +1205,7 @@ public class ConnectionManager : MonoBehaviour
         catch
         {
             Debug.Log("Cannot Receive Host Data: " + www.downloadHandler.error);
-            
+
             // Avoid Client in disconnected Room
             disconnect = true;
             showCommError = true;

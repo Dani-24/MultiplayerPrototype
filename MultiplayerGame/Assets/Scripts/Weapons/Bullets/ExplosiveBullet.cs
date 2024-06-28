@@ -37,6 +37,7 @@ public class ExplosiveBullet : Bullet
 
     private void OnTriggerEnter(Collider other)
     {
+        if (whoShotThis != null && other.GetComponent<CharacterController>() == whoShotThis) return;
         OnExplosion();
     }
 
@@ -51,6 +52,8 @@ public class ExplosiveBullet : Bullet
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
 
+        List<DMGPackage> affectedPlayers = new();
+
         foreach (Collider hit in colliders)
         {
             // Hit
@@ -60,9 +63,25 @@ public class ExplosiveBullet : Bullet
                 float dmgDealt = dmgCurve.Evaluate(dist) * DMG;
 
                 if (hit.GetComponent<PlayerStats>())
-                    hit.GetComponent<PlayerStats>().OnDMGReceive(weaponShootingThis, dmgDealt, ConnectionManager.Instance.userName);
+                {
+                    DMGPackage dmg = new DMGPackage
+                    {
+                        dmg = dmgDealt,
+                        cause = weaponShootingThis,
+                        dealer = ConnectionManager.Instance.userName,
+                        receiverID = hit.GetComponent<PlayerNetworking>().networkID
+                    };
+                    affectedPlayers.Add(dmg);
+                }
                 else if (hit.GetComponent<Dummy>())
                     hit.GetComponent<Dummy>().OnDMGReceive(weaponShootingThis, dmgDealt, ConnectionManager.Instance.userName);
+            }
+
+            if (affectedPlayers.Count > 0)
+            {
+                Package dmgPckg = ConnectionManager.Instance.WritePackage(Pck_type.DMG);
+                dmgPckg.dMGPackages = affectedPlayers;
+                ConnectionManager.Instance.SendPackage(dmgPckg);
             }
 
             // Main Bullet Paint

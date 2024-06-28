@@ -38,7 +38,7 @@ public class DefaultBullet : Bullet
                 // Range
                 if (Vector3.Distance(transform.position, initPos) > range)
                 {
-                    rb.velocity = Vector3.zero;
+                    //rb.velocity = Vector3.zero;
                     bulletState = BulletState.Fall;
                 }
 
@@ -53,6 +53,8 @@ public class DefaultBullet : Bullet
 
     private void OnTriggerEnter(Collider other)
     {
+        if (whoShotThis != null && other.GetComponent<CharacterController>() == whoShotThis) return;
+
         audioSource.clip = null;
         if (isShotByOwnPlayer)
         {

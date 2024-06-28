@@ -101,7 +101,8 @@ public class Minigun : Weapon
             bullet.GetComponent<DefaultBullet>().pRadius = pRadius;
             bullet.GetComponent<DefaultBullet>().pHardness = pHardness;
             bullet.GetComponent<DefaultBullet>().pStrength = pStrength;
-            bullet.GetComponent<DefaultBullet>().meshScale = 1;
+            bullet.GetComponent<DefaultBullet>().meshScale = 1; 
+            bullet.GetComponent<DefaultBullet>().whoShotThis = GetComponentInParent<CharacterController>();
 
             // Ink droplets
             for (int i = 0; i < sprayDropletsNum; i++)
@@ -116,6 +117,7 @@ public class Minigun : Weapon
                 sprayDrop.GetComponent<DefaultBullet>().pHardness = pHardness;
                 sprayDrop.GetComponent<DefaultBullet>().pStrength = pStrength;
                 sprayDrop.GetComponent<DefaultBullet>().meshScale = sprayDropMeshRadius;
+                sprayDrop.GetComponent<DefaultBullet>().whoShotThis = GetComponentInParent<CharacterController>();
             }
 
             // Cost ink

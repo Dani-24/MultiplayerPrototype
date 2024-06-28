@@ -56,8 +56,49 @@ MonoBehaviour:
   range: 80
   cooldown: 0
   instantExplosion: 1
-  lethalRadius: 2
-  nonLethalRadius: 3
+  affectedRadius: 4
+  dmgCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0.0033903306
+      outSlope: 0.0033903306
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.4
+      value: 1
+      inSlope: 0.0062821135
+      outSlope: 0.0062821135
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.52041316
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.41
+      value: 0.5
+      inSlope: -0.008167443
+      outSlope: -0.008167443
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.19474752
+      outWeight: 0.6198719
+    - serializedVersion: 3
+      time: 1
+      value: 0.5
+      inSlope: -0.003999093
+      outSlope: -0.003999093
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.14827281
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   aimYOffset: -28
   paintRadius: 6
   strength: 1
