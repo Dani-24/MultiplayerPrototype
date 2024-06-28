@@ -50,7 +50,7 @@ MonoBehaviour:
   isHosting: 0
   maxPlayers: 8
   connGameplayState: 0
-  lobbyScene: 
+  lobbyScene: 000_Lobby
   isConnected: 0
   localHost: 0
   hostIP: 127.0.0.1
@@ -59,8 +59,8 @@ MonoBehaviour:
   serverIsConnected: 0
   clientIsConnected: 0
   packageDataSize: 10240
-  connectionTickRate: 0.1
-  disconnectionTime: 5
+  connectionTickRate: 0.15
+  disconnectionTime: 10
   newNetGOs: []
   onlinePlay: 0
   logged: 0
@@ -72,7 +72,6 @@ MonoBehaviour:
   searchRooms: 0
   createRoom: 0
   enablePckLogs: 1
-  showCommError: 0
   logPckSize: 0
   connectAtStart: 0
   reconnect: 0
@@ -86,10 +85,9 @@ MonoBehaviour:
     lifeState: 0
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
-    moveInput: {x: 0, y: 0}
     camRot: {x: 0, y: 0, z: 0}
     running: 0
-    jumping: 0
+    isGrounded: 0
     shooting: 0
     shootingSub: 0
     mainWeapon: 0

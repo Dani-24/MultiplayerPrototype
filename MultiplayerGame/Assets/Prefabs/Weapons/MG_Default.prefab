@@ -84,8 +84,8 @@ MonoBehaviour:
   shootDMG: 32
   bulletSpeed: 50
   weaponRange: 17
-  rng: 4
-  jumpRng: 14
+  rng: 3
+  jumpRng: 6
   firstShootCooldown: 60
   shootCost: 0.1
   moveSpeedMultiplier: 0.5
@@ -107,7 +107,7 @@ MonoBehaviour:
   - {fileID: 5070266830091733894}
   weaponSprite: {fileID: 21300000, guid: 8546e859ce5f0a543bffb74a7c29943f, type: 3}
   costIncrease: 0.05
-  costRecoverSpeed: 15
+  costRecoverSpeed: 20
 --- !u!82 &6473631592966740588
 AudioSource:
   m_ObjectHideFlags: 0

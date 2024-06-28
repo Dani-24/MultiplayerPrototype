@@ -59,7 +59,7 @@ MonoBehaviour:
   lethalRadius: 2
   nonLethalRadius: 3
   aimYOffset: -28
-  paintRadius: 5.5
+  paintRadius: 6
   strength: 1
   hardness: 0.1
   throwCost: 45

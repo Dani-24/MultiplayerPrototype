@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] Animator playerAnimator;
 
-    public bool isUsingGamepad;
+    public GameObject playerMesh;
 
     [Header("Ground Paint")]
     [SerializeField] Color groundColor;
@@ -22,6 +22,8 @@ public class PlayerMovement : MonoBehaviour
     #region Horizontal Movement Propierties
 
     [Header("Movement")]
+    public bool isUsingGamepad;
+
     public Vector2 moveInput;
 
     Vector3 forward;
@@ -47,6 +49,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float rotationSpeedWhileShooting = 100.0f;
     [SerializeField][Range(0.1f, 200f)] float ballModeRotationSpeed = 10.0f;
     float ballRotationAngle = 0;
+
+    public bool enterBallMode = false;
 
     #endregion
 
@@ -106,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                Falling();
+                Falling();  // Falin ???? Oh No
 
                 moveDir.Set(0, fallSpeed, 0);
             }
@@ -147,7 +151,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 case GroundInk.NoInk:
 
-                    if (GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
+                    if(isRunning)
+                        targetSpeed += moveSpeed;
+                    else if (GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
                         targetSpeed += moveSpeed * weaponSpeedMultiplier;
                     else
                         targetSpeed += moveSpeed;
@@ -155,10 +161,10 @@ public class PlayerMovement : MonoBehaviour
                     break;
                 case GroundInk.AllyInk:
 
-                    if (GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
-                        targetSpeed += moveSpeed * weaponSpeedMultiplier;
-                    else if (isRunning)
+                    if (isRunning)
                         targetSpeed += runSpeed;
+                    else if (GetComponent<PlayerArmament>().weaponShooting || GetComponent<PlayerArmament>().subWeaponShooting)
+                        targetSpeed += moveSpeed * weaponSpeedMultiplier;
                     else
                         targetSpeed += moveSpeed;
 
@@ -237,16 +243,9 @@ public class PlayerMovement : MonoBehaviour
             controller.stepOffset = originalStepOffset;
             fallSpeed = groundedFallSpeed;
 
-            if (isJumping)
-            {
-                fallSpeed = jumpForce;
-                playerAnimator.SetTrigger("Jump");
-            }
+            if (isJumping) fallSpeed = jumpForce;
         }
-        else
-        {
-            controller.stepOffset = 0;
-        }
+        else controller.stepOffset = 0;
 
         moveDir.y += fallSpeed;
     }
@@ -326,29 +325,31 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // ANIMATOR //
-
         playerAnimator.SetBool("isMoving", actualSpeed != 0);
         playerAnimator.SetBool("isRunning", isRunning);
-        // Jump is on JumpingAndFalling();
-        playerAnimator.SetFloat("MoveX", moveInput.x);
-        playerAnimator.SetFloat("MoveY", moveInput.y);
+        playerAnimator.SetBool("isGrounded", isGrounded);
 
-        playerAnimator.SetBool("isShooting", GetComponent<PlayerArmament>().weaponShooting);
-
-        if (isRunning)
+        if (!isRunning)
         {
-            playerBody.SetActive(false);
+            playerAnimator.SetBool("isShooting", GetComponent<PlayerArmament>().weaponShooting);
+            playerAnimator.SetBool("ballMode", false);
+        }
+        else playerAnimator.SetBool("isShooting", false);
+
+        if (playerAnimator.GetBool("ballMode"))
+        {
+            playerMesh.SetActive(false);
             playerRunBody.SetActive(true);
         }
         else
         {
-            playerBody.SetActive(true);
+            playerMesh.SetActive(true);
             playerRunBody.SetActive(false);
         }
 
         if (GetComponent<PlayerStats>().lifeState != PlayerStats.LifeState.alive)
         {
-            playerBody.SetActive(false);
+            playerMesh.SetActive(false);
             playerRunBody.SetActive(false);
         }
     }
@@ -379,19 +380,9 @@ public class PlayerMovement : MonoBehaviour
         return isRunning;
     }
 
-    public bool GetJumpInput()
-    {
-        return isJumping;
-    }
-
     public void SetRunInput(bool _run)
     {
         isRunning = _run;
-    }
-
-    public void SetJumpInput(bool _jump)
-    {
-        isJumping = _jump;
     }
 
     public void SetPosition(Vector3 _position)

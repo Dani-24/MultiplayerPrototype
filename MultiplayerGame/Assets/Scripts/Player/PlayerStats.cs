@@ -33,7 +33,7 @@ public class PlayerStats : MonoBehaviour
 
     [Header("Ink")]
     public float ink = 100.0f;
-    float inkCapacity;
+    [SerializeField] float inkCapacity = 100.0f;
 
     [SerializeField][Range(0.1f, 20f)] float inkReloadSpeed = 1f;
     [SerializeField][Range(1f, 30f)] float inkReloadSpeedOnInk = 5f;
@@ -63,7 +63,6 @@ public class PlayerStats : MonoBehaviour
     void Start()
     {
         lastFrameHP = maxHP = HP;
-        inkCapacity = ink;
 
         controller = GetComponent<CharacterController>();
 
@@ -75,12 +74,24 @@ public class PlayerStats : MonoBehaviour
 
     void Update()
     {
+        // Net
+        if (!GetComponent<PlayerNetworking>().isOwnByThisInstance) { infiniteInk = true; }
+
+        // Debug
+        if (infiniteHP) { HP = maxHP; }
+        if (infiniteInk) { ink = inkCapacity; }
+
         // Check Color & Team
+
+        ///////////////////////////////////////
+
         for (int i = 0; i < teamColorBaseMeshes.Count; ++i)
             teamColorBaseMeshes[i].material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
 
         for (int i = 0; i < teamColorSkinnedMeshes.Count; ++i)
             teamColorSkinnedMeshes[i].material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
+
+        ///////////////////////////////////////
 
         if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
@@ -117,8 +128,7 @@ public class PlayerStats : MonoBehaviour
                 if (transform.position.y < minYaxis || HP <= 0) lifeState = LifeState.death;
 
                 // Healing
-                if (HP != maxHP)
-                    RegenHealth();
+                if (HP != maxHP) RegenHealth();
 
                 if (HP > maxHP) { HP = maxHP; }
 
@@ -162,8 +172,7 @@ public class PlayerStats : MonoBehaviour
                     }
 
                     // Sync Netcode
-                    if (netLifeState != lifeState)
-                        Respawn();
+                    if (netLifeState != lifeState) Respawn();
 
                     break;
                 }
@@ -172,13 +181,6 @@ public class PlayerStats : MonoBehaviour
 
                 break;
         }
-
-        // Debug
-        if (infiniteHP) { HP = maxHP; }
-        if (infiniteInk) { ink = inkCapacity; }
-
-        // Net
-        if (!GetComponent<PlayerNetworking>().isOwnByThisInstance) { infiniteInk = true; }
     }
 
     void Respawn()

@@ -24,6 +24,8 @@ public class Blaster : Weapon
 
     void Update()
     {
+        if (GetComponentInParent<PlayerMovement>().isRunning || !GetComponentInParent<PlayerStats>().playerInputEnabled && GetComponentInParent<PlayerNetworking>().isOwnByThisInstance) return;
+
         isShooting = GetComponentInParent<PlayerArmament>().weaponShooting;
 
         // Aiming Rotation

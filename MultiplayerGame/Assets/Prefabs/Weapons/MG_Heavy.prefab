@@ -87,7 +87,7 @@ MonoBehaviour:
   rng: 6
   jumpRng: 12
   firstShootCooldown: 120
-  shootCost: 0.8
+  shootCost: 0.1
   moveSpeedMultiplier: 0.2
   pRadius: 3
   pStrength: 1

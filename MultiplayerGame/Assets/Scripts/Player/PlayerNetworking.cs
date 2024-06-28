@@ -55,7 +55,7 @@ public class PlayerNetworking : MonoBehaviour
             teamTag = GetComponent<PlayerStats>().teamTag,
             lifeState = GetComponent<PlayerStats>().lifeState,
             running = GetComponent<PlayerMovement>().GetRunInput(),
-            jumping = GetComponent<PlayerMovement>().GetJumpInput(),
+            isGrounded = GetComponent<PlayerMovement>().isGrounded,
             camRot = GetComponent<PlayerOrbitCamera>().GetCamRot(),
             position = transform.position,
             rotation = GetComponent<PlayerMovement>().playerBody.transform.rotation,
@@ -63,8 +63,7 @@ public class PlayerNetworking : MonoBehaviour
             netID = networkID,
             inputEnabled = GetComponent<PlayerStats>().playerInputEnabled,
             mainWeapon = GetComponent<PlayerArmament>().currentWeaponId,
-            subWeapon = GetComponent<PlayerArmament>().currentSubWeaponId,
-            moveInput = GetComponent<PlayerMovement>().moveInput
+            subWeapon = GetComponent<PlayerArmament>().currentSubWeaponId
         };
 
         if (GetComponent<PlayerArmament>().currentWeapon != null)
@@ -88,7 +87,7 @@ public class PlayerNetworking : MonoBehaviour
         if (GetComponent<PlayerStats>().teamTag != pck.teamTag) GetComponent<PlayerStats>().ChangeTag(pck.teamTag);
 
         GetComponent<PlayerMovement>().SetRunInput(pck.running);
-        GetComponent<PlayerMovement>().SetJumpInput(pck.jumping);
+        GetComponent<PlayerMovement>().isGrounded = pck.isGrounded;
         GetComponent<PlayerArmament>().SetFire(pck.shooting);
         GetComponent<PlayerArmament>().SetSubFire(pck.shootingSub);
         GetComponent<PlayerOrbitCamera>().SetCamRot(pck.camRot);
@@ -98,7 +97,6 @@ public class PlayerNetworking : MonoBehaviour
         GetComponent<PlayerArmament>().ChangeWeapon(pck.mainWeapon);
         GetComponent<PlayerArmament>().ChangeSubWeapon(pck.subWeapon);
         GetComponent<PlayerStats>().netLifeState = pck.lifeState;
-        GetComponent<PlayerMovement>().moveInput = pck.moveInput;
 
         if (!pck.inputEnabled) nameTagText.color = Color.grey; else nameTagText.color = Color.white;
 

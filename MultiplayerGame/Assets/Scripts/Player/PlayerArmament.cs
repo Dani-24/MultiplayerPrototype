@@ -34,7 +34,11 @@ public class PlayerArmament : MonoBehaviour
     void Update()
     {
         if (GetComponent<PlayerStats>().lifeState != PlayerStats.LifeState.alive)
+        {
             weaponShooting = subWeaponShooting = chargingSub = false;
+            if (currentWeapon != null) currentWeapon.SetActive(false);
+        }
+        else if (currentWeapon != null && !currentWeapon.activeSelf) currentWeapon.SetActive(true);
 
         // WEAPON
         if (!createdWeapon || currentWeapon.GetComponent<Weapon>().weaponName != weaponToUse.GetComponent<Weapon>().weaponName) SetWeapon();
@@ -43,8 +47,11 @@ public class PlayerArmament : MonoBehaviour
         aimDirection = GetComponentInParent<PlayerOrbitCamera>().GetCameraTransform().forward;
 
         // SUB WEAPON
-        if (subWeaponShooting) ChargeSub();
-        else if (chargingSub) ThrowSub();
+        if (!GetComponent<PlayerMovement>().isRunning && GetComponent<PlayerStats>().playerInputEnabled)  // Don't allow throwing bombs while running or UI Open
+        {
+            if (subWeaponShooting) ChargeSub();
+            else if (chargingSub) ThrowSub();
+        }
 
         // Update weapon tag
         if (currentWeapon != null) currentWeapon.GetComponent<Weapon>().teamTag = GetComponent<PlayerStats>().teamTag;
@@ -130,7 +137,7 @@ public class PlayerArmament : MonoBehaviour
 
     void OnSubFire(InputValue value)
     {
-        if (GetComponent<PlayerNetworking>().isOwnByThisInstance && GetComponent<PlayerStats>().playerInputEnabled)
+        if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
             subWeaponShooting = value.isPressed;
     }
 

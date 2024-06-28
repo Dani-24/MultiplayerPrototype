@@ -178,7 +178,7 @@ MonoBehaviour:
   pHardness: 0.1
   sprayDropletsNum: 1
   sprayDropMeshRadius: 1
-  sprayPaintRadius: 2
+  sprayPaintRadius: 2.5
   linearPaint: 0
   dropletsDistance: 1
   spawnBulletPosition: {fileID: 3150462560917926386}

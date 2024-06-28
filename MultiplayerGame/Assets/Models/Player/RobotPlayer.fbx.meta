@@ -33,40 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature|BallMode
-      takeName: Armature|BallMode
-      internalID: 7874048636888022332
-      firstFrame: 0
-      lastFrame: 0
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Armature|Go Into BallMode
+      name: Go Into BallMode
       takeName: Armature|Go Into BallMode
       internalID: 675732146943698757
       firstFrame: 0
-      lastFrame: 0
+      lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -95,7 +66,7 @@ ModelImporter:
       takeName: Armature|Idle
       internalID: -8945691123924629249
       firstFrame: 0
-      lastFrame: 40
+      lastFrame: 60
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -120,11 +91,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|Jump
+      name: Jump
       takeName: Armature|Jump
       internalID: 1079665108409675491
       firstFrame: 0
-      lastFrame: 0
+      lastFrame: 15
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -173,81 +144,125 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events: []
-      transformMask: []
-      maskType: 3
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 0
+      - path: Armature/CodoIK.L
+        weight: 1
+      - path: Armature/CodoIK.L/CodoIK.L_end
+        weight: 1
+      - path: Armature/CodoIK.R
+        weight: 1
+      - path: Armature/CodoIK.R/CodoIK.R_end
+        weight: 1
+      - path: Armature/Cuerpo
+        weight: 0
+      - path: Armature/Cuerpo/Brazo_Superior.L
+        weight: 1
+      - path: Armature/Cuerpo/Brazo_Superior.L/Brazo.L
+        weight: 1
+      - path: Armature/Cuerpo/Brazo_Superior.L/Brazo.L/Brazo.L_end
+        weight: 1
+      - path: Armature/Cuerpo/Brazo_Superior.R
+        weight: 1
+      - path: Armature/Cuerpo/Brazo_Superior.R/Brazo.R
+        weight: 1
+      - path: Armature/Cuerpo/Brazo_Superior.R/Brazo.R/Brazo.R_end
+        weight: 1
+      - path: Armature/Cuerpo/Cabeza
+        weight: 0
+      - path: Armature/Cuerpo/Cabeza/Ojo.L
+        weight: 0
+      - path: Armature/Cuerpo/Cabeza/Ojo.L/Ojo.L_end
+        weight: 0
+      - path: Armature/Cuerpo/Cabeza/Ojo.R
+        weight: 0
+      - path: Armature/Cuerpo/Cabeza/Ojo.R/Ojo.R_end
+        weight: 0
+      - path: Armature/Cuerpo/Cadera.L
+        weight: 0
+      - path: Armature/Cuerpo/Cadera.L/Pierna.L
+        weight: 0
+      - path: Armature/Cuerpo/Cadera.L/Pierna.L/Pie.L
+        weight: 0
+      - path: Armature/Cuerpo/Cadera.L/Pierna.L/Pie.L/Pie.L_end
+        weight: 0
+      - path: Armature/Cuerpo/Cadera.R
+        weight: 0
+      - path: Armature/Cuerpo/Cadera.R/Pierna.R
+        weight: 0
+      - path: Armature/Cuerpo/Cadera.R/Pierna.R/Pie.R
+        weight: 0
+      - path: Armature/Cuerpo/Cadera.R/Pierna.R/Pie.R/Pie.R_end
+        weight: 0
+      - path: Armature/ManoIK.L
+        weight: 1
+      - path: Armature/ManoIK.L/Mano.L
+        weight: 1
+      - path: Armature/ManoIK.L/Mano.L/Dedo.L
+        weight: 1
+      - path: Armature/ManoIK.L/Mano.L/Dedo.L/Dedo_Punta.L
+        weight: 1
+      - path: Armature/ManoIK.L/Mano.L/Dedo.L/Dedo_Punta.L/Dedo_Punta.L_end
+        weight: 1
+      - path: Armature/ManoIK.L/Mano.L/Dedos.L
+        weight: 1
+      - path: Armature/ManoIK.L/Mano.L/Dedos.L/Dedos_Punta.L
+        weight: 1
+      - path: Armature/ManoIK.L/Mano.L/Dedos.L/Dedos_Punta.L/Dedos_Punta.L_end
+        weight: 1
+      - path: Armature/ManoIK.R
+        weight: 1
+      - path: Armature/ManoIK.R/Mano.R
+        weight: 1
+      - path: Armature/ManoIK.R/Mano.R/Dedo.R
+        weight: 1
+      - path: Armature/ManoIK.R/Mano.R/Dedo.R/Dedo_Punta.R
+        weight: 1
+      - path: Armature/ManoIK.R/Mano.R/Dedo.R/Dedo_Punta.R/Dedo_Punta.R_end
+        weight: 1
+      - path: Armature/ManoIK.R/Mano.R/Dedos.R
+        weight: 1
+      - path: Armature/ManoIK.R/Mano.R/Dedos.R/Dedos_Punta.R
+        weight: 1
+      - path: Armature/ManoIK.R/Mano.R/Dedos.R/Dedos_Punta.R/Dedos_Punta.R_end
+        weight: 1
+      - path: Armature/RodillaIK.L
+        weight: 0
+      - path: Armature/RodillaIK.L/RodillaIK.L_end
+        weight: 0
+      - path: Armature/RodillaIK.R
+        weight: 0
+      - path: Armature/RodillaIK.R/RodillaIK.R_end
+        weight: 0
+      - path: Armature/TobilloIK.L
+        weight: 0
+      - path: Armature/TobilloIK.L/TobilloIK.L_end
+        weight: 0
+      - path: Armature/TobilloIK.R
+        weight: 0
+      - path: Armature/TobilloIK.R/TobilloIK.R_end
+        weight: 0
+      - path: Body
+        weight: 0
+      maskType: 0
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|Side Walk
-      takeName: Armature|Side Walk
-      internalID: 4489061274570545769
-      firstFrame: 0
-      lastFrame: 0
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Armature|Use Subweapon
-      takeName: Armature|Use Subweapon
-      internalID: 2266814631611921977
-      firstFrame: 0
-      lastFrame: 0
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Armature|Walk
+      name: Walk
       takeName: Armature|Walk
       internalID: 8349542763059015795
       firstFrame: 0
-      lastFrame: 0
+      lastFrame: 60
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0

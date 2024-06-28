@@ -397,6 +397,13 @@ public class ConnectionManager : MonoBehaviour
         {
             Debug.Log(debugLog);
 
+            isConnected = false;
+            disconnect = false;
+            connectionStablished = false;
+            pendingToCleanPlayers = true;
+            serverIsConnected = false;
+            clientIsConnected = false;
+
             if (!onlinePlay)
             {
                 if (isHosting)
@@ -428,7 +435,7 @@ public class ConnectionManager : MonoBehaviour
 
             onlinePlay = false;
             logged = false;
-            isHosting = false;
+            isHosting = false; 
             isConnected = false;
             disconnect = false;
             connectionStablished = false;
@@ -477,19 +484,19 @@ public class ConnectionManager : MonoBehaviour
     {
         return defaultPort; // Define always the same port
 
-        if (localHost) return defaultPort;
+        //if (localHost) return defaultPort;
 
-        for (int i = 1; i <= 9050; i++)
-        {
-            int j = UnityEngine.Random.Range(0, 9050);
-            if (IsPortAvailable(j))
-            {
-                Debug.Log("Port " + j + " is available");
-                return j;
-            }
-        }
+        //for (int i = 1; i <= 9050; i++)
+        //{
+        //    int j = UnityEngine.Random.Range(0, 9050);
+        //    if (IsPortAvailable(j))
+        //    {
+        //        Debug.Log("Port " + j + " is available");
+        //        return j;
+        //    }
+        //}
 
-        throw new Exception("There is no Port Available");
+        //throw new Exception("There is no Port Available");
     }
 
     bool IsPortAvailable(int _port)
@@ -1402,12 +1409,10 @@ public class PlayerPackage
     public Vector3 position;
     public Quaternion rotation;
 
-    public Vector2 moveInput;
-
     public Vector3 camRot;
 
     public bool running = false;
-    public bool jumping = false;
+    public bool isGrounded = false;
 
     public bool shooting = false;
     public bool shootingSub = false;

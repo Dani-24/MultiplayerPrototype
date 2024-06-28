@@ -85,7 +85,7 @@ MonoBehaviour:
   bulletSpeed: 50
   weaponRange: 13
   rng: 7
-  jumpRng: 16
+  jumpRng: 14
   firstShootCooldown: 30
   shootCost: 0.1
   moveSpeedMultiplier: 0.9

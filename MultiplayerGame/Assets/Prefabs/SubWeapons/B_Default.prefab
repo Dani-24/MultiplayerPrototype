@@ -50,7 +50,7 @@ MonoBehaviour:
   teamTag: 
   isShotByOwnPlayer: 0
   weaponName: Delay Bomb
-  dmg: 180
+  dmg: 120
   splashDmg: 30
   speed: 30
   range: 80

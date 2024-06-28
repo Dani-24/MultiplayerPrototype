@@ -11,8 +11,7 @@ public class Shooter : Weapon
         audioS = GetComponent<AudioSource>();
         Random.InitState(0);
 
-        if (GetComponentInParent<PlayerNetworking>().isOwnByThisInstance)
-            audioS.spatialBlend = 0;
+        if (GetComponentInParent<PlayerNetworking>().isOwnByThisInstance) audioS.spatialBlend = 0;
 
         if (bulletDropletPrefab == null) bulletDropletPrefab = bulletPrefab;
 
@@ -23,6 +22,8 @@ public class Shooter : Weapon
 
     void Update()
     {
+        if (GetComponentInParent<PlayerMovement>().isRunning || !GetComponentInParent<PlayerStats>().playerInputEnabled && GetComponentInParent<PlayerNetworking>().isOwnByThisInstance) return;
+
         isShooting = GetComponentInParent<PlayerArmament>().weaponShooting;
 
         // Aiming Rotation
