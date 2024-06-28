@@ -109,7 +109,7 @@ public class ConnectionManager : MonoBehaviour
 
     int cont = 0;
 
-    Package randomPackageToSend = null;
+    List<Package> randomPackages = new();
     List<DMGPackage> dmgReceivedPCKG = new();
 
     #endregion
@@ -161,11 +161,13 @@ public class ConnectionManager : MonoBehaviour
 
     public Package WritePackage(Pck_type type)
     {
-        Package pck = new Package();
-        pck.netID = ownPlayerNetID;
-        pck.IP = myIP;
-        pck.type = type;
-        pck.currentScene = activeSceneName;
+        Package pck = new()
+        {
+            netID = ownPlayerNetID,
+            IP = myIP,
+            type = type,
+            currentScene = activeSceneName
+        };
 
         #region Net Scene GameObject
         if (isHosting && SceneManagerScript.Instance.netGOs.Count > 0)
@@ -316,7 +318,7 @@ public class ConnectionManager : MonoBehaviour
 
     public void SendPackage(Package pck)
     {
-        randomPackageToSend = pck;
+        randomPackages.Add(pck);
     }
 
     #endregion
@@ -345,8 +347,7 @@ public class ConnectionManager : MonoBehaviour
 
     public void StartConnection()
     {
-        if (isConnected)
-            EndConnection();
+        if (isConnected) EndConnection();
 
         try
         {
@@ -368,7 +369,7 @@ public class ConnectionManager : MonoBehaviour
             }
             else
             {
-                port = FindAvailablePort(); //
+                port = FindAvailablePort();
 
                 ipep = new IPEndPoint(IPAddress.Parse(hostIP), port);       // As client set the server IP
 
@@ -435,7 +436,7 @@ public class ConnectionManager : MonoBehaviour
 
             onlinePlay = false;
             logged = false;
-            isHosting = false; 
+            isHosting = false;
             isConnected = false;
             disconnect = false;
             connectionStablished = false;
@@ -549,22 +550,27 @@ public class ConnectionManager : MonoBehaviour
                         sendPStream = SerializeJson(pPck);
 
                         foreach (EndPoint endP in remoteClients)
-                        {
                             socket.SendTo(sendPStream.ToArray(), (int)sendPStream.Length, SocketFlags.None, endP);
-                        }
 
-                        if (randomPackageToSend != null)
+                        #region Extra Data
+
+                        if (randomPackages.Count > 0)
                         {
                             for (int i = 0; i < remoteClients.Count; i++)
                             {
-                                MemoryStream sendPStreamB = new MemoryStream();
-                                sendPStreamB = SerializeJson(randomPackageToSend);
+                                for (int j = 0; j < randomPackages.Count; j++)
+                                {
+                                    MemoryStream sendPStreamB = new MemoryStream();
+                                    sendPStreamB = SerializeJson(randomPackages[j]);
 
-                                socket.SendTo(sendPStreamB.ToArray(), (int)sendPStreamB.Length, SocketFlags.None, remoteClients[i]);
-
-                                randomPackageToSend = null;
+                                    socket.SendTo(sendPStreamB.ToArray(), (int)sendPStreamB.Length, SocketFlags.None, remoteClients[i]);
+                                }
                             }
+                            randomPackages.Clear();
                         }
+
+                        #endregion
+
                     }
                     catch (SystemException e)
                     {
@@ -703,15 +709,21 @@ public class ConnectionManager : MonoBehaviour
                     delay = 0;
                 }
 
-                if (randomPackageToSend != null)
+                #region Extra Data
+
+                if (randomPackages.Count > 0)
                 {
-                    MemoryStream sendPStreamB = new MemoryStream();
-                    sendPStreamB = SerializeJson(randomPackageToSend);
+                    for (int j = 0; j < randomPackages.Count; j++)
+                    {
+                        MemoryStream sendPStreamB = new MemoryStream();
+                        sendPStreamB = SerializeJson(randomPackages[j]);
 
-                    socket.SendTo(sendPStreamB.ToArray(), (int)sendPStreamB.Length, SocketFlags.None, ipep);
-
-                    randomPackageToSend = null;
+                        socket.SendTo(sendPStreamB.ToArray(), (int)sendPStreamB.Length, SocketFlags.None, ipep);
+                    }
+                    randomPackages.Clear();
                 }
+
+                #endregion
 
                 #endregion
             }
@@ -888,7 +900,13 @@ public class ConnectionManager : MonoBehaviour
                     StartCoroutine(ReceiveHostData());
                 }
 
-                if (randomPackageToSend != null) StartCoroutine(SendExtraData());
+                if (randomPackages.Count > 0)
+                {
+                    for (int i = 0; i < randomPackages.Count; i++)
+                        StartCoroutine(SendExtraData(randomPackages[i]));
+
+                    randomPackages.Clear();
+                }
             }
         }
 
@@ -1192,7 +1210,7 @@ public class ConnectionManager : MonoBehaviour
         catch
         {
             Debug.Log("Cannot Receive Host Data: " + www.downloadHandler.error);
-            
+
             // Avoid Client in disconnected Room
             disconnect = true;
             showCommError = true;
@@ -1262,7 +1280,7 @@ public class ConnectionManager : MonoBehaviour
     }
 
     // Extra Data
-    public IEnumerator SendExtraData()
+    public IEnumerator SendExtraData(Package data)
     {
         WWWForm form = new();
 
@@ -1274,9 +1292,7 @@ public class ConnectionManager : MonoBehaviour
 
         form.AddField("timeStamp", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
 
-        form.AddField("data", PkgToJson(randomPackageToSend));
-
-        randomPackageToSend = null;
+        form.AddField("data", PkgToJson(data));
 
         UnityWebRequest www = UnityWebRequest.Post(PHP_Url, form);
 

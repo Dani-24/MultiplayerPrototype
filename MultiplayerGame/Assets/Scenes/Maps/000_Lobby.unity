@@ -30218,7 +30218,7 @@ PrefabInstance:
     - target: {fileID: 5394203701332355235, guid: f975b4175d3a89b42b96b63c4b3a768f,
         type: 3}
       propertyPath: enablePckLogs
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5394203701332355235, guid: f975b4175d3a89b42b96b63c4b3a768f,
         type: 3}
