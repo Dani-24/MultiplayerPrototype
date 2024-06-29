@@ -1252,8 +1252,6 @@ public class ConnectionManager : MonoBehaviour
             string jsonData = www.downloadHandler.text;
             string[] rows = jsonData.Split('\n');
 
-            availableRooms.Clear();
-
             foreach (string row in rows)
             {
                 if (!string.IsNullOrEmpty(row))
