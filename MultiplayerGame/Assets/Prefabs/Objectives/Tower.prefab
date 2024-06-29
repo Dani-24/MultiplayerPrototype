@@ -4036,8 +4036,8 @@ MonoBehaviour:
   betaTravelDist: 0
   alphaTotalDist: 0
   betaTotalDist: 0
-  alphaAudio: {fileID: 8300000, guid: 8b06dda86bd372e498b5c4f27a78ba64, type: 3}
-  betaAudio: {fileID: 8300000, guid: c6c71e885821c5547879f608770e2fc6, type: 3}
+  alphaAudio: {fileID: 8300000, guid: e81559b8f5adc614a9b7879a98649a15, type: 3}
+  betaAudio: {fileID: 8300000, guid: 3eaa87029e4fb0b4eb76c02f09b7c2f1, type: 3}
   backwardsAudio: {fileID: 8300000, guid: 03ec2cc9d158c7b4ca91888c819fafa3, type: 3}
   meshesWithTeamColor:
   - {fileID: 4259649487096491521}
