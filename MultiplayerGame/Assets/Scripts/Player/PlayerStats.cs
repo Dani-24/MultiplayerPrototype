@@ -83,15 +83,11 @@ public class PlayerStats : MonoBehaviour
 
         // Check Color & Team
 
-        ///////////////////////////////////////
+        for (int i = 0; i < teamColorSkinnedMeshes.Count; ++i)
+            teamColorSkinnedMeshes[i].materials[1].color = SceneManagerScript.Instance.GetTeamColor(teamTag);
 
         for (int i = 0; i < teamColorBaseMeshes.Count; ++i)
             teamColorBaseMeshes[i].material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
-
-        for (int i = 0; i < teamColorSkinnedMeshes.Count; ++i)
-            teamColorSkinnedMeshes[i].material.color = SceneManagerScript.Instance.GetTeamColor(teamTag);
-
-        ///////////////////////////////////////
 
         if (GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
