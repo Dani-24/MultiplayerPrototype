@@ -119,7 +119,7 @@ function CloseRoom(){
 function SearchRoom(){
     global $conn;
 
-    $sql = "SELECT * FROM Rooms";
+    $sql = "SELECT * FROM Rooms ORDER BY Room_Id DESC";
 
     $result = $conn->query($sql);
 
