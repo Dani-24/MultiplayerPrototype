@@ -45,7 +45,10 @@ public class CanvasS_Conn : MonoBehaviour
 
         if (currentPanel == PanelOptions.Room)
         {
-            roomID.text = "Room ID: " + ConnectionManager.Instance.GetHostIP();
+            if (!ConnectionManager.Instance.onlinePlay)
+                roomID.text = "Room ID: " + ConnectionManager.Instance.GetHostIP();
+            else
+                roomID.text = "Room ID: " + ConnectionManager.Instance.PHP_roomId;
 
             if (ConnectionManager.Instance.isHosting && SceneManagerScript.Instance.sceneName == ConnectionManager.Instance.lobbyScene)
             {

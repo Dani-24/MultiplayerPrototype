@@ -62,10 +62,10 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] List<netGO> newNetGOs;
 
     [Header("Online (PHP)")]
-    [SerializeField] bool onlinePlay = false;
+    public bool onlinePlay = false;
     [SerializeField] bool logged = false;
     [SerializeField] string PHP_Url = "https://citmalumnes.upc.es/~danieltr1/OnlinePlay.php";
-    [SerializeField] int PHP_roomId = -1;
+    public int PHP_roomId = -1;
     [SerializeField] int PHP_userId = -1;
     [SerializeField] int PHP_askId = 0;
 

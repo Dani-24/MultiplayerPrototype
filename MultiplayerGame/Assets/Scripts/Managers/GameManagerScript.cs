@@ -50,9 +50,9 @@ public class GameManagerScript : MonoBehaviour
 
     void Start()
     {
-        alphaScoreText.text = ":D";
+        alphaScoreText.text = "Waiting all players";
         screenMsg.text = "Starting Game ...";
-        betaScoreText.text = "):";
+        betaScoreText.text = "Waiting all players";
 
         timerCount = matchTimes[0].time;
     }

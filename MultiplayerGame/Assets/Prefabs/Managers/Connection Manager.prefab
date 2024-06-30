@@ -101,8 +101,8 @@ MonoBehaviour:
     setDisconnected: 0
   ownTeamTagOnSceneChange: 
   playerPackages: []
-  startClip: {fileID: 8300000, guid: 4004fa011becf6b4dba1ee2af01aedbe, type: 3}
-  endClip: {fileID: 8300000, guid: 73bd7e8b242154044a156aefe0fa019a, type: 3}
+  startClip: {fileID: 8300000, guid: f379e2769d20c9a4e8bb982f14157b58, type: 3}
+  endClip: {fileID: 8300000, guid: 13ebd0a8a98fd724d9fb2cc11224064d, type: 3}
   commErrorClip: {fileID: 8300000, guid: 0f4c0d90284f8a9498c1e68620ae00ef, type: 3}
 --- !u!82 &8561263313555369219
 AudioSource:
