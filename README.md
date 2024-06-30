@@ -1,11 +1,21 @@
-# Unity_MultiplayerGame
+# Co-Lorín, a multiplayer game prototype
 
-> Añadir foto del proyecto
 
-> Describir que se ha realizado y que se quiere realizar
+* Features:
 
-> Guia de uso
+> Handmade netcode
 
-> Controles
+> Painting Shooter Game 
 
-> Referencias y agradecimientos / sistemas de terceros
+* Controls:
+
+> ASDW - Movement
+
+> Spacebar - Jump
+
+> Left Shift - Run
+
+> Left Mouse Click - Shoot / Interact with UI
+
+> Escape - Open UI
+
