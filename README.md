@@ -5,7 +5,7 @@
 
 > Handmade netcode
 
-> Painting Shooter Game 
+> Painting Team Shooter Game 
 
 * Controls:
 
