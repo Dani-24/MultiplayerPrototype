@@ -85,13 +85,12 @@ public class ConnectionManager : MonoBehaviour
     public bool disconnect = false;
 
     bool changeScene;
-    string sceneToChange;
 
     #region NET Data
 
     [Header("NET Data Display")]
     [SerializeField] bool connectionStablished = false;
-    string activeSceneName;
+    public string activeSceneName;
 
     public int ownPlayerNetID = -1;
     public PlayerPackage ownPlayerPck;
@@ -240,7 +239,7 @@ public class ConnectionManager : MonoBehaviour
         // CHANGE SCENE
         if (!isHosting && pck.currentScene != activeSceneName)
         {
-            sceneToChange = pck.currentScene;
+            activeSceneName = pck.currentScene;
             changeScene = true;
         }
 
@@ -358,8 +357,7 @@ public class ConnectionManager : MonoBehaviour
 
     public void StartConnection()
     {
-        if (isConnected)
-            EndConnection();
+        if (isConnected) EndConnection();
 
         try
         {
@@ -780,6 +778,8 @@ public class ConnectionManager : MonoBehaviour
         if (connectAtStart) StartConnection();
 
         audioSource = GetComponent<AudioSource>();
+
+        activeSceneName = SceneManager.GetActiveScene().name;
     }
 
     void Update()
@@ -808,8 +808,6 @@ public class ConnectionManager : MonoBehaviour
 
         userName = UI_Manager.Instance.userName;    // this should only update when the username is updated instead of every frame
 
-        activeSceneName = SceneManager.GetActiveScene().name;
-
         delay += Time.deltaTime;
 
         UpdateGameObjects();
@@ -818,8 +816,7 @@ public class ConnectionManager : MonoBehaviour
         {
             changeScene = false;
             SceneManagerScript.Instance.netGOs.Clear();
-            SceneManagerScript.Instance.ChangeScene(sceneToChange);
-            sceneToChange = "";
+            SceneManagerScript.Instance.ChangeScene(activeSceneName);
         }
 
         if (activeSceneName != lobbyScene) connGameplayState = ConnectionGameplayState.Playing; else connGameplayState = ConnectionGameplayState.Lobby;

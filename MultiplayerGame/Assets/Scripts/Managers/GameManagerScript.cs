@@ -161,7 +161,11 @@ public class GameManagerScript : MonoBehaviour
                     }
                 }
 
-                if (!timerNetGo.connectedToServer && timerCount <= 0) SceneManagerScript.Instance.ChangeScene("000_Lobby", true);
+                if (!timerNetGo.connectedToServer && timerCount <= 0)
+                {
+                    SceneManagerScript.Instance.ChangeScene("000_Lobby", true);
+                    ConnectionManager.Instance.activeSceneName = "000_Lobby";
+                }
 
                 break;
         }
