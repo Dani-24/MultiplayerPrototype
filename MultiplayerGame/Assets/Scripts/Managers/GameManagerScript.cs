@@ -64,7 +64,7 @@ public class GameManagerScript : MonoBehaviour
             case MatchState.waiting:
                 CameraManager.Instance.pauseUpdate = true;
                 SceneManagerScript.Instance.GetOwnPlayerInstance().GetComponent<PlayerStats>().playerInputEnabled = false;
-                
+
                 if (!timerNetGo.connectedToServer && timerCount <= 0)
                 {
                     matchState = MatchState.playing;
@@ -177,6 +177,9 @@ public class GameManagerScript : MonoBehaviour
             case GameMode.towah:
                 alphaScore = (int)(tower.alphaRecord * 100);
                 betaScore = (int)(tower.betaRecord * 100);
+
+                tower.GetComponent<BoxCollider>().enabled = (matchState != MatchState.waiting);
+
                 break;
         }
 
@@ -196,7 +199,7 @@ public class GameManagerScript : MonoBehaviour
         TimeSpan time = TimeSpan.FromSeconds(timerCount);
         timer.text = time.ToString("mm':'ss");
 
-        if(matchState != MatchState.waiting)
+        if (matchState != MatchState.waiting)
         {
             alphaScoreText.text = "Alpha Score: " + alphaScore;
             betaScoreText.text = "Beta Score: " + betaScore;

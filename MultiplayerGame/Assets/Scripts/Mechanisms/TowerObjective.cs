@@ -50,7 +50,6 @@ public class TowerObjective : MonoBehaviour
     [SerializeField] NetGameObject netPosZ;
 
     [SerializeField] float interpolationSpeed = 1.0f;
-    [SerializeField] float towerPlayerMaxDist;
 
     void Start()
     {
@@ -75,19 +74,17 @@ public class TowerObjective : MonoBehaviour
     void Update()
     {
         #region Check Players on tower
+
         if (playersOnTower.Count <= 0)
         {
-            if (state != TowerState.Backing)
-            {
-                state = TowerState.Resting;
-            }
+            if (state != TowerState.Backing) state = TowerState.Resting;
         }
         else
         {
             int alphas = 0;
             for (int i = 0; i < playersOnTower.Count; i++)
             {
-                if (playersOnTower[i].GetComponent<PlayerStats>().teamTag == "Alpha") alphas++; else alphas--;
+                if (playersOnTower[i] != null && playersOnTower[i].GetComponent<PlayerStats>().teamTag == "Alpha") alphas++; else alphas--;
             }
 
             // Start Moving if all players are from the same team
@@ -107,6 +104,7 @@ public class TowerObjective : MonoBehaviour
                 state = TowerState.Resting;
             }
         }
+
         #endregion
 
         TowerStates();
@@ -137,7 +135,7 @@ public class TowerObjective : MonoBehaviour
         // Check players deaths
         for (int i = 0; i < playersOnTower.Count; i++)
         {
-            if (Vector3.Distance(playersOnTower[i].transform.position, transform.position) > towerPlayerMaxDist)
+            if (playersOnTower[i] != null && playersOnTower[i].GetComponent<PlayerStats>().lifeState != PlayerStats.LifeState.alive)
             {
                 playersOnTower[i].transform.SetParent(null);
                 playersOnTower.Remove(playersOnTower[i]);

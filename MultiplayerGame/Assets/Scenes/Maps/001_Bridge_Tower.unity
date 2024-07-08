@@ -8195,7 +8195,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 66613552}
 --- !u!114 &185646835
@@ -50646,7 +50646,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 66613552}
 --- !u!114 &1063133463
@@ -67592,6 +67592,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 965749402}
+    - target: {fileID: 3479165268802781808, guid: e318062746cdcbe40b5d81f23c3ad2b2,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4280265610790644918, guid: e318062746cdcbe40b5d81f23c3ad2b2,
         type: 3}
       propertyPath: m_Mesh
@@ -67606,6 +67611,11 @@ PrefabInstance:
         type: 3}
       propertyPath: speed
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4962949308907558289, guid: e318062746cdcbe40b5d81f23c3ad2b2,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4962949308907558289, guid: e318062746cdcbe40b5d81f23c3ad2b2,
         type: 3}

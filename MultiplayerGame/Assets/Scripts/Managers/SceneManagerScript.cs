@@ -14,6 +14,7 @@ public class SceneManagerScript : MonoBehaviour
     [SerializeField] string sceneToLoad;
     [SerializeField] bool loadScene = false;
     [SerializeField] float timeToLoad = 5.0f;
+    bool isAlreadyChangingScene = false;
 
     [SerializeField] Animator transitionAnimator;
     [SerializeField] float transitionTime;
@@ -419,6 +420,10 @@ public class SceneManagerScript : MonoBehaviour
 
     public void ChangeScene(string sceneToChange, bool preserveTag = false)
     {
+        if (isAlreadyChangingScene) return;
+
+        isAlreadyChangingScene = true;
+
         UI_Manager.Instance.CloseAll();
 
         if (preserveTag) ConnectionManager.Instance.ownTeamTagOnSceneChange = ConnectionManager.Instance.ownPlayerPck.teamTag;
@@ -442,6 +447,8 @@ public class SceneManagerScript : MonoBehaviour
         SceneManager.LoadScene(sceneToChange);
 
         LoadData();
+
+        isAlreadyChangingScene = false;
     }
 
     #endregion
@@ -557,8 +564,7 @@ public class SceneManagerScript : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        if (saveOnExit)
-            SaveData();
+        if (saveOnExit) SaveData();
 
         SaveManagerScript.DeleteRuntimeData();
     }
