@@ -61,6 +61,8 @@ public class ConnectionManager : MonoBehaviour
 
     [SerializeField] List<netGO> newNetGOs;
 
+    [SerializeField] int userNumber = -1;
+
     [Header("Online (PHP)")]
     public bool onlinePlay = false;
     [SerializeField] bool logged = false;
@@ -97,6 +99,7 @@ public class ConnectionManager : MonoBehaviour
     [HideInInspector] public string ownTeamTagOnSceneChange = "";
 
     public List<PlayerPackage> playerPackages = new List<PlayerPackage>();
+    bool ownPckgAssigned = false;
 
     Color _alphaTcolor;
     Color _betaTcolor;
@@ -110,6 +113,7 @@ public class ConnectionManager : MonoBehaviour
 
     Package randomPackageToSend = null;
     List<DMGPackage> dmgReceivedPCKG = new();
+    int nextPckID = 0;
 
     #endregion
 
@@ -166,6 +170,17 @@ public class ConnectionManager : MonoBehaviour
         pck.type = type;
         pck.currentScene = activeSceneName;
 
+        if (isHosting)
+        {
+            pck.user = Network_User.Server;
+            pck.userNum = userNumber = 0;
+        }
+        else
+        {
+            pck.user = Network_User.Client;
+            pck.userNum = userNumber;
+        }
+
         #region Net Scene GameObject
         if (isHosting && SceneManagerScript.Instance.netGOs.Count > 0)
         {
@@ -184,33 +199,13 @@ public class ConnectionManager : MonoBehaviour
 
         switch (type)
         {
-            case Pck_type.Player:       // CLIENT
+            case Pck_type.Player:
 
                 if (ownPlayerPck != null)
                 {
                     pck.playerPck = ownPlayerPck;
                     pck.playerPck.userName = userName;
                 }
-
-                break;
-            case Pck_type.PlayerList:   // SERVER
-
-                // Update own player
-                //if (delay > connectionTickRate)
-                //{
-                //    delay = 0;
-
-                for (int i = 0; i < playerPackages.Count; i++)
-                {
-                    if (playerPackages[i].netID == ownPlayerPck.netID)
-                    {
-                        playerPackages[i] = ownPlayerPck;
-                        break;
-                    }
-                }
-                //}
-
-                pck.playersListPck = playerPackages;
 
                 break;
             case Pck_type.Connection:
@@ -220,7 +215,9 @@ public class ConnectionManager : MonoBehaviour
                 break;
             case Pck_type.DMG:
 
-                pck.dmGPackage = new DMGPackage();
+                pck.pckgID = nextPckID;
+
+                if (nextPckID > 9999) nextPckID = 0; else nextPckID++;
 
                 break;
         }
@@ -230,24 +227,27 @@ public class ConnectionManager : MonoBehaviour
 
     void ReadPackage(Package pck)
     {
+        if (enablePckLogs) Debug.Log("Received Pck: " + pck.type + " from: " + pck.user);
+
         lastPckgDateTime = pck.pckCreationTime;
         int pckDelay = (DateTime.UtcNow - lastPckgDateTime).Milliseconds;
         string pckLog = "Package from: " + pck.user + " (" + pck.IP + ") ms: " + pckDelay;
 
-        if (enablePckLogs) Debug.Log("Received Pck: " + pck.type);
-
         // CHANGE SCENE
-        if (!isHosting && pck.currentScene != activeSceneName)
+        if (pck.user == Network_User.Server)
         {
-            activeSceneName = pck.currentScene;
-            changeScene = true;
-        }
+            if (pck.currentScene != activeSceneName)
+            {
+                activeSceneName = pck.currentScene;
+                changeScene = true;
+            }
 
-        if (!isHosting && isConnected) newNetGOs = pck.sceneNetGO;
+            if (isConnected) newNetGOs = pck.sceneNetGO;
+        }
 
         switch (pck.type)
         {
-            case Pck_type.Player:       // SERVER
+            case Pck_type.Player:
 
                 bool alreadyExists = false;
 
@@ -263,25 +263,18 @@ public class ConnectionManager : MonoBehaviour
 
                 if (!alreadyExists) playerPackages.Add(pck.playerPck);
 
-                break;
-            case Pck_type.PlayerList:   // CLIENT
-
-                playerPackages = pck.playersListPck;
-
-                // Is really Needed?
-                foreach (DMGPackage dmgPck in pck.dMGPackages)
+                if (playerPackages.Count == userNumber && !ownPckgAssigned)
                 {
-                    Debug.Log(dmgPck.receiverID);
+                    if (userNumber % 2 == 0) ownPlayerPck.teamTag = "Alpha"; else ownPlayerPck.teamTag = "Beta";
 
-                    if (dmgPck.receiverID == ownPlayerNetID)
-                    {
-                        Debug.Log("DMG Package Received From: " + dmgPck.dealer);
-                        dmgReceivedPCKG.Add(dmgPck);
-                    }
+                    playerPackages.Add(ownPlayerPck);
+                    ownPckgAssigned = true;
                 }
 
                 break;
-            case Pck_type.Connection:   // Messages
+            case Pck_type.Connection:   // Client
+
+                if (pck.user != Network_User.Server || isHosting) { break; }
 
                 // Limit players
                 if (!pck.connPck.canConnect && pck.IP == myIP)
@@ -301,14 +294,12 @@ public class ConnectionManager : MonoBehaviour
                     _NEWbetaTcolor = pck.connPck.betaColor;
                 }
 
+                userNumber = pck.userNum;
+
                 break;
             case Pck_type.DMG:
 
-                Debug.Log("DMG Package Received From: " + pck.dmGPackage.dealer);
-
-                if (pck.dmGPackage.receiverID == ownPlayerNetID) dmgReceivedPCKG.Add(pck.dmGPackage);
-
-                // Also check DMG list
+                // Check DMG list
                 foreach (DMGPackage dmgPck in pck.dMGPackages)
                 {
                     Debug.Log(dmgPck.receiverID);
@@ -545,17 +536,16 @@ public class ConnectionManager : MonoBehaviour
     {
         while (true)
         {
-            if (clientIsConnected)
-            {
-                #region Send Data to all Clients
+            #region Send Data to all Clients
 
-                if (connectionStablished)
+            if (clientIsConnected && connectionStablished)
+            {
+                try
                 {
-                    try
+                    if (delay > connectionTickRate)
                     {
                         MemoryStream sendPStream = new MemoryStream();
-                        Package pPck = WritePackage(Pck_type.PlayerList);
-                        pPck.user = Network_User.Server;
+                        Package pPck = WritePackage(Pck_type.Player);
 
                         sendPStream = SerializeJson(pPck);
 
@@ -563,32 +553,33 @@ public class ConnectionManager : MonoBehaviour
                         {
                             socket.SendTo(sendPStream.ToArray(), (int)sendPStream.Length, SocketFlags.None, endP);
                         }
+                        delay = 0;
+                    }
 
-                        if (randomPackageToSend != null)
+                    if (randomPackageToSend != null)
+                    {
+                        for (int i = 0; i < remoteClients.Count; i++)
                         {
-                            for (int i = 0; i < remoteClients.Count; i++)
-                            {
-                                MemoryStream sendPStreamB = new MemoryStream();
-                                sendPStreamB = SerializeJson(randomPackageToSend);
+                            MemoryStream sendPStreamB = new MemoryStream();
+                            sendPStreamB = SerializeJson(randomPackageToSend);
 
-                                socket.SendTo(sendPStreamB.ToArray(), (int)sendPStreamB.Length, SocketFlags.None, remoteClients[i]);
+                            socket.SendTo(sendPStreamB.ToArray(), (int)sendPStreamB.Length, SocketFlags.None, remoteClients[i]);
 
-                                randomPackageToSend = null;
-                            }
+                            randomPackageToSend = null;
                         }
                     }
-                    catch (SystemException e)
-                    {
-                        Debug.Log("Client has disconnected (Send)" + e.ToString());
-
-                        showCommError = true;
-
-                        if (clientIsConnected) EndConnection();
-                    }
                 }
+                catch (SystemException e)
+                {
+                    Debug.Log("Client has disconnected (Send)" + e.ToString());
 
-                #endregion
+                    showCommError = true;
+
+                    if (clientIsConnected) EndConnection();
+                }
             }
+
+            #endregion
         }
     }
 
@@ -618,17 +609,16 @@ public class ConnectionManager : MonoBehaviour
                 Package receivedPck = DeserializeJson(receiveStream);
                 ReadPackage(receivedPck);
 
-                // Answering
                 switch (receivedPck.type)
                 {
                     case Pck_type.Connection:
+                        // Answering
                         {
                             MemoryStream sendStream = new MemoryStream();
 
                             Package answerPck = WritePackage(Pck_type.Connection);
                             answerPck.IP = receivedPck.IP; // Return same IP
                             answerPck.connPck.message = receivedPck.connPck.message;
-                            answerPck.user = Network_User.Server;
                             answerPck.connPck.isAnswer = true;
 
                             if (playerPackages.Count >= maxPlayers || connGameplayState != ConnectionGameplayState.Lobby || receivedPck.connPck.version != version)
@@ -642,6 +632,8 @@ public class ConnectionManager : MonoBehaviour
                                 answerPck.connPck.setColor = true;
                                 answerPck.connPck.alphaColor = _alphaTcolor;
                                 answerPck.connPck.betaColor = _betaTcolor;
+
+                                answerPck.userNum = playerPackages.Count;
                             }
 
                             sendStream = SerializeJson(answerPck);
@@ -650,17 +642,14 @@ public class ConnectionManager : MonoBehaviour
                             connectionStablished = true;
                         }
                         break;
-                    case Pck_type.DMG:
+                    default:
 
-                        // Resend DMG to all Clients
+                        // Resend to all Clients
                         foreach (EndPoint endP in remoteClients)
                         {
                             if (!endP.Equals(remoteClient))
                                 socket.SendTo(receiveStream.ToArray(), (int)receiveStream.Length, SocketFlags.None, endP);
                         }
-
-                        break;
-                    default:
                         break;
                 }
 
@@ -690,7 +679,6 @@ public class ConnectionManager : MonoBehaviour
             Package pck = WritePackage(Pck_type.Connection);
             pck.connPck.message = "Connection Stablished";
             pck.connPck.version = version;
-            pck.user = Network_User.Client;
             sendStream = SerializeJson(pck);
 
             socket.SendTo(sendStream.ToArray(), (int)sendStream.Length, SocketFlags.None, ipep);
@@ -707,7 +695,6 @@ public class ConnectionManager : MonoBehaviour
                 {
                     MemoryStream sendPStream = new MemoryStream();
                     Package pPck = WritePackage(Pck_type.Player);
-                    pPck.user = Network_User.Client;
                     sendPStream = SerializeJson(pPck);
 
                     socket.SendTo(sendPStream.ToArray(), (int)sendPStream.Length, SocketFlags.None, ipep);
@@ -926,6 +913,12 @@ public class ConnectionManager : MonoBehaviour
             ownPlayerPck.userName = userName;
         }
 
+        if (isHosting && playerPackages.Count == 0)
+        {
+            playerPackages.Add(ownPlayerPck);
+            ownPckgAssigned = true;
+        }
+
         if (isConnected)
         {
             // Net GO Update (Client only)
@@ -944,8 +937,6 @@ public class ConnectionManager : MonoBehaviour
                     }
                 }
             }
-
-            if (isHosting && playerPackages.Count == 0) playerPackages.Add(ownPlayerPck);
 
             // Manage Player Packages
             for (int i = 0; i < playerPackages.Count; i++)
@@ -1170,8 +1161,7 @@ public class ConnectionManager : MonoBehaviour
 
         form.AddField("timeStamp", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
 
-        Package pPck = WritePackage(Pck_type.PlayerList);
-        pPck.user = Network_User.Server;
+        Package pPck = WritePackage(Pck_type.Player);
 
         form.AddField("data", PkgToJson(pPck));
 
@@ -1221,7 +1211,6 @@ public class ConnectionManager : MonoBehaviour
 
         MemoryStream sendPStream = new MemoryStream();
         Package pPck = WritePackage(Pck_type.Player);
-        pPck.user = Network_User.Client;
 
         form.AddField("data", PkgToJson(pPck));
 
@@ -1372,7 +1361,6 @@ public enum ConnectionGameplayState
 public enum Pck_type
 {
     Player,
-    PlayerList,
     Connection,
     DMG
 }
@@ -1387,22 +1375,27 @@ public enum Network_User
 [System.Serializable]
 public class Package
 {
+    // General Data
     public Pck_type type;
     public string IP;
     public DateTime pckCreationTime = DateTime.UtcNow;
     public Network_User user;
     public int netID;
+    public int userNum = 0;
 
+    // Host
     public string currentScene;
     public List<netGO> sceneNetGO = new List<netGO>();
 
-    public PlayerPackage playerPck = null;                                  // Esto lo devuelve el client
-    public List<PlayerPackage> playersListPck = new List<PlayerPackage>();  // Esto lo devuelve el Server
+    public PlayerPackage playerPck = null;
 
+    // Asking / Answer
     public ConnectionPackage connPck = null;
 
-    public DMGPackage dmGPackage = null;
+    // Damage Event
     public List<DMGPackage> dMGPackages = new List<DMGPackage>();
+
+    public int pckgID = 0;
 }
 
 [System.Serializable]

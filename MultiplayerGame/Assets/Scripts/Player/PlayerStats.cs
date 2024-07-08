@@ -249,13 +249,16 @@ public class PlayerStats : MonoBehaviour
         if (!GetComponent<PlayerNetworking>().isOwnByThisInstance)
         {
             Package dmgPckg = ConnectionManager.Instance.WritePackage(Pck_type.DMG);
-            dmgPckg.dmGPackage = new DMGPackage
+
+            DMGPackage dmgPackage = new DMGPackage
             {
                 dmg = DMG,
                 cause = whatDealsTheDMG,
                 dealer = whoDealsTheDMG,
                 receiverID = GetComponent<PlayerNetworking>().networkID
             };
+
+            dmgPckg.dMGPackages.Add(dmgPackage);
 
             ConnectionManager.Instance.SendPackage(dmgPckg);
             return;
