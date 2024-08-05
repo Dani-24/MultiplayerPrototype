@@ -63563,16 +63563,6 @@ PrefabInstance:
       objectReference: {fileID: 1212948682}
     - target: {fileID: 4962949308907558289, guid: e318062746cdcbe40b5d81f23c3ad2b2,
         type: 3}
-      propertyPath: speed
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4962949308907558289, guid: e318062746cdcbe40b5d81f23c3ad2b2,
-        type: 3}
-      propertyPath: backingSpeed
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4962949308907558289, guid: e318062746cdcbe40b5d81f23c3ad2b2,
-        type: 3}
       propertyPath: startCheckpoint
       value: 
       objectReference: {fileID: 51228556}
@@ -90645,7 +90635,7 @@ MonoBehaviour:
   - {fileID: 1547825790}
   audioSources:
   - {fileID: 1677566328}
-  puntuationNeeded: 0.12
+  puntuationNeeded: 0.11
   timerNeeded: 90
 --- !u!82 &1677566328
 AudioSource:

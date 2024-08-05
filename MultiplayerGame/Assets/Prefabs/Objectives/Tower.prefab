@@ -4028,7 +4028,7 @@ MonoBehaviour:
   state: 1
   teamOnTower: 
   speed: 5
-  backingSpeed: 6
+  backingSpeed: 5.5
   timeToBack: 3
   alphaRecord: 0
   betaRecord: 0
@@ -4052,7 +4052,6 @@ MonoBehaviour:
   netPosY: {fileID: 4125946864005738952}
   netPosZ: {fileID: 3056109423286114364}
   interpolationSpeed: 20
-  towerPlayerMaxDist: 5
 --- !u!65 &3479165268802781808
 BoxCollider:
   m_ObjectHideFlags: 0

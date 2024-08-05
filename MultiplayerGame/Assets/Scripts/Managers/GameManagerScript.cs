@@ -67,6 +67,7 @@ public class GameManagerScript : MonoBehaviour
 
                 if (!timerNetGo.connectedToServer && timerCount <= 0)
                 {
+                    alphaScore = betaScore = 0;
                     matchState = MatchState.playing;
                     timerCount = matchTimes[1].time;
                 }
