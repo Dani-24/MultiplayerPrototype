@@ -1,4 +1,4 @@
-# Co-Lorín, a multiplayer game prototype
+# Multiplayer game prototype
 
 
 * Features:
